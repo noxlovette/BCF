@@ -16,17 +16,18 @@ class Ingredient(models.Model):
 
     common_name = models.CharField(max_length=100, verbose_name="Name")
 
-    latin_name = models.CharField(max_length=100, blank=True, verbose_name="Latin")
-    cas = models.CharField(max_length=20, blank=True, verbose_name="CAS")
-    family = models.CharField(max_length=50, verbose_name="Olfactory Family")
-    ingredient_type = models.CharField(max_length=10, verbose_name="Type", choices=INGREDIENT_TYPES)
-    origin = models.CharField(max_length=100, blank=True, verbose_name="Origin")
-    constituents = models.TextField(verbose_name="Components", blank=True)
-    strip = models.DurationField(verbose_name="Strip life", blank=True)
-    colour = models.CharField(max_length=10, verbose_name="Colour", blank=True)
-    olfactory_profile = models.TextField(blank=True, verbose_name="Olfactory Profile")
-    use = models.TextField(blank=True, verbose_name="Use")
-    is_collection = models.BooleanField(default=False, verbose_name="In Collection")
+    latin_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="Latin")
+    cas = models.CharField(max_length=20, null=True, blank=True, verbose_name="CAS")
+    family = models.CharField(max_length=50, null=True, verbose_name="Olfactory Family")
+    ingredient_type = models.CharField(max_length=15, null=True, verbose_name="Type", choices=INGREDIENT_TYPES)
+    origin = models.CharField(max_length=100, null=True, blank=True, verbose_name="Origin")
+    constituents = models.TextField(verbose_name="Components", null=True, blank=True)
+    # strip life in seconds
+    strip = models.DurationField(verbose_name="Strip life", null=True, blank=True)
+    colour = models.CharField(max_length=10, verbose_name="Colour", null=True, blank=True)
+    olfactory_profile = models.TextField(null=True, blank=True, verbose_name="Olfactory Profile")
+    use = models.TextField(null=True, blank=True, verbose_name="Use")
+    is_collection = models.BooleanField(default=False, null=True, verbose_name="In Collection")
 
     def clean(self):
         """
@@ -36,8 +37,11 @@ class Ingredient(models.Model):
             ValidationError: If the strip life is negative, name is empty, family is empty,
                                      or CAS number is required for synthetic ingredients.
         """
-        if self.strip.total_seconds() < 0:
-            raise ValidationError('Strip life must be a positive duration')
+        try:
+            if self.strip.total_seconds() < 0:
+                raise ValidationError('Strip life must be a positive duration')
+        except AttributeError:
+            pass
 
         if not self.common_name:
             raise ValidationError('Name cannot be empty')
@@ -65,4 +69,3 @@ class Ingredient(models.Model):
         verbose_name_plural = "Ingredients"
         unique_together = ('cas', 'common_name')
         db_table = 'ingredients'
-        ordering = ['name']
