@@ -1,26 +1,41 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views import generic
+
 from .models import Ingredient
 
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the ingredients index.")
+class IndexView(generic.ListView):
+    template_name = "ingredients_app/index.html"
+    # tells Django what you want to use as the variable for the template
+    context_object_name = "latest_ingredients_list"
+
+    def get_queryset(self):
+        # Return the last five edited ingredients
+        return Ingredient.objects.order_by('?')[:5]
 
 
-def detail(request, ing_id):
-    ingredient = get_object_or_404(Ingredient, pk=ing_id)
-    return render(request, 'ingredients_app/detail.html', {'ingredient': ingredient})
+class SingleIngredientView(generic.DetailView):
+    model = Ingredient
+    # behind the scenes, Detail and FamilyView are the same thing, but the template name changes everything
+    template_name = "ingredients_app/detail.html"
 
 
-def change_type(request, ing_id):
+class FamilyView(generic.DetailView):
+    model = Ingredient
+    # the question variable is provided automatically because we use a Django model Ingredient
+    template_name = "ingredients_app/family.html"
+
+
+def modify(request, ing_id):
     ingredient = get_object_or_404(Ingredient, pk=ing_id)
 
     if request.method == 'POST':
         selected_choice_pk = request.POST.get("choice")
         if selected_choice_pk is None:
             return render(
-                request, "ingredients_app/change_type.html",
+                request, "ingredients_app/modify.html",
                 {
                     "ingredient": ingredient,
                     "error_message": "You didn't select a type",
@@ -35,7 +50,7 @@ def change_type(request, ing_id):
 
         if selected_choice is None:
             return render(
-                request, "ingredients_app/change_type.html",
+                request, "ingredients_app/modify.html",
                 {
                     "ingredient": ingredient,
                     "error_message": "Selected type is not valid",
@@ -48,13 +63,8 @@ def change_type(request, ing_id):
 
     # Handle GET request
     return render(
-        request, "ingredients_app/change_type.html",
+        request, "ingredients_app/modify.html",
         {
             "ingredient": ingredient,
         }
     )
-
-
-def family(request, ing_id):
-    response = "You're looking at the family %s."
-    return HttpResponse(response % ing_id)

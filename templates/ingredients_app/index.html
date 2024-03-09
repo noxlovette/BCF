@@ -1,0 +1,10 @@
+{% if latest_ingredients_list %}
+    <ul>
+    {% for ing in latest_ingredients_list %}
+        <li><a href="{% url 'ingredients_app:ingredient' ing.id %}">{{ ing.common_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No ingredients are available for display...</p>
+{% endif %}
+

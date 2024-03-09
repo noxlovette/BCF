@@ -2,6 +2,28 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 
+class Family(models.Model):
+    """
+    this model represents an olfactory family seen in perfumery
+    top_level_family = Family.objects.create(name='Amber', description='...'
+    subfamily.... same.. , parent=top_level_family [amber in this case])
+    """
+    name = models.CharField(max_length=30)
+    description = models.TextField()
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subfamilies')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        """
+        Gives the verbose name to the families.
+        """
+        verbose_name = "Family"
+        verbose_name_plural = "Families"
+        db_table = 'family'
+
+
 class Ingredient(models.Model):
     """
     This model represents an ingredient used in perfumery

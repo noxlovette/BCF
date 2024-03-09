@@ -1,4 +1,4 @@
-<form action="{% url 'ingredients_app:type' ing_id=ingredient.id %}" method="post">
+<form action="{% url 'modify' ing_id=ingredient.id %}" method="post">
 {% csrf_token %}
 <fieldset>
     <legend><h1>Change Ingredient Type</h1></legend>
