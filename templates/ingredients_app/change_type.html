@@ -1,0 +1,14 @@
+<form action="{% url 'ingredients_app:type' ing_id=ingredient.id %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <legend><h1>Change Ingredient Type</h1></legend>
+    <h2>{{ ingredient.common_name }}</h2>
+    {% if error_message %}<p><strong>{{ error_message }} for {{ ingredient.common_name }}</strong></p>{% endif %}
+    {% for ingredient_type in ingredient.INGREDIENT_TYPES %}
+        <label for="choice {{ forloop.counter }}"></label>
+        <input type="radio" name="choice" id="choice {{ forloop.counter }}" value="{{ ingredient_type.0 }}">
+        <label for="{{ ingredient_type.0 }}">{{ ingredient_type.1 }}</label><br>
+    {% endfor %}
+</fieldset>
+<input type="submit" value="Change Type">
+</form>

@@ -13,9 +13,7 @@ class Ingredient(models.Model):
         ('cold_pressed', 'Cold Pressed'),
         ('absolute', 'Absolute'),
     ]
-
     common_name = models.CharField(max_length=100, verbose_name="Name")
-
     latin_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="Latin")
     cas = models.CharField(max_length=20, null=True, blank=True, verbose_name="CAS")
     family = models.CharField(max_length=50, null=True, verbose_name="Olfactory Family")
