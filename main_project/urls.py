@@ -22,4 +22,5 @@ urlpatterns = [
     path('', views.home, name='home'),
     path("ingredients_app/", include('ingredients_app.urls')),
     path('admin/', admin.site.urls),
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
