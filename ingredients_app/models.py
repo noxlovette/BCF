@@ -5,12 +5,9 @@ from django.core.exceptions import ValidationError
 class Family(models.Model):
     """
     this model represents an olfactory family seen in perfumery
-    top_level_family = Family.objects.create(name='Amber', description='...'
-    subfamily.... same.. , parent=top_level_family [amber in this case])
     """
     name = models.CharField(max_length=30)
     description = models.TextField()
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subfamilies')
 
     def __str__(self):
         return self.name
@@ -30,23 +27,34 @@ class Ingredient(models.Model):
     """
     INGREDIENT_TYPES = [
         ('synthetic', 'Synthetic'),
-        ('essential_oil', 'Essential Oil'),
-        ('resinoid', 'Resinoid'),
-        ('cold_pressed', 'Cold Pressed'),
-        ('absolute', 'Absolute'),
+        ('natural', 'Natural'),
+        ('base', 'Base')
     ]
+    # most important data
     common_name = models.CharField(max_length=100, verbose_name="Name")
+    other_names = models.TextField(null=True, blank=True, verbose_name="Other Names")
     latin_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="Latin")
     cas = models.CharField(max_length=20, null=True, blank=True, verbose_name="CAS")
-    family = models.CharField(max_length=50, null=True, verbose_name="Olfactory Family")
+
+    # secondary data
+    family = models.ManyToManyField('Family', related_name='ingredients', verbose_name='Family')
     ingredient_type = models.CharField(max_length=15, null=True, verbose_name="Type", choices=INGREDIENT_TYPES)
+    use = models.TextField(null=True, blank=True, verbose_name="Use")
+    strip = models.DurationField(verbose_name="Strip life", null=True, blank=True)
+
+    # applicable only to naturals
     origin = models.CharField(max_length=100, null=True, blank=True, verbose_name="Origin")
     constituents = models.TextField(verbose_name="Components", null=True, blank=True)
-    # strip life in seconds
-    strip = models.DurationField(verbose_name="Strip life", null=True, blank=True)
-    colour = models.CharField(max_length=10, verbose_name="Colour", null=True, blank=True)
     olfactory_profile = models.TextField(null=True, blank=True, verbose_name="Olfactory Profile")
-    use = models.TextField(null=True, blank=True, verbose_name="Use")
+
+    # strip life in seconds
+    similar_ingredients = models.ManyToManyField('self', verbose_name="Similar Ingredients", blank=True)
+
+    # subjective data
+    colour = models.CharField(max_length=10, verbose_name="Colour", null=True, blank=True)
+    impression = models.TextField(verbose_name="Impression", null=True, blank=True)
+    associations = models.TextField(verbose_name="Associations", null=True, blank=True)
+
     is_collection = models.BooleanField(default=False, null=True, verbose_name="In Collection")
 
     def clean(self):
@@ -79,6 +87,21 @@ class Ingredient(models.Model):
         """
 
         return self.common_name
+
+    def get_absolute_url(self):
+        """
+        Returns the absolute url of the ingredient
+        :return:
+        """
+        from django.urls import reverse
+        return reverse('ingredients_app:ingredient', args=[str(self.id)])
+
+    def get_family_names(self):
+        """
+        Returns the names of the families the ingredient belongs to
+        :return:
+        """
+        return ", ".join([family.name for family in self.family.all()])
 
     class Meta:
         """
