@@ -30,24 +30,26 @@ class Ingredient(models.Model):
         ('natural', 'Natural'),
         ('base', 'Base')
     ]
+
     # most important data
     common_name = models.CharField(max_length=100, verbose_name="Name")
     other_names = models.TextField(null=True, blank=True, verbose_name="Other Names")
-    latin_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="Latin")
     cas = models.CharField(max_length=20, null=True, blank=True, verbose_name="CAS")
 
     # secondary data
     family = models.ManyToManyField('Family', related_name='ingredients', verbose_name='Family')
     ingredient_type = models.CharField(max_length=15, null=True, verbose_name="Type", choices=INGREDIENT_TYPES)
     use = models.TextField(null=True, blank=True, verbose_name="Use")
-    strip = models.DurationField(verbose_name="Strip life", null=True, blank=True)
-
-    # applicable only to naturals
-    origin = models.CharField(max_length=100, null=True, blank=True, verbose_name="Origin")
-    constituents = models.TextField(verbose_name="Components", null=True, blank=True)
+    volatility = models.CharField(max_length=20, null=True, blank=True, verbose_name="Volatility")
+    is_restricted = models.BooleanField(default=False, null=True, verbose_name="Restricted")
     olfactory_profile = models.TextField(null=True, blank=True, verbose_name="Olfactory Profile")
 
-    # strip life in seconds
+    # applicable only to naturals
+    origin = models.TextField(null=True, blank=True, verbose_name="Origin")
+    constituents = models.TextField(verbose_name="Components", null=True, blank=True)
+    latin_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="Latin")
+
+    # arbitrary data
     similar_ingredients = models.ManyToManyField('self', verbose_name="Similar Ingredients", blank=True)
 
     # subjective data
@@ -65,12 +67,6 @@ class Ingredient(models.Model):
             ValidationError: If the strip life is negative, name is empty, family is empty,
                                      or CAS number is required for synthetic ingredients.
         """
-        try:
-            if self.strip.total_seconds() < 0:
-                raise ValidationError('Strip life must be a positive duration')
-        except AttributeError:
-            pass
-
         if not self.common_name:
             raise ValidationError('Name cannot be empty')
 
