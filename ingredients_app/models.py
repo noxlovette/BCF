@@ -52,13 +52,6 @@ class Ingredient(models.Model):
     # arbitrary data
     similar_ingredients = models.ManyToManyField('self', verbose_name="Similar Ingredients", blank=True)
 
-    # subjective data
-    colour = models.CharField(max_length=10, verbose_name="Colour", null=True, blank=True)
-    impression = models.TextField(verbose_name="Impression", null=True, blank=True)
-    associations = models.TextField(verbose_name="Associations", null=True, blank=True)
-
-    is_collection = models.BooleanField(default=False, null=True, verbose_name="In Collection")
-
     def clean(self):
         """
         Validate the ingredient data.
@@ -98,6 +91,18 @@ class Ingredient(models.Model):
         :return:
         """
         return ", ".join([family.name for family in self.family.all()])
+
+    @property
+    def to_json(self):
+        """
+        Returns a dictionary representation of the ingredient
+        :return:
+        """
+        return {
+            'common_name': self.common_name,
+            'cas': self.cas,
+            'families': self.get_family_names()
+        }
 
     class Meta:
         """

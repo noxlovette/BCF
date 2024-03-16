@@ -1,10 +1,22 @@
-{% if latest_ingredients_list %}
-    <ul>
-    {% for ing in latest_ingredients_list %}
-        <li><a href="{% url 'ingredients_app:ingredient' ing.id %}">{{ ing.common_name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No ingredients are available for display...</p>
-{% endif %}
-
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Ingredients</title>
+</head>
+<body>
+    <table id="ingredients-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>CAS</th>
+                <th>Families</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be added here by JavaScript -->
+        </tbody>
+    </table>
+    <script src={% static 'ingredients_app/index.js' %}></script>
+</body>
+</html>
