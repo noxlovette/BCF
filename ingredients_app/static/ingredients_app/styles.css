@@ -1,6 +1,6 @@
 /* Typography */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Brawler', Arial, sans-serif;
     font-size: 16px;
     line-height: 1.6;
     color: #333;
@@ -49,4 +49,10 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* table css */
+#ingredients-table th, #ingredients-table td {
+    text-align: center;
+    width: 200px;  /* Adjust this value to your preference */
 }

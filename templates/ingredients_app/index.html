@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 {% load static %}
-<html>
+<html lang="en">
 <head>
     <title>Ingredients</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Brawler:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href={% static 'ingredients_app/styles.css' %}>
 </head>
+<button id="prev-page" disabled>Previous Page</button>
+<button id="next-page">Next Page</button>
 <body>
     <table id="ingredients-table">
         <thead>

@@ -2,15 +2,20 @@ from django.views import generic
 from .models import Ingredient
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.core.paginator import Paginator
 
 
 class IngredientsView(APIView):
     """
     API endpoint that allows ingredients to be viewed.
     """
+
     def get(self, request):
-        ingredients = Ingredient.objects.all()
-        ingredients_json = [ingredient.to_json for ingredient in ingredients]
+        page_number = request.GET.get('page', 1)  # Get the page number from the request parameters
+        ingredients = Ingredient.objects.all().order_by('common_name')
+        paginator = Paginator(ingredients, 20)  # Create a Paginator object with 20 items per page
+        page = paginator.get_page(page_number)  # Get the requested page
+        ingredients_json = [ingredient.to_json for ingredient in page]  # Convert the ingredients to JSON
         return Response(ingredients_json)
 
 
