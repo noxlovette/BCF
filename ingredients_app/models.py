@@ -92,6 +92,13 @@ class Ingredient(models.Model):
         """
         return ", ".join([family.name for family in self.family.all()])
 
+    def get_restrictions(self):
+        """
+        Returns the restrictions of the ingredient
+        :return:
+        """
+        return "Yes" if self.is_restricted else "No"
+
     @property
     def to_json(self):
         """
@@ -99,9 +106,14 @@ class Ingredient(models.Model):
         :return:
         """
         return {
+            'id': self.id,
             'common_name': self.common_name,
             'cas': self.cas,
-            'families': self.get_family_names()
+            'families': self.get_family_names(),
+            'type': self.ingredient_type,
+            'use': self.use,
+            'volatility': self.volatility,
+            'is_restricted': self.get_restrictions(),
         }
 
     class Meta:

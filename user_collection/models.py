@@ -8,8 +8,8 @@ from ingredients_app.models import Ingredient
 class UserCollectionIng(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount = models.IntegerField()
-    unit = models.CharField(max_length=50, default='g')
+    amount = models.IntegerField(default=0, verbose_name="Amount")
+    unit = models.CharField(max_length=50, default='g', verbose_name="Unit")
     colour = models.CharField(max_length=10, verbose_name="Colour", null=True, blank=True)
     impression = models.TextField(verbose_name="Impression", null=True, blank=True)
     associations = models.TextField(verbose_name="Associations", null=True, blank=True)
@@ -28,4 +28,12 @@ class UserCollectionIng(models.Model):
             raise ValueError("The amount cannot be negative.")
         elif self.amount == 0:
             self.is_collection = False
+        elif self.amount > 0:
+            self.is_collection = True
         super().save(*args, **kwargs)
+
+    class Meta:
+        unique_together = ['user', 'ingredient']
+        verbose_name = "Ingredient in Collection"
+        verbose_name_plural = "Ingredients in Collection"
+        ordering = ['user', 'ingredient']
