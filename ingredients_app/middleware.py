@@ -3,6 +3,7 @@
 from django.http import HttpResponseForbidden
 
 
+# we can use middleware to validate the referrer of the request. make sure to add the middleware to the MIDDLEWARE list in settings.py
 class ValidateReferrerMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response

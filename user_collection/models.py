@@ -20,6 +20,24 @@ class UserCollectionIng(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.ingredient.common_name} - {self.amount} {self.unit}"
 
+    @property
+    def to_json(self):
+        return {
+            "user": self.user.username,
+            "ingredient": self.ingredient.common_name,
+            "cas": self.ingredient.cas,
+            "volatility": self.ingredient.volatility,
+            "use": self.ingredient.use,
+            "amount": self.amount,
+            "unit": self.unit,
+            "colour": self.colour,
+            "impression": self.impression,
+            "associations": self.associations,
+            "notes": self.notes,
+            "is_collection": "Yes" if self.is_collection else "No",
+            "date_added": self.date_added.strftime("%Y-%m-%d %H:%M:%S")
+        }
+
     def save(self, *args, **kwargs):
         """
         Override the save method to handle is_collection when amount is 0.
@@ -28,7 +46,7 @@ class UserCollectionIng(models.Model):
             raise ValueError("The amount cannot be negative.")
         elif self.amount == 0:
             self.is_collection = False
-        elif self.amount > 0:
+        else:
             self.is_collection = True
         super().save(*args, **kwargs)
 
