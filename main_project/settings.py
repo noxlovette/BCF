@@ -37,7 +37,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'ingredients_app.apps.IngredientsConfig',
+    'browse.apps.BrowseConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    "user_collection.apps.UserCollectionConfig",
+    "collection.apps.UserCollectionConfig",
     'corsheaders',
 ]
 
@@ -146,8 +146,8 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'user_collection/static'),
-    os.path.join(BASE_DIR, 'ingredients_app/static'),
+    os.path.join(BASE_DIR, 'collection/static'),
+    os.path.join(BASE_DIR, 'browse/static'),
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
