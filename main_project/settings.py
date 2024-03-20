@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     "collection.apps.UserCollectionConfig",
     'corsheaders',
+    "formulae.apps.FormulaeConfig"
 ]
 
 MIDDLEWARE = [
