@@ -1,0 +1,15 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h1>Formula List</h1>
+    <a href="{% url 'formulae:formula_new' %}" class="btn">Add Formula</a>
+  <ul>
+    {% for formula in formulae_list %}
+  <li>
+    <a href="{% url 'formulae:formula' formula.id %}">{{ formula.name }}</a>
+  </li>
+{% empty %}
+  <li>Your formula collection is empty</li>
+{% endfor %}
+  </ul>
+{% endblock %}

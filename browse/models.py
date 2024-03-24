@@ -2,9 +2,9 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 
-class Family(models.Model):
+class Descriptor(models.Model):
     """
-    this model represents an olfactory family seen in perfumery
+    this model represents an olfactory family/descriptor seen in perfumery
     """
     name = models.CharField(max_length=30)
     description = models.TextField()
@@ -16,9 +16,9 @@ class Family(models.Model):
         """
         Gives the verbose name to the families.
         """
-        verbose_name = "Family"
-        verbose_name_plural = "Families"
-        db_table = 'family'
+        verbose_name = "Descriptor"
+        verbose_name_plural = "Descriptors"
+        db_table = 'descriptors'
 
 
 class Ingredient(models.Model):
@@ -32,22 +32,22 @@ class Ingredient(models.Model):
     ]
 
     # most important data
-    common_name = models.CharField(max_length=100, verbose_name="Name")
+    common_name = models.CharField(max_length=200, verbose_name="Name")
     other_names = models.TextField(null=True, blank=True, verbose_name="Other Names")
-    cas = models.CharField(max_length=20, null=True, blank=True, verbose_name="CAS")
+    cas = models.CharField(max_length=30, null=True, blank=True, verbose_name="CAS")
 
     # secondary data
-    family = models.ManyToManyField('Family', related_name='ingredients', verbose_name='Family')
+    descriptor1 = models.ManyToManyField('Descriptor', related_name='descriptor1', verbose_name='Descriptor 1')
+    descriptor2 = models.ManyToManyField('Descriptor', related_name='descriptor2', verbose_name='Descriptor 2')
+    descriptor3 = models.ManyToManyField('Descriptor', related_name='descriptor3', verbose_name='Descriptor 3')
     ingredient_type = models.CharField(max_length=15, null=True, verbose_name="Type", choices=INGREDIENT_TYPES)
     use = models.TextField(null=True, blank=True, verbose_name="Use")
     volatility = models.CharField(max_length=20, null=True, blank=True, verbose_name="Volatility")
     is_restricted = models.BooleanField(default=False, null=True, verbose_name="Restricted")
-    olfactory_profile = models.TextField(null=True, blank=True, verbose_name="Olfactory Profile")
 
     # applicable only to naturals
     origin = models.TextField(null=True, blank=True, verbose_name="Origin")
-    constituents = models.TextField(verbose_name="Components", null=True, blank=True)
-    latin_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="Latin")
+    constituents = models.ManyToManyField('self', verbose_name="Constituents", blank=True)
 
     # arbitrary data
     similar_ingredients = models.ManyToManyField('self', verbose_name="Similar Ingredients", blank=True)
@@ -62,9 +62,6 @@ class Ingredient(models.Model):
         """
         if not self.common_name:
             raise ValidationError('Name cannot be empty')
-
-        if not self.family:
-            raise ValidationError('Family is mandatory')
 
         if self.ingredient_type == 'synthetic' and not self.cas:
             raise ValidationError('CAS number is required for synthetic ingredients')

@@ -5,7 +5,7 @@ from browse.models import Ingredient
 
 # Create your models here.
 
-class UserCollectionIng(models.Model):
+class CollectionIngredient(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     amount = models.IntegerField(default=0, verbose_name="Amount")

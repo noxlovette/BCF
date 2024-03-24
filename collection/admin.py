@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserCollectionIng
+from .models import CollectionIngredient
 
 
-admin.site.register(UserCollectionIng)
+admin.site.register(CollectionIngredient)

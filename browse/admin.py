@@ -1,7 +1,7 @@
 # register models on the admin page
 
 from django.contrib import admin
-from .models import Ingredient, Family
+from .models import Ingredient, Descriptor
 
 
 class IngredientAdmin(admin.ModelAdmin):
@@ -18,4 +18,4 @@ class FamilyAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Ingredient, IngredientAdmin)
-admin.site.register(Family)
+admin.site.register(Descriptor)
