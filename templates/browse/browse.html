@@ -1,6 +1,6 @@
 {% extends "basic.html" %}
 {% load static %}
-
+{% load compress %}
 {% block content %}
 <button id="prev-page" disabled>Previous Page</button>
 <button id="next-page">Next Page</button>
@@ -27,6 +27,10 @@
             <!-- Rows will be added here by JavaScript -->
         </tbody>
     </table>
+    <button id="prev-page" disabled>Previous Page</button>
+    <button id="next-page">Next Page</button>
+{% compress js %}
     <script src={% static 'browse/browse.js' %}></script>
+{% endcompress %}
 </body>
 {% endblock %}

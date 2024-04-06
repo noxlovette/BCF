@@ -1,14 +1,16 @@
 document.getElementById('login-form').addEventListener('submit', function(event) {
     event.preventDefault();
+    event.stopPropagation();
 
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const username = document.getElementById('username-field').value;
+    const password = document.getElementById('password-field').value;
+    let csrftoken = getCookie('csrftoken');
 
     fetch('/login/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'),
+            'X-CSRFToken': csrftoken,
         },
         body: JSON.stringify({
             username: username,
@@ -17,44 +19,35 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Login failed');
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.text();  // Change this line
+        return response.json();
     })
-    .then(text => {
-        console.log('Response text:', text);  // Log the response text
-        return JSON.parse(text);  // Parse the response text as JSON
+    .then(data => {
+        if (data.error) {
+            console.error('Server responded with an error:', data.error);
+        } else {
+            // Store user data in session storage
+            // TODO add 'remember' functionaliy?
+            sessionStorage.setItem('user_id', data.user_id);
+            sessionStorage.setItem('username', data.username);
+            sessionStorage.setItem('is_authenticated', data.is_authenticated);
+
+            window.location.href = '/collection/';
+        }
     })
-    .then(response => {
-        // The rest of your code...
-    })
+
     .catch(error => {
-        console.error('Failed to log in:', error);
+        console.error('Failed to fetch:', error);
     });
 });
 
-// Do the same for the other fetch request
-fetch('/collection/api/collection')
-    .then(response => response.text())  // Change this line
-    .then(text => {
-        console.log('Response text:', text);  // Log the response text
-        return JSON.parse(text);  // Parse the response text as JSON
-    })
-    .then(data => {
-        // The rest of your code...
-    })
-    .catch(error => {
-        console.error('Failed to fetch collection:', error);
-    });
-
-// Function to get a cookie by name
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;

@@ -4,25 +4,37 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 from django.db.models import Q
+from rest_framework.pagination import PageNumberPagination
 
 
-class IngredientsView(APIView):
+class BrowseView(APIView):
     """
     API endpoint that allows ingredients to be viewed.
     """
 
     def get(self, request):
-        page_number = request.GET.get('page', 1)  # Get the page number from the request parameters
-        search_term = request.GET.get('search', '')  # Get the search term from the request parameters
-        if search_term:
-            ingredients = Ingredient.objects.filter(Q(common_name__icontains=search_term)).order_by('common_name')
-        else:
-            ingredients = Ingredient.objects.all().order_by('common_name')
-        paginator = Paginator(ingredients, 20)  # Create a Paginator object with 20 items per page
-        page = paginator.get_page(page_number)  # Get the requested page
-        ingredients_json = [ingredient.to_json for ingredient in page]  # Convert the ingredients to JSON
-        return Response(ingredients_json)
+        # Get all ingredients
+        ingredients = Ingredient.objects.all().order_by('common_name')
 
+        # Create a paginator
+        paginator = CustomPageNumberPagination()  # Use the custom pagination class
+        paginator.page_size = 10  # Set the number of items per page
+
+        # Get the page of ingredients
+        page_of_ingredients = paginator.paginate_queryset(ingredients, request)
+
+        # Convert the page of ingredients to JSON
+        ingredients_json = [ingredient.to_json for ingredient in page_of_ingredients]
+
+        return paginator.get_paginated_response(ingredients_json)
+
+class CustomPageNumberPagination(PageNumberPagination):
+    def get_paginated_response(self, data):
+        return Response({
+            'page': self.page.number,  # current page number
+            'total_pages': self.page.paginator.num_pages,  # total number of pages
+            'results': data  # results for the current page
+        })
 
 class IndexView(generic.ListView):
     model = Ingredient

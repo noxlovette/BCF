@@ -1,16 +1,24 @@
-window.addEventListener('DOMContentLoaded', (event) => {
+function updateNavbar() {
     // Get the navbar buttons
     const loginButton = document.getElementById('login-button');
     const signupButton = document.getElementById('signup-button');
+    const navbar = document.getElementById('navbar');
+
+    // Remove any existing greeting elements
+    const existingGreeting = document.getElementById('greeting');
+    if (existingGreeting) {
+        navbar.removeChild(existingGreeting);
+    }
 
     // Get the user's login status and nickname from session storage
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-    const nickname = sessionStorage.getItem('nickname');
+    const is_authenticated = sessionStorage.getItem('is_authenticated');
+    const username = sessionStorage.getItem('username');
 
-    if (isLoggedIn) {
+    if (is_authenticated) {
         // If the user is logged in, display "Hello, [user's nickname]" and hide the log in and sign up buttons
         const greeting = document.createElement('span');
-        greeting.textContent = `Hello, ${nickname}`;
+        greeting.id = 'greeting';  // Add an id to the greeting element
+        greeting.textContent = `Hello, ${username}`;
         navbar.appendChild(greeting);
         loginButton.style.display = 'none';
         signupButton.style.display = 'none';
@@ -19,4 +27,5 @@ window.addEventListener('DOMContentLoaded', (event) => {
         loginButton.style.display = 'block';
         signupButton.style.display = 'block';
     }
-});
+}
+document.addEventListener('DOMContentLoaded', updateNavbar);

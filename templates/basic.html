@@ -1,4 +1,5 @@
 {% load static %}
+{% load compress %}
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en">
 <script src="{% static 'assets/basic.js' %}"></script>
@@ -12,7 +13,6 @@
     <link rel="stylesheet" href="{% static 'assets/css/bs-theme-overrides.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/Footer-Basic-icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/footer-styles.css' %}">
-    
 </head>
 
 {% block title %}
@@ -71,8 +71,10 @@
             </div>
         </div>
     </footer>
+    {% compress js %}
     <script src="{% static '/assets/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static '/assets/basic.js' %}"></script>
+    {% endcompress %}
 </body>
 
 </html>

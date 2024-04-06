@@ -27,31 +27,12 @@ document.getElementById('login-form').addEventListener('submit', function(event)
         if (data.error) {
             console.error('Server responded with an error:', data.error);
         } else {
-            console.log('User ID:', data.user_id);
-            console.log('Username:', data.username);
-            console.log('Is authenticated:', data.is_authenticated);
-
             // Store user data in session storage
             // TODO add 'remember' functionaliy?
             sessionStorage.setItem('user_id', data.user_id);
             sessionStorage.setItem('username', data.username);
             sessionStorage.setItem('is_authenticated', data.is_authenticated);
 
-            // collection fetch request
-            fetch('/collection/api/full_collection')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Collection:', data);
-                    sessionStorage.setItem('collection', JSON.stringify(data));
-                })
-                .catch(error => {
-                    console.error('Failed to fetch collection:', error);
-                });
             window.location.href = '/collection/';
         }
     })

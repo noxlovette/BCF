@@ -1,154 +1,123 @@
-let currentPage = 1;
-let searchValue = '';
+document.addEventListener('DOMContentLoaded', function() {
 
-function handleSearch() {
-    const searchTerm = document.getElementById('search-input').value;
-    searchValue = searchTerm;
-    fetchIngredients(searchTerm);
+    let currentPage = 1;
+    let userId = sessionStorage.getItem('user_id');
 
-    // Update the URL with the search value as a query parameter
-    const url = new URL(window.location);
-    url.searchParams.set('search', searchValue);
-    window.history.pushState({}, '', url);
-}
-
-document.getElementById('prev-page').addEventListener('click', function() {
-    if (currentPage > 1) {
-        currentPage--;
-        fetchIngredients(searchValue);
-    }
-});
-
-document.getElementById('next-page').addEventListener('click', function() {
-    currentPage++;
-    fetchIngredients(searchValue);
-});
-
-document.getElementById('search-button').addEventListener('click', handleSearch);
-
-document.getElementById('search-input').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        handleSearch();
-    }
-});
-
-// Get the clear search button
-const clearSearchButton = document.getElementById('clear-search');
-
-// Add an event listener for the 'click' event to the clear search button
-clearSearchButton.addEventListener('click', function() {
-    // Clear the search input field
-    const searchInput = document.getElementById('search-input');
-    searchInput.value = '';
-
-    // Reset the searchValue variable
-    searchValue = '';
-
-    // Fetch the ingredients again without any search term
-    fetchIngredients();
-
-    // Clear the search query parameter from the URL
-    const url = new URL(window.location);
-    url.searchParams.delete('search');
-    window.history.pushState({}, '', url);
-});
-
-// When the page loads, check if there's a search query parameter in the URL
-window.addEventListener('load', function() {
-    const url = new URL(window.location);
-    const searchValue = url.searchParams.get('search');
-
-    // If there's a search value, update the input field and apply the search criteria
-    if (searchValue) {
-        document.getElementById('search-input').value = searchValue;
-        fetchIngredients(searchValue);
-    }
-});
-
-function addToCollection(ingredient) {
-    // Get the collection from session storage
-    let collection = JSON.parse(sessionStorage.getItem('collection'));
-
-    if (!collection) {
-        collection = [];
-    }
-    // Add the ingredient to the collection
-    collection.push(ingredient);
-
-    // Update the collection in session storage
-    sessionStorage.setItem('collection', JSON.stringify(collection));
-
-    // Send a request to the API to update the collection on the server
-    fetch('collection/api/collection', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(collection),
+    document.getElementById('prev-page').addEventListener('click', function () {
+        console.log('prev button clicked');
+        if (currentPage > 1) {
+            currentPage--;
+            console.log('Current Page after decrement:', currentPage);
+            fetchIngredients();
+        }
     });
-}
-function fetchIngredients(searchTerm='') {
-    // fetch the page and search term
-    fetch(`api/ingredients?page=${currentPage}&search=${searchTerm}`)
-        .then(response => response.json())
-        .then(data => {
 
-            // Get the tbody of the ingredients table
-            const ingredientsTableBody = document.querySelector('#ingredients-table tbody');
-            ingredientsTableBody.innerHTML = '';  // Clear the current contents
+    document.getElementById('next-page').addEventListener('click', function () {
+        console.log('next button clicked');
+        if (currentPage < totalPages) {
+            currentPage++;
+            console.log('Current Page after increment:', currentPage);
+            fetchIngredients();
+        }
+    });
 
-            data.forEach(ingredient => {
-                // Create a new row and cells for the ingredient
-                const row = document.createElement('tr');
-                const buttonCell = document.createElement('td');
-                const addButton = document.createElement('button');
-                addButton.type = 'button';
-                addButton.className = 'btn btn-primary add-to-collection';
-                addButton.textContent = 'Add to collection';
-                addButton.setAttribute('data-id', ingredient.id);
-                const nameCell = document.createElement('td');
-                const casCell = document.createElement('td');
-                const descriptorsCell = document.createElement('td');
-                const volatilityCell = document.createElement('td');
-                const useCell = document.createElement('td');
-                const restrictionsCell = document.createElement('td');
-                const typeCell = document.createElement('td');
+    function addToCollection(ingredientId, userId) {
+        let data = {
+            user_id: userId,
+            ingredient_id: ingredientId
+        };
 
-                // Set the text content of the cells
-                // Set the innerHTML of the add_button cell
-                nameCell.textContent = ingredient.common_name;
-                casCell.textContent = ingredient.cas;
-                descriptorsCell.textContent = ingredient.descriptors;
-                volatilityCell.textContent = ingredient.volatility;
-                useCell.textContent = ingredient.use;
-                restrictionsCell.textContent = ingredient.is_restricted;
-                typeCell.textContent = ingredient.ingredient_type;
+        fetch(`/collection/api/collection/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Response:', response);
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data)
+                if (data.success) {
+                    alert('Ingredient successfully added to collection!');
+                } else {
+                    console.error(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    }
 
-                addButton.addEventListener('click', function() {
-                    addToCollection(ingredient)
+    function fetchIngredients() {
+        fetch(`api/ingredients?page=${currentPage}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('data from server:', data);  // Add this line
+                totalPages = data.total_pages;
+                console.log(totalPages);  // Add this line
+                const fragment = document.createDocumentFragment();
+
+                // Access the ingredients directly from data
+                data.results.forEach(ingredient => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                    <td>
+                        <button type="button" class="btn btn-primary add-to-collection" data-id="${ingredient.id}">
+                            Add to collection
+                        </button>
+                    </td>
+                    <td>${ingredient.common_name}</td>
+                    <td>${ingredient.cas}</td>
+                    <td>${ingredient.ingredient_type}</td>
+                    <td>${ingredient.volatility}</td>
+                    <td>${ingredient.descriptors}</td>
+                    <td>${ingredient.use}</td>
+                    <td>${ingredient.is_restricted}</td>
+                `;
+
+                    fragment.appendChild(row);
+                    row.querySelector('.add-to-collection').addEventListener('click', function () {
+                    addToCollection(ingredient.id, userId);
+                });
                 });
 
+                const ingredientsTableBody = document.querySelector('#ingredients-table tbody');
+                ingredientsTableBody.innerHTML = '';
+                ingredientsTableBody.appendChild(fragment);
 
-                // Append the cells to the row
-                buttonCell.appendChild(addButton);
-                row.appendChild(buttonCell);
-                row.appendChild(nameCell);
-                row.appendChild(casCell);
-                row.appendChild(typeCell);
-                row.appendChild(volatilityCell);
-                row.appendChild(descriptorsCell);
-                row.appendChild(useCell);
-                row.appendChild(restrictionsCell);
-
-                // Append the row to the table body
-                ingredientsTableBody.appendChild(row);
+                const prevPageButton = document.getElementById('prev-page');
+                prevPageButton.disabled = currentPage <= 1;
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
             });
-
-            // Enable or disable the 'previous page' and 'next page' buttons
-            document.getElementById('prev-page').disabled = (currentPage === 1);
-            document.getElementById('next-page').disabled = (data.length < 20);
-        });
+    }
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
 
-fetchIngredients(searchValue);
+    fetchIngredients();
+});

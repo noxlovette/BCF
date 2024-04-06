@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     "collection.apps.UserCollectionConfig",
     'corsheaders',
+    'compressor',
     "formulae.apps.FormulaeConfig"
 ]
 
@@ -59,7 +60,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -147,6 +147,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_FINDERS = [
+    # Other staticfiles finders...
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+]
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
@@ -158,3 +165,20 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+COMPRESS_ENABLED = True
+# TODO - change to ManifestStaticFilesStorage
+
+COMPRESS_OFFLINE = True
+
+COMPRESS_VERSION = True
+
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.rCSSMinFilter',
+]
+
+COMPRESS_JS_FILTERS = [
+    'compressor.filters.jsmin.JSMinFilter',
+]
+

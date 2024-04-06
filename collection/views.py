@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .models import CollectionIngredient, Ingredient, User
 from rest_framework.views import APIView
 import json
+from rest_framework.exceptions import ParseError
 
 
 class CollectionView(generic.ListView):
@@ -14,63 +15,56 @@ class CollectionView(generic.ListView):
     context_object_name = "collection"
 
     def get_queryset(self):
-        return CollectionIngredient.objects.order_by('ingredient__common_name').values_list('ingredient__common_name',
-                                                                                            flat=True)
+        return self.request.session.get('collection', [])
 
 
-class FullCollectionAPI(APIView):
-    """
-    API endpoint that allows full collection to be viewed.
-    """
-
-    def get(self, request):
-        user_id = self.request.user.id
+class CollectionAPI(APIView):
+    def get_collection(self, request, user_id):
         user = User.objects.get(id=user_id)
         collection_ingredients = CollectionIngredient.objects.filter(user=user).order_by('ingredient__common_name')
+        return collection_ingredients
 
-        # Convert the collection to JSON
+    def get(self, request, user_id):
+
+        collection_ingredients = self.get_collection(request, user_id)
+
+        if not collection_ingredients.exists():
+            empty_ingredient = {
+                'ingredient': '',
+                'ingredient.cas': '',
+                'ingredient.volatility': '',
+                'ingredient.use': '',
+                'amount': '',
+                'colour': '',
+                'impression': '',
+                'date_added': '',
+                'is_collection': False
+            }
+            return JsonResponse(empty_ingredient, status=200)
+
         collection_json = [collection_ingredient.to_json for collection_ingredient in collection_ingredients]
+        request.session['collection'] = collection_json
+
         return Response(collection_json)
 
 
-class CollectionAPIPages(APIView):
-    """
-    API endpoint that allows collection to be viewed.
-    """
 
-    def get(self, request):
-        # main code
-        user_id = self.request.user.id
-        user = User.objects.get(id=user_id)
-        collection_ingredients = CollectionIngredient.objects.filter(user=user).order_by('ingredient__common_name')
-
-        # pagination handling
-        page_number = request.GET.get('page', 1)  # Get the page number from the request parameters
-        paginator = Paginator(collection_ingredients, 20)  # Create a Paginator object with 20 items per page
-        page = paginator.get_page(page_number)  # Get the requested page
-        # Convert the collection to JSON
-        collection_json = [collection_ingredient.to_json for collection_ingredient in page]
-        return Response(collection_json)
-
-    @staticmethod
-    def post(request):
+    def post(self, request, user_id):
         try:
-            data = json.loads(request.body)
-            user_id = data.get('user_id')
+            data = request.data
             ingredient_id = data.get('ingredient_id')
 
+            # Get the user and ingredient from the database using the provided IDs
             user = User.objects.get(id=user_id)
             ingredient = Ingredient.objects.get(id=ingredient_id)
 
-            CollectionIngredient.objects.create(
-                user=user,
-                ingredient=ingredient
-            )
+            # Create a new CollectionIngredient object
+            CollectionIngredient.objects.create(user=user, ingredient=ingredient)
 
-            return Response({'success': True})
+            return JsonResponse({'success': True})
         except IntegrityError:
             return JsonResponse({'error': 'Ingredient is already in collection.'}, status=400)
-
-        except TypeError:
-            # i.e. if the collection doesn't exist
-            return JsonResponse({'error': 'Collection does not exist.'}, status=400)
+        except (User.DoesNotExist, Ingredient.DoesNotExist):
+            return JsonResponse({'error': 'User or Ingredient does not exist.'}, status=400)
+        except ParseError:
+            return JsonResponse({'error': 'Invalid JSON data.'}, status=400)

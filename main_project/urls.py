@@ -13,5 +13,5 @@ urlpatterns = [
     path("formulae/", include('formulae.urls')),
     path('admin/', admin.site.urls),
     path("__debug__/", include("debug_toolbar.urls")),
-    re_path(r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
+    re_path(r'^favicon\.ico$', RedirectView.as_view(url='/staticfiles/assets/img/bcf_logo_dark.png')),
 ]

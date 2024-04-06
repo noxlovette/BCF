@@ -1,6 +1,6 @@
 {% extends "basic.html" %}
 {% load static %}
-
+{% load compress %}
 {% block content %}
     <section class="position-relative py-4 py-xl-5">
         <div class="container" style="position: static;">
@@ -32,6 +32,8 @@
             </div>
         </div>
     </section>
+    {% compress js %}
     <script src="{% static 'registration/login.js' %}"></script>
+    {% endcompress %}
 {% endblock %}
 ```

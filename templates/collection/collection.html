@@ -1,5 +1,6 @@
 {% extends "basic.html"%}
 {% load static %}
+{% load compress %}
 {% block content %}
 <button id="prev-page" disabled>Previous Page</button>
 <button id="next-page">Next Page</button>
@@ -22,6 +23,8 @@
             <!-- Rows will be added here by JavaScript -->
         </tbody>
     </table>
-    <script src={% static 'collection/collection.js' %}></script>
+    {% compress js %}
+    <script src="{% static 'collection/collection.js' %}?v=1.0.1"></script>
+    {% endcompress %}
 </body>
 {% endblock %}

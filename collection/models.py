@@ -22,12 +22,24 @@ class CollectionIngredient(models.Model):
 
     @property
     def to_json(self):
+        ingredient = self.ingredient
+        if ingredient is None:
+            ingredient_data = {
+                "common_name": "Ingredient not found",
+                "cas": "N/A",
+                "volatility": "N/A",
+                "use": "N/A",
+            }
+        else:
+            ingredient_data = {
+                "common_name": ingredient.common_name,
+                "cas": ingredient.cas,
+                "volatility": ingredient.volatility,
+                "use": ingredient.use,
+            }
+
         return {
             "user": self.user.username,
-            "ingredient": self.ingredient.common_name,
-            "cas": self.ingredient.cas,
-            "volatility": self.ingredient.volatility,
-            "use": self.ingredient.use,
             "amount": self.amount,
             "unit": self.unit,
             "colour": self.colour,
@@ -35,7 +47,8 @@ class CollectionIngredient(models.Model):
             "associations": self.associations,
             "notes": self.notes,
             "is_collection": "Yes" if self.is_collection else "No",
-            "date_added": self.date_added.strftime("%Y-%m-%d %H:%M:%S")
+            "date_added": self.date_added.strftime("%Y-%m-%d %H:%M:%S"),
+            **ingredient_data,
         }
 
     def save(self, *args, **kwargs):
