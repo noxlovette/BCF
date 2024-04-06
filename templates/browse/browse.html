@@ -1,16 +1,15 @@
-<!DOCTYPE html>
+{% extends "basic.html" %}
 {% load static %}
-<html lang="en">
-<head>
-    <title>Ingredients</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Brawler:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href={% static 'browse/styles.css' %}>
-</head>
+
+{% block content %}
 <button id="prev-page" disabled>Previous Page</button>
 <button id="next-page">Next Page</button>
+
 <body>
+<label for="search-input">Search by name:</label>
+<input type="text" id="search-input" placeholder="Search by name">
+   <button id="search-button">Search</button>
+    <button id="clear-search">Clear Search</button>
     <table id="ingredients-table">
         <thead>
             <tr>
@@ -19,7 +18,7 @@
                 <th class="cas-col">CAS</th>
                 <th class="type-col">Type</th>
                 <th class="vol-col">Volatility</th>
-                <th>Families</th>
+                <th>Descriptors</th>
                 <th class="use-col">Use</th>
                 <th class="rest-col">Restricted</th>
             </tr>
@@ -28,6 +27,6 @@
             <!-- Rows will be added here by JavaScript -->
         </tbody>
     </table>
-    <script src={% static 'browse/index.js' %}></script>
+    <script src={% static 'browse/browse.js' %}></script>
 </body>
-</html>
+{% endblock %}

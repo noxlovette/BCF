@@ -70,6 +70,9 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+LOGIN_REDIRECT_URL = '/collection/'
+LOGOUT_REDIRECT_URL = '/'
+
 
 TEMPLATES = [
     {
@@ -89,6 +92,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'main_project.wsgi.application'
+AUTH_USER_MODEL = 'auth.User'
 
 
 # Database
@@ -148,6 +152,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'collection/static'),
     os.path.join(BASE_DIR, 'browse/static'),
+    os.path.join(BASE_DIR, 'main_project/static')
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

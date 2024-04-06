@@ -14,14 +14,14 @@ document.getElementById('next-page').addEventListener('click', function() {
 });
 
 function fetchIngredients() {
-    fetch(`http://localhost:8000/collection/api/collection?page=${currentPage}`)
+    fetch(`/collection/api/collection?page=${currentPage}`)
         .then(response => response.json())
         .then(data => {
             // Get the tbody of the user collection table
             const ingredientsTableBody = document.querySelector('#collection-table tbody');
             ingredientsTableBody.innerHTML = '';  // Clear the current contents
 
-            data.forEach(collection_ing => {
+            data.forEach(collection_ingredient => {
                 // Create a new row and cells for the ingredient
                 const row = document.createElement('tr');
                 const nameCell = document.createElement('td');
@@ -30,19 +30,20 @@ function fetchIngredients() {
                 const useCell = document.createElement('td');
                 const amountCell = document.createElement('td');
                 const colourCell = document.createElement('td');
+                // might be a good idea to add descriptors to this list
                 const impressionCell = document.createElement('td');
                 const dateCell = document.createElement('td');
                 const is_collectionCell = document.createElement('td');
 
-                nameCell.textContent = collection_ing.ingredient;
-                casCell.textContent = collection_ing.cas;
-                volatilityCell.textContent = collection_ing.volatility;
-                useCell.textContent = collection_ing.use;
-                amountCell.textContent = collection_ing.amount;
-                colourCell.textContent = collection_ing.colour;
-                impressionCell.textContent = collection_ing.impression;
-                dateCell.textContent = collection_ing.date_added;
-                is_collectionCell.textContent = collection_ing.is_collection;
+                nameCell.textContent = collection_ingredient.ingredient;
+                casCell.textContent = collection_ingredient.ingredient.cas;
+                volatilityCell.textContent = collection_ingredient.ingredient.volatility;
+                useCell.textContent = collection_ingredient.ingredient.use;
+                amountCell.textContent = collection_ingredient.amount;
+                colourCell.textContent = collection_ingredient.colour;
+                impressionCell.textContent = collection_ingredient.impression;
+                dateCell.textContent = collection_ingredient.date_added;
+                is_collectionCell.textContent = collection_ingredient.is_collection;
 
 
                 // Append the cells to the row

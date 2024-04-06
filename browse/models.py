@@ -82,12 +82,15 @@ class Ingredient(models.Model):
         from django.urls import reverse
         return reverse('browse:ingredient', args=[str(self.id)])
 
-    def get_family_names(self):
+    def get_descriptors(self):
         """
-        Returns the names of the families the ingredient belongs to
+        Returns the names of the descriptors that define the ingredient
         :return:
         """
-        return ", ".join([family.name for family in self.family.all()])
+        descriptors = []
+        for descriptor in [self.descriptor1.all(), self.descriptor2.all(), self.descriptor3.all()]:
+            descriptors += [str(d) for d in descriptor]
+        return ", ".join(descriptors) if descriptors else "No descriptors found"
 
     @property
     def to_json(self):
@@ -99,7 +102,7 @@ class Ingredient(models.Model):
             'id': self.id,
             'common_name': self.common_name,
             'cas': self.cas,
-            'families': self.get_family_names(),
+            'descriptors': self.get_descriptors(),
             'type': self.ingredient_type,
             'use': self.use,
             'volatility': self.volatility,

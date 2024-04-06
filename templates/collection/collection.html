@@ -1,13 +1,6 @@
-<!DOCTYPE html>
+{% extends "basic.html"%}
 {% load static %}
-<html lang="en">
-<head>
-    <title>Ingredients</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Brawler:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href={% static 'collection/collection.css' %}>
-</head>
+{% block content %}
 <button id="prev-page" disabled>Previous Page</button>
 <button id="next-page">Next Page</button>
 <body>
@@ -31,4 +24,4 @@
     </table>
     <script src={% static 'collection/collection.js' %}></script>
 </body>
-</html>
+{% endblock %}

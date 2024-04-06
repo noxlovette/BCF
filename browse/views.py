@@ -3,6 +3,7 @@ from .models import Ingredient
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 class IngredientsView(APIView):
@@ -12,7 +13,11 @@ class IngredientsView(APIView):
 
     def get(self, request):
         page_number = request.GET.get('page', 1)  # Get the page number from the request parameters
-        ingredients = Ingredient.objects.all().order_by('common_name')
+        search_term = request.GET.get('search', '')  # Get the search term from the request parameters
+        if search_term:
+            ingredients = Ingredient.objects.filter(Q(common_name__icontains=search_term)).order_by('common_name')
+        else:
+            ingredients = Ingredient.objects.all().order_by('common_name')
         paginator = Paginator(ingredients, 20)  # Create a Paginator object with 20 items per page
         page = paginator.get_page(page_number)  # Get the requested page
         ingredients_json = [ingredient.to_json for ingredient in page]  # Convert the ingredients to JSON
@@ -21,7 +26,7 @@ class IngredientsView(APIView):
 
 class IndexView(generic.ListView):
     model = Ingredient
-    template_name = "browse/index.html"
+    template_name = "browse/browse.html"
     # tells Django what you want to use as the variable for the template
     context_object_name = "ingredients"
 
