@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (currentPage > 1) {
             currentPage--;
             console.log('Current Page after decrement:', currentPage);
-            fetchIngredients();
+            const searchTerm = document.getElementById('search-input').value;
+            fetchIngredients(searchTerm);
         }
     });
 
@@ -16,10 +17,20 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('next button clicked');
         if (currentPage < totalPages) {
             currentPage++;
+            const searchTerm = document.getElementById('search-input').value;
             console.log('Current Page after increment:', currentPage);
-            fetchIngredients();
+            fetchIngredients(searchTerm);
         }
     });
+
+    document.getElementById('search-button').addEventListener('click', function () {
+    console.log('search button clicked');
+        // Get the search term from the search input field
+    const searchTerm = document.getElementById('search-input').value;
+    currentPage = 1;  // Reset the current page to 1 when search clicked
+    // Fetch the ingredients that match the search term
+    fetchIngredients(searchTerm);
+});
 
     function addToCollection(ingredientId, userId) {
         let data = {
@@ -55,8 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    function fetchIngredients() {
-        fetch(`api/ingredients?page=${currentPage}`)
+    function fetchIngredients(searchTerm = '') {
+        fetch(`api/ingredients?page=${currentPage}&search=${searchTerm}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
