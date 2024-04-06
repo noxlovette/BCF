@@ -23,6 +23,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    document.getElementById('clear-search').addEventListener('click', function () {
+    // Clear the search input field
+    document.getElementById('search-input').value = '';
+    // Reset the current page to 1
+    currentPage = 1;
+    // Fetch the first page of all ingredients
+    fetchIngredients();
+});
+
     document.getElementById('search-button').addEventListener('click', function () {
     console.log('search button clicked');
         // Get the search term from the search input field
