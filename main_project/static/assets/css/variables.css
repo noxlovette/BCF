@@ -1,0 +1,9 @@
+:root {
+    --browse-primary-color: #6A752F;
+    --browse-secondary-color: #C1CA94;
+    --browse-text-color: #2B3303;
+    --browse-border-color: #414B11;
+    --browse-bg-color: rgba(200, 200, 110, 0.5);
+    --browse-hover-bg-color: rgba(117, 103, 47, 0.5);
+    --browse-search-bg-color: rgba(54, 64, 4, 0.1);
+}

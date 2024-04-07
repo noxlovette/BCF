@@ -2,14 +2,21 @@
 {% load static %}
 {% load compress %}
 {% block content %}
-<button id="prev-page" disabled>Previous Page</button>
-<button id="next-page">Next Page</button>
 
 <body>
-<label for="search-input">Search by name:</label>
-<input type="text" id="search-input" placeholder="Search by name">
-   <button id="search-button">Search</button>
-    <button id="clear-search">Clear Search</button>
+<div class="tools">
+    <div id="search-tools">
+        <label for="search-input">Find anything</label>
+        <input type="text" id="search-input" placeholder="Search by name or CAS">
+        <button class="btn btn-primary" id="search-button">Search</button>
+        <button class="btn btn-primary" id="clear-search">Clear Search</button>
+    </div>
+    <div id="paginator">
+        <button class="btn btn-primary" id="prev-page" disabled>Previous Page</button>
+        <button class="btn btn-primary" id="next-page">Next Page</button>
+    </div>
+</div>
+<div class="table-container">
     <table id="ingredients-table">
         <thead>
             <tr>
@@ -27,8 +34,7 @@
             <!-- Rows will be added here by JavaScript -->
         </tbody>
     </table>
-    <button id="prev-page" disabled>Previous Page</button>
-    <button id="next-page">Next Page</button>
+</div>
 {% compress js %}
     <script src={% static 'browse/browse.js' %}></script>
 {% endcompress %}

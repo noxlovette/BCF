@@ -93,19 +93,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 data.results.forEach(ingredient => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                    <td>
-                        <button type="button" class="btn btn-primary add-to-collection" data-id="${ingredient.id}">
-                            Add to collection
-                        </button>
-                    </td>
-                    <td>${ingredient.common_name}</td>
-                    <td>${ingredient.cas}</td>
-                    <td>${ingredient.ingredient_type}</td>
-                    <td>${ingredient.volatility}</td>
-                    <td>${ingredient.descriptors}</td>
-                    <td>${ingredient.use}</td>
-                    <td>${ingredient.is_restricted}</td>
-                `;
+                <td>
+                    <button class='add-to-collection' title="Add to collection" data-id="${ingredient.id}" style="background: transparent; border: none;">
+                        <img src="/static/assets/img/plus-circle.svg" alt="Add to collection">
+                    </button>
+                </td>
+                <td>${ingredient.common_name}</td>
+                <td>${ingredient.cas}</td>
+                <td>${ingredient.ingredient_type}</td>
+                <td>${ingredient.volatility}</td>
+                <td>${ingredient.descriptors}</td>
+                <td>${ingredient.use}</td>
+                <td>${ingredient.is_restricted}</td>
+            `;
 
                     fragment.appendChild(row);
                     row.querySelector('.add-to-collection').addEventListener('click', function () {

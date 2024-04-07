@@ -7,12 +7,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>BCF App</title>
+    <link rel="icon" href="{% static 'assets/img/bcf_icon.png' %}">
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %} ">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans&amp;display=swap">
     <link rel="stylesheet" href="{% static 'assets/css/bs-theme-overrides.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/variables.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/Footer-Basic-icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/footer-styles.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tools.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/table.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/navbar.css' %}">
+
 </head>
 
 {% block title %}
@@ -21,15 +27,20 @@
 <body>
     <nav class="navbar navbar-expand-md bg-body py-3" id="navbar">
         <div class="container">
-            <picture><img src="{% static 'assets/img/bcf_logo_dark.png' %}" style="width: 64px;padding: 0;margin-right: 24px;" alt=""></picture><a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}"><span>BCF</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <a href = "{% url 'home' %}">
+                <img src="{% static 'assets/img/bcf_logo_dark.png' %}" style="width: 64px;padding: 0;margin-right: 24px;" alt="Go to home page">
+            </a>
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}"><span>BCF</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link active" href="{% url 'browse:browse' %}">Browse</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'collection:collection' %}">Collect</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'formulae:formulae_list' %}">Formulate</a></li>
                 </ul>
-                <button class="btn btn-primary" id = 'signup-button' type="button" style="margin-right: 8px;background: var(--bs-body-bg);border-color: var(--bs-btn-hover-border-color);color: var(--bs-btn-hover-border-color);">Sign Up</button>
-                <a href="{% url 'login' %}" class="btn btn-primary" id = 'login-button' role="button">Log In</a>
+                <div class="navbar-nav login">
+                    <button class="btn btn-primary" id = 'signup-button' type="button" style="margin-right: 8px;background: var(--bs-body-bg);border-color: var(--bs-btn-hover-border-color);color: var(--bs-btn-hover-border-color);">Sign Up</button>
+                    <a href="{% url 'login' %}" class="btn btn-primary" id = 'login-button' role="button">Log In</a>
+                </div>
             </div>
         </div>
     </nav>
