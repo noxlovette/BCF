@@ -23,9 +23,9 @@ class IngredientUpdateView(APIView):
                 return JsonResponse({'error': 'CollectionIngredient does not exist.'}, status=400)
 
             # Update the fields. if a key is missing, it defaults to what was there...
-            collection_ingredient.amount = int(data.get('amount', collection_ingredient.amount))
-            collection_ingredient.colour = data.get('colour', collection_ingredient.colour)
-            collection_ingredient.impression = data.get('impression', collection_ingredient.impression)
+            collection_ingredient.amount = int(data.get('amount', collection_ingredient.amount).replace(' g', '').strip())
+            collection_ingredient.colour = data.get('colour', collection_ingredient.colour).strip()
+            collection_ingredient.impression = data.get('impression', collection_ingredient.impression).strip()
             collection_ingredient.is_collection = data.get('is_collection', collection_ingredient.is_collection)
 
             print(collection_ingredient.is_collection)

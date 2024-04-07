@@ -6,4 +6,11 @@
     --browse-bg-color: rgba(200, 200, 110, 0.5);
     --browse-hover-bg-color: rgba(117, 103, 47, 0.5);
     --browse-search-bg-color: rgba(54, 64, 4, 0.1);
+    --collection-primary-color: #8A544E;
+    --collection-secondary-color: #FFC1BA;
+    --collection-text-color: #35302F;
+    --collection-border-color: #35302F;
+    --collection-bg-color: rgba(255, 193, 186, 0.5);
+    --collection-hover-bg-color: rgba(138, 84, 78, 0.5);
+    --collection-search-bg-color: rgba(53, 48, 47, 0.1);
 }
