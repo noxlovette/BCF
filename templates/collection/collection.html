@@ -2,9 +2,14 @@
 {% load static %}
 {% load compress %}
 {% block content %}
-<button class="btn btn-primary" id="next-page" type="button" >Next Page</button>
+    <div class = "tools collection">
+        <button class="btn btn-primary" id="add-button" type="button">Add</button>
+        <button class="btn btn-primary" id="filter-button" type="button">Filter</button>
+    <button class="btn btn-primary" id="next-page" type="button" >Next Page</button>
 <button class="btn btn-primary" id="prev-page"  type="button" disabled>Previous Page</button>
+    </div>
 <body>
+<div class = "table container collection">
     <table id="collection-table">
         <thead>
             <tr>
@@ -23,8 +28,10 @@
             <!-- Rows will be added here by JavaScript -->
         </tbody>
     </table>
+</div>
+    
     {% compress js %}
-    <script src="{% static 'collection/collection.js' %}?v=1.0.1"></script>
+    <script src="{% static 'collection/collection.js' %}"></script>
     {% endcompress %}
 </body>
 {% endblock %}

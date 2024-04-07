@@ -1,13 +1,64 @@
-from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.views import generic
 from rest_framework.response import Response
 from .models import CollectionIngredient, Ingredient, User
 from rest_framework.views import APIView
-import json
 from rest_framework.exceptions import ParseError
 
+
+class IngredientUpdateView(APIView):
+    def put(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            user_id = kwargs.get('user_id')
+            collection_ingredient_id = kwargs.get('collectionIngredientId')
+            print(data)
+            print(user_id)
+            print(collection_ingredient_id)
+
+            try:
+                collection_ingredient = CollectionIngredient.objects.get(user=user_id, id=collection_ingredient_id)
+            except CollectionIngredient.DoesNotExist:
+                return JsonResponse({'error': 'CollectionIngredient does not exist.'}, status=400)
+
+            # Update the fields. if a key is missing, it defaults to what was there...
+            collection_ingredient.amount = int(data.get('amount', collection_ingredient.amount))
+            collection_ingredient.colour = data.get('colour', collection_ingredient.colour)
+            collection_ingredient.impression = data.get('impression', collection_ingredient.impression)
+            collection_ingredient.is_collection = data.get('is_collection', collection_ingredient.is_collection)
+
+            print(collection_ingredient.is_collection)
+            print(collection_ingredient.impression)
+            print(collection_ingredient)
+
+            collection_ingredient.save()
+
+            return JsonResponse({'success': True})
+        except Ingredient.DoesNotExist:
+            return JsonResponse({'error': 'Ingredient does not exist.'}, status=400)
+        except ParseError:
+            return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User does not exist.'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            user_id = kwargs.get('user_id')
+            collection_ingredient_id = kwargs.get('collectionIngredientId')
+
+            try:
+                collection_ingredient = CollectionIngredient.objects.get(user=user_id, id=collection_ingredient_id)
+            except CollectionIngredient.DoesNotExist:
+                return JsonResponse({'error': 'CollectionIngredient does not exist.'}, status=400)
+
+            collection_ingredient.delete()
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
 
 class CollectionView(generic.ListView):
     model = CollectionIngredient
@@ -46,8 +97,6 @@ class CollectionAPI(APIView):
         request.session['collection'] = collection_json
 
         return Response(collection_json)
-
-
 
     def post(self, request, user_id):
         try:

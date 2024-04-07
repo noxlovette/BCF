@@ -1,4 +1,4 @@
-#tools {
+.tools {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -10,74 +10,73 @@
     border-color: var(--bs-border-color);
 }
 
-#buttons {
+.tools #buttons {
     display: flex;
     justify-content: flex-start;
 }
 
-#search-tools {
+.tools #search-tools {
     display: flex;
     justify-content: center;
     flex-grow: 1;
 }
 
-label[for="search-input"] {
+.tools label[for="search-input"] {
     display: block;
     text-align: center;
     margin: 10px 20px; /* Adjust this value to your preference */
 }
 
-#prev-page, #next-page {
+.tools #prev-page, #next-page {
+    background: var(--browse-bg-color);
+    border-color: var(--browse-border-color);
+    color: var(--browse-text-color);
     margin-right: 8px;
     margin-bottom: 8px;
     padding: 8px 16px;
     width: auto;
     max-width: 200px;
-    background: var(--bs-body-bg);
-    border-color: var(--bs-btn-hover-border-color);
-    color: var(--bs-btn-hover-border-color);
 }
 
-#prev-page:hover, #next-page:hover {
-    background: var(--bs-btn-hover-bg);
-    border-color: var(--bs-btn-hover-border-color);
-    color: var(--bs-btn-hover-color);
+.tools #prev-page:hover, #next-page:hover {
+    background: var(--browse-hover-bg-color);
+    border-color: var(--browse-border-color);
+    color: var(--browse-text-color);
 }
 
-#prev-page:active, #next-page:active {
+.tools #prev-page:active, #next-page:active {
     background: var(--bs-btn-active-bg);
     border-color: var(--bs-btn-active-border-color);
     color: var(--bs-btn-active-color);
 }
-#search-button, #clear-search {
+.tools #search-button, #clear-search {
     margin-right: 8px;
     margin-bottom: 8px;
     padding: 8px 16px;
     width: auto;
     max-width: 200px;
-    background: var(--bs-body-bg);
-    border-color: var(--bs-btn-hover-border-color);
-    color: var(--bs-btn-hover-border-color);
+    background: var(--browse-bg-color);
+    border-color: var(--browse-border-color);
+    color: var(--browse-text-color);
 }
 
-#search-button:hover, #clear-search:hover {
-    background: var(--bs-btn-hover-bg);
-    border-color: var(--bs-btn-hover-border-color);
-    color: var(--bs-btn-hover-color);
+.tools #search-button:hover, #clear-search:hover {
+    background: var(--browse-hover-bg-color);
+    border-color: var(--browse-border-color);
+    color: var(--browse-text-color);
 }
 
-#search-button:active, #clear-search:active {
+.tools #search-button:active, #clear-search:active {
     background: var(--bs-btn-active-bg);
     border-color: var(--bs-btn-active-border-color);
     color: var(--bs-btn-active-color);
 }
 
-#search-input {
+.tools #search-input {
     margin-right: 8px;
     margin-bottom: 8px;
     padding: 8px 16px;
     width: 50%;
-    background: var(--bs-body-bg);
-    border-color: var(--bs-btn-hover-border-color);
-    color: var(--bs-btn-hover-border-color);
+    background: var(--browse-search-bg-color);
+    border-color: var(--browse-border-color);
 }
