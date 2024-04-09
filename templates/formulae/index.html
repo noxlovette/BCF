@@ -1,0 +1,21 @@
+{% extends 'basic.html' %}
+{% load compress %}
+{% load static %}
+{% block content %}
+<div id="app">
+    <div id="sidebar">
+        <h1>Formula List</h1>
+        <!-- The list of formulae will be loaded here by formulae_list.js-->
+    </div>
+
+    <div id="main-content">
+      <!-- The selected formula will be loaded here. the purview of edit and detail js -->
+    </div>
+</div>
+    
+{% compress js %}
+    <script src="{% static 'formulae/formulae_list.js' %}"></script>
+    <script src="{% static 'formulae/formula_edit.js' %}"></script>
+    
+{% endcompress %}
+{% endblock %}

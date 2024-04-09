@@ -1,0 +1,11 @@
+#sidebar {
+    position: fixed;
+    width: 25vw;
+    height: 100vh;
+    overflow: auto;
+}
+
+#main-content {
+    margin-left: 25vw;
+    padding: 20px;
+}

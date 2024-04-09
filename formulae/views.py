@@ -1,27 +1,115 @@
-from django.contrib.auth.models import User
-from django.core.paginator import Paginator
 from django.forms import inlineformset_factory
+from django.shortcuts import get_object_or_404, render
 from django.views import generic
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from .models import Formula, FormulaIngredient
-from collection.models import CollectionIngredient
-from django.urls import reverse
 from django.views.generic.edit import UpdateView
 from .forms import FormulaForm, FormulaIngredientForm
-from .models import Formula
+from rest_framework import generics
+from rest_framework import serializers
+from .models import Formula, FormulaIngredient
 
 
-class FormulaCreateView(generic.CreateView):
-    model = Formula
-    form_class = FormulaForm
-    template_name = 'formulae/formula_edit.html'
-    success_url = '/formulae/formula-list/'
+def index_view(request):
+    """
+    renders the minimalistic index page
+    :param request:
+    :return:
+    """
+    return render(request, 'formulae/index.html')
+
+
+class DateTimeSerializer(serializers.DateTimeField):
+    """
+    custom time representation
+    """
+
+    def to_representation(self, value):
+        formatted_datetime = value.strftime("%d.%m.%Y, %I:%M%p")
+        return formatted_datetime
+
+
+class FormulaIngredientSerializer(serializers.ModelSerializer):
+    """
+    This is the serializer for the FormulaIngredient model. It will be used to serialize the FormulaIngredient model into JSON format.
+    """
+    ingredient = serializers.StringRelatedField(source='collection_ingredient.ingredient.common_name')
+    cas = serializers.StringRelatedField(source='collection_ingredient.ingredient.cas')
+    volatility = serializers.StringRelatedField(source='collection_ingredient.ingredient.volatility')
+    use = serializers.StringRelatedField(source='collection_ingredient.ingredient.use')
+
+    class Meta:
+        model = FormulaIngredient
+        fields = ['ingredient', 'cas', 'volatility', 'use', 'amount', 'unit']
+
+
+class FormulaSerializer(serializers.ModelSerializer):
+    """
+    This is the serializer for the Formula model. It will be used to serialize the Formula model into JSON format.
+    """
+    ingredients = FormulaIngredientSerializer(source='formulaingredient_set', many=True)
+    created_at = DateTimeSerializer()
+    updated_at = DateTimeSerializer()
+
+    class Meta:
+        model = Formula
+        fields = ['user', 'name', 'description', 'ingredients', 'created_at', 'updated_at']
+
+
+class FormulaCreateAPI(generics.CreateAPIView):
+    """
+    CREATE A NEW FORMULA
+    """
+    serializer_class = FormulaSerializer
+
+    def get_queryset(self):
+        # access the sessionStorage
+        user_id = self.request.session.get('user_id')
+
+        if user_id is not None:
+            return Formula.objects.filter(user=user_id)
+        else:
+            # i.e. you are not logged in
+            return Formula.objects.none()
+
+
+class FormulaListViewAPI(generics.ListAPIView):
+    """
+    LIST OF FORMULAE. The page is populated by JS
+    """
+    queryset = Formula.objects.all()
+    serializer_class = FormulaSerializer
+
+    def get_queryset(self):
+        # Access the user_id from query parameters
+        user_id = self.request.query_params.get('user_id')
+
+        if user_id is not None:
+            return Formula.objects.filter(user=user_id)
+        else:
+            # If user_id is not provided, return an empty queryset
+            return Formula.objects.none()
+
+
+class FormulaDetailViewAPI(generics.RetrieveAPIView):
+    """
+    Looks for pk in the url
+    """
+    queryset = Formula.objects.all()
+    serializer_class = FormulaSerializer
+
+    def get_queryset(self):
+        # Access the user_id from query parameters
+        user_id = self.request.query_params.get('user_id')
+
+        if user_id is not None:
+            return Formula.objects.filter(user=user_id)
+        else:
+            # If user_id is not provided, return an empty queryset
+            return Formula.objects.none()
 
 
 class FormulaUpdateView(UpdateView):
     """
-    EDIT A FORMULA
+    EDIT A FORMULA # TODO REDO COMPLETELY TO API
     """
     model = Formula
     form_class = FormulaForm
@@ -46,50 +134,3 @@ class FormulaUpdateView(UpdateView):
             collection_ingredient.instance = self.object
             collection_ingredient.save()
         return super().form_valid(form)
-
-
-class FormulaListView(generic.ListView):
-    """
-    LIST OF FORMULAE
-    """
-    model = Formula
-    template_name = 'formulae/formulae_list.html'
-    context_object_name = 'formulae_list'
-
-    def get_queryset(self):
-        return Formula.objects.order_by('name')
-
-
-class FormulaDetailView(generic.DetailView):
-    """
-    SINGLE FORMULA NOT LIST OF FORMULAE
-    """
-    model = Formula
-    template_name = "formulae/formula_detail.html"
-    # template context
-    context_object_name = "formula"
-
-    def get_queryset(self):
-        return Formula.objects.order_by('name')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['formulaingredient_list'] = self.object.formulaingredient_set.all()
-        return context
-
-
-class FormulaAPI(APIView):
-    """
-    API endpoint that allows formula to be viewed.
-    """
-
-    def get(self, request):
-        # TEMPORARY HARD-CODED USER ID TODO REMOVE HARDCORED USER ID
-        user_id = 2
-        user = User.objects.get(id=user_id)
-        page_number = request.GET.get('page', 1)  # Get the page number from the request parameters
-        ingredients = Formula.objects.filter(user=user).order_by('formulaingredient__collection_ingredient__ingredient')
-        paginator = Paginator(ingredients, 20)  # Create a Paginator object with 20 items per page
-        page = paginator.get_page(page_number)  # Get the requested page
-        formula_json = [formula_part.to_json for formula_part in page]  # Convert the formula to JSON
-        return Response(formula_json)

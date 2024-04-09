@@ -36,7 +36,7 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link active" href="{% url 'browse:browse' %}">Browse</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'collection:collection' %}">Collect</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'formulae:formulae_list' %}">Formulate</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'formulae:index' %}">Formulate</a></li>
                 </ul>
                 <div class="navbar-nav login">
                     <button class="btn btn-primary" id = 'signup-button' type="button" style="margin-right: 8px;background: var(--bs-body-bg);border-color: var(--bs-btn-hover-border-color);color: var(--bs-btn-hover-border-color);">Sign Up</button>
@@ -46,6 +46,7 @@
         </div>
     </nav>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 {% block content %}
 {% endblock %}
     

@@ -8,14 +8,12 @@ from rest_framework.exceptions import ParseError
 
 
 class IngredientUpdateView(APIView):
+    # TODO rewrite for UpdateView
     def put(self, request, *args, **kwargs):
         try:
             data = request.data
             user_id = kwargs.get('user_id')
             collection_ingredient_id = kwargs.get('collectionIngredientId')
-            print(data)
-            print(user_id)
-            print(collection_ingredient_id)
 
             try:
                 collection_ingredient = CollectionIngredient.objects.get(user=user_id, id=collection_ingredient_id)
@@ -23,14 +21,11 @@ class IngredientUpdateView(APIView):
                 return JsonResponse({'error': 'CollectionIngredient does not exist.'}, status=400)
 
             # Update the fields. if a key is missing, it defaults to what was there...
-            collection_ingredient.amount = int(data.get('amount', collection_ingredient.amount).replace(' g', '').strip())
+            collection_ingredient.amount = int(
+                data.get('amount', collection_ingredient.amount).replace(' g', '').strip())
             collection_ingredient.colour = data.get('colour', collection_ingredient.colour).strip()
             collection_ingredient.impression = data.get('impression', collection_ingredient.impression).strip()
             collection_ingredient.is_collection = data.get('is_collection', collection_ingredient.is_collection)
-
-            print(collection_ingredient.is_collection)
-            print(collection_ingredient.impression)
-            print(collection_ingredient)
 
             collection_ingredient.save()
 
@@ -59,6 +54,7 @@ class IngredientUpdateView(APIView):
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
+
 
 class CollectionView(generic.ListView):
     model = CollectionIngredient
