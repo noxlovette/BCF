@@ -1,4 +1,5 @@
-// Load the formula list when the page is ready
+// HANDLES ONLY THE LIST VIEW
+
 user_id = sessionStorage.getItem('user_id');
 $(document).ready(function() {
     // Obtain the CSRF token from the cookie
@@ -34,6 +35,7 @@ $(document).ready(function() {
                 var nameLabel = $('<p id = "formula-name">').text('Name: ' + formula.name);
                 var timeEditedLabel = $('<p id = "formula-edit-time">').text('Edited: ' + formula.updated_at);
                 var viewButton = $('<button class= "btn btn-primary btn-formula" id = "view-formula">').text('View Formula');
+                viewButton.data('id', formula.id);
 
                 // Append the elements to the block
                 formulaItem.append(nameLabel, timeEditedLabel, viewButton);
@@ -50,45 +52,6 @@ $(document).ready(function() {
         }
     });
 
-});
-
-
-
-
-// Load the formula data when the page is ready and the formula name is clicked
-$(document).ready(function() {
-    $('.formula-link').on('click', function(e) {
-        e.preventDefault();
-
-        var formulaId = $(this).data('id');
-
-        $.get('api/' + formulaId, function(data) {
-            // Store the data in  main-content div
-            $('#main-content').data('formulaData', data).html(data);
-        });
-    });
-});
-
-// Add a click event handler to the create button
-$('#create-button').on('click', function() {
-    // Create an empty formula
-    var formData = {
-        name: '',
-        description: '',
-        ingredients: []
-    };
-
-    $.ajax({
-        url: '/api/new/',
-        type: 'POST',
-        data: JSON.stringify(formData),
-        contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
-        success: function(data) {
-            // Redirect to the editing view for the new formula
-            window.location.href = '/edit-formula/' + data.id;
-        }
-    });
 });
 
 // Function to retrieve the CSRF token from the cookie

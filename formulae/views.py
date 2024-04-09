@@ -51,7 +51,7 @@ class FormulaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Formula
-        fields = ['user', 'name', 'description', 'ingredients', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'name', 'description', 'ingredients', 'created_at', 'updated_at']
 
 
 class FormulaCreateAPI(generics.CreateAPIView):
@@ -91,20 +91,10 @@ class FormulaListViewAPI(generics.ListAPIView):
 
 class FormulaDetailViewAPI(generics.RetrieveAPIView):
     """
-    Looks for pk in the url
+    Looks for pk in the url and returns the formula
     """
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
-
-    def get_queryset(self):
-        # Access the user_id from query parameters
-        user_id = self.request.query_params.get('user_id')
-
-        if user_id is not None:
-            return Formula.objects.filter(user=user_id)
-        else:
-            # If user_id is not provided, return an empty queryset
-            return Formula.objects.none()
 
 
 class FormulaUpdateView(UpdateView):
