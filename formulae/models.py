@@ -29,7 +29,7 @@ class FormulaIngredient(models.Model):
     """
     This is the model of an ingredient in a formula. It is a list of ingredients used in a perfume formula.
     """
-    formula = models.ForeignKey(Formula, on_delete=models.CASCADE)
+    formula = models.ForeignKey(Formula, on_delete=models.CASCADE, related_name='ingredients')
     collection_ingredient = models.ForeignKey(CollectionIngredient, on_delete=models.CASCADE)
     amount = models.IntegerField(default=0, verbose_name="Amount")
     unit = models.CharField(max_length=50, default='g', verbose_name="Unit")

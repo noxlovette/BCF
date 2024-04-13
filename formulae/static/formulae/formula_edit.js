@@ -129,6 +129,10 @@ $(document).ready(function() {
         var formulaIngredientTable = formulaDetailItem.find('.formula-ingredient-table');
         var lastRow = formulaIngredientTable.find('tr:last');
         lastCounter = parseInt(lastRow.find('.td-counter-cell').text());
+        if (isNaN(lastCounter)) {
+            lastCounter = 0;
+        }
+
         var newCounter = lastCounter + 1;
 
         var newRow = $('<tr>').append(

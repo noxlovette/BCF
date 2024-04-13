@@ -24,9 +24,10 @@ $(document).ready(function() {
         var formula_id = $(this).data('id');
         var ingredients = [];
         var data = {
-    'name': formula_name,
-    'description': formula_description,
-    'ingredients': []
+            'user': userId,
+            'name': formula_name,
+            'description': formula_description,
+            'ingredients': []
         };
 
         formulaIngredientTable.find('tr').each(function (index, row) {

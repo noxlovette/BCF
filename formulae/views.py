@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -59,14 +61,18 @@ class FormulaDetailViewAPI(generics.RetrieveUpdateAPIView):
     serializer_class = FormulaSerializer
 
     def update(self, request, *args, **kwargs):
-        """
-        Update the formula
-        """
-        # if the value exists. If it does not exist, it will return False
-        partial = kwargs.pop('partial', False)
-        formula = self.get_object()
-        serializer = self.get_serializer(formula, data=request.data, partial=partial)
+        raw_data = request.body.decode('utf-8')  # Decode the raw data
+        data = json.loads(raw_data)  # Parse the raw data into a JSON object
+        print(raw_data)
+        print(data)
+
+        # Get the existing instance
+        instance = self.get_object()
+
+        # Initialize the serializer with the existing instance and the data
+        serializer = self.get_serializer(instance, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
+
         self.perform_update(serializer)
         return Response(serializer.data)
 
