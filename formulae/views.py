@@ -24,15 +24,9 @@ class FormulaCreateAPI(generics.CreateAPIView):
     """
     serializer_class = FormulaSerializer
 
-    def get_queryset(self):
-        # access the sessionStorage
-        user_id = self.request.session.get('user_id')
-
-        if user_id is not None:
-            return Formula.objects.filter(user=user_id)
-        else:
-            # i.e. you are not logged in
-            return Formula.objects.none()
+    def perform_create(self, serializer):
+        # Set the user field before saving the object
+        serializer.save(user=self.request.user, created_at=timezone.now(), updated_at=timezone.now())
 
 
 class FormulaListViewAPI(generics.ListAPIView):
@@ -41,7 +35,7 @@ class FormulaListViewAPI(generics.ListAPIView):
     """
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
-    @csrf_exempt
+
     def get_queryset(self):
         # Access the user_id from query parameters
         user_id = self.request.query_params.get('user_id')
@@ -86,3 +80,7 @@ class FormulaDetailViewAPI(generics.RetrieveUpdateAPIView):
         request.data['updated_at'] = timezone.now()
         return super().partial_update(request, *args, **kwargs)
 
+
+class FormulaIngredientDeleteAPIView(generics.DestroyAPIView):
+    queryset = FormulaIngredient.objects.all()
+    serializer_class = FormulaIngredientSerializer

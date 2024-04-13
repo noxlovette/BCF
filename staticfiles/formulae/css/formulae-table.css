@@ -1,8 +1,11 @@
 #sidebar {
-    position: fixed;
-    width: 25vw;
-    height: 100vh;
-    overflow: auto;
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: auto; /* This will add a scrollbar when the content is larger than the sidebar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #main-content {

@@ -7,4 +7,6 @@ body {
 
 footer {
     margin-top: auto;
+    z-index: 1000; /* Any high number can be used */
+    position: relative; /* z-index only works on positioned elements (position: absolute, position: relative, position: fixed, or position: sticky) */
 }

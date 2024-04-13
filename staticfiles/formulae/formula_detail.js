@@ -11,8 +11,6 @@ $(document).ready(function() {
         // Use the formula ID as needed (e.g., to display the corresponding formula)
         console.log('Clicked button view for formula ID:', formulaId);
 
-        var csrftoken = getCookie('csrftoken');
-
         $.ajax({
             url: 'api/formula/' + formulaId + '/', // make sure the URL is correct...
             method: 'GET',
@@ -41,12 +39,14 @@ $(document).ready(function() {
                 var timeEditedRow = $('<tr>').append($('<td>').text('Time Edited:'), $('<td>').text(data.updated_at));
                 var editButton = $('<button>').addClass('btn btn-primary btn-edit-formula').text('Edit');
                 editButton.data('id', data.id);
+                var cancelButton = $('<button>').addClass('btn btn-primary btn-cancel-formula').text('Cancel');
+                cancelButton.hide();
                 var saveButton = $('<button>').addClass('btn btn-primary btn-save-formula').text('Save');
                 saveButton.data('id', data.id);
                 saveButton.hide();
 
                 // Append rows to the detail table
-                formulaDetailTable.append(nameRow, descriptionRow, timeEditedRow, editButton, saveButton);
+                formulaDetailTable.append(nameRow, descriptionRow, timeEditedRow, editButton, saveButton, cancelButton);
 
                 // Create a table for the formula ingredients
                 var formulaIngredientTable = $('<table>').addClass('formula-ingredient-table');
@@ -76,8 +76,10 @@ $(document).ready(function() {
                         $('<td id="amount cell">').text(ingredient.amount).addClass('td-regular-input'),
                     );
 
-                    // Append ingredient row to the ingredient table
-                    formulaIngredientTable.append(ingredientRow);
+                    // Append ingredient row to the ingredient table. Give it the value of the formula_ingredient_id
+                    ingredientRow.data('id', ingredient.formula_ingredient_id)
+                    formulaIngredientTable.append(ingredientRow)
+                    console.log('Ingredient row:', ingredientRow.data('id'))
                 });
 
                 // Append detail tables to the formula detail view div
@@ -95,20 +97,3 @@ $(document).ready(function() {
         });
     });
 });
-
-// Function to retrieve the CSRF token from the cookie
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = $.trim(cookies[i]);
-            // Check if the cookie name matches the specified name
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}

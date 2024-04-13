@@ -1,17 +1,11 @@
 // HANDLES ONLY THE LIST VIEW
-
-user_id = sessionStorage.getItem('user_id');
 $(document).ready(function() {
-    // Obtain the CSRF token from the cookie
-    var csrftoken = getCookie('csrftoken');
-    console.log('User ID:', user_id);
-
     // Make an AJAX request to fetch the list of formula instances
     $.ajax({
         url: 'api/formula/list/', // URL to your API endpoint
         method: 'GET',
         data: {
-            user_id: user_id
+            user_id: userId
         },
         headers: {
             'X-CSRFToken': csrftoken // Include the CSRF token in the headers
@@ -42,7 +36,8 @@ $(document).ready(function() {
                 formulaList.append(formulaItem);
 
             });
-            $('#sidebar').append(formulaList); // fill out the block with the formula items
+            let createFormulaButton = $('<button class="btn btn-primary create-formula" id="create-formula">').text('Create Formula');
+            $('#sidebar').append(formulaList, createFormulaButton); // fill out the block with the formula items
         },
         error: function(xhr, status, error) {
             // Log the error details
@@ -51,22 +46,31 @@ $(document).ready(function() {
             console.log('Response headers:', xhr.getAllResponseHeaders());
         }
     });
+    $('#sidebar').on('click', '#create-formula', function(e) {
+        e.preventDefault();
+        // Create an empty formula
+        console.log('Creating a new formula')
+        var formData = {
+            name: 'New Formula',
+            description: 'Write something inspiring here!',
+            ingredients: [],
+            user: userId,
+        };
+
+        $.ajax({
+            url: "api/formula/new/",
+            type: 'POST',
+            data: JSON.stringify(formData),
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function(data) {
+                // Redirect to the editing view for the new formula
+                window.location.href = '/formulae/';
+            }
+        });
+    });
 
 });
-
-// Function to retrieve the CSRF token from the cookie
-function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = $.trim(cookies[i]);
-                // Check if the cookie name matches the specified name
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
