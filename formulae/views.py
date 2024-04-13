@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework import generics
 from .models import Formula, FormulaIngredient
@@ -38,7 +39,7 @@ class FormulaListViewAPI(generics.ListAPIView):
     """
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
-
+    @csrf_exempt
     def get_queryset(self):
         # Access the user_id from query parameters
         user_id = self.request.query_params.get('user_id')

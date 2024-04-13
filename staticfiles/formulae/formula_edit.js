@@ -41,8 +41,15 @@ function setupIngredientAutocomplete(text) {
             item.on('click', function() {
                 inputField.val(ingredient.common_name); // Populate input field with selected value
                 var row = $(item).closest('tr');
-                var cell = row.find('td:eq(2)')
-                cell.text(ingredient.volatility)
+                var volatility = row.find('td:eq(2)')
+                var amount = row.find('td:eq(3)')
+                volatility.text(ingredient.volatility)
+                amount.data('id', ingredient.id)
+                console.log('Amount ID:', amount.data('id'))
+                let parentElement = inputField.parent();
+                let tdIngredientInput = parentElement.closest('tr').find('.td-ingredient-input');
+                tdIngredientInput.data('id', ingredient.id);
+                console.log('Ingredient ID:', tdIngredientInput.data('id'))
 
                 dropdownMenu.removeClass('active'); // Hide dropdown menu
             });
@@ -169,10 +176,10 @@ $(document).ready(function() {
             var parentElement = $(this);
             var inputField = parentElement.find('#ingredient-input');
             var inputValue = inputField.val();
-            parentElement.text(inputValue);
-            console.log('Changed the value of the td');
+            parentElement
+                .text(inputValue)
+                .attr('id', 'ingredient cell ' + parentElement.data('id'));
             parentElement.find('#ingredient-autocomplete-container').remove();
-            console.log('Removed container for one of the rows');
 });
 
         console.log('Removed container')

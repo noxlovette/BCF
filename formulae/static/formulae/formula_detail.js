@@ -36,8 +36,8 @@ $(document).ready(function() {
                 var formulaDetailTable = $('<table>').addClass('formula-detail-table');
 
                 // Add rows for each section: name, description, time_edited
-                var nameRow = $('<tr>').append($('<td>').text('Name:'), $('<td class="editable-detail-table">').text(data.name));
-                var descriptionRow = $('<tr>').append($('<td>').text('Description:'), $('<td class="editable-detail-table">').text(data.description));
+                var nameRow = $('<tr>').append($('<td>').text('Name:'), $('<td class="editable-detail-table" id = "formula-name">').text(data.name));
+                var descriptionRow = $('<tr>').append($('<td>').text('Description:'), $('<td class="editable-detail-table", id = "formula-description">').text(data.description));
                 var timeEditedRow = $('<tr>').append($('<td>').text('Time Edited:'), $('<td>').text(data.updated_at));
                 var editButton = $('<button>').addClass('btn btn-primary btn-edit-formula').text('Edit');
                 editButton.data('id', data.id);
@@ -68,7 +68,10 @@ $(document).ready(function() {
                 data.ingredients.forEach(function(ingredient) {
                     var ingredientRow = $('<tr>').append(
                         $('<td id="counter cell">').text(counter++).addClass('td-counter-cell'),
-                        $('<td id="ingredient cell">').text(ingredient.ingredient).addClass("td-ingredient-input"),
+                        $('<td>').text(ingredient.ingredient)
+                            .addClass("td-ingredient-input")
+                            .attr('id', 'ingredient cell ' + ingredient.ingredient_id)
+                            .data('id', ingredient.ingredient_id),
                         $('<td id="volatility cell">').text(ingredient.volatility).addClass('td-volatility-cell'),
                         $('<td id="amount cell">').text(ingredient.amount).addClass('td-regular-input'),
                     );
