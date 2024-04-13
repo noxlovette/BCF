@@ -1,10 +1,9 @@
-from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework import generics
-from rest_framework import serializers
 from .models import Formula, FormulaIngredient
-from collection.models import CollectionIngredient
+from .serialisers import FormulaSerializer, FormulaIngredientSerializer
 
 
 def index_view(request):
@@ -14,45 +13,6 @@ def index_view(request):
     :return:
     """
     return render(request, 'formulae/index.html')
-
-
-class DateTimeSerializer(serializers.DateTimeField):
-    """
-    custom time representation
-    """
-
-    def to_representation(self, value):
-        formatted_datetime = value.strftime("%d.%m.%Y, %I:%M%p")
-        return formatted_datetime
-
-
-class FormulaIngredientSerializer(serializers.ModelSerializer):
-    """
-    This is the serializer for the FormulaIngredient model. It will be used to serialize the FormulaIngredient model into JSON format.
-    """
-    ingredient = serializers.StringRelatedField(source='collection_ingredient.ingredient.common_name')
-    cas = serializers.StringRelatedField(source='collection_ingredient.ingredient.cas')
-    volatility = serializers.StringRelatedField(source='collection_ingredient.ingredient.volatility')
-    use = serializers.StringRelatedField(source='collection_ingredient.ingredient.use')
-
-    class Meta:
-        model = FormulaIngredient
-        fields = ['ingredient', 'cas', 'volatility', 'use', 'amount', 'unit']
-        read_only_fields = ['ingredient', 'cas', 'volatility', 'use', 'unit']
-
-
-class FormulaSerializer(serializers.ModelSerializer):
-    """
-    This is the serializer for the Formula model. It will be used to serialize the Formula model into JSON format.
-    """
-    ingredients = FormulaIngredientSerializer(source='formulaingredient_set', many=True)
-    created_at = DateTimeSerializer()
-    updated_at = DateTimeSerializer()
-
-    class Meta:
-        model = Formula
-        fields = ['id', 'user', 'name', 'description', 'ingredients', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'user', 'created_at', 'updated_at']
 
 
 class FormulaCreateAPI(generics.CreateAPIView):
@@ -108,3 +68,14 @@ class FormulaDetailViewAPI(generics.RetrieveUpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
+
+    def get_serializer(self, *args, **kwargs):
+        # Specify partial=True for partial updates
+        kwargs['partial'] = True
+        return super().get_serializer(*args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        # Set the updated_at field to the current time
+        request.data['updated_at'] = timezone.now()
+        return super().partial_update(request, *args, **kwargs)
+
