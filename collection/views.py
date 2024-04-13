@@ -1,10 +1,15 @@
 from django.db import IntegrityError
+from django.db.models import Q
 from django.http import JsonResponse
 from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from .models import CollectionIngredient, Ingredient, User
 from rest_framework.views import APIView
 from rest_framework.exceptions import ParseError
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class IngredientUpdateView(APIView):
@@ -66,13 +71,25 @@ class CollectionView(generic.ListView):
 
 
 class CollectionAPI(APIView):
+    @csrf_exempt
     def get_collection(self, request, user_id):
+
         user = User.objects.get(id=user_id)
+        search_param = request.query_params.get('search', None)
         collection_ingredients = CollectionIngredient.objects.filter(user=user).order_by('ingredient__common_name')
+
+        if search_param:
+            collection_ingredients = collection_ingredients.filter(
+                Q(ingredient__common_name__icontains=search_param) |
+                Q(ingredient__other_names__icontains=search_param) |
+                Q(ingredient__cas__icontains=search_param)
+            ).order_by('ingredient__common_name')
+
         return collection_ingredients
 
+    @csrf_exempt
     def get(self, request, user_id):
-
+        logger.info('GET request received')
         collection_ingredients = self.get_collection(request, user_id)
 
         if not collection_ingredients.exists():
@@ -90,10 +107,10 @@ class CollectionAPI(APIView):
             return JsonResponse(empty_ingredient, status=200)
 
         collection_json = [collection_ingredient.to_json for collection_ingredient in collection_ingredients]
-        request.session['collection'] = collection_json
 
         return Response(collection_json)
 
+    @csrf_exempt
     def post(self, request, user_id):
         try:
             data = request.data

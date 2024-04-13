@@ -1,0 +1,19 @@
+.dropdown-menu {
+    display: none; /* Hide the dropdown menu by default */
+    position: absolute; /* Position it absolutely relative to the input field */
+    z-index: 1000; /* Set a high z-index to ensure it appears above other elements */
+    background-color: #fff; /* Set background color */
+    border: 1px solid #ccc; /* Add a border */
+    padding: 5px; /* Add padding */
+    text-align: center; /* Center-align text */
+}
+
+.dropdown-menu.active {
+    display: block; /* Show the dropdown menu when the 'active' class is added */
+}
+
+.dropdown-item {
+    color: #000; /* Set text color */
+    padding: 5px; /* Add padding */
+    cursor: pointer; /* Change cursor to pointer */
+}

@@ -1,11 +1,10 @@
-from django.forms import inlineformset_factory
-from django.shortcuts import get_object_or_404, render
-from django.views import generic
-from django.views.generic.edit import UpdateView
-from .forms import FormulaForm, FormulaIngredientForm
+from django.http import JsonResponse
+from django.shortcuts import render
+from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import serializers
 from .models import Formula, FormulaIngredient
+from collection.models import CollectionIngredient
 
 
 def index_view(request):
@@ -39,6 +38,7 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = FormulaIngredient
         fields = ['ingredient', 'cas', 'volatility', 'use', 'amount', 'unit']
+        read_only_fields = ['ingredient', 'cas', 'volatility', 'use', 'unit']
 
 
 class FormulaSerializer(serializers.ModelSerializer):
@@ -52,6 +52,7 @@ class FormulaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Formula
         fields = ['id', 'user', 'name', 'description', 'ingredients', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'user', 'created_at', 'updated_at']
 
 
 class FormulaCreateAPI(generics.CreateAPIView):
@@ -89,38 +90,21 @@ class FormulaListViewAPI(generics.ListAPIView):
             return Formula.objects.none()
 
 
-class FormulaDetailViewAPI(generics.RetrieveAPIView):
+class FormulaDetailViewAPI(generics.RetrieveUpdateAPIView):
     """
-    Looks for pk in the url and returns the formula
+    Looks for pk in the url and returns the formula. Can also edit it.
     """
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
 
-
-class FormulaUpdateView(UpdateView):
-    """
-    EDIT A FORMULA # TODO REDO COMPLETELY TO API
-    """
-    model = Formula
-    form_class = FormulaForm
-    template_name = 'formulae/formula_edit.html'
-    success_url = '/formulae/formula-list/'
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        FormulaIngredientInlineFormSet = inlineformset_factory(Formula, FormulaIngredient, form=FormulaIngredientForm,
-                                                               extra=1)
-        if self.request.POST:
-            data['formulaingredient'] = FormulaIngredientInlineFormSet(self.request.POST, instance=self.object)
-        else:
-            data['formulaingredient'] = FormulaIngredientInlineFormSet(instance=self.object)
-        return data
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        collection_ingredient = context['collection_ingredient']
-        self.object = form.save()
-        if collection_ingredient.is_valid():
-            collection_ingredient.instance = self.object
-            collection_ingredient.save()
-        return super().form_valid(form)
+    def update(self, request, *args, **kwargs):
+        """
+        Update the formula
+        """
+        # if the value exists. If it does not exist, it will return False
+        partial = kwargs.pop('partial', False)
+        formula = self.get_object()
+        serializer = self.get_serializer(formula, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)

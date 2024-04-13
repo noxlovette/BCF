@@ -159,7 +159,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'collection/static'),
     os.path.join(BASE_DIR, 'browse/static'),
-    os.path.join(BASE_DIR, 'main_project/static')
+    os.path.join(BASE_DIR, 'main_project/static'),
+    os.path.join(BASE_DIR, 'formulae/static')
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -182,3 +183,13 @@ COMPRESS_JS_FILTERS = [
     'compressor.filters.jsmin.JSMinFilter',
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+}

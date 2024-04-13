@@ -1,3 +1,5 @@
+/* css for browse table */
+
 .table-container #ingredients-table {
     border: 1px solid var(--bs-border-color);
     max-width: 90%;
