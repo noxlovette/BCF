@@ -16,3 +16,16 @@ function getCookie(name) {
 
 const csrftoken = getCookie('csrftoken');
 const userId = sessionStorage.getItem('user_id');
+
+let emojis = ["🧪", "🔬", "🧫", "🧬", "🌡️", "⚗️", "🔭", "🧲", "🔩", "🧰"];
+
+function getRandomEmoji() {
+    var randomIndex = Math.floor(Math.random() * emojis.length);
+    return emojis[randomIndex];
+}
+
+let listItems = document.querySelectorAll("#app #sidebar li");
+listItems.forEach(function(li) {
+    var randomEmoji = getRandomEmoji();
+    li.style.setProperty("--random-emoji", `"${randomEmoji}"`);
+});

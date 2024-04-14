@@ -97,6 +97,8 @@ $(document).ready(function() {
         // Find the table containing the formula ingredients
         let formulaIngredientTable = formulaDetailItem.find('.formula-ingredient-table');
 
+        formulaIngredientTable.addClass('edit-mode');
+
         // Make the formula details editable
         formulaDetailTable.find('.editable-detail-table').each(function () {
             let text = $(this).text().trim();
@@ -119,7 +121,7 @@ $(document).ready(function() {
         });
 
         // Show the Save button and create deleteButton and hide the Edit button
-        let deleteButton = $('<button>').addClass('btn btn-danger btn-delete-ingredient').text('Delete Ingredient');
+        let deleteButton = $('<button>').addClass('btn btn-danger btn-delete-ingredient').text('Delete');
         formulaIngredientTable.find('tr:not(:first)').each(function () {
             let row = $(this);
             let deleteButtonClone = deleteButton.clone(); // clone the button to avoid sharing the same button instance

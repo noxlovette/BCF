@@ -21,6 +21,7 @@ $(document).ready(function() {
             console.log('Response headers:', xhr.getAllResponseHeaders());
 
             var formulaList = $('<ul id="formulae-list">');
+            // Step 1: Create an array of emojis
 
             // Process the response data
             data.forEach(function(formula) {
@@ -37,6 +38,8 @@ $(document).ready(function() {
 
             });
             let createFormulaButton = $('<button class="btn btn-primary create-formula" id="create-formula">').text('Create Formula');
+            formulaList.append(createFormulaButton);
+
             $('#sidebar').append(formulaList, createFormulaButton); // fill out the block with the formula items
         },
         error: function(xhr, status, error) {
@@ -72,5 +75,4 @@ $(document).ready(function() {
             }
         });
     });
-
 });

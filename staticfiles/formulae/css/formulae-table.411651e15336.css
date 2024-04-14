@@ -1,0 +1,219 @@
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#app {
+    display: flex;
+    flex-direction: row;
+    margin: 3%;
+    margin-top: -52px;
+    max-width: 1200px;
+    max-height: 800px;
+    justify-content: center;
+    align-items: center;
+    background: var(--formula-bg-color);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 20;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+#app #create-formula {
+    background: var(--formula-secondary-color);
+}
+
+#app .btn {
+    background: var(--formula-primary-color);
+    color: var(--formula-hover-bg-color);
+    border: 1px solid var(--formula-border-color);
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+#app .btn:hover {
+    color: var(--formula-primary-color);
+    background: var(--formula-hover-bg-color);
+}
+
+#app #main-content .formula-detail .formula-detail-table .btn {
+    position: relative;
+    width: 100px;
+}
+
+#app #main-content .formula-detail .formula-detail-table .btn-delete-ingredient {
+    background: var(--formula-delete-color);
+    color: var(--formula-hover-bg-color);
+    border: 1px solid var(--formula-border-color);
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+
+}
+
+#app #sidebar {
+    display: flex;
+    flex:33%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-height: 750px;
+    border-radius: 10px;
+    padding: 20px;
+    overflow: auto;
+}
+
+#app #main-content {
+    flex:67%;
+    max-height: 600px;
+    min-height: 600px;
+    margin-left: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+#app #sidebar #formulae-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-height: 600px;
+    background: var(--formula-primary-color);
+    overflow: auto;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+h1 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding-top: 10px;
+    z-index: 20; /* Make it appear underneath other elements */
+    font-size: 10em !important; /* Adjust to your preference */
+    text-align: center;
+    line-height: 100vh; /* Vertically center the text */
+}
+
+#app #sidebar h2 {
+    text-align: center;
+    padding: 10px;
+}
+
+#app #sidebar li {
+    list-style-type: none;
+    margin: 10px;
+    padding: 10px;
+    background: var(--formula-secondary-color);
+    color: var(--formula-text-color);
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+#app #sidebar li {
+    width: 300px;
+    text-align: center;
+
+}
+
+#app #sidebar li:hover {
+    background: var(--formula-hover-bg-color);
+}
+
+#app #sidebar li::before {
+    content: var(--random-emoji);
+    margin-right: 10px;
+}
+
+#app #sidebar li.active {
+    background: var(--formula-primary-color);
+}
+
+#app #sidebar li.active:hover {
+    background: var(--formula-primary-color);
+}
+
+#app #sidebar li.active::before {
+    content: var(--active-emoji);
+}
+
+#app #main-content .td {
+    padding: 10px;
+    text-align: center;
+}
+
+#app #main-content .td-detail-table {
+    font-size: 1.2em;
+}
+
+#app #main-content .formula-detail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#app #main-content .formula-detail .formula-detail-table {
+    position: relative;
+    width: 600px;
+    padding: 20px;
+    margin: 20px;
+    border-collapse: separate;
+    border-spacing: 5px;
+    background: var(--formula-hover-bg-color);
+}
+
+#app #main-content .formula-detail .formula-ingredient-table {
+    position: relative;
+    width: 600px;
+    padding: 20px;
+    margin: 20px;
+    border-collapse: separate;
+    border-spacing: 5px;
+    background: var(--formula-hover-bg-color);
+}
+
+#app #main-content .formula-detail .formula-ingredient-table .td-regular-input {
+    width: 100%; /* Adjust as needed */
+}
+
+#app #main-content .formula-detail .formula-ingredient-table .td-regular-input input {
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    width: 100%; /* Take up full width of parent */
+    padding: 0; /* Override default padding */
+    border: none; /* Override default border */
+    margin: 0; /* Override default margin */
+}
+
+#app #main-content .formula-detail .formula-ingredient-table tr, td, th {
+    border: 1px solid var(--formula-border-color);
+}
+
+.dropdown-menu {
+    display: none; /* Hide the dropdown menu by default */
+    position: absolute; /* Position it absolutely relative to the input field */
+    z-index: 1000; /* Set a high z-index to ensure it appears above other elements */
+    background-color: #fff; /* Set background color */
+    border: 1px solid #ccc; /* Add a border */
+    padding: 5px; /* Add padding */
+    text-align: center; /* Center-align text */
+}
+
+.dropdown-menu.active {
+    display: block; /* Show the dropdown menu when the 'active' class is added */
+}
+
+.dropdown-item {
+    color: var(--formula-text-color); /* Set text color */
+    padding: 5px; /* Add padding */
+    cursor: pointer; /* Change cursor to pointer */
+}

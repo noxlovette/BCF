@@ -13,4 +13,14 @@
     --collection-bg-color: rgba(255, 193, 186, 0.5);
     --collection-hover-bg-color: rgba(138, 84, 78, 0.5);
     --collection-search-bg-color: rgba(53, 48, 47, 0.1);
+    --formula-primary-color: #4B5A6A;
+    --formula-secondary-color: #91A8C0;
+    --formula-text-color: #393C41;
+    --formula-border-color: #393C41;
+    --formula-bg-color: #C0AF91;
+    --formula-hover-bg-color: #EBD38A;
+    --formula-search-bg-color: rgba(47, 50, 63, 0.1);
+    --formula-delete-color: #C04B4B;
 }
+
+/* Path: main_project/static/assets/css/variables.css */

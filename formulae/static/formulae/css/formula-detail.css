@@ -1,3 +1,35 @@
+#app #main-content .td {
+    padding: 10px;
+    text-align: center;
+}
+
+#app #main-content .td-detail-table {
+    font-size: 1.2em;
+}
+
+#app #main-content .formula-detail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#app #main-content .formula-detail .formula-detail-table {
+    position: relative;
+    width: 80%;
+    border-collapse: collapse;
+    background: var(--formula-hover-bg-color);
+}
+
+#app #main-content .formula-detail .formula-ingredient-table {
+    position: relative;
+    width: 80%;
+    border-collapse: collapse;
+}
+#app #main-content .formula-detail .formula-ingredient-table tr, td, th {
+    border: 1px solid var(--formula-border-color);
+}
+
 .dropdown-menu {
     display: none; /* Hide the dropdown menu by default */
     position: absolute; /* Position it absolutely relative to the input field */
@@ -13,7 +45,7 @@
 }
 
 .dropdown-item {
-    color: #000; /* Set text color */
+    color: var(--formula-text-color); /* Set text color */
     padding: 5px; /* Add padding */
     cursor: pointer; /* Change cursor to pointer */
 }

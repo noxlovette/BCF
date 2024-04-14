@@ -34,9 +34,9 @@ $(document).ready(function() {
                 var formulaDetailTable = $('<table>').addClass('formula-detail-table');
 
                 // Add rows for each section: name, description, time_edited
-                var nameRow = $('<tr>').append($('<td>').text('Name:'), $('<td class="editable-detail-table" id = "formula-name">').text(data.name));
-                var descriptionRow = $('<tr>').append($('<td>').text('Description:'), $('<td class="editable-detail-table", id = "formula-description">').text(data.description));
-                var timeEditedRow = $('<tr>').append($('<td>').text('Time Edited:'), $('<td>').text(data.updated_at));
+                var nameRow = $('<tr>').append($('<td>').text('Name:').addClass('td-detail-table'), $('<td class="editable-detail-table" id = "formula-name">').text(data.name));
+                var descriptionRow = $('<tr>').append($('<td>').text('Description:').addClass('td-detail-table'), $('<td class="editable-detail-table", id = "formula-description">').text(data.description));
+                var timeEditedRow = $('<tr>').append($('<td>').text('Time Edited:').addClass('td-detail-table'), $('<td>').text(data.updated_at));
                 var editButton = $('<button>').addClass('btn btn-primary btn-edit-formula').text('Edit');
                 editButton.data('id', data.id);
                 var cancelButton = $('<button>').addClass('btn btn-primary btn-cancel-formula').text('Cancel');
@@ -53,10 +53,10 @@ $(document).ready(function() {
 
                 // Create header row for the ingredient table
                 var ingredientHeaderRow = $('<tr>').append(
-                    $('<th>').text('#'),
-                    $('<th>').text('Ingredient'),
-                    $('<th>').text('Volatility'),
-                    $('<th>').text('Amount'),
+                    $('<th>').text('#').addClass('th-ingredient-table th-counter'),
+                    $('<th>').text('Ingredient').addClass('th-ingredient-table th-ingredient'),
+                    $('<th>').text('Volatility').addClass('th-ingredient-table th-volatility'),
+                    $('<th>').text('Amount').addClass('th-ingredient-table th-amount')
                 );
 
                 // Append header row to the ingredient table
@@ -83,7 +83,9 @@ $(document).ready(function() {
                 });
 
                 // Append detail tables to the formula detail view div
-                formulaDetailItem.append(formulaDetailTable, formulaIngredientTable);
+                let tableWrapper = $('<div>').addClass('table-wrapper');
+                tableWrapper.append(formulaIngredientTable);
+                formulaDetailItem.append(formulaDetailTable, tableWrapper);
 
                 // Append formula detail view div to the desired container
                 $('#main-content').append(formulaDetailItem);

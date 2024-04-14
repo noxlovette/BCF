@@ -1,0 +1,25 @@
+:root {
+    --browse-primary-color: #6A752F;
+    --browse-secondary-color: #C1CA94;
+    --browse-text-color: #2B3303;
+    --browse-border-color: #414B11;
+    --browse-bg-color: rgba(200, 200, 110, 0.5);
+    --browse-hover-bg-color: rgba(117, 103, 47, 0.5);
+    --browse-search-bg-color: rgba(54, 64, 4, 0.1);
+    --collection-primary-color: #8A544E;
+    --collection-secondary-color: #FFC1BA;
+    --collection-text-color: #35302F;
+    --collection-border-color: #35302F;
+    --collection-bg-color: rgba(255, 193, 186, 0.5);
+    --collection-hover-bg-color: rgba(138, 84, 78, 0.5);
+    --collection-search-bg-color: rgba(53, 48, 47, 0.1);
+    --formula-primary-color: #4E698A;
+    --formula-secondary-color: #BACDFF;
+    --formula-text-color: #2F3235;
+    --formula-border-color: #46515F;
+    --formula-bg-color: rgba(186, 205, 255, 0.5);
+    --formula-hover-bg-color: rgba(78, 105, 138, 0.5);
+    --formula-search-bg-color: rgba(47, 50, 63, 0.1);
+}
+
+/* Path: main_project/static/assets/css/variables.css */
