@@ -234,6 +234,7 @@ $(document).ready(function() {
         console.log('Removed container')
 
         $('.btn-add-ingredient').remove();
+        formulaIngredientTable.removeClass('edit-mode');
 
         // Hide the Save button and show the Edit button
         formulaDetailItem.find('.btn-edit-formula').show();

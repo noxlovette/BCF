@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ingredient_id: ingredientId
         };
 
-        fetch(`/collection/api/collection/${userId}`, {
+        fetch(`/collection/api/collection/${userId}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
