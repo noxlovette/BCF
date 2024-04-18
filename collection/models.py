@@ -1,12 +1,12 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 from browse.models import Ingredient
 
 
-# Create your models here.
-
 class BaseCollectionIngredient(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     amount = models.IntegerField(default=0, verbose_name="Amount")
     unit = models.CharField(max_length=50, default='g', verbose_name="Unit")
     colour = models.CharField(max_length=50, verbose_name="Colour", null=True, blank=True)
@@ -14,7 +14,7 @@ class BaseCollectionIngredient(models.Model):
     associations = models.TextField(verbose_name="Associations", null=True, blank=True)
     notes = models.TextField(verbose_name="Notes", null=True, blank=True)
     is_collection = models.BooleanField(default=False, verbose_name="In Collection")
-    date_added = models.DateTimeField(auto_now_add=True)
+    date_added = models.DateTimeField(auto_now_add=True, verbose_name="Date Added")
 
     def __str__(self):
         return f"{self.user.username} - {self.common_name} - {self.amount} {self.unit}"
@@ -53,8 +53,9 @@ class CollectionIngredient(BaseCollectionIngredient):
 
 class CustomCollectionIngredient(BaseCollectionIngredient):
     common_name = models.CharField(max_length=255, verbose_name="Common Name")
-    cas = models.CharField(max_length=255, verbose_name="CAS Number")
-    volatility = models.CharField(max_length=255, verbose_name="Volatility")
+    cas = models.CharField(max_length=255, verbose_name="CAS Number", null=True, blank=True)
+    volatility = models.CharField(max_length=255, verbose_name="Volatility", null=True, blank=True)
+    use = models.CharField(max_length=255, verbose_name="Use", null=True, blank=True)
 
     def __str__(self):
         return self.common_name

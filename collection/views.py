@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import JsonResponse
@@ -8,9 +10,9 @@ from .models import CollectionIngredient, Ingredient, User, CustomCollectionIngr
 from rest_framework.views import APIView
 from rest_framework.exceptions import ParseError
 import logging
-from django.db.models import Value, CharField
 
-from .serialisers import CollectionIngredientSerializer
+from .serialisers import CollectionIngredientSerializer, UnifiedCollectionIngredientSerializer, \
+    CustomCollectionIngredientSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -90,10 +92,11 @@ class CollectionAPI(APIView):
     # todo accomodate for customingredient
 
     def get_collection(self, request, user_id):
-
         user = User.objects.get(id=user_id)
         search_param = request.query_params.get('search', None)
+
         collection_ingredients = CollectionIngredient.objects.filter(user=user).order_by('ingredient__common_name')
+        custom_collection_ingredients = CustomCollectionIngredient.objects.filter(user=user).order_by('common_name')
 
         if search_param:
             collection_ingredients = collection_ingredients.filter(
@@ -102,13 +105,18 @@ class CollectionAPI(APIView):
                 Q(ingredient__cas__icontains=search_param)
             ).order_by('ingredient__common_name')
 
-        return collection_ingredients
+            custom_collection_ingredients = custom_collection_ingredients.filter(
+                Q(common_name__icontains=search_param) |
+                Q(cas__icontains=search_param)
+            ).order_by('common_name')
+
+        return collection_ingredients, custom_collection_ingredients
 
     def get(self, request, user_id):
         logger.info('GET request received')
-        collection_ingredients = self.get_collection(request, user_id)
+        collection_ingredients, custom_collection_ingredients = self.get_collection(request, user_id)
 
-        if not collection_ingredients.exists():
+        if not collection_ingredients.exists() and not custom_collection_ingredients.exists():
             empty_ingredient = {
                 'ingredient': '',
                 'ingredient.cas': '',
@@ -122,8 +130,12 @@ class CollectionAPI(APIView):
             }
             return JsonResponse(empty_ingredient, status=200)
 
-        serializer = CollectionIngredientSerializer(collection_ingredients, many=True)
-        return Response(serializer.data)
+        collection_serializer = CollectionIngredientSerializer(collection_ingredients, many=True)
+        custom_collection_serializer = CustomCollectionIngredientSerializer(custom_collection_ingredients, many=True)
+        combined_data = list(chain(collection_serializer.data, custom_collection_serializer.data))
+        sorted_data = sorted(combined_data, key=lambda x: x['common_name'])
+
+        return Response(sorted_data)
 
     def post(self, request, user_id):
         try:

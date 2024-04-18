@@ -2,8 +2,7 @@
 {% load static %}
 {% load compress %}
 {% block content %}
-
-<body>
+<h1 class="big-header">BROWSE</h1>
 <div class="tools">
     <div id="search-tools">
         <label for="search-input">Find anything</label>
@@ -38,5 +37,4 @@
 {% compress js %}
     <script src={% static 'browse/browse.js' %}></script>
 {% endcompress %}
-</body>
 {% endblock %}
