@@ -28,7 +28,7 @@ $(document).ready(function() {
                 // Create HTML elements to represent the formula instance
                 var formulaItem = $('<li>').addClass('formula-item');
                 var nameLabel = $('<p id = "formula-name">').text('Name: ' + formula.name);
-                var timeEditedLabel = $('<p id = "formula-edit-time">').text('Edited: ' + formula.updated_at);
+                var timeEditedLabel = $('<p id = "formula-edit-time">').text('Edited: ' + formula.updated);
                 var viewButton = $('<button class= "btn btn-primary btn-formula" id = "view-formula">').text('View Formula');
                 viewButton.data('id', formula.id);
 

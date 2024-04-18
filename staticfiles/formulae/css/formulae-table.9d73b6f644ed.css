@@ -1,3 +1,30 @@
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#app {
+    display: flex;
+    flex-direction: row;
+    margin: 3%;
+    margin-top: -52px;
+    max-width: 1200px;
+    max-height: 800px;
+    justify-content: center;
+    align-items: center;
+    background: var(--formula-bg-color);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 20;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+#app #create-formula {
+    background: var(--formula-secondary-color);
+}
+
 #app .btn {
     background: var(--formula-primary-color);
     color: var(--formula-hover-bg-color);
@@ -12,6 +39,73 @@
     background: var(--formula-hover-bg-color);
 }
 
+#app #main-content .table-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-height: 600px;
+    overflow: auto;
+
+}
+
+#app #main-content .formula-detail .formula-detail-table .btn {
+    position: relative;
+    width: 100px;
+}
+
+#app #main-content .formula-detail .formula-ingredient-table.edit-mode .btn-delete-ingredient {
+    background: var(--formula-delete-color);
+    color: var(--formula-hover-bg-color);
+    border: 1px solid var(--formula-border-color);
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+
+}
+
+#app #main-content .formula-detail .formula-ingredient-table.edit-mode .btn.btn-primary.btn-add-ingredient {
+    width: 200px;
+}
+
+#app #sidebar {
+    display: flex;
+    flex:33%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-height: 750px;
+    border-radius: 10px;
+    padding: 20px;
+    overflow: auto;
+}
+
+#app #main-content {
+    flex:67%;
+    max-height: 600px;
+    min-height: 600px;
+    margin-left: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+#app #sidebar #formulae-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-height: 600px;
+    background: var(--formula-primary-color);
+    overflow: auto;
+    border-radius: 10px;
+    padding: 20px;
+}
+
 h1 {
     position: relative;
     width: 100%;
@@ -24,66 +118,8 @@ h1 {
 }
 
 #app #sidebar h2 {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding-top: 10px;
     text-align: center;
-    font-size: 3em;
-}
-
-#app #sidebar li {
-    width: 300px;
-    text-align: center;
-
-}
-
-#app {
-    display: flex;
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-top: -52px;
-    justify-content: center;
-    align-items: center;
-    background: var(--formula-bg-color);
-    padding: 15px;
-    border-radius: 10px;
-    z-index: 20;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-#app #create-formula {
-    background: var(--formula-secondary-color);
-}
-
-#app #sidebar {
-    display: flex;
-    flex: 0 0 15%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-height: 750px;
-    border-radius: 10px;
-    padding: 20px;
-}
-
-#app #sidebar #formula-header {
-    position: relative;
-    bottom-margin: -20px;
-}
-
-#app #sidebar #formulae-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    max-height: 600px;
-    background: var(--formula-primary-color);
-    overflow: auto;
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: -15px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
 }
 
 #app #sidebar li {
@@ -97,30 +133,10 @@ h1 {
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-#app #main-content {
-    flex: 1;
-    max-height: 600px;
-    min-height: 600px;
-    margin-left: 20px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+#app #sidebar li {
+    width: 300px;
+    text-align: center;
 
-app #main-content .table-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-height: 600px;
-    overflow: auto;
-}
-
-#app #main-content .formula-detail .formula-detail-table .btn {
-    position: relative;
-    width: 100px;
 }
 
 #app #sidebar li:hover {
@@ -140,9 +156,12 @@ app #main-content .table-wrapper {
     background: var(--formula-primary-color);
 }
 
+#app #sidebar li.active::before {
+    content: var(--active-emoji);
+}
+
 #app #main-content .td {
     padding: 10px;
-    margin: 10px;
     text-align: center;
 }
 
@@ -167,10 +186,6 @@ app #main-content .table-wrapper {
     background: var(--formula-hover-bg-color);
 }
 
-#app #main-content .formula-detail .formula-ingredient-table tr, td, th {
-    border: 1px solid var(--formula-border-color);
-}
-
 #app #main-content .formula-detail .formula-ingredient-table {
     position: relative;
     width: 600px;
@@ -179,20 +194,6 @@ app #main-content .table-wrapper {
     border-collapse: separate;
     border-spacing: 5px;
     background: var(--formula-hover-bg-color);
-    overflow: auto;
-}
-
-#app #main-content .formula-detail .formula-ingredient-table.edit-mode .btn-delete-ingredient {
-    background: var(--formula-delete-color);
-    color: var(--formula-hover-bg-color);
-    border: 1px solid var(--formula-border-color);
-    padding: 10px;
-    margin: 10px;
-    cursor: pointer;
-}
-
-#app #main-content .formula-detail .formula-ingredient-table.edit-mode .btn.btn-primary.btn-add-ingredient {
-    width: 200px;
 }
 
 #app #main-content .formula-detail .formula-ingredient-table.edit-mode .td-regular-input {
@@ -205,6 +206,10 @@ app #main-content .table-wrapper {
     padding: 0; /* Override default padding */
     border: none; /* Override default border */
     margin: 0; /* Override default margin */
+}
+
+#app #main-content .formula-detail .formula-ingredient-table tr, td, th {
+    border: 1px solid var(--formula-border-color);
 }
 
 .dropdown-menu {

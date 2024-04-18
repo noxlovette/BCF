@@ -22,7 +22,7 @@ class Formula(models.Model):
         verbose_name = "User's Formula"
         verbose_name_plural = "User's Formulae"
         db_table = 'formulae'
-        ordering = ['user', 'name']
+        ordering = ['user', '-updated_at', '-name']
 
 
 class FormulaIngredient(models.Model):

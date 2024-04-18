@@ -27,6 +27,9 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
     volatility = serializers.StringRelatedField(source='collection_ingredient.ingredient.volatility')
     use = serializers.StringRelatedField(source='collection_ingredient.ingredient.use')
 
+
+
+
     class Meta:
         model = FormulaIngredient
         fields = ['ingredient_id', 'formula_ingredient_id', 'ingredient', 'cas', 'volatility', 'use', 'amount', 'unit']
@@ -38,6 +41,8 @@ class FormulaSerializer(serializers.ModelSerializer):
     This is the serializer for the Formula model. It will be used to serialize the Formula model into JSON format.
     """
     ingredients = FormulaIngredientSerializer(many=True)
+    created = DateTimeSerializer(source='created_at')
+    updated = DateTimeSerializer(source='updated_at')
 
     def update(self, instance, validated_data):
         # Update existing Formula fields
@@ -78,5 +83,5 @@ class FormulaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Formula
-        fields = ['id', 'user', 'name', 'description', 'ingredients', 'created_at', 'updated_at']
+        fields = ['updated', 'created', 'id', 'user', 'name', 'description', 'ingredients', 'created_at', 'updated_at']
         read_only_fields = ['id', 'user']

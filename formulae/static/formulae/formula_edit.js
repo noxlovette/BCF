@@ -97,6 +97,8 @@ $(document).ready(function() {
         // Find the table containing the formula ingredients
         let formulaIngredientTable = formulaDetailItem.find('.formula-ingredient-table');
 
+        let TableWrapper = formulaDetailItem.find('.table-wrapper');
+
         formulaIngredientTable.addClass('edit-mode');
 
         // Make the formula details editable
@@ -130,7 +132,7 @@ $(document).ready(function() {
 
         let addButton = $('<button>').addClass('btn btn-primary btn-add-ingredient').text('Add Ingredient');
 
-        formulaIngredientTable.append(addButton);
+        TableWrapper.append(addButton);
 
         formulaDetailItem.find('.btn-save-formula').show();
         formulaDetailItem.find('.btn-cancel-formula').show();

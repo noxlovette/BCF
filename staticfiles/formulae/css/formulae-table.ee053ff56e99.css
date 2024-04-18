@@ -1,3 +1,10 @@
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 #app .btn {
     background: var(--formula-primary-color);
     color: var(--formula-hover-bg-color);
@@ -24,12 +31,8 @@ h1 {
 }
 
 #app #sidebar h2 {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding-top: 10px;
     text-align: center;
-    font-size: 3em;
+    padding: 10px;
 }
 
 #app #sidebar li {
@@ -40,13 +43,15 @@ h1 {
 
 #app {
     display: flex;
-    margin-left: 20px;
-    margin-right: 20px;
+    flex-direction: row;
+    margin: 3%;
     margin-top: -52px;
+    max-width: 1200px;
+    max-height: 800px;
     justify-content: center;
     align-items: center;
     background: var(--formula-bg-color);
-    padding: 15px;
+    padding: 20px;
     border-radius: 10px;
     z-index: 20;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
@@ -58,7 +63,7 @@ h1 {
 
 #app #sidebar {
     display: flex;
-    flex: 0 0 15%;
+    flex:33%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -67,7 +72,7 @@ h1 {
     padding: 20px;
 }
 
-#app #sidebar #formula-header {
+#formula-header {
     position: relative;
     bottom-margin: -20px;
 }
@@ -82,7 +87,6 @@ h1 {
     overflow: auto;
     border-radius: 10px;
     padding: 20px;
-    margin-top: -15px;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -98,7 +102,7 @@ h1 {
 }
 
 #app #main-content {
-    flex: 1;
+    flex:67%;
     max-height: 600px;
     min-height: 600px;
     margin-left: 20px;
@@ -121,6 +125,19 @@ app #main-content .table-wrapper {
 #app #main-content .formula-detail .formula-detail-table .btn {
     position: relative;
     width: 100px;
+}
+
+#app #main-content .formula-detail .formula-ingredient-table.edit-mode .btn-delete-ingredient {
+    background: var(--formula-delete-color);
+    color: var(--formula-hover-bg-color);
+    border: 1px solid var(--formula-border-color);
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+#app #main-content .formula-detail .formula-ingredient-table.edit-mode .btn.btn-primary.btn-add-ingredient {
+    width: 200px;
 }
 
 #app #sidebar li:hover {
@@ -167,10 +184,6 @@ app #main-content .table-wrapper {
     background: var(--formula-hover-bg-color);
 }
 
-#app #main-content .formula-detail .formula-ingredient-table tr, td, th {
-    border: 1px solid var(--formula-border-color);
-}
-
 #app #main-content .formula-detail .formula-ingredient-table {
     position: relative;
     width: 600px;
@@ -179,20 +192,6 @@ app #main-content .table-wrapper {
     border-collapse: separate;
     border-spacing: 5px;
     background: var(--formula-hover-bg-color);
-    overflow: auto;
-}
-
-#app #main-content .formula-detail .formula-ingredient-table.edit-mode .btn-delete-ingredient {
-    background: var(--formula-delete-color);
-    color: var(--formula-hover-bg-color);
-    border: 1px solid var(--formula-border-color);
-    padding: 10px;
-    margin: 10px;
-    cursor: pointer;
-}
-
-#app #main-content .formula-detail .formula-ingredient-table.edit-mode .btn.btn-primary.btn-add-ingredient {
-    width: 200px;
 }
 
 #app #main-content .formula-detail .formula-ingredient-table.edit-mode .td-regular-input {
@@ -205,6 +204,10 @@ app #main-content .table-wrapper {
     padding: 0; /* Override default padding */
     border: none; /* Override default border */
     margin: 0; /* Override default margin */
+}
+
+#app #main-content .formula-detail .formula-ingredient-table tr, td, th {
+    border: 1px solid var(--formula-border-color);
 }
 
 .dropdown-menu {
