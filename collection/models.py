@@ -5,9 +5,8 @@ from browse.models import Ingredient
 
 # Create your models here.
 
-class CollectionIngredient(models.Model):
+class BaseCollectionIngredient(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     amount = models.IntegerField(default=0, verbose_name="Amount")
     unit = models.CharField(max_length=50, default='g', verbose_name="Unit")
     colour = models.CharField(max_length=50, verbose_name="Colour", null=True, blank=True)
@@ -18,39 +17,7 @@ class CollectionIngredient(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.ingredient.common_name} - {self.amount} {self.unit}"
-
-    @property
-    def to_json(self):
-        ingredient = self.ingredient
-        if ingredient is None:
-            ingredient_data = {
-                "common_name": "Ingredient not found",
-                "cas": "N/A",
-                "volatility": "N/A",
-                "use": "N/A",
-            }
-        else:
-            ingredient_data = {
-                "common_name": ingredient.common_name,
-                "cas": ingredient.cas,
-                "volatility": ingredient.volatility,
-                "use": ingredient.use,
-            }
-
-        return {
-            "id": self.id,
-            "user": self.user.username,
-            "amount": self.amount,
-            "unit": self.unit,
-            "colour": self.colour,
-            "impression": self.impression,
-            "associations": self.associations,
-            "notes": self.notes,
-            "is_collection": "Yes" if self.is_collection else "No",
-            "date_added": self.date_added.strftime("%Y-%m-%d %H:%M:%S"),
-            **ingredient_data,
-        }
+        return f"{self.user.username} - {self.common_name} - {self.amount} {self.unit}"
 
     def save(self, *args, **kwargs):
         """
@@ -70,8 +37,30 @@ class CollectionIngredient(models.Model):
             super().save(*args, **kwargs)
 
     class Meta:
+        abstract = True
+
+
+class CollectionIngredient(BaseCollectionIngredient):
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+
+    class Meta:
         unique_together = ['user', 'ingredient']
         verbose_name = "Ingredient in Collection"
         verbose_name_plural = "Ingredients in Collection"
         db_table = 'user_collection_ing'
         ordering = ['user', 'ingredient']
+
+
+class CustomCollectionIngredient(BaseCollectionIngredient):
+    common_name = models.CharField(max_length=255, verbose_name="Common Name")
+    cas = models.CharField(max_length=255, verbose_name="CAS Number")
+    volatility = models.CharField(max_length=255, verbose_name="Volatility")
+
+    def __str__(self):
+        return self.common_name
+
+    class Meta:
+        verbose_name = "Custom Ingredient"
+        verbose_name_plural = "Custom Ingredients"
+        db_table = 'custom_collection_ing'
+        ordering = ['user', 'common_name']

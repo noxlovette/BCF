@@ -106,7 +106,7 @@ function fetchIngredients() {
                 // Create a new row using a template literal
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td class="nm-col">${collection_ingredient.common_name || ''}</td>
+                    <td class="nm-col">${collection_ingredient.common_name || 'name unknown'}</td>
                     <td class="cas-col">${collection_ingredient.cas || 'cas unknown'}</td>
                     <td class="vol-col">${collection_ingredient.volatility || 'no volatility specified'}</td>
                     <td class="use-col">${collection_ingredient.use || 'use not specified'}</td>

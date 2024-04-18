@@ -4,10 +4,13 @@ from django.http import JsonResponse
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
-from .models import CollectionIngredient, Ingredient, User
+from .models import CollectionIngredient, Ingredient, User, CustomCollectionIngredient
 from rest_framework.views import APIView
 from rest_framework.exceptions import ParseError
 import logging
+from django.db.models import Value, CharField
+
+from .serialisers import CollectionIngredientSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -62,16 +65,30 @@ class IngredientUpdateView(APIView):
 
 
 class CollectionView(generic.ListView):
-    model = CollectionIngredient
     template_name = "collection/collection.html"
     context_object_name = "collection"
 
     def get_queryset(self):
-        return self.request.session.get('collection', [])
+        collection = self.request.session.get('collection', [])
+        collection_ingredient_ids = [id for item in collection if len(item) == 2 and item[0] == 'CollectionIngredient'
+                                     for type, id in [item]]
+        custom_collection_ids = [id for item in collection if len(item) == 2 and item[0] == 'CustomCollectionIngredient'
+                                 for type, id in [item]]
 
+        collection_ingredient = list(CollectionIngredient.objects.filter(id__in=collection_ingredient_ids))
+        custom_collection = list(CustomCollectionIngredient.objects.filter(id__in=custom_collection_ids))
+        for obj in collection_ingredient:
+            obj.type = 'CollectionIngredient'
+        for obj in custom_collection:
+            obj.type = 'CustomCollectionIngredient'
+
+        combined_collection = collection_ingredient + custom_collection
+
+        return combined_collection
 
 class CollectionAPI(APIView):
-    @csrf_exempt
+    # todo accomodate for customingredient
+
     def get_collection(self, request, user_id):
 
         user = User.objects.get(id=user_id)
@@ -87,7 +104,6 @@ class CollectionAPI(APIView):
 
         return collection_ingredients
 
-    @csrf_exempt
     def get(self, request, user_id):
         logger.info('GET request received')
         collection_ingredients = self.get_collection(request, user_id)
@@ -106,11 +122,9 @@ class CollectionAPI(APIView):
             }
             return JsonResponse(empty_ingredient, status=200)
 
-        collection_json = [collection_ingredient.to_json for collection_ingredient in collection_ingredients]
+        serializer = CollectionIngredientSerializer(collection_ingredients, many=True)
+        return Response(serializer.data)
 
-        return Response(collection_json)
-
-    @csrf_exempt
     def post(self, request, user_id):
         try:
             data = request.data
