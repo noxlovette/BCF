@@ -1,45 +1,42 @@
 from itertools import chain
-
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import JsonResponse
-from django.utils import timezone
 from django.views import generic
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from rest_framework.response import Response
 from .models import CollectionIngredient, Ingredient, User, CustomCollectionIngredient
 from rest_framework.views import APIView
 from rest_framework.exceptions import ParseError
 import logging
-
-from .serialisers import CollectionIngredientSerializer, UnifiedCollectionIngredientSerializer, \
+from .serialisers import CollectionIngredientSerializer, \
     CustomCollectionIngredientSerializer
 
 logger = logging.getLogger(__name__)
 
 
-class IngredientUpdateView(APIView):
-    # TODO rewrite for UpdateView
+class CustomIngredientUpdateView(APIView):
     def put(self, request, *args, **kwargs):
         try:
             data = request.data
             user_id = kwargs.get('user_id')
-            collection_ingredient_id = kwargs.get('collectionIngredientId')
+            custom_collection_ingredient_id = kwargs.get('customCollectionIngredientId')
 
             try:
-                collection_ingredient = CollectionIngredient.objects.get(user=user_id, id=collection_ingredient_id)
-            except CollectionIngredient.DoesNotExist:
-                return JsonResponse({'error': 'CollectionIngredient does not exist.'}, status=400)
+                custom_collection_ingredient = CustomCollectionIngredient.objects.get(user=user_id,
+                                                                                      id=custom_collection_ingredient_id)
+            except CustomCollectionIngredient.DoesNotExist:
+                return JsonResponse({'error': 'CustomCollectionIngredient does not exist.'}, status=400)
 
             # Update the fields. if a key is missing, it defaults to what was there...
-            collection_ingredient.amount = int(
-                data.get('amount', collection_ingredient.amount).replace(' g', '').strip())
-            collection_ingredient.colour = data.get('colour', collection_ingredient.colour).strip()
-            collection_ingredient.impression = data.get('impression', collection_ingredient.impression).strip()
-            collection_ingredient.is_collection = data.get('is_collection', collection_ingredient.is_collection)
+            custom_collection_ingredient.amount = data.get('amount', custom_collection_ingredient.amount)
+            custom_collection_ingredient.colour = data.get('colour', custom_collection_ingredient.colour).strip()
+            custom_collection_ingredient.impression = data.get('impression',
+                                                               custom_collection_ingredient.impression).strip()
+            custom_collection_ingredient.is_collection = data.get('is_collection',
+                                                                  custom_collection_ingredient.is_collection)
 
-            collection_ingredient.save()
+            custom_collection_ingredient.save()
 
             return JsonResponse({'success': True})
         except Ingredient.DoesNotExist:
@@ -54,18 +51,53 @@ class IngredientUpdateView(APIView):
     def delete(self, request, *args, **kwargs):
         try:
             user_id = kwargs.get('user_id')
-            collection_ingredient_id = kwargs.get('collectionIngredientId')
+            custom_collection_ingredient_id = kwargs.get('customCollectionIngredientId')
 
             try:
-                collection_ingredient = CollectionIngredient.objects.get(user=user_id, id=collection_ingredient_id)
-            except CollectionIngredient.DoesNotExist:
-                return JsonResponse({'error': 'CollectionIngredient does not exist.'}, status=400)
+                custom_collection_ingredient = CustomCollectionIngredient.objects.get(user=user_id,
+                                                                                      id=custom_collection_ingredient_id)
+            except CustomCollectionIngredient.DoesNotExist:
+                return JsonResponse({'error': 'CustomCollectionIngredient does not exist.'}, status=400)
 
-            collection_ingredient.delete()
+            custom_collection_ingredient.delete()
 
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
+
+
+class IngredientUpdateView(generics.UpdateAPIView):
+    queryset = CollectionIngredient.objects.all()
+    serializer_class = CollectionIngredientSerializer
+    lookup_url_kwarg = 'collectionIngredientId'
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        return self.queryset.filter(user=user_id)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+
+class IngredientDeleteView(generics.DestroyAPIView):
+    queryset = CollectionIngredient.objects.all()
+    serializer_class = CollectionIngredientSerializer
+    lookup_url_kwarg = 'collectionIngredientId'
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        return self.queryset.filter(user=user_id)
 
 
 class CollectionView(generic.ListView):

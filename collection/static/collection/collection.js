@@ -1,6 +1,33 @@
+function createButton(textContent, className, eventListener, id) {
+    const button = document.createElement('button');
+    button.textContent = textContent;
+    button.className = `btn btn-primary ${className}`;
+    button.addEventListener('click', eventListener);
+    button.dataset.id = id;
+    return button;
+}
 function deleteCollectionIngredient(collectionIngredientId, userId) {
     $.ajax({
-        url: `/collection/api/ingredient/${userId}/${collectionIngredientId}`,
+        url: `/collection/api/ingredient/${userId}/${collectionIngredientId}/delete/`,
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json',
+        },
+        success: function(response) {
+            fetchIngredients();
+        },
+        error: function(error) {
+            console.error('Error deleting ingredient:', error);
+        }
+    });
+}
+
+function deleteCustomCollectionIngredient(customCollectionIngredientId, userId) {
+    // TODO UNDEFINED
+    console.log('Deleting custom collection ingredient:', customCollectionIngredientId);
+    $.ajax({
+        url: `/collection/api/ingredient/${userId}/custom/${customCollectionIngredientId}/delete/`,
         method: 'DELETE',
         headers: {
             'X-CSRFToken': getCookie('csrftoken'),
@@ -16,65 +43,80 @@ function deleteCollectionIngredient(collectionIngredientId, userId) {
 }
 
 function editCustomCollectionIngredient(event, id) {
+    // TODO UNDEFINED
     console.log('Editing custom collection ingredient:', id);
-}
+    const row = event.target.parentNode.parentNode;
+    const cells = row.querySelectorAll('td.editable-custom, td.editable');
+    cells.forEach((cell, index) => {
+        const cellText = cell.textContent;
+        if (index !== cells.length - 1) { // Exclude the last cell (the one with the buttons)
 
-function deleteCustomCollectionIngredient(customCollectionIngredientId, userId) {
-    console.log('Deleting custom collection ingredient:', customCollectionIngredientId);
+            cell.innerHTML = `<input class="collection-input" type="text" value="${cellText}">`;
+        }
+    });
+
 }
 
 function editCollectionIngredient(event, id) {
     const row = event.target.parentNode.parentNode;
-    const amountCell = row.querySelector('.amount-col');
-    const colourCell = row.querySelector('.col-col');
-    const impressionCell = row.querySelector('.impt-col');
-    const isCollectionCell = row.querySelector('.is_col-col');
+    row.dataset.id = id;
+    const cells = row.querySelectorAll('td.editable');
+    cells.forEach((cell, index) => {
+        const cellText = cell.textContent;
+        const cellId = cell.id;
+        console.log('cellId before conversion', cellId)
+        let inputElement;
+        if (cellId === 'is_collection') {
+            inputElement = document.createElement('input');
+            inputElement.className = "collection-input";
+            inputElement.type = "checkbox";
+            if (cellText === 'true') {
+                inputElement.checked = true;
+            }
+        } else if (cellId === 'amount') {
+            inputElement = document.createElement('input');
+            inputElement.className = "collection-input";
+            inputElement.type = "number";
+            inputElement.value = parseInt(cellText, 10);
+        } else {
+            inputElement = document.createElement('input');
+            inputElement.className = "collection-input";
+            inputElement.type = "text";
+            inputElement.value = cellText;
+        }
+        inputElement.id = `${cellId}-input`;
+        cell.innerHTML = '';
+        cell.appendChild(inputElement);
+        console.log('inputId after conversion', inputElement.id)
+    });
 
-    const amount = amountCell.textContent;
-    const colour = colourCell.textContent;
-    const impression = impressionCell.textContent;
-    const isCollection = isCollectionCell.textContent === 'true';
-
-    amountCell.innerHTML = `<input id="amount-input" class="collection-input" type="text" value="${amount}">`;
-    colourCell.innerHTML = `<input id="colour-input" class="collection-input" type="text" value="${colour}">`;
-    impressionCell.innerHTML = `<textarea id="impression-input" class="collection-input" type="text">${impression}</textarea>`;
-    isCollectionCell.innerHTML = `<input id="is-collection-input" class="collection-input" type="checkbox" ${isCollection ? 'checked' : ''}>`;
-
-    const saveButton = document.createElement('button');
-    saveButton.textContent = 'Save';
-    saveButton.className = 'btn btn-primary save';
-    saveButton.dataset.id = id;
-    saveButton.addEventListener('click', saveIngredient);
-
-    const cancelButton = document.createElement('button');
-    cancelButton.textContent = 'Cancel';
-    cancelButton.className = 'btn btn-primary cancel';
-    cancelButton.addEventListener('click', fetchIngredients);
+    const saveButton = createButton('Save', 'save', saveIngredient, id);
+    const cancelButton = createButton('Cancel', 'cancel', fetchIngredients);
 
     const buttonCell = row.querySelector('.editing');
     buttonCell.appendChild(saveButton);
     buttonCell.appendChild(cancelButton);
-
-    console.log('Editing collection ingredient:', saveButton.dataset.id);
 }
 
 //redefine to handle the two types of ingredients
 function saveIngredient(event) {
-    const collectionIngredientId = event.target.dataset.id;
-    const amountInput = $('#amount-input');
-    const colourInput = $('#colour-input');
-    const impressionInput = $('#impression-input');
-    const isCollectionInput = $('#is-collection-input');
+    console.log('Saving ingredient...')
+    const id = event.target.dataset.id;
+    console.log('id when save button has been clicked', id)
+    const row = document.querySelector(`tr[data-id="${id}"]`);
+    const inputs = row.querySelectorAll('input.collection-input');
+    const data = {};
 
-    const data = {
-        amount: amountInput.val(),
-        colour: colourInput.val(),
-        impression: impressionInput.val(),
-        is_collection: isCollectionInput.is(':checked')
-    };
+    inputs.forEach((input) => {
+        console.log('input', input)
+        const key = input.id.replace('-input', '');
+        console.log('key', key)
+        data[key] = input.type === 'checkbox' ? input.checked : input.value;
+        console.log('data[key]', data[key])
+    });
 
     $.ajax({
-        url: `/collection/api/ingredient/${userId}/${collectionIngredientId}`,
+        url: `/collection/api/ingredient/${userId}/${id}/update/`,
         method: 'PUT',
         headers: {
             'X-CSRFToken': getCookie('csrftoken'),
@@ -91,8 +133,9 @@ function saveIngredient(event) {
 }
 
 function fetchIngredients() {
+    console.log('Fetching ingredients...')
     $.ajax({
-        url: `api/collection/${userId}`,
+        url: `api/collection/${userId}/`,
         method: 'GET',
         success: function(data) {
             let ingredients = Array.isArray(data) ? data : [data];
@@ -105,15 +148,15 @@ function fetchIngredients() {
                 // Construct the row HTML
                 const rowHtml = `
                     <tr>
-                        <td class="nm-col">${collection_ingredient.common_name || 'name unknown'}</td>
-                        <td class="cas-col">${collection_ingredient.cas || 'cas unknown'}</td>
-                        <td class="vol-col">${collection_ingredient.volatility || 'no volatility specified'}</td>
-                        <td class="use-col">${collection_ingredient.use || 'use not specified'}</td>
-                        <td class="col-col">${collection_ingredient.colour || 'no colour specified'}</td>
-                        <td class="impt-col">${collection_ingredient.impression || 'no impression specified yet'}</td>
-                        <td class="date-col">${collection_ingredient.date_added || 'date unknown'}</td>
-                        <td class="is_col-col">${collection_ingredient.is_collection || ''} </td>
-                        <td class="amount-col">${collection_ingredient.amount || '0'} ${collection_ingredient.unit}</td>
+                        <td id = "common_name" class="nm-col editable-custom">${collection_ingredient.common_name || 'name unknown'}</td>
+                        <td id = "cas" class="cas-col editable-custom">${collection_ingredient.cas || 'cas unknown'}</td>
+                        <td id = "volatility" class="vol-col editable-custom">${collection_ingredient.volatility || 'no volatility specified'}</td>
+                        <td id = "use" class="use-col editable-custom">${collection_ingredient.use || 'use not specified'}</td>
+                        <td id = "colour" class="col-col editable">${collection_ingredient.colour || 'no colour specified'}</td>
+                        <td id = "impression" class="impt-col editable">${collection_ingredient.impression || 'no impression specified yet'}</td>
+                        <td id = "date_added" class="date-col">${collection_ingredient.date_added || 'date unknown'}</td>
+                        <td id = "is_collection" class="is_col-col editable">${collection_ingredient.is_collection || ''} </td>
+                        <td id = "amount" class="amount-col editable">${collection_ingredient.amount || '0'} ${collection_ingredient.unit}</td>
                         <td class="editing">
                             <button class="btn btn-primary delete" title="Delete ingredient">Delete</button>
                             <button class="btn btn-primary edit" title="Edit ingredient">Edit</button>
@@ -123,6 +166,8 @@ function fetchIngredients() {
 
                 // Append the row to the table
                 let row = $(rowHtml).appendTo(tableBody);
+                row.data('id', collection_ingredient.id);
+                console.log('Row data:', row.data('id'));
 
                 let deleteIngredientButton = row.find('.delete');
                 deleteIngredientButton.data('type', collection_ingredient.type);
@@ -160,7 +205,6 @@ function fetchIngredients() {
         }
     });
 }
-
 
 function createCustomIngredient() {
     // Create a new row with input fields
@@ -214,7 +258,6 @@ function createCustomIngredient() {
             },
             data: JSON.stringify({user: userId, ...data}),
             success: function(response) {
-                $('.table-wrapper.collection').remove('.btn-create-ingredient');
                 fetchIngredients();
             },
             error: function(error) {

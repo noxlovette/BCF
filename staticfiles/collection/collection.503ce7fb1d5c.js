@@ -8,7 +8,7 @@ function createButton(textContent, className, eventListener, id) {
 }
 function deleteCollectionIngredient(collectionIngredientId, userId) {
     $.ajax({
-        url: `/collection/api/ingredient/${userId}/${collectionIngredientId}/delete/`,
+        url: `/collection/api/ingredient/${userId}/${collectionIngredientId}`,
         method: 'DELETE',
         headers: {
             'X-CSRFToken': getCookie('csrftoken'),
@@ -24,10 +24,9 @@ function deleteCollectionIngredient(collectionIngredientId, userId) {
 }
 
 function deleteCustomCollectionIngredient(customCollectionIngredientId, userId) {
-    // TODO UNDEFINED
     console.log('Deleting custom collection ingredient:', customCollectionIngredientId);
     $.ajax({
-        url: `/collection/api/ingredient/${userId}/custom/${customCollectionIngredientId}/delete/`,
+        url: `/collection/api/ingredient/${userId}/custom/${customCollectionIngredientId}`,
         method: 'DELETE',
         headers: {
             'X-CSRFToken': getCookie('csrftoken'),
@@ -43,7 +42,6 @@ function deleteCustomCollectionIngredient(customCollectionIngredientId, userId) 
 }
 
 function editCustomCollectionIngredient(event, id) {
-    // TODO UNDEFINED
     console.log('Editing custom collection ingredient:', id);
     const row = event.target.parentNode.parentNode;
     const cells = row.querySelectorAll('td.editable-custom, td.editable');
@@ -59,36 +57,17 @@ function editCustomCollectionIngredient(event, id) {
 
 function editCollectionIngredient(event, id) {
     const row = event.target.parentNode.parentNode;
-    row.dataset.id = id;
+    console.log('row id when edit button has been clicked', row.id)
+    console.log(row)
     const cells = row.querySelectorAll('td.editable');
     cells.forEach((cell, index) => {
         const cellText = cell.textContent;
         const cellId = cell.id;
-        console.log('cellId before conversion', cellId)
-        let inputElement;
-        if (cellId === 'is_collection') {
-            inputElement = document.createElement('input');
-            inputElement.className = "collection-input";
-            inputElement.type = "checkbox";
-            if (cellText === 'true') {
-                inputElement.checked = true;
-            }
-        } else if (cellId === 'amount') {
-            inputElement = document.createElement('input');
-            inputElement.className = "collection-input";
-            inputElement.type = "number";
-            inputElement.value = parseInt(cellText, 10);
-        } else {
-            inputElement = document.createElement('input');
-            inputElement.className = "collection-input";
-            inputElement.type = "text";
-            inputElement.value = cellText;
-        }
-        inputElement.id = `${cellId}-input`;
-        cell.innerHTML = '';
-        cell.appendChild(inputElement);
-        console.log('inputId after conversion', inputElement.id)
+        cell.innerHTML = `<input class="collection-input" type="text" value="${cellText}">`;
+        cell.id = `${cellId}-input`;
     });
+
+    console.log('row id when edit button has been clicked', row.id)
 
     const saveButton = createButton('Save', 'save', saveIngredient, id);
     const cancelButton = createButton('Cancel', 'cancel', fetchIngredients);
@@ -100,7 +79,6 @@ function editCollectionIngredient(event, id) {
 
 //redefine to handle the two types of ingredients
 function saveIngredient(event) {
-    console.log('Saving ingredient...')
     const id = event.target.dataset.id;
     console.log('id when save button has been clicked', id)
     const row = document.querySelector(`tr[data-id="${id}"]`);
@@ -108,15 +86,12 @@ function saveIngredient(event) {
     const data = {};
 
     inputs.forEach((input) => {
-        console.log('input', input)
-        const key = input.id.replace('-input', '');
-        console.log('key', key)
+        const key = input.id.split('-')[0]; // Get the key from the input's id by removing '-input'
         data[key] = input.type === 'checkbox' ? input.checked : input.value;
-        console.log('data[key]', data[key])
     });
 
     $.ajax({
-        url: `/collection/api/ingredient/${userId}/${id}/update/`,
+        url: `/collection/api/ingredient/${userId}/${id}`,
         method: 'PUT',
         headers: {
             'X-CSRFToken': getCookie('csrftoken'),
@@ -135,7 +110,7 @@ function saveIngredient(event) {
 function fetchIngredients() {
     console.log('Fetching ingredients...')
     $.ajax({
-        url: `api/collection/${userId}/`,
+        url: `api/collection/${userId}`,
         method: 'GET',
         success: function(data) {
             let ingredients = Array.isArray(data) ? data : [data];

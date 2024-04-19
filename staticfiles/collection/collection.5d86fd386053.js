@@ -8,7 +8,7 @@ function createButton(textContent, className, eventListener, id) {
 }
 function deleteCollectionIngredient(collectionIngredientId, userId) {
     $.ajax({
-        url: `/collection/api/ingredient/${userId}/${collectionIngredientId}/delete/`,
+        url: `/collection/api/ingredient/${userId}/${collectionIngredientId}`,
         method: 'DELETE',
         headers: {
             'X-CSRFToken': getCookie('csrftoken'),
@@ -24,10 +24,9 @@ function deleteCollectionIngredient(collectionIngredientId, userId) {
 }
 
 function deleteCustomCollectionIngredient(customCollectionIngredientId, userId) {
-    // TODO UNDEFINED
     console.log('Deleting custom collection ingredient:', customCollectionIngredientId);
     $.ajax({
-        url: `/collection/api/ingredient/${userId}/custom/${customCollectionIngredientId}/delete/`,
+        url: `/collection/api/ingredient/${userId}/custom/${customCollectionIngredientId}`,
         method: 'DELETE',
         headers: {
             'X-CSRFToken': getCookie('csrftoken'),
@@ -43,7 +42,6 @@ function deleteCustomCollectionIngredient(customCollectionIngredientId, userId) 
 }
 
 function editCustomCollectionIngredient(event, id) {
-    // TODO UNDEFINED
     console.log('Editing custom collection ingredient:', id);
     const row = event.target.parentNode.parentNode;
     const cells = row.querySelectorAll('td.editable-custom, td.editable');
@@ -116,7 +114,7 @@ function saveIngredient(event) {
     });
 
     $.ajax({
-        url: `/collection/api/ingredient/${userId}/${id}/update/`,
+        url: `/collection/api/ingredient/${userId}/${id}/`,
         method: 'PUT',
         headers: {
             'X-CSRFToken': getCookie('csrftoken'),
