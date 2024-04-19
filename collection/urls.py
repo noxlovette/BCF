@@ -5,5 +5,7 @@ app_name = 'collection'
 urlpatterns = [
     path('', views.CollectionView.as_view(), name="collection"),
     path("api/collection/<int:user_id>/", views.CollectionAPI.as_view(), name="api-collection"),
-    path("api/ingredient/<int:user_id>/<int:collectionIngredientId>", views.IngredientUpdateView.as_view(), name="api-ingredient"),
+    path("api/ingredient/<int:user_id>/<int:collectionIngredientId>", views.IngredientUpdateView.as_view(),
+         name="api-ingredient"),
+    path("api/ingredient/new/", views.IngredientCreateView.as_view(), name="api-ingredient-create"),
 ]

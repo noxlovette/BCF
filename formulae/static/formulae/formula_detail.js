@@ -83,7 +83,7 @@ $(document).ready(function() {
                 });
 
                 // Append detail tables to the formula detail view div
-                let tableWrapper = $('<div>').addClass('table-wrapper');
+                let tableWrapper = $('<div>').addClass('table-wrapper formulae');
                 tableWrapper.append(formulaIngredientTable);
                 formulaDetailItem.append(formulaDetailTable, tableWrapper);
 

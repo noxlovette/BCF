@@ -15,15 +15,15 @@ function deleteCollectionIngredient(collectionIngredientId, userId) {
     });
 }
 
-function editCustomCollectionIngredient(event, id) {
-    console.log('Editing custom collection ingredient:', id);
+function editCustomCollectionIngredient(customCollectionIngredientId) {
+    console.log('Editing custom collection ingredient:', customCollectionIngredientId);
 }
 
 function deleteCustomCollectionIngredient(customCollectionIngredientId, userId) {
     console.log('Deleting custom collection ingredient:', customCollectionIngredientId);
 }
 
-function editCollectionIngredient(event, id) {
+function editCollectionIngredient(event) {
     const row = event.target.parentNode.parentNode;
     const amountCell = row.querySelector('.amount-col');
     const colourCell = row.querySelector('.col-col');
@@ -43,7 +43,7 @@ function editCollectionIngredient(event, id) {
     const saveButton = document.createElement('button');
     saveButton.textContent = 'Save';
     saveButton.className = 'btn btn-primary save';
-    saveButton.dataset.id = id;
+    saveButton.dataset.id = event.target.dataset.id;
     saveButton.addEventListener('click', saveIngredient);
 
     const cancelButton = document.createElement('button');
@@ -54,8 +54,6 @@ function editCollectionIngredient(event, id) {
     const buttonCell = row.querySelector('.editing');
     buttonCell.appendChild(saveButton);
     buttonCell.appendChild(cancelButton);
-
-    console.log('Editing collection ingredient:', saveButton.dataset.id);
 }
 
 //redefine to handle the two types of ingredients
@@ -120,11 +118,7 @@ function fetchIngredients() {
                         </td>
                     </tr>
                 `;
-
-                // Append the row to the table
-                let row = $(rowHtml).appendTo(tableBody);
-
-                let deleteIngredientButton = row.find('.delete');
+                let deleteIngredientButton = $(rowHtml).find('.delete');
                 deleteIngredientButton.data('type', collection_ingredient.type);
                 deleteIngredientButton.data('id', collection_ingredient.id)
                 deleteIngredientButton.on('click', function() {
@@ -137,17 +131,21 @@ function fetchIngredients() {
                     }
                 });
 
-                let editIngredientButton = row.find('.edit');
+                let editIngredientButton = $(rowHtml).find('.edit');
                 editIngredientButton.data('type', collection_ingredient.type);
                 editIngredientButton.data('id', collection_ingredient.id);
-                editIngredientButton.on('click', function(event) {
+                editIngredientButton.on('click', function() {
                     let type = $(this).data('type');
+                    let id = $(this).data('id');
                     if (type === 'CollectionIngredient') {
-                        editCollectionIngredient(event, collection_ingredient.id);
+                        editCollectionIngredient(id);
                     } else if (type === 'CustomCollectionIngredient') {
-                        editCustomCollectionIngredient(event, collection_ingredient.id);
+                        editCustomCollectionIngredient(id);
                     }
-                });
+});
+
+                // Append the row to the table
+                tableBody.append(rowHtml);
             });
 
             // Append create ingredient button

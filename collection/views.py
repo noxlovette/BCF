@@ -3,8 +3,10 @@ from itertools import chain
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import JsonResponse
+from django.utils import timezone
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import generics
 from rest_framework.response import Response
 from .models import CollectionIngredient, Ingredient, User, CustomCollectionIngredient
 from rest_framework.views import APIView
@@ -88,6 +90,7 @@ class CollectionView(generic.ListView):
 
         return combined_collection
 
+
 class CollectionAPI(APIView):
     # todo accomodate for customingredient
 
@@ -156,3 +159,15 @@ class CollectionAPI(APIView):
             return JsonResponse({'error': 'User or Ingredient does not exist.'}, status=400)
         except ParseError:
             return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
+
+
+class IngredientCreateView(generics.CreateAPIView):
+    """
+    CREATE A NEW CUSTOM INGREDIENT
+    """
+
+    serializer_class = CustomCollectionIngredientSerializer
+
+    def perform_create(self, serializer):
+        # Set the user field before saving the object
+        serializer.save(user=self.request.user)

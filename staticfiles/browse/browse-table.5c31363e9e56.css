@@ -1,0 +1,64 @@
+.table-wrapper.browse #ingredients-table {
+    border: 1px solid var(--bs-border-color);
+    max-width: 90%;
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: separate; /* Change this line */
+    border-spacing: 0; /* Add this line */
+    border-radius: 10px;
+    background-color: var(--browse-bg-color);
+}
+
+.table-wrapper.browse #ingredients-table th {
+    background-color: var(--browse-primary-color);
+    height: 50px;
+}
+
+.table-wrapper.browse #ingredients-table th,
+.table-wrapper.browse #ingredients-table td {
+    color: var(--browse-text-color);
+    padding: 10px;
+}
+
+.table-wrapper.browse #ingredients-table th, #ingredients-table td {
+    width: 12.5%;
+    text-align: center;
+}
+
+.table-wrapper.browse #ingredients-table th:not(:last-child),
+.table-wrapper.browse #ingredients-table td:not(:last-child) {
+    border-right: 1px solid var(--browse-border-color);
+}
+
+.table-wrapper.browse #ingredients-table tr:not(:last-child) th,
+.table-wrapper.browse #ingredients-table tr:not(:last-child) td {
+    border-bottom: 1px solid var(--browse-border-color);
+}
+
+.table-wrapper.browse #ingredients-table th:first-child,
+.table-wrapper.browse #ingredients-table td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.table-wrapper.browse #ingredients-table th:last-child,
+.table-wrapper.browse #ingredients-table td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.table-wrapper.browse #ingredients-table tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+.table-wrapper.browse #ingredients-table tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+.table-wrapper.browse #ingredients-table,
+.table-wrapper.browse #ingredients-table th:not(:last-child),
+.table-wrapper.browse #ingredients-table td:not(:last-child),
+.table-wrapper.browse #ingredients-table tr:not(:last-child) th,
+.table-wrapper.browse #ingredients-table tr:not(:last-child) td {
+    border-color: var(--browse-border-color);
+}

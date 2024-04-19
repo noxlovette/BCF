@@ -13,6 +13,7 @@ class DateTimeSerializer(serializers.DateTimeField):
 
 
 class BaseCollectionIngredientSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     common_name = serializers.CharField()
     cas = serializers.CharField()
     volatility = serializers.CharField()
@@ -27,7 +28,7 @@ class BaseCollectionIngredientSerializer(serializers.ModelSerializer):
     date_added = DateTimeSerializer()
 
     class Meta:
-        fields = ['common_name', 'cas', 'volatility', 'use', 'date_added', 'colour', 'impression', 'associations',
+        fields = ['type', 'id', 'common_name', 'cas', 'volatility', 'use', 'date_added', 'colour', 'impression', 'associations',
                   'notes', 'is_collection', 'amount', 'unit']
         abstract = True
 
@@ -37,14 +38,24 @@ class CollectionIngredientSerializer(BaseCollectionIngredientSerializer):
     cas = serializers.StringRelatedField(source='ingredient.cas')
     volatility = serializers.StringRelatedField(source='ingredient.volatility')
     use = serializers.StringRelatedField(source='ingredient.use')
+    type = serializers.SerializerMethodField()
+
+    def get_type(self, obj):
+        return 'CollectionIngredient'
+
 
     class Meta(BaseCollectionIngredientSerializer.Meta):
         model = CollectionIngredient
 
 
 class CustomCollectionIngredientSerializer(BaseCollectionIngredientSerializer):
+    type = serializers.SerializerMethodField()
+
+    def get_type(self, obj):
+        return 'CustomCollectionIngredient'
     class Meta(BaseCollectionIngredientSerializer.Meta):
         model = CustomCollectionIngredient
+
 
 
 class UnifiedCollectionIngredientSerializer(serializers.Serializer):

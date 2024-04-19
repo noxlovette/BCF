@@ -10,7 +10,7 @@
 <button class="btn btn-primary" id="prev-page"  type="button" disabled>Previous Page</button>
     </div>
 <body>
-<div class = "table-container collection">
+<div class = "table-wrapper collection">
     <table id="collection-table">
         <thead>
             <tr>
@@ -33,6 +33,7 @@
 </div>
     
     {% compress js %}
+        <script src="{% static 'assets/utils.js' %}"></script>
     <script src="{% static 'collection/collection.js' %}"></script>
     {% endcompress %}
 </body>

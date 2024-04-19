@@ -1,4 +1,4 @@
-function deleteCollectionIngredient(collectionIngredientId, userId) {
+function deleteIngredient(collectionIngredientId, userId) {
     $.ajax({
         url: `/collection/api/ingredient/${userId}/${collectionIngredientId}`,
         method: 'DELETE',
@@ -15,15 +15,7 @@ function deleteCollectionIngredient(collectionIngredientId, userId) {
     });
 }
 
-function editCustomCollectionIngredient(event, id) {
-    console.log('Editing custom collection ingredient:', id);
-}
-
-function deleteCustomCollectionIngredient(customCollectionIngredientId, userId) {
-    console.log('Deleting custom collection ingredient:', customCollectionIngredientId);
-}
-
-function editCollectionIngredient(event, id) {
+function editIngredient(event) {
     const row = event.target.parentNode.parentNode;
     const amountCell = row.querySelector('.amount-col');
     const colourCell = row.querySelector('.col-col');
@@ -43,7 +35,7 @@ function editCollectionIngredient(event, id) {
     const saveButton = document.createElement('button');
     saveButton.textContent = 'Save';
     saveButton.className = 'btn btn-primary save';
-    saveButton.dataset.id = id;
+    saveButton.dataset.id = event.target.dataset.id;
     saveButton.addEventListener('click', saveIngredient);
 
     const cancelButton = document.createElement('button');
@@ -54,11 +46,8 @@ function editCollectionIngredient(event, id) {
     const buttonCell = row.querySelector('.editing');
     buttonCell.appendChild(saveButton);
     buttonCell.appendChild(cancelButton);
-
-    console.log('Editing collection ingredient:', saveButton.dataset.id);
 }
 
-//redefine to handle the two types of ingredients
 function saveIngredient(event) {
     const collectionIngredientId = event.target.dataset.id;
     const amountInput = $('#amount-input');
@@ -115,44 +104,25 @@ function fetchIngredients() {
                         <td class="is_col-col">${collection_ingredient.is_collection || ''} </td>
                         <td class="amount-col">${collection_ingredient.amount || '0'} ${collection_ingredient.unit}</td>
                         <td class="editing">
-                            <button class="btn btn-primary delete" title="Delete ingredient">Delete</button>
-                            <button class="btn btn-primary edit" title="Edit ingredient">Edit</button>
+                            <button class="btn btn-primary delete" title="Delete ingredient" data-id="${collection_ingredient.id}">Delete</button>
+                            <button class="btn btn-primary edit" title="Edit ingredient" data-id="${collection_ingredient.id}">Edit</button>
                         </td>
                     </tr>
                 `;
+                let deleteIngredientButton = $(rowHtml).find('.delete');
+                deleteIngredientButton.on('click', function() {
+                    deleteIngredient(collection_ingredient.id, userId);
+                });
+                let editIngredientButton = $(rowHtml).find('.edit');
+                editIngredientButton.on('click', editIngredient);
 
                 // Append the row to the table
-                let row = $(rowHtml).appendTo(tableBody);
-
-                let deleteIngredientButton = row.find('.delete');
-                deleteIngredientButton.data('type', collection_ingredient.type);
-                deleteIngredientButton.data('id', collection_ingredient.id)
-                deleteIngredientButton.on('click', function() {
-                    let type = $(this).data('type');
-                    let id = $(this).data('id');
-                    if (type === 'CollectionIngredient') {
-                        deleteCollectionIngredient(id, userId);
-                    } else if (type === 'CustomCollectionIngredient') {
-                        deleteCustomCollectionIngredient(id, userId);
-                    }
-                });
-
-                let editIngredientButton = row.find('.edit');
-                editIngredientButton.data('type', collection_ingredient.type);
-                editIngredientButton.data('id', collection_ingredient.id);
-                editIngredientButton.on('click', function(event) {
-                    let type = $(this).data('type');
-                    if (type === 'CollectionIngredient') {
-                        editCollectionIngredient(event, collection_ingredient.id);
-                    } else if (type === 'CustomCollectionIngredient') {
-                        editCustomCollectionIngredient(event, collection_ingredient.id);
-                    }
-                });
+                tableBody.append(rowHtml);
             });
 
             // Append create ingredient button
             const createIngredientButton = $('<button class="btn btn-primary btn-create-ingredient">Create Ingredient</button>');
-            createIngredientButton.on('click', createCustomIngredient);
+            createIngredientButton.on('click', createIngredient);
             $('.table-wrapper.collection').append(createIngredientButton);
         },
         error: function(error) {
@@ -162,7 +132,7 @@ function fetchIngredients() {
 }
 
 
-function createCustomIngredient() {
+function createIngredient() {
     // Create a new row with input fields
     const rowHtml = `
         <tr>
@@ -214,7 +184,6 @@ function createCustomIngredient() {
             },
             data: JSON.stringify({user: userId, ...data}),
             success: function(response) {
-                $('.table-wrapper.collection').remove('.btn-create-ingredient');
                 fetchIngredients();
             },
             error: function(error) {
