@@ -130,12 +130,14 @@ function saveIngredientCommon(event, url, id) {
     });
 }
 
-function saveCollectionIngredient(event, id) {
+function saveCollectionIngredient(event) {
+    const id = event.target.dataset.id;
     const url = `/collection/api/ingredient/${userId}/${id}/update/`;
     saveIngredientCommon(event, url, id);
 }
 
-function saveCustomCollectionIngredient(event, id) {
+function saveCustomCollectionIngredient(event) {
+    const id = event.target.dataset.id;
     const url = `/collection/api/ingredient/${userId}/custom/${id}/update/`;
     saveIngredientCommon(event, url, id);
 }

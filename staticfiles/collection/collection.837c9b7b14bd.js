@@ -50,9 +50,7 @@ function deleteCustomCollectionIngredient(customCollectionIngredientId, userId) 
 
 function editIngredient(event, id, selectors, saveFunction) {
     const row = event.target.parentNode.parentNode;
-    row.dataset.id = id;
-    console.log('row.dataset.id when edit has been clicked', row.dataset.id)
-    console.log('id when edit has been clicked', id)
+    console.log('edit has been clicked, the id: ', id)
     const cells = row.querySelectorAll(selectors);
     cells.forEach((cell, index) => {
         const cellText = cell.textContent;
@@ -130,14 +128,16 @@ function saveIngredientCommon(event, url, id) {
     });
 }
 
-function saveCollectionIngredient(event, id) {
+function saveCollectionIngredient(event) {
+    const id = event.target.dataset.id;
     const url = `/collection/api/ingredient/${userId}/${id}/update/`;
-    saveIngredientCommon(event, url, id);
+    saveIngredientCommon(event, url);
 }
 
-function saveCustomCollectionIngredient(event, id) {
+function saveCustomCollectionIngredient(event) {
+    const id = event.target.dataset.id;
     const url = `/collection/api/ingredient/${userId}/custom/${id}/update/`;
-    saveIngredientCommon(event, url, id);
+    saveIngredientCommon(event, url);
 }
 
 // main function

@@ -2,14 +2,35 @@
 {% load static %}
 {% load compress %}
 {% block content %}
+    <body>
     <h1 class="big-header">COLLECT</h1>
-    <div class = "tools collection">
-        <button class="btn btn-primary" id="add-button" type="button">Add</button>
-        <button class="btn btn-primary" id="filter-button" type="button">Filter</button>
-    <button class="btn btn-primary" id="next-page" type="button" >Next Page</button>
-<button class="btn btn-primary" id="prev-page"  type="button" disabled>Previous Page</button>
+    <div class="tools collection">
+        <div class="search-tools collection">
+            <label for="search-input">Find anything</label>
+            <input type="text" id="search-input" placeholder="Search by name or CAS">
+            <button class="btn btn-primary btn-collection" id="clear-search">Clear Search</button>
+            <button class="btn btn-primary btn-collection" id="add-button" type="button">Add an ingredient</button>
+        </div>
+        <div class="filter collection">
+            <div class="filter-box">
+                <label for="filter-name">Subjective filter</label>
+                <input type="text" id="filter-name" placeholder="Associations, notes, colour, etc.">
+                <label for="filter-volatility">Volatility filter</label>
+                <select id="filter-volatility">
+                    <option value="any">Any</option>
+                    <option value="head">Head</option>
+                    <option value="heart">Heart</option>
+                    <option value="base">Base</option>
+                </select>
+            </div>
+        </div>
+        <div class = "paginator collection">
+                <button class="btn btn-primary btn-collection" id="prev-page"  type="button" disabled>Previous Page</button>
+                <button class="btn btn-primary btn-collection" id="next-page" type="button" >Next Page</button>
+        </div>
     </div>
-<body>
+
+    
 <div class = "table-wrapper collection">
     <table id="collection-table">
         <thead>
@@ -30,11 +51,12 @@
             <!-- Rows will be added here by JavaScript -->
         </tbody>
     </table>
+    <button class="btn btn-primary btn-create-ingredient">Create Ingredient</button>
 </div>
     
     {% compress js %}
         <script src="{% static 'assets/utils.js' %}"></script>
-    <script src="{% static 'collection/collection.js' %}"></script>
+        <script src="{% static 'collection/collection.js' %}"></script>
     {% endcompress %}
 </body>
 {% endblock %}

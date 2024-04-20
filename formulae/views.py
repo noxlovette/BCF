@@ -55,6 +55,8 @@ class FormulaDetailViewAPI(generics.RetrieveUpdateAPIView):
     serializer_class = FormulaSerializer
 
     def update(self, request, *args, **kwargs):
+        # Get the raw data from the request
+        # TODO ACCOMMODATE FOR CUSTOM INGREDIENTS
         raw_data = request.body.decode('utf-8')  # Decode the raw data
         data = json.loads(raw_data)  # Parse the raw data into a JSON object
         print(raw_data)

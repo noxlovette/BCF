@@ -15,55 +15,42 @@ from .serialisers import CollectionIngredientSerializer, \
 logger = logging.getLogger(__name__)
 
 
-class CustomIngredientUpdateView(APIView):
-    def put(self, request, *args, **kwargs):
-        try:
-            data = request.data
-            user_id = kwargs.get('user_id')
-            custom_collection_ingredient_id = kwargs.get('customCollectionIngredientId')
+# CREATE VIEWS
+class IngredientCreateView(generics.CreateAPIView):
+    """
+    CREATE A NEW CUSTOM INGREDIENT
+    """
 
-            try:
-                custom_collection_ingredient = CustomCollectionIngredient.objects.get(user=user_id,
-                                                                                      id=custom_collection_ingredient_id)
-            except CustomCollectionIngredient.DoesNotExist:
-                return JsonResponse({'error': 'CustomCollectionIngredient does not exist.'}, status=400)
+    serializer_class = CustomCollectionIngredientSerializer
 
-            # Update the fields. if a key is missing, it defaults to what was there...
-            custom_collection_ingredient.amount = data.get('amount', custom_collection_ingredient.amount)
-            custom_collection_ingredient.colour = data.get('colour', custom_collection_ingredient.colour).strip()
-            custom_collection_ingredient.impression = data.get('impression',
-                                                               custom_collection_ingredient.impression).strip()
-            custom_collection_ingredient.is_collection = data.get('is_collection',
-                                                                  custom_collection_ingredient.is_collection)
+    def perform_create(self, serializer):
+        # Set the user field before saving the object
+        serializer.save(user=self.request.user)
 
-            custom_collection_ingredient.save()
 
-            return JsonResponse({'success': True})
-        except Ingredient.DoesNotExist:
-            return JsonResponse({'error': 'Ingredient does not exist.'}, status=400)
-        except ParseError:
-            return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
-        except User.DoesNotExist:
-            return JsonResponse({'error': 'User does not exist.'}, status=400)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
+# UPDATE VIEWS
+class CustomIngredientUpdateView(generics.UpdateAPIView):
+    queryset = CustomCollectionIngredient.objects.all()
+    serializer_class = CustomCollectionIngredientSerializer
+    lookup_url_kwarg = 'customCollectionIngredientId'
 
-    def delete(self, request, *args, **kwargs):
-        try:
-            user_id = kwargs.get('user_id')
-            custom_collection_ingredient_id = kwargs.get('customCollectionIngredientId')
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        return self.queryset.filter(user=user_id)
 
-            try:
-                custom_collection_ingredient = CustomCollectionIngredient.objects.get(user=user_id,
-                                                                                      id=custom_collection_ingredient_id)
-            except CustomCollectionIngredient.DoesNotExist:
-                return JsonResponse({'error': 'CustomCollectionIngredient does not exist.'}, status=400)
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
 
-            custom_collection_ingredient.delete()
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
 
-            return JsonResponse({'success': True})
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
+        return Response(serializer.data)
 
 
 class IngredientUpdateView(generics.UpdateAPIView):
@@ -90,7 +77,12 @@ class IngredientUpdateView(generics.UpdateAPIView):
         return Response(serializer.data)
 
 
+# DELETE VIEWS
+
 class IngredientDeleteView(generics.DestroyAPIView):
+    """
+    DELETE A COLLECTION INGREDIENT
+    """
     queryset = CollectionIngredient.objects.all()
     serializer_class = CollectionIngredientSerializer
     lookup_url_kwarg = 'collectionIngredientId'
@@ -100,7 +92,24 @@ class IngredientDeleteView(generics.DestroyAPIView):
         return self.queryset.filter(user=user_id)
 
 
+class CustomIngredientDeleteView(generics.DestroyAPIView):
+    """
+    DELETE A CUSTOM INGREDIENT
+    """
+    queryset = CustomCollectionIngredient.objects.all()
+    serializer_class = CustomCollectionIngredientSerializer
+    lookup_url_kwarg = 'customCollectionIngredientId'
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        return self.queryset.filter(user=user_id)
+
+
+# LIST VIEWS
 class CollectionView(generic.ListView):
+    """
+    VIEW TO DISPLAY THE USER'S COLLECTION
+    """
     template_name = "collection/collection.html"
     context_object_name = "collection"
 
@@ -124,8 +133,9 @@ class CollectionView(generic.ListView):
 
 
 class CollectionAPI(APIView):
-    # todo accomodate for customingredient
-
+    """
+    API VIEW TO DISPLAY THE USER'S COLLECTION
+    """
     def get_collection(self, request, user_id):
         user = User.objects.get(id=user_id)
         search_param = request.query_params.get('search', None)
@@ -172,7 +182,14 @@ class CollectionAPI(APIView):
 
         return Response(sorted_data)
 
+    # this is the browse functionality
     def post(self, request, user_id):
+        """
+        adds a new ingredient to the user's collection (FROM THE BROWSE APP)
+        :param request:
+        :param user_id:
+        :return:
+        """
         try:
             data = request.data
             ingredient_id = data.get('ingredient_id')
@@ -191,15 +208,3 @@ class CollectionAPI(APIView):
             return JsonResponse({'error': 'User or Ingredient does not exist.'}, status=400)
         except ParseError:
             return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
-
-
-class IngredientCreateView(generics.CreateAPIView):
-    """
-    CREATE A NEW CUSTOM INGREDIENT
-    """
-
-    serializer_class = CustomCollectionIngredientSerializer
-
-    def perform_create(self, serializer):
-        # Set the user field before saving the object
-        serializer.save(user=self.request.user)

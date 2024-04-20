@@ -51,8 +51,6 @@ function deleteCustomCollectionIngredient(customCollectionIngredientId, userId) 
 function editIngredient(event, id, selectors, saveFunction) {
     const row = event.target.parentNode.parentNode;
     row.dataset.id = id;
-    console.log('row.dataset.id when edit has been clicked', row.dataset.id)
-    console.log('id when edit has been clicked', id)
     const cells = row.querySelectorAll(selectors);
     cells.forEach((cell, index) => {
         const cellText = cell.textContent;
@@ -82,7 +80,7 @@ function editIngredient(event, id, selectors, saveFunction) {
     });
 
     const saveButton = createButton('Save', 'save', function(event) {
-        saveFunction(event, id);});
+        saveFunction(event);});
     const cancelButton = createButton('Cancel', 'cancel', fetchIngredients);
 
     const buttonCell = row.querySelector('.editing');
@@ -99,8 +97,9 @@ function editCustomCollectionIngredient(event, id) {
 }
 
 // saving
-function saveIngredientCommon(event, url, id) {
+function saveIngredientCommon(event, url) {
     console.log('Saving ingredient...')
+    const id = event.target.dataset.id;
     console.log('id when save button has been clicked', id)
     const row = document.querySelector(`tr[data-id="${id}"]`);
     const inputs = row.querySelectorAll('input.collection-input');
@@ -130,14 +129,16 @@ function saveIngredientCommon(event, url, id) {
     });
 }
 
-function saveCollectionIngredient(event, id) {
+function saveCollectionIngredient(event) {
+    const id = event.target.dataset.id;
     const url = `/collection/api/ingredient/${userId}/${id}/update/`;
-    saveIngredientCommon(event, url, id);
+    saveIngredientCommon(event, url);
 }
 
-function saveCustomCollectionIngredient(event, id) {
+function saveCustomCollectionIngredient(event) {
+    const id = event.target.dataset.id;
     const url = `/collection/api/ingredient/${userId}/custom/${id}/update/`;
-    saveIngredientCommon(event, url, id);
+    saveIngredientCommon(event, url);
 }
 
 // main function
@@ -203,6 +204,11 @@ function fetchIngredients() {
                     }
                 });
             });
+
+            // Append create ingredient button
+            const createIngredientButton = $('<button class="btn btn-primary btn-create-ingredient">Create Ingredient</button>');
+            createIngredientButton.on('click', createCustomIngredient);
+            $('.table-wrapper.collection').append(createIngredientButton);
         },
         error: function(error) {
             console.error('Error fetching ingredients:', error);
@@ -211,10 +217,6 @@ function fetchIngredients() {
 }
 
 // create
-
-$(document).ready(function() {
-    $('.btn-create-ingredient').on('click', createCustomIngredient);
-});
 function createCustomIngredient() {
     // Create a new row with input fields
     const rowHtml = `

@@ -1,3 +1,5 @@
+// utils
+
 function createButton(textContent, className, eventListener, id) {
     const button = document.createElement('button');
     button.textContent = textContent;
@@ -6,6 +8,8 @@ function createButton(textContent, className, eventListener, id) {
     button.dataset.id = id;
     return button;
 }
+
+// delete ingredient
 function deleteCollectionIngredient(collectionIngredientId, userId) {
     $.ajax({
         url: `/collection/api/ingredient/${userId}/${collectionIngredientId}/delete/`,
@@ -42,29 +46,17 @@ function deleteCustomCollectionIngredient(customCollectionIngredientId, userId) 
     });
 }
 
-function editCustomCollectionIngredient(event, id) {
-    // TODO UNDEFINED
-    console.log('Editing custom collection ingredient:', id);
-    const row = event.target.parentNode.parentNode;
-    const cells = row.querySelectorAll('td.editable-custom, td.editable');
-    cells.forEach((cell, index) => {
-        const cellText = cell.textContent;
-        if (index !== cells.length - 1) { // Exclude the last cell (the one with the buttons)
+// editing
 
-            cell.innerHTML = `<input class="collection-input" type="text" value="${cellText}">`;
-        }
-    });
-
-}
-
-function editCollectionIngredient(event, id) {
+function editIngredient(event, id, selectors, saveFunction) {
     const row = event.target.parentNode.parentNode;
     row.dataset.id = id;
-    const cells = row.querySelectorAll('td.editable');
+    console.log('row.dataset.id when edit has been clicked', row.dataset.id)
+    console.log('id when edit has been clicked', id)
+    const cells = row.querySelectorAll(selectors);
     cells.forEach((cell, index) => {
         const cellText = cell.textContent;
         const cellId = cell.id;
-        console.log('cellId before conversion', cellId)
         let inputElement;
         if (cellId === 'is_collection') {
             inputElement = document.createElement('input');
@@ -87,10 +79,10 @@ function editCollectionIngredient(event, id) {
         inputElement.id = `${cellId}-input`;
         cell.innerHTML = '';
         cell.appendChild(inputElement);
-        console.log('inputId after conversion', inputElement.id)
     });
 
-    const saveButton = createButton('Save', 'save', saveIngredient, id);
+    const saveButton = createButton('Save', 'save', function(event) {
+        saveFunction(event, id);});
     const cancelButton = createButton('Cancel', 'cancel', fetchIngredients);
 
     const buttonCell = row.querySelector('.editing');
@@ -98,15 +90,21 @@ function editCollectionIngredient(event, id) {
     buttonCell.appendChild(cancelButton);
 }
 
-//redefine to handle the two types of ingredients
-function saveIngredient(event) {
+function editCollectionIngredient(event, id) {
+    editIngredient(event, id, 'td.editable', saveCollectionIngredient);
+}
+
+function editCustomCollectionIngredient(event, id) {
+    editIngredient(event, id, 'td.editable, td.editable-custom', saveCustomCollectionIngredient);
+}
+
+// saving
+function saveIngredientCommon(event, url, id) {
     console.log('Saving ingredient...')
-    const id = event.target.dataset.id;
     console.log('id when save button has been clicked', id)
     const row = document.querySelector(`tr[data-id="${id}"]`);
     const inputs = row.querySelectorAll('input.collection-input');
     const data = {};
-
     inputs.forEach((input) => {
         console.log('input', input)
         const key = input.id.replace('-input', '');
@@ -116,7 +114,7 @@ function saveIngredient(event) {
     });
 
     $.ajax({
-        url: `/collection/api/ingredient/${userId}/${id}/update/`,
+        url: url,
         method: 'PUT',
         headers: {
             'X-CSRFToken': getCookie('csrftoken'),
@@ -132,6 +130,17 @@ function saveIngredient(event) {
     });
 }
 
+function saveCollectionIngredient(event, id) {
+    const url = `/collection/api/ingredient/${userId}/${id}/update/`;
+    saveIngredientCommon(event, url, id);
+}
+
+function saveCustomCollectionIngredient(event, id) {
+    const url = `/collection/api/ingredient/${userId}/custom/${id}/update/`;
+    saveIngredientCommon(event, url, id);
+}
+
+// main function
 function fetchIngredients() {
     console.log('Fetching ingredients...')
     $.ajax({
@@ -194,11 +203,6 @@ function fetchIngredients() {
                     }
                 });
             });
-
-            // Append create ingredient button
-            const createIngredientButton = $('<button class="btn btn-primary btn-create-ingredient">Create Ingredient</button>');
-            createIngredientButton.on('click', createCustomIngredient);
-            $('.table-wrapper.collection').append(createIngredientButton);
         },
         error: function(error) {
             console.error('Error fetching ingredients:', error);
@@ -206,6 +210,11 @@ function fetchIngredients() {
     });
 }
 
+// create
+
+$(document).ready(function() {
+    $('.btn-create-ingredient').on('click', createCustomIngredient);
+});
 function createCustomIngredient() {
     // Create a new row with input fields
     const rowHtml = `
