@@ -1,6 +1,6 @@
 from rest_framework import serializers, generics
 
-from collection.models import CollectionIngredient
+from collection.models import CollectionIngredient, CustomCollectionIngredient
 from formulae.models import FormulaIngredient, Formula
 
 
@@ -16,24 +16,73 @@ class DateTimeSerializer(serializers.DateTimeField):
 
 class FormulaIngredientSerializer(serializers.ModelSerializer):
     """
-    This is the serializer for the FormulaIngredient model.
-    It will be used to serialize the FormulaIngredient model into JSON format.
+    Serializer for the FormulaIngredient model.
     """
-    ingredient_id = serializers.PrimaryKeyRelatedField(source='collection_ingredient.id',
-                                                       queryset=CollectionIngredient.objects.all())
-    formula_ingredient_id = serializers.PrimaryKeyRelatedField(source='id', queryset=FormulaIngredient.objects.all())
-    ingredient = serializers.StringRelatedField(source='collection_ingredient.ingredient.common_name')
-    cas = serializers.StringRelatedField(source='collection_ingredient.ingredient.cas')
-    volatility = serializers.StringRelatedField(source='collection_ingredient.ingredient.volatility')
-    use = serializers.StringRelatedField(source='collection_ingredient.ingredient.use')
 
+    id = serializers.IntegerField(allow_null=True)  # Add this line
+    collection_ingredient_id = serializers.IntegerField(required=False, allow_null=True)
+    custom_collection_ingredient_id = serializers.IntegerField(required=False, allow_null=True)
+    ingredient = serializers.SerializerMethodField()
+    cas = serializers.SerializerMethodField()
+    volatility = serializers.SerializerMethodField()
+    use = serializers.SerializerMethodField()
+    collection_ingredient_type = serializers.SerializerMethodField()
 
+    def get_ingredient(self, obj):
+        """
+        Return the common name of the ingredient.
+        """
+        if obj.collection_ingredient:
+            return obj.collection_ingredient.ingredient.common_name
+        elif obj.custom_collection_ingredient:
+            return obj.custom_collection_ingredient.common_name
+        return None
 
+    def get_cas(self, obj):
+        """
+        Return the CAS number of the ingredient.
+        """
+        if obj.collection_ingredient:
+            return obj.collection_ingredient.ingredient.cas
+        elif obj.custom_collection_ingredient:
+            return obj.custom_collection_ingredient.cas
+        return None
+
+    def get_volatility(self, obj):
+        """
+        Return the volatility of the ingredient.
+        """
+        if obj.collection_ingredient:
+            return obj.collection_ingredient.ingredient.volatility
+        elif obj.custom_collection_ingredient:
+            return obj.custom_collection_ingredient.volatility
+        return None
+
+    def get_use(self, obj):
+        """
+        Return the use of the ingredient.
+        """
+        if obj.collection_ingredient:
+            return obj.collection_ingredient.ingredient.use
+        elif obj.custom_collection_ingredient:
+            return obj.custom_collection_ingredient.use
+        return None
+
+    def get_collection_ingredient_type(self, obj):
+        """
+        Return the type of collection ingredient associated with the FormulaIngredient.
+        """
+        if obj.collection_ingredient:
+            return "Collection Ingredient"
+        elif obj.custom_collection_ingredient:
+            return "Custom Collection Ingredient"
+        return None
 
     class Meta:
         model = FormulaIngredient
-        fields = ['ingredient_id', 'formula_ingredient_id', 'ingredient', 'cas', 'volatility', 'use', 'amount', 'unit']
-        read_only_fields = ['ingredient_id', 'formula_ingredient_id', 'ingredient', 'cas', 'volatility', 'use', 'unit']
+        fields = ['collection_ingredient_id', 'custom_collection_ingredient_id', 'id', 'ingredient', 'cas', 'volatility', 'use',
+                  'amount', 'unit', 'collection_ingredient_type']
+
 
 
 class FormulaSerializer(serializers.ModelSerializer):
@@ -41,34 +90,62 @@ class FormulaSerializer(serializers.ModelSerializer):
     This is the serializer for the Formula model. It will be used to serialize the Formula model into JSON format.
     """
     ingredients = FormulaIngredientSerializer(many=True)
-    created = DateTimeSerializer(source='created_at')
-    updated = DateTimeSerializer(source='updated_at')
+    created = DateTimeSerializer(source='created_at', read_only=True)
+    updated = DateTimeSerializer(source='updated_at', read_only=True)
 
     def update(self, instance, validated_data):
         # Update existing Formula fields
-        print(f"validated_data update function: {validated_data}")
         instance.name = validated_data.get('name', instance.name)
         instance.description = validated_data.get('description', instance.description)
         instance.save()
 
         # Update existing FormulaIngredient instances or create new ones
         ingredients_data = validated_data.pop('ingredients', [])
-        print(f"ingredients_data: {ingredients_data}")
         for ingredient_data in ingredients_data:
-            collection_ingredient = ingredient_data.get('collection_ingredient')
-            if collection_ingredient is not None:
-                ingredient_id = collection_ingredient.get('id')
-                if ingredient_id is not None:
-                    amount = ingredient_data.get('amount')
-                    try:
-                        formula_ingredient, created = FormulaIngredient.objects.update_or_create(
-                            formula=instance,
-                            collection_ingredient_id=ingredient_id.id,
-                            # Access the id attribute of the CollectionIngredient instance
-                            defaults={'amount': amount}
-                        )
-                    except Exception as e:
-                        print(f"Error updating or creating FormulaIngredient: {e}")
+            formula_ingredient_id = ingredient_data.get('id')
+            amount = ingredient_data.get('amount')
+
+            if ingredient_id := ingredient_data.get('collection_ingredient_id'):
+                if formula_ingredient_id is None:
+                    # Create a new FormulaIngredient instance
+                    FormulaIngredient.objects.create(
+                        amount=amount,
+                        collection_ingredient=CollectionIngredient.objects.get(id=ingredient_id),
+                        formula=instance
+                    )
+                else:
+                    # Update an existing FormulaIngredient instance
+                    FormulaIngredient.objects.update_or_create(
+                        id=formula_ingredient_id,
+                        defaults={
+                            'amount': amount,
+                            'collection_ingredient': CollectionIngredient.objects.get(id=ingredient_id),
+                            'custom_collection_ingredient': None,  # Clear the custom_collection_ingredient
+                            'formula': instance
+                        }
+                    )
+            elif ingredient_id := ingredient_data.get('custom_collection_ingredient_id'):
+                if formula_ingredient_id is None:
+                    # Create a new FormulaIngredient instance
+                    FormulaIngredient.objects.create(
+                        amount=amount,
+                        custom_collection_ingredient=CustomCollectionIngredient.objects.get(id=ingredient_id),
+                        formula=instance
+                    )
+                else:
+                    # Update an existing FormulaIngredient instance
+                    FormulaIngredient.objects.update_or_create(
+                        id=formula_ingredient_id,
+                        defaults={
+                            'amount': amount,
+                            'custom_collection_ingredient': CustomCollectionIngredient.objects.get(id=ingredient_id),
+                            'collection_ingredient': None,  # Clear the collection_ingredient
+                            'formula': instance
+                        }
+                    )
+            else:
+                print("Invalid ingredient type.")
+                continue
 
         return instance
 
@@ -84,4 +161,4 @@ class FormulaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Formula
         fields = ['updated', 'created', 'id', 'user', 'name', 'description', 'ingredients', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'user']
+        read_only_fields = ['id', 'user', 'created_at', 'updated_at']

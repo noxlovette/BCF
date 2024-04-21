@@ -17,7 +17,7 @@ class BaseCollectionIngredient(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, verbose_name="Date Added")
 
     def __str__(self):
-        return f"{self.user.username} - {self.common_name} - {self.amount} {self.unit}"
+        return f" BASE COLLECTION INGREDIENT {self.user.username} {self.amount} {self.unit}"
 
     def save(self, *args, **kwargs):
         """
@@ -43,6 +43,9 @@ class BaseCollectionIngredient(models.Model):
 class CollectionIngredient(BaseCollectionIngredient):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"regular collection ing {self.user.username} - {self.ingredient.common_name}"
+
     class Meta:
         unique_together = ['user', 'ingredient']
         verbose_name = "Ingredient in Collection"
@@ -58,7 +61,7 @@ class CustomCollectionIngredient(BaseCollectionIngredient):
     use = models.CharField(max_length=255, verbose_name="Use", null=True, blank=True)
 
     def __str__(self):
-        return self.common_name
+        return f"custom collection ing{self.user.username} - {self.common_name}"
 
     class Meta:
         verbose_name = "Custom Ingredient"

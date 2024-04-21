@@ -12,7 +12,7 @@ $(document).ready(function() {
         console.log('Clicked button view for formula ID:', formulaId);
 
         $.ajax({
-            url: 'api/formula/' + formulaId + '/', // make sure the URL is correct...
+            url: 'api/formula/'+ userId + '/'+ formulaId + '/', // make sure the URL is correct...
             method: 'GET',
             headers: {
                 'X-CSRFToken': csrftoken // Include the CSRF token in the headers

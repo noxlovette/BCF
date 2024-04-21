@@ -34,6 +34,9 @@ export async function fetchDataFromDjango(endpoint, method = 'GET', body = null)
         throw new Error('Failed to fetch data from Django API');
     }
 
-    const data = await response.json();
-    return data;
+    // Only parse as JSON if the response has content
+    if (response.status !== 204 && response.statusText !== 'No Content') {
+        const data = await response.json();
+        return data;
+    }
 }

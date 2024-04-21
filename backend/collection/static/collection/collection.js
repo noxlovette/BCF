@@ -1,14 +1,4 @@
 // utils
-
-function createButton(textContent, className, eventListener, id) {
-    const button = document.createElement('button');
-    button.textContent = textContent;
-    button.className = `btn btn-primary ${className}`;
-    button.addEventListener('click', eventListener);
-    button.dataset.id = id;
-    return button;
-}
-
 // delete ingredient
 function deleteCollectionIngredient(collectionIngredientId, userId) {
     $.ajax({
@@ -28,7 +18,6 @@ function deleteCollectionIngredient(collectionIngredientId, userId) {
 }
 
 function deleteCustomCollectionIngredient(customCollectionIngredientId, userId) {
-    // TODO UNDEFINED
     console.log('Deleting custom collect ingredient:', customCollectionIngredientId);
     $.ajax({
         url: `/collection/api/ingredient/${userId}/custom/${customCollectionIngredientId}/delete/`,

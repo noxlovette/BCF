@@ -5,7 +5,7 @@ depends on core.js for utility functions like removeChildren or quickElement
 */
 'use strict';
 {
-    // CalendarNamespace -- Provides a collect of HTML calendar-related helper functions
+    // CalendarNamespace -- Provides a collection of HTML calendar-related helper functions
     const CalendarNamespace = {
         monthsOfYear: [
             gettext('January'),

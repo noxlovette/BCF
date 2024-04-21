@@ -38,8 +38,21 @@
     }
   }
 
-  async function addToCollection() {
-    console.log('Add to collection');
+  async function addToCollection(ingredientId) {
+    try {
+      const userId = sessionStorage.getItem('user_id');
+      const endpoint = `http://localhost:8000/collection/api/collection/${userId}/`;
+      const body = { user_id: userId, ingredient_id: ingredientId };
+      const response = await fetchDataFromDjango(endpoint, 'POST', body);
+
+      if (response.success) {
+        alert('Ingredient successfully added to collection!');
+      } else {
+        console.error(response.error);
+      }
+    } catch (error) {
+      console.error('Error adding ingredient to collection:', error);
+    }
   }
 
   async function searchIngredients() {

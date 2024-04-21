@@ -24,8 +24,12 @@ class IngredientCreateView(generics.CreateAPIView):
     serializer_class = CustomCollectionIngredientSerializer
 
     def perform_create(self, serializer):
+        # Get the user_id from the URL
+        user_id = self.kwargs.get('user_id')
+        # Get the user object
+        user = User.objects.get(id=user_id)
         # Set the user field before saving the object
-        serializer.save(user=self.request.user)
+        serializer.save(user=user)
 
 
 # UPDATE VIEWS

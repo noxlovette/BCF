@@ -2,11 +2,8 @@
 $(document).ready(function() {
     // Make an AJAX request to fetch the list of formula instances
     $.ajax({
-        url: 'api/formula/list/', // URL to your API endpoint
+        url: 'api/formula/' + userId + `/list/`, // URL to your API endpoint
         method: 'GET',
-        data: {
-            user_id: userId
-        },
         headers: {
             'X-CSRFToken': csrftoken // Include the CSRF token in the headers
         },

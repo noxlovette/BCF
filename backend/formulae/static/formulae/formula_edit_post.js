@@ -48,7 +48,7 @@ function sendDataToServer(formula_id, data) {
     console.log("data inside the senddatatoserver:", data)
     // Make AJAX call to send data to server
     $.ajax({
-        url: 'api/formula/' + formula_id + '/',
+        url: 'api/formula/'+ userId + '/'+ formulaId + '/', // URL to your API endpoint
         method: 'PUT',
         headers: {
             'X-CSRFToken': csrftoken // Include the CSRF token in the headers

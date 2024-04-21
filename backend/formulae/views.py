@@ -18,6 +18,9 @@ def index_view(request):
     return render(request, 'formulae/index.html')
 
 
+from django.contrib.auth.models import User
+
+
 class FormulaCreateAPI(generics.CreateAPIView):
     """
     CREATE A NEW FORMULA
@@ -25,23 +28,28 @@ class FormulaCreateAPI(generics.CreateAPIView):
     serializer_class = FormulaSerializer
 
     def perform_create(self, serializer):
+        # Get the user_id from the URL
+        user_id = self.kwargs.get('user_id')
+        # Get the user object
+        user = User.objects.get(id=user_id)
         # Set the user field before saving the object
-        serializer.save(user=self.request.user, created_at=timezone.now(), updated_at=timezone.now())
+        serializer.save(user=user, created_at=timezone.now(), updated_at=timezone.now())
 
 
 class FormulaListViewAPI(generics.ListAPIView):
     """
     LIST OF FORMULAE. The page is populated by JS
     """
-    queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
 
     def get_queryset(self):
-        # Access the user_id from query parameters
-        user_id = self.request.query_params.get('user_id')
+        # Get the user_id from the URL
+        user_id = self.kwargs.get('user_id')
 
         if user_id is not None:
-            return Formula.objects.filter(user=user_id)
+            # Get the user object
+            user = User.objects.get(id=user_id)
+            return Formula.objects.filter(user=user)
         else:
             # If user_id is not provided, return an empty queryset
             return Formula.objects.none()
@@ -56,7 +64,6 @@ class FormulaDetailViewAPI(generics.RetrieveUpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         # Get the raw data from the request
-        # TODO ACCOMMODATE FOR CUSTOM INGREDIENTS
         raw_data = request.body.decode('utf-8')  # Decode the raw data
         data = json.loads(raw_data)  # Parse the raw data into a JSON object
         print(raw_data)
@@ -86,3 +93,9 @@ class FormulaDetailViewAPI(generics.RetrieveUpdateAPIView):
 class FormulaIngredientDeleteAPIView(generics.DestroyAPIView):
     queryset = FormulaIngredient.objects.all()
     serializer_class = FormulaIngredientSerializer
+
+
+class FormulaDeleteAPIView(generics.DestroyAPIView):
+    queryset = Formula.objects.all()
+    serializer_class = FormulaSerializer
+# Path: formulae/urls.py

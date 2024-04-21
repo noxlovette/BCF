@@ -758,7 +758,7 @@ S2.define('select2/utils',[
   // Append an array of jQuery nodes to a given element.
   Utils.appendMany = function ($element, $nodes) {
     // jQuery 1.7.x does not support $.fn.append() with an array
-    // Fall back to a jQuery object collect using $.fn.add()
+    // Fall back to a jQuery object collection using $.fn.add()
     if ($.fn.jquery.substr(0, 3) === '1.7') {
       var $jqNodes = $();
 
