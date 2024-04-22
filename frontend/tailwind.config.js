@@ -1,8 +1,14 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {Partial<CustomThemeConfig & {extend: Partial<CustomThemeConfig>}> & DefaultTheme} */
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans]
+      }
+    }
   },
   plugins: []
 };

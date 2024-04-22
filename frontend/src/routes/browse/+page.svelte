@@ -21,6 +21,13 @@
     return await fetchIngredients(currentPage, searchTerm);
   }
 
+  async function reset() {
+    searchTerm = '';
+    currentPage = 1;
+    goto(`/browse?page=${currentPage}&search=${searchTerm}`);
+    data = await load();
+  }
+
   /**
    * @param {number} currentPage
    */
@@ -74,46 +81,79 @@
   }
 </script>
 
-<main>
-  <h1>Browse Page</h1>
-  <input type="text" bind:value={searchTerm} placeholder="Search..." />
-  <button on:click={searchIngredients}>Search</button>
-  <button on:click={prevPage}>Prev</button>
-  <button on:click={nextPage}>Next</button>
+<div class="flex flex-col items-center justify-center mt-0">
+  <h1 class = "text-9xl font-thin">Browse</h1>
+  <div id="tools">
+    <div id="search-bar" class="flex items-center">
+      <input type="text" bind:value={searchTerm} placeholder="Search..."
+             title="Find an ingredient by CAS or the multiple names that it might have"/>
+      <button on:click={searchIngredients}>
+      <span class="material-icons">search</span>
+      </button>
+      <button on:click={reset} title="Reset the search field">
+      <span class="material-icons">search_off</span>
+      </button>
+    </div>
 
-  {#if isLoading} <!-- If isLoading is true, display a loading message -->
-    <p>Loading...</p>
-  {:else} <!-- Once data is fetched, render the #each block -->
-  <table>
-    <thead>
-    <tr>
-      <th>Add to collection</th>
-      <th>Common Name</th>
-      <th>CAS</th>
-      <th>Ingredient Type</th>
-      <th>Volatility</th>
-      <th>Descriptors</th>
-      <th>Use</th>
-      <th>Is Restricted</th>
-    </tr>
-    </thead>
-    <tbody>
-    {#each data.results as ingredient (ingredient.id)}
-      <tr>
-        <td>
-          <button on:click={() => addToCollection(ingredient.id)}>Add to collection</button>
-        </td>
-        <td>{ingredient.common_name}</td>
-        <td>{ingredient.cas}</td>
-        <td>{ingredient.ingredient_type}</td>
-        <td>{ingredient.volatility}</td>
-        <td>{ingredient.descriptors}</td>
-        <td>{ingredient.use}</td>
-        <td>{ingredient.is_restricted}</td>
-      </tr>
-    {/each}
-    </tbody>
-  </table>
+    <div id="pagination" class="flex justify-between items-center">
+      <button on:click={prevPage}>
+        <span class="material-icons">arrow_back_ios</span>
+      </button>
+      <button on:click={nextPage}>
+        <span class="material-icons">arrow_forward_ios</span>
+      </button>
+    </div>
+  </div>
+
+  <div id = 'table-wrapper' class="flex flex-auto items-center justify-center m-10 mt-0 p-2">
+    {#if isLoading} <!-- If isLoading is true, display a loading message -->
+      <p>Loading...</p>
+    {:else} <!-- Once data is fetched, render the #each block -->
+      <table class="flex-auto table-fixed border-separate border border-slate-600">
+        <thead>
+        <tr class="font-bold">
+          <th class = "border-header">Add</th>
+          <th class = "border-header">Common Name</th>
+          <th class = "border-header">CAS</th>
+          <th class = "border-header">Volatility</th>
+          <th class = "border-header">Descriptors</th>
+          <th class = "border-header">Use</th>
+          <th class = "border-header">Is Restricted</th>
+        </tr>
+        </thead>
+        <tbody>
+        {#each data.results as ingredient (ingredient.id)}
+          <tr>
+            <td class="border-cell">
+              <button on:click={() => addToCollection(ingredient.id)} class="flex items-center"
+                      title="Add this ingredient to your collection">
+                <span class="material-icons">add_box</span>
+              </button>
+
+            </td>
+            <td class="border-cell">{ingredient.common_name}</td>
+            <td class="border-cell">{ingredient.cas}</td>
+            <td class="border-cell">{ingredient.volatility}</td>
+            <td class="border-cell">{ingredient.descriptors}</td>
+            <td class="border-cell">{ingredient.use}</td>
+            <td class="border-cell">{ingredient.is_restricted}</td>
+          </tr>
+        {/each}
+        </tbody>
+      </table>
     {/if}
-</main>
-```
+  </div>
+
+</div>
+
+<style>
+  .border-header {
+    @apply border-r border-slate-600;
+  }
+
+  .border-cell {
+    @apply border-r border-b border-slate-600;
+  }
+
+
+</style>

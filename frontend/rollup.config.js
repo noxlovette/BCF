@@ -8,6 +8,8 @@ plugins=[
         whitelist: [], // Array of classnames whitelisted from purging
         whitelistPatterns: [], // Same as above, but list of regexes
         tailwind: {
+
+            mode: "jit",
             colors: {
                 primary: "#b027b0",
                 secondary: "#009688",
