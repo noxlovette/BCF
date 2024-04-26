@@ -13,7 +13,7 @@ class DateTimeSerializer(serializers.DateTimeField):
 
 
 class BaseCollectionIngredientSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(read_only=True)
     common_name = serializers.CharField()
     cas = serializers.CharField()
     volatility = serializers.CharField()
@@ -21,15 +21,15 @@ class BaseCollectionIngredientSerializer(serializers.ModelSerializer):
     amount = serializers.IntegerField()
     unit = serializers.CharField()
     colour = serializers.CharField()
-    impression = serializers.CharField()
-    associations = serializers.CharField()
-    notes = serializers.CharField()
-    is_collection = serializers.BooleanField()
-    date_added = DateTimeSerializer()
+    date_added = DateTimeSerializer(read_only=True)
+    impression = serializers.CharField(allow_null=True, allow_blank=True)
+    ideas = serializers.CharField(allow_null=True, allow_blank=True)
+    associations = serializers.CharField(allow_null=True, allow_blank=True)
+    # return associations, ideas
 
     class Meta:
         fields = ['type', 'id', 'common_name', 'cas', 'volatility', 'use', 'date_added', 'colour', 'impression', 'associations',
-                  'notes', 'is_collection', 'amount', 'unit']
+                  'ideas', 'is_collection', 'amount', 'unit']
         abstract = True
 
 

@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+import uuid
 
 
 class Descriptor(models.Model):
@@ -20,7 +21,6 @@ class Descriptor(models.Model):
         verbose_name_plural = "Descriptors"
         db_table = 'descriptors'
 
-
 class Ingredient(models.Model):
     """
     This model represents an ingredient used in perfumery
@@ -30,8 +30,6 @@ class Ingredient(models.Model):
         ('natural', 'Natural'),
         ('base', 'Base')
     ]
-
-    # most important data
     common_name = models.CharField(max_length=200, verbose_name="Name")
     other_names = models.TextField(null=True, blank=True, verbose_name="Other Names")
     cas = models.CharField(max_length=30, null=True, blank=True, verbose_name="CAS")
@@ -101,6 +99,7 @@ class Ingredient(models.Model):
         return {
             'id': self.id,
             'common_name': self.common_name,
+            'other_names': self.other_names,
             'cas': self.cas,
             'descriptors': self.get_descriptors(),
             'type': self.ingredient_type,
@@ -118,3 +117,9 @@ class Ingredient(models.Model):
         verbose_name_plural = "Ingredients"
         unique_together = ('cas', 'common_name')
         db_table = 'ingredients'
+
+class SuggestedIngredient(Ingredient):
+    """
+    This model represents an ingredient suggested by a user #TODO implement this
+    """
+    ...

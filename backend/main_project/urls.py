@@ -5,7 +5,6 @@ from django.views.generic import RedirectView
 from .views import UserLoginView, get_csrf_token
 
 urlpatterns = [
-    path('', views.home, name='home'),
     path('api/user_id', views.get_user_id,  name='user_id'),
     path('login/', UserLoginView.as_view(), name='login'),
     path("browse/", include('browse.urls')),

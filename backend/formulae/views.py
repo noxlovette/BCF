@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework import generics
-from .models import Formula, FormulaIngredient
+from .models import Formula, FormulaIngredient, Tag
 from .serialisers import FormulaSerializer, FormulaIngredientSerializer
 
 
@@ -63,19 +63,11 @@ class FormulaDetailViewAPI(generics.RetrieveUpdateAPIView):
     serializer_class = FormulaSerializer
 
     def update(self, request, *args, **kwargs):
-        # Get the raw data from the request
-        raw_data = request.body.decode('utf-8')  # Decode the raw data
-        data = json.loads(raw_data)  # Parse the raw data into a JSON object
-        print(raw_data)
-        print(data)
-
-        # Get the existing instance
+        raw_data = request.body.decode('utf-8')
+        data = json.loads(raw_data)
         instance = self.get_object()
-
-        # Initialize the serializer with the existing instance and the data
         serializer = self.get_serializer(instance, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
-
         self.perform_update(serializer)
         return Response(serializer.data)
 

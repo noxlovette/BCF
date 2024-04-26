@@ -1,7 +1,7 @@
 from rest_framework import serializers, generics
 
 from collection.models import CollectionIngredient, CustomCollectionIngredient
-from formulae.models import FormulaIngredient, Formula
+from formulae.models import FormulaIngredient, Formula, Tag
 
 
 class DateTimeSerializer(serializers.DateTimeField):
@@ -97,7 +97,14 @@ class FormulaSerializer(serializers.ModelSerializer):
         # Update existing Formula fields
         instance.name = validated_data.get('name', instance.name)
         instance.description = validated_data.get('description', instance.description)
+        user_id = validated_data.get('user')
         instance.save()
+
+        # update or create tags
+        tags_data = validated_data.pop('tags', [])
+        for tag_name in tags_data:
+            tag, created = Tag.objects.get_or_create(name=tag_name, user_id=user_id)
+            instance.tags.add(tag)
 
         # Update existing FormulaIngredient instances or create new ones
         ingredients_data = validated_data.pop('ingredients', [])

@@ -4,6 +4,22 @@ from django.contrib.auth.models import User
 from collection.models import CollectionIngredient, Ingredient, CustomCollectionIngredient
 
 
+class Tag(models.Model):
+    """
+    This is the model of a tag. It is a list of tags that can be associated with a formula.
+    """
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'tags'
+        verbose_name = "Tag"
+        verbose_name_plural = "Tags"
+        ordering = ['name']
+
 class Formula(models.Model):
     """
     This the model of a formula. It is a list of ingredients used in a perfume formula.
@@ -12,6 +28,7 @@ class Formula(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField()
+    tags = models.ManyToManyField(Tag, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

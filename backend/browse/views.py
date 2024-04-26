@@ -15,17 +15,21 @@ class BrowseView(APIView):
     def get(self, request):
         # get the search term from the query string
         search_term = request.query_params.get('search', None)
+        page_size = request.query_params.get('page_size', 10)
 
         # Get all ingredients
         ingredients = Ingredient.objects.filter(
             Q(common_name__icontains=search_term) |
             Q(other_names__icontains=search_term) |
-            Q(cas__icontains=search_term)
+            Q(cas__icontains=search_term) |
+            Q(descriptor1__name__icontains=search_term) |
+            Q(descriptor2__name__icontains=search_term) |
+            Q(descriptor3__name__icontains=search_term)
         ).order_by('common_name')
 
         # Create a paginator
         paginator = CustomPageNumberPagination()  # Use the custom pagination class
-        paginator.page_size = 10  # Set the number of items per page
+        paginator.page_size = page_size  # Set the number of items per page
 
         # Get the page of ingredients
         page_of_ingredients = paginator.paginate_queryset(ingredients, request)

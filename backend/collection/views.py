@@ -142,6 +142,9 @@ class CollectionAPI(APIView):
     """
     def get_collection(self, request, user_id):
         user = User.objects.get(id=user_id)
+        if not user:
+            return JsonResponse({'error': 'user not logged in'}, status=400)
+
         search_param = request.query_params.get('search', None)
 
         collection_ingredients = CollectionIngredient.objects.filter(user=user).order_by('ingredient__common_name')
@@ -167,7 +170,7 @@ class CollectionAPI(APIView):
 
         if not collection_ingredients.exists() and not custom_collection_ingredients.exists():
             empty_ingredient = {
-                'ingredient': '',
+                'ingredient': 'this is a sample ingredient',
                 'ingredient.cas': '',
                 'ingredient.volatility': '',
                 'ingredient.use': '',
@@ -207,8 +210,8 @@ class CollectionAPI(APIView):
 
             return JsonResponse({'success': True})
         except IntegrityError:
-            return JsonResponse({'error': 'Ingredient is already in collection.'}, status=400)
+            return JsonResponse({'error': 'ingredient is already in collection'}, status=400)
         except (User.DoesNotExist, Ingredient.DoesNotExist):
-            return JsonResponse({'error': 'User or Ingredient does not exist.'}, status=400)
+            return JsonResponse({'error': 'user or ingredient does not exist'}, status=400)
         except ParseError:
-            return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
+            return JsonResponse({'error': 'invalid JSON data'}, status=400)

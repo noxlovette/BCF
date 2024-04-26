@@ -18,7 +18,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate, login
 
+
 class UserLoginAPI(APIView):
+    # CAPTCHA, verify email
     def post(self, request, *args, **kwargs):
         data = request.data
         username = data.get('username')
@@ -54,10 +56,6 @@ def login_view(request):
 @login_required
 def get_user_id(request):
     return JsonResponse({'user_id': request.user.id})
-
-
-def home(request):
-    return render(request, 'main page.html')
 
 
 class UserLoginView(LoginView):

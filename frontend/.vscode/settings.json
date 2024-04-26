@@ -1,5 +1,5 @@
 {
-    "workbench.editor.languageDetection": true,
-    "workbench.preferredHighContrastColorTheme": "Abyss",
-    "workbench.colorTheme": "Dracula Soft"
+  "workbench.editor.languageDetection": true,
+  "workbench.preferredHighContrastColorTheme": "Abyss",
+  "workbench.colorTheme": "Dracula"
 }

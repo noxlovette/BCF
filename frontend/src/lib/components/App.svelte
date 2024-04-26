@@ -1,11 +1,11 @@
 <script>
-  import "smelte/src/tailwind.css" ;
+  import "smelte/src/tailwind.css";
 </script>
 
 <main>
-    <!-- HTML markup here -->
+  <!-- HTML markup here -->
 </main>
 
 <style>
-    /* CSS styles here */
+  /* CSS styles here */
 </style>

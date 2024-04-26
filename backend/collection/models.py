@@ -12,7 +12,7 @@ class BaseCollectionIngredient(models.Model):
     colour = models.CharField(max_length=50, verbose_name="Colour", null=True, blank=True)
     impression = models.TextField(verbose_name="Impression", null=True, blank=True)
     associations = models.TextField(verbose_name="Associations", null=True, blank=True)
-    notes = models.TextField(verbose_name="Notes", null=True, blank=True)
+    ideas = models.TextField(verbose_name="Notes", null=True, blank=True)
     is_collection = models.BooleanField(default=False, verbose_name="In Collection")
     date_added = models.DateTimeField(auto_now_add=True, verbose_name="Date Added")
 
