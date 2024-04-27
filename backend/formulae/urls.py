@@ -11,4 +11,7 @@ urlpatterns = [
     path('api/formula/<int:user_id>/<int:pk>/delete/', views.FormulaDeleteAPIView.as_view(), name='formula_delete_api'),
     path('api/ingredient/<int:user_id>/<int:pk>/delete/', views.FormulaIngredientDeleteAPIView.as_view(),
          name='ingredient_delete_api'),
+    path('api/formula/<int:user_id>/<int:formula_id>/add_as_custom/',
+         views.FormulaAsCustomIngredientAPI.as_view(),
+         name='formula_as_custom_ingredient_api'),
 ]

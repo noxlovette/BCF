@@ -1,8 +1,9 @@
-from datetime import datetime
-
 from django.db import models
 from django.contrib.auth.models import User
 from browse.models import Ingredient
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+
 
 
 class BaseCollectionIngredient(models.Model):
@@ -59,6 +60,9 @@ class CustomCollectionIngredient(BaseCollectionIngredient):
     cas = models.CharField(max_length=255, verbose_name="CAS Number", null=True, blank=True)
     volatility = models.CharField(max_length=255, verbose_name="Volatility", null=True, blank=True)
     use = models.CharField(max_length=255, verbose_name="Use", null=True, blank=True)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):
         return f"custom collection ing{self.user.username} - {self.common_name}"

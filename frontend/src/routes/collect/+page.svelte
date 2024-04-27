@@ -167,6 +167,8 @@ function isEditableField(ingredientType, fieldName) {
   let volatility = '';
   let use ='';
   let colour ='';
+  let associations ='';
+  let ideas ='';
   let impression ='';
   let amount = 0;
 
@@ -180,6 +182,8 @@ function isEditableField(ingredientType, fieldName) {
       use,
       colour,
       impression,
+      associations,
+      ideas,
       amount,
       unit: "g",
     };
@@ -256,7 +260,7 @@ function isEditableField(ingredientType, fieldName) {
 <Header currentPage="collect" notification={notification} />
 
 <main>
-<div id = "app" class="flex flex-col content-center lowercase">
+<div id = "app" class="flex flex-col content-center lowercase" transition:fade={{duration: 700}}>
 
   <div id="tools" class="flex flex-row w-full justify-between space-x-2">
     <button class="pl-2"on:click={prevPage}>
@@ -321,12 +325,43 @@ function isEditableField(ingredientType, fieldName) {
       </svg>
       
     </button>
+    {#if isModalVisible}
+      <div id="modal" class="flex bg-white p-6 text-xs">
+        <div class="grid grid-cols-2 gap-1">
+          <input bind:value={common_name} placeholder="name" />
+          <input bind:value={cas} placeholder="CAS" />
+          <input bind:value={volatility} placeholder="volatility" />
+          <input bind:value={use} placeholder="use" />
+        </div>
+        <div class="flex flex-col space-y-2 p-2">
+          <button on:click={createCustomIngredient}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>            
+          </button>
+          <button on:click={cancelCreate}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+            
+          </button>
+          <button on:click={hideModal}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+            </svg>
+            
+          
+          </button>
+      </div>
+      </div>
+    {/if}
    
   </div>
   
 
 
-<div class="table-wrapper" transition:fade={{duration: 500}}>
+<div class="table-wrapper">
+  
   <table class="bg-blend-screen size-full table-fixed text-sm">
   <thead class="bg-amber-100 space-x-2">
   <tr>
@@ -336,7 +371,9 @@ function isEditableField(ingredientType, fieldName) {
       {/if}
     {/each}
   </thead>
+  
   <tbody class="text-center divide-y divide-dashed divide-amber-300">
+    
   {#each ingredients as ingredient}
     <tr on:dblclick={() => toggleEdit(ingredient.id)}>
 
@@ -372,29 +409,6 @@ function isEditableField(ingredientType, fieldName) {
 
   </table>
 
-    {#if isModalVisible}
-      <div id="modal" class="flex w-full">
-        <div class="flex text-sm grid-cols-3">
-          <input bind:value={common_name} placeholder="name" />
-          <input bind:value={cas} placeholder="CAS" />
-          <input bind:value={volatility} placeholder="volatility" />
-          <input bind:value={use} placeholder="use" />
-          <input bind:value={colour} placeholder="colour" />
-          <textarea bind:value={impression} placeholder="impression"
-            ></textarea>
-          <input
-              type="number"
-              bind:value={amount}
-              placeholder="amount"
-            />  
-        </div>
-        <div class="flex flex-row space-x-2">
-          <button on:click={createCustomIngredient}>Done</button>
-          <button on:click={cancelCreate}>Cancel</button>
-          <button on:click={hideModal}>Close</button>
-      </div>
-      </div>
-    {/if}
   
   </div>
 </div>

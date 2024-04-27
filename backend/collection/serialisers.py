@@ -20,15 +20,15 @@ class BaseCollectionIngredientSerializer(serializers.ModelSerializer):
     use = serializers.CharField()
     amount = serializers.IntegerField()
     unit = serializers.CharField()
-    colour = serializers.CharField()
+    colour = serializers.CharField(allow_null=True, allow_blank=True)
     date_added = DateTimeSerializer(read_only=True)
     impression = serializers.CharField(allow_null=True, allow_blank=True)
     ideas = serializers.CharField(allow_null=True, allow_blank=True)
     associations = serializers.CharField(allow_null=True, allow_blank=True)
-    # return associations, ideas
 
     class Meta:
-        fields = ['type', 'id', 'common_name', 'cas', 'volatility', 'use', 'date_added', 'colour', 'impression', 'associations',
+        fields = ['type', 'id', 'common_name', 'cas', 'volatility', 'use', 'date_added', 'colour', 'impression',
+                  'associations',
                   'ideas', 'is_collection', 'amount', 'unit']
         abstract = True
 
@@ -43,7 +43,6 @@ class CollectionIngredientSerializer(BaseCollectionIngredientSerializer):
     def get_type(self, obj):
         return 'CollectionIngredient'
 
-
     class Meta(BaseCollectionIngredientSerializer.Meta):
         model = CollectionIngredient
 
@@ -53,9 +52,9 @@ class CustomCollectionIngredientSerializer(BaseCollectionIngredientSerializer):
 
     def get_type(self, obj):
         return 'CustomCollectionIngredient'
+
     class Meta(BaseCollectionIngredientSerializer.Meta):
         model = CustomCollectionIngredient
-
 
 
 class UnifiedCollectionIngredientSerializer(serializers.Serializer):

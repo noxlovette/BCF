@@ -27,6 +27,7 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
     volatility = serializers.SerializerMethodField()
     use = serializers.SerializerMethodField()
     collection_ingredient_type = serializers.SerializerMethodField()
+    percentage = serializers.FloatField(allow_null=True)
 
     def get_ingredient(self, obj):
         """
@@ -81,7 +82,7 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = FormulaIngredient
         fields = ['collection_ingredient_id', 'custom_collection_ingredient_id', 'id', 'ingredient', 'cas', 'volatility', 'use',
-                  'amount', 'unit', 'collection_ingredient_type']
+                  'amount', 'unit', 'collection_ingredient_type', 'percentage']
 
 
 
@@ -111,6 +112,7 @@ class FormulaSerializer(serializers.ModelSerializer):
         for ingredient_data in ingredients_data:
             formula_ingredient_id = ingredient_data.get('id')
             amount = ingredient_data.get('amount')
+            percentage = ingredient_data.get('percentage')
 
             if ingredient_id := ingredient_data.get('collection_ingredient_id'):
                 if formula_ingredient_id is None:
@@ -118,7 +120,8 @@ class FormulaSerializer(serializers.ModelSerializer):
                     FormulaIngredient.objects.create(
                         amount=amount,
                         collection_ingredient=CollectionIngredient.objects.get(id=ingredient_id),
-                        formula=instance
+                        formula=instance,
+                        percentage=percentage
                     )
                 else:
                     # Update an existing FormulaIngredient instance
@@ -128,7 +131,8 @@ class FormulaSerializer(serializers.ModelSerializer):
                             'amount': amount,
                             'collection_ingredient': CollectionIngredient.objects.get(id=ingredient_id),
                             'custom_collection_ingredient': None,  # Clear the custom_collection_ingredient
-                            'formula': instance
+                            'formula': instance,
+                            'percentage': percentage
                         }
                     )
             elif ingredient_id := ingredient_data.get('custom_collection_ingredient_id'):
@@ -137,7 +141,8 @@ class FormulaSerializer(serializers.ModelSerializer):
                     FormulaIngredient.objects.create(
                         amount=amount,
                         custom_collection_ingredient=CustomCollectionIngredient.objects.get(id=ingredient_id),
-                        formula=instance
+                        formula=instance,
+                        percentage=percentage
                     )
                 else:
                     # Update an existing FormulaIngredient instance
@@ -147,7 +152,9 @@ class FormulaSerializer(serializers.ModelSerializer):
                             'amount': amount,
                             'custom_collection_ingredient': CustomCollectionIngredient.objects.get(id=ingredient_id),
                             'collection_ingredient': None,  # Clear the collection_ingredient
-                            'formula': instance
+                            'formula': instance,
+                            'percentage': percentage
+
                         }
                     )
             else:

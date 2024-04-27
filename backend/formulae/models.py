@@ -1,7 +1,9 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 from collection.models import CollectionIngredient, Ingredient, CustomCollectionIngredient
+from django.apps import apps
 
 
 class Tag(models.Model):
@@ -19,6 +21,7 @@ class Tag(models.Model):
         verbose_name = "Tag"
         verbose_name_plural = "Tags"
         ordering = ['name']
+
 
 class Formula(models.Model):
     """
@@ -53,6 +56,11 @@ class FormulaIngredient(models.Model):
                                                      blank=True)
     amount = models.IntegerField(default=0, verbose_name="Amount")
     unit = models.CharField(max_length=50, default='g', verbose_name="Unit")
+    percentage = models.FloatField(
+        default=100,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        verbose_name="Percentage"
+    )
 
     def clean(self):
         """

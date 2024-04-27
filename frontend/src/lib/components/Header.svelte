@@ -89,6 +89,8 @@ $: {
 
             {:else if currentPage === "collect"}
             <p class="m-2 text-3xl text-light tracking-wider text-gray-800">collect</p>
+            {:else if currentPage === "formulate"}
+            <p class="m-2 text-3xl text-light tracking-wider text-gray-800">formulate</p>
           {:else}
             <p class="m-2 text-3xl text-light tracking-wider text-gray-800">page not found</p>
         {/if}
@@ -155,7 +157,7 @@ $: {
                   >collect</a>
                 </li>
                 <li class="text-gray-800 hover:text-amber-900">
-                  <a href="/formula"
+                  <a href="/formulate"
                   >formulate</a>
                 </li>
               </ul>
