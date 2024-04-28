@@ -2,10 +2,32 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { writable } from "svelte/store";
+  import { goto } from "$app/navigation";
+  import { fetchDataFromDjango } from "$lib/DjangoAPI.ts";
 
 
   let is_authenticated = false;
   let username = "";
+
+
+  async function logout() {
+    const url = "http://localhost:8000/api/logout/";
+
+    try {
+      const response = await fetchDataFromDjango(url, "POST", {});
+      console.log("Response:", response);
+      is_authenticated = false;
+      sessionStorage.clear();
+      window.location.href = "/";
+      notification.set("Logged out successfully");
+
+    } catch (error) {
+      console.error("Failed to log out");
+      notification.set("Failed to log out")
+    }
+  }
+
+
   let isDropdownOpen = false;
   export { is_authenticated, username, isDropdownOpen, toggleDropdown, resetCountdown, closeDropdown };
   /**
@@ -86,11 +108,12 @@ $: {
             <p class="m-2 text-3xl text-light tracking-wider text-gray-800">BCF</p>
             {:else if currentPage === "login"}
             <p class="m-2 text-3xl text-light tracking-wider text-gray-800">login</p>
-
             {:else if currentPage === "collect"}
             <p class="m-2 text-3xl text-light tracking-wider text-gray-800">collect</p>
             {:else if currentPage === "formulate"}
             <p class="m-2 text-3xl text-light tracking-wider text-gray-800">formulate</p>
+            {:else if currentPage === "signup"}
+            <p class="m-2 text-3xl text-light tracking-wider text-gray-800">sign up</p>
           {:else}
             <p class="m-2 text-3xl text-light tracking-wider text-gray-800">page not found</p>
         {/if}
@@ -115,15 +138,14 @@ $: {
               
             </a>
             <p class="text-gray-800 justify-self-center mr-auto">welcome, {username}</p>
-            <a href="/logout" class="text-gray-800">
+            <button on:click={logout} class="text-gray-800">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
-              </svg>
-              
-            </a>
+              </svg>   
+            </button>
           {:else}
-            <a href="/login" class="text-gray-800 hover:text-amber-900">login</a>
-            <a href="/register" class="text-gray-800 hover:text-amber-900">sign up</a>
+            <a href="/auth/login" class="text-gray-800 hover:text-amber-900">login</a>
+            <a href="/auth/signup" class="text-gray-800 hover:text-amber-900">sign up</a>
           {/if}
         </div>
     </div>

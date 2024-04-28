@@ -10,7 +10,7 @@
       <li>
         <a href="https://twitter.com/BCF_app">
           <img
-            src="assets/img/x-logo/logo-black.png"
+            src="/assets/img/x-logo/logo-black.png"
             alt="Twitter"
             width="16"
             height="16"
@@ -24,7 +24,7 @@
           class="hover:scale-105 hover:shadow ease-in-out duration-1000"
         >
           <img
-            src="assets/img/patreon-logo/PATREON_SYMBOL_1_BLACK_RGB.png"
+            src="/assets/img/patreon-logo/PATREON_SYMBOL_1_BLACK_RGB.png"
             alt="Patreon"
             width="16"
             height="16"

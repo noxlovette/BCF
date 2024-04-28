@@ -4,8 +4,8 @@
     import Header from "$lib/components/Header.svelte";
     import { fade } from "svelte/transition";
     import { writable } from "svelte/store";
-    import { crossfade } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
+
+
 
 
 
@@ -260,7 +260,7 @@ function isEditableField(ingredientType, fieldName) {
 <Header currentPage="collect" notification={notification} />
 
 <main>
-<div id = "app" class="flex flex-col content-center lowercase" transition:fade={{duration: 700}}>
+<div id = "app" class="flex flex-col content-center lowercase">
 
   <div id="tools" class="flex flex-row w-full justify-between space-x-2">
     <button class="pl-2"on:click={prevPage}>

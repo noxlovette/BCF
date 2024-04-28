@@ -15,6 +15,7 @@ export async function fetchDataFromDjango(
   endpoint: string,
   method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
   body: any = null,
+  credentials: RequestCredentials = "same-origin"
 ): Promise<any> {
   // function body
   const csrfToken = await fetchCSRFToken();
@@ -31,6 +32,7 @@ export async function fetchDataFromDjango(
     headers,
     // Include any other necessary options such as body for POST requests
     body: body ? JSON.stringify(body) : null,
+    credentials,
   };
 
   const response = await fetch(endpoint, options);

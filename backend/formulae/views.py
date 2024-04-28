@@ -10,6 +10,8 @@ from .models import Formula, FormulaIngredient, Tag
 from .serialisers import FormulaSerializer, FormulaIngredientSerializer
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
 
 
 def index_view(request):
@@ -45,17 +47,21 @@ class FormulaListViewAPI(generics.ListAPIView):
     """
     serializer_class = FormulaSerializer
 
-    def get_queryset(self):
+    def get(self, request, *args, **kwargs):
         # Get the user_id from the URL
         user_id = self.kwargs.get('user_id')
 
         if user_id is not None:
             # Get the user object
             user = User.objects.get(id=user_id)
-            return Formula.objects.filter(user=user)
+            queryset = Formula.objects.filter(user=user)
         else:
             # If user_id is not provided, return an empty queryset
-            return Formula.objects.none()
+            queryset = Formula.objects.none()
+
+        # Serialize the queryset and return the response
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
 
 class FormulaDetailViewAPI(generics.RetrieveUpdateAPIView):
@@ -124,10 +130,42 @@ class FormulaAsCustomIngredientAPI(generics.CreateAPIView):
             cas='BASE',
         )
 
-
         # Set the content type and object id fields for the generic relationship
         custom_ingredient.content_type = ContentType.objects.get_for_model(Formula)
         custom_ingredient.object_id = formula.id
 
         # Save the CustomCollectionIngredient instance
         custom_ingredient.save()
+
+
+class FormulaTagAPI(generics.RetrieveUpdateAPIView):
+    queryset = Formula.objects.all()
+    serializer_class = FormulaSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Extract tags data from request
+        tags_data = request.data.get('tags', [])
+
+        # Iterate over tags data
+        for tag_data in tags_data:
+            tag_name = tag_data.get('name')
+
+            # Check if a tag with the same name exists for the user
+            existing_tag = Tag.objects.filter(name=tag_name, user=request.user).first()
+
+            if existing_tag:
+                # Associate the formula with the existing tag
+                instance.tags.add(existing_tag)
+            else:
+                # Create a new tag and associate it with the formula
+                new_tag = Tag.objects.create(name=tag_name, user=request.user)
+                instance.tags.add(new_tag)
+
+        # Save the updated instance
+        self.perform_update(serializer)
+
+        return Response(serializer.data)

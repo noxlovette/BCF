@@ -1,9 +1,8 @@
 <script>
-  import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { fetchDataFromDjango } from "$lib/DjangoAPI.ts";
   import Header from "$lib/components/Header.svelte";
-    import { writable } from "svelte/store";
+  import { writable } from "svelte/store";
 
   let username = "";
   let password = "";
@@ -11,7 +10,7 @@
 
   const handleSubmit = async () => {
     try {
-      let url = "http://localhost:8000/api/login/";
+      const url = "http://localhost:8000/api/login/";
       let body = {
         username: username,
         password: password,
@@ -61,7 +60,3 @@
   </div>
   
 </main>
-
-<style>
-  /* Your CSS styles here */
-</style>

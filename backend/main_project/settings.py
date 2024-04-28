@@ -190,7 +190,12 @@ COMPRESS_JS_FILTERS = [
     'compressor.filters.jsmin.JSMinFilter',
 ]
 
-CACHE_BACKEND = 'django.core.cache.backends.db.DatabaseCache'
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "cache_table",
+    }
+}
 
 LOGGING = {
     'version': 1,

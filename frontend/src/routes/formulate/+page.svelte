@@ -116,8 +116,11 @@
     };
 
     let url = `http://localhost:8000/formulae/api/formula/${userId}/new/`;
-    let data = fetchDataFromDjango(url, "POST", formData);
+    let data = await fetchDataFromDjango(url, "POST", formData);
     console.log(data);
+
+    fetchFormulae()
+
   }
 
   async function populateDropdown(query) {
@@ -165,6 +168,8 @@
 
       // Update the ingredient at the found index
       editedFormula.ingredients[index] = $activeIngredient;
+
+      activeIngredient.set(null); // Reset the activeIngredient
 
       // Reassign the array to trigger a reactive update
       editedFormula.ingredients = [...editedFormula.ingredients];
@@ -214,9 +219,24 @@
       console.log(response);
       notification.set("Formula added as custom ingredient");
     }
+  }
 
-    
-    
+  async function addTag(formulaId) {
+    console.log("Adding tag");
+    let tag = prompt("Enter a tag for this formula:");
+    if (tag) {
+      const data = {
+        user: userId,
+        tag: tag,
+      };
+      let url = `http://localhost:8000/formulae/api/formula/${userId}/${formulaId}/add_tag/`;
+
+      let response = await fetchDataFromDjango(url, "POST", data);
+      if (response) {
+        console.log(response);
+        notification.set("Tag added to formula");
+      }
+    }
   }
 
   let notification = writable("");
@@ -245,21 +265,22 @@
   <div id="sidebar" class="flex flex-col w-1/4 mr-auto bg-amber-200/50 text-stone-800 rounded shadow p-2">
     <h2 id="formula-header" class= "text-xl border-b-2 border-lime-600">my formulae</h2>
     <ul id="formulate-list" class= "overflow-y-hidden divide-y-2 divide-dashed divide-stone-400">
-      {#each formulae as formula (formula.id)}
+      {#each formulae as formula}
         <li id="formula-item" class="flex flex-col rounded hover:bg-lime-600/25 hover:shadow" on:dblclick={() => viewFormula(formula.id)}>
           <p id="formula-name">name: {formula.name}</p>
           <p id="formula-edit-time">edited: {formula.updated}</p>
         </li>
       {/each}
+      <li id="formula-item" class="flex flex-col rounded hover:bg-lime-600/25 hover:shadow" on:dblclick={createFormula}>create new formula</li>
     </ul>
   </div>
   <div id="main-content" class="flex flex-row items-start flex-1 bg-amber-100/50 rounded shadow m-4 mb-0 mt-0 divide-x-2 divide-dashed divide-stone-400">
     {#if formulaDetail}
       {#if formulaDetail.id == 0}
         <button
-          class="btn btn-primary"
+          class="m-2 p-2 bg-lime-600/50 rounded shadow text-stone-800"
           id="create-formula"
-          on:click={createFormula}>Create Formula</button
+          on:click={createFormula}>create formula</button
         >
       {/if}
       {#if editing}

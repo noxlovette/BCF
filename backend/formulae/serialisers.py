@@ -81,9 +81,9 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FormulaIngredient
-        fields = ['collection_ingredient_id', 'custom_collection_ingredient_id', 'id', 'ingredient', 'cas', 'volatility', 'use',
+        fields = ['collection_ingredient_id', 'custom_collection_ingredient_id', 'id', 'ingredient', 'cas',
+                  'volatility', 'use',
                   'amount', 'unit', 'collection_ingredient_type', 'percentage']
-
 
 
 class FormulaSerializer(serializers.ModelSerializer):
