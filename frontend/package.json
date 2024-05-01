@@ -32,6 +32,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@tailwindcss/forms": "^0.5.7",
     "smelte": "^1.1.8",
     "svelte-color": "^1.0.2",
     "svelte-color-picker": "^1.0.7"

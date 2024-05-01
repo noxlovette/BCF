@@ -114,14 +114,13 @@ class SuggestedIngredient(models.Model):
     common_name = models.CharField(max_length=200, verbose_name="Name", default="unchanged")
     other_names = models.TextField(null=True, blank=True, verbose_name="Other Names", default="unchanged")
     cas = models.CharField(max_length=30, null=True, blank=True, verbose_name="CAS", default="unchanged")
-    ingredient_type = models.CharField(max_length=15, null=True, verbose_name="Type",
-                                       choices=Ingredient.INGREDIENT_TYPES, default="unchanged")
+    ingredient_type = models.CharField(max_length=15, null=True, verbose_name="Type", default="unchanged")
     use = models.TextField(null=True, blank=True, verbose_name="Use", default=1)
     volatility = models.CharField(max_length=20, null=True, blank=True, verbose_name="Volatility", default="unchanged")
     is_restricted = models.BooleanField(null=True, verbose_name="Restricted", default=None)
     origin = models.TextField(null=True, blank=True, verbose_name="Origin", default="unchanged")
-    constituents = models.TextField(verbose_name="Constituents", blank=True, default="unchanged")
-    similar_ingredients = models.TextField(verbose_name="Similar Ingredients", blank=True, default=None)
+    constituents = models.TextField(verbose_name="Constituents", blank=True, null=True, default="unchanged")
+    similar_ingredients = models.TextField(verbose_name="Similar Ingredients", blank=True, null=True,  default=None)
     message = models.TextField(null=True, blank=True)
 
     # the system fills these out

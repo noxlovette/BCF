@@ -21,7 +21,13 @@
   "What did the ocean say to the shore? Nothing, it just waved.",
   "Why did the scarecrow win an award? Because he was outstanding in his field.",
   "Why did the tomato turn red? Because it saw the salad dressing!",
-  "How does a penguin build its house? Igloos it together."
+  "How does a penguin build its house? Igloos it together.",
+  "What do computers like to eat? Chips!",
+  "Why did the golfer bring two pairs of pants? In case he got a hole in one.",
+  "Why did the coffee file a police report? It got mugged.",
+
+
+
   // Add more funny phrases as needed
 ];
 
@@ -60,7 +66,7 @@ function stopNotificationInterval() {
   onMount(() => {
     console.log("mounted");
     isMounted = true;
-    setTimeout(startNotificationInterval, 20000);
+    setTimeout(startNotificationInterval, 1000000);
   });
 
 
@@ -69,8 +75,11 @@ function stopNotificationInterval() {
 </script>
 <div class="flex flex-col min-h-screen mb-auto transition-opacity" style="background: url('/assets/bg/bbblurry-main.svg') no-repeat center center fixed; background-size: cover;">
 
-    <Header currentPage="home" notification = {notification} />
-
+<Header 
+    currentPage="home" 
+    notification = {notification}  
+    />
+    
   <div id="hero" class="flex flex-auto items-center m-10 p-2">
     <div class="flex space-x-4 ml-10 mb-40 text-left">
       {#if isMounted}
@@ -93,7 +102,7 @@ function stopNotificationInterval() {
           class="text-3xl font-thin tracking-normal mt-2 text-stone-600/60 dark:text-stone-100/60"
           transition:fade={{
             duration: 500,
-            delay: 100,
+            delay: 1000,
 
             easing: quintOut,
           }}
@@ -103,10 +112,10 @@ function stopNotificationInterval() {
         <div
         id="buttons"
         class="mt-auto flex flex-row items-center justify-center *:m-2 *:p-2 *:ml-0 *:pl-0 font-light"
-        transition:fade={{duration: 500, delay: 600, easing: quintOut,}}>
+        transition:fade={{duration: 500, delay: 2500, easing: quintOut,}}>
         <a href="/browse"class="button hover:text-sky-300/80">browse</a>
         <a href="/collect" class="button hover:text-pink-400/80">collect</a>
-        <a href="/formulate" class="button hover:text-lime-300/80">formulate</a>
+        <a href="/formulate" class="button hover:text-lime-500/80">formulate</a>
       </div>
         </div>
 

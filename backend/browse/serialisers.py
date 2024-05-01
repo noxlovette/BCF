@@ -26,19 +26,21 @@ class IngredientSerialiser(serializers.ModelSerializer):
     """
 
     descriptors = serializers.SerializerMethodField()
+    constituents = serializers.StringRelatedField(many=True)
+    contributors = serializers.StringRelatedField(many=True, read_only=True)
 
     def get_descriptors(self, obj):
         descriptors = list(obj.descriptor1.all()) + list(obj.descriptor2.all()) + list(obj.descriptor3.all())
         return [descriptor.name for descriptor in descriptors]
 
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'descriptors', 'common_name', 'other_names', 'cas',  'ingredient_type', 'use', 'volatility',
+                  'is_restricted', 'origin', 'constituents', 'similar_ingredients', 'contributors')
         model = Ingredient
 
 
 class SuggestedIngredientSerialiser(serializers.ModelSerializer):
     date_suggested = DateTimeSerializer(read_only=True)
-    contributors = serializers.StringRelatedField(many=True)
 
     class Meta:
         fields = '__all__'

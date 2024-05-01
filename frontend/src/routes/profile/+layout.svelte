@@ -1,5 +1,6 @@
 <script>
     import Header from "$lib/components/Header.svelte";
+    import Footer from "$lib/components/Footer.svelte";
     import { writable } from "svelte/store";
     import { onMount } from "svelte";
 
@@ -8,14 +9,12 @@
 
     onMount(() => {
         userId = sessionStorage.getItem('user_id');
-        username = sessionStorage.getItem("username") || "";
 
         if (!userId) {
         window.location.href = '/auth/login';
         notification.set("Please log in to view your profile")
     }
 
-    notification.set("Welcome to your profile page " + username + "!");
     });
 
     // If the user is not logged in, redirect to the login page
@@ -23,13 +22,12 @@
     let notification = writable("");
 </script>
 
-<Header currentPage="profile" notification={notification}/>
-<main>
-    <div class="flex justify-center">
-        <div class="w-full md:w-1/2">
-            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <h1>Welcome, {username}!</h1>
-                <slot></slot>
-            </div>
-        </div>
-</main>
+<div class="lowercase flex flex-col min-h-screen z-0" style="background: url('/assets/bg/bbblurry-auth.svg') no-repeat center center fixed; background-size: cover;">
+    <div class="mb-auto">
+    <Header currentPage="profile" notification={notification}/>
+    <slot></slot>
+    </div>
+    <Footer/>
+</div>
+
+    

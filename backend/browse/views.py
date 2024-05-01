@@ -4,13 +4,15 @@ from rest_framework.response import Response
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 from .serialisers import IngredientSerialiser, SuggestedIngredientSerialiser
-from rest_framework.generics import CreateAPIView
+from rest_framework import generics
+from django.contrib.auth.models import User
 
 
 class BrowseView(APIView):
     """
     API endpoint that allows ingredients to be viewed.
     """
+
     def get(self, request):
         # get the search term from the query string
         search_term = request.query_params.get('search', None)
@@ -45,9 +47,29 @@ class CustomPageNumberPagination(PageNumberPagination):
             'results': data  # results for the current page
         })
 
-class SuggestedIngredientCreateView(CreateAPIView):
+
+class SuggestedIngredientCreateView(generics.CreateAPIView):
     queryset = SuggestedIngredient.objects.all()
     serializer_class = SuggestedIngredientSerialiser
 
+
+class SuggestedIngredientListView(generics.RetrieveAPIView):
+    serializer_class = SuggestedIngredientSerialiser
+
+    def get(self, request, *args, **kwargs):
+        # Get the user_id from the URL
+        user_id = self.kwargs.get('user_id')
+
+        if user_id is not None:
+            # Get the user object
+            user = User.objects.get(id=user_id)
+            queryset = SuggestedIngredient.objects.filter(user=user)
+        else:
+            # If user_id is not provided, return an empty queryset
+            queryset = SuggestedIngredient.objects.none()
+
+        # Serialize the queryset and return the response
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
 # Path: browse/urls.py
