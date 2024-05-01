@@ -41,12 +41,12 @@
     <form on:submit|preventDefault={handleSubmit} class= "flex flex-col justify-start w-1/2">
       <div id= "username">
         <label for="username-field" class="p-2 pl-0">Username:</label>
-      <input id="username-field" type="text" class= "w-full p-2" bind:value={username} required />
+      <input id="username-field" type="text" class= "w-full p-2 bg-white/20" bind:value={username} required />
 
       </div>
       <div id= "password">
         <label for="password-field" class="p-2 pl-0">Password:</label>
-        <input id="password-field" type="password" class="w-full p-2" bind:value={password} required />
+        <input id="password-field" type="password" class="w-full p-2 bg-white/20" bind:value={password} required />
       </div>
       <button type="submit" class="pt-2 hover:text-amber-900">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

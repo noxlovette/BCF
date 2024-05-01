@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-import uuid
+from django.contrib.auth.models import User
 
 
 class Descriptor(models.Model):
@@ -21,15 +21,18 @@ class Descriptor(models.Model):
         verbose_name_plural = "Descriptors"
         db_table = 'descriptors'
 
+
 class Ingredient(models.Model):
     """
     This model represents an ingredient used in perfumery
     """
+    # basic data
     INGREDIENT_TYPES = [
         ('synthetic', 'Synthetic'),
         ('natural', 'Natural'),
         ('base', 'Base')
     ]
+
     common_name = models.CharField(max_length=200, verbose_name="Name")
     other_names = models.TextField(null=True, blank=True, verbose_name="Other Names")
     cas = models.CharField(max_length=30, null=True, blank=True, verbose_name="CAS")
@@ -43,12 +46,12 @@ class Ingredient(models.Model):
     volatility = models.CharField(max_length=20, null=True, blank=True, verbose_name="Volatility")
     is_restricted = models.BooleanField(default=False, null=True, verbose_name="Restricted")
 
-    # applicable only to naturals
     origin = models.TextField(null=True, blank=True, verbose_name="Origin")
     constituents = models.ManyToManyField('self', verbose_name="Constituents", blank=True)
 
     # arbitrary data
     similar_ingredients = models.ManyToManyField('self', verbose_name="Similar Ingredients", blank=True)
+    contributors = models.ManyToManyField(User, related_name='contributors')
 
     def clean(self):
         """
@@ -90,23 +93,6 @@ class Ingredient(models.Model):
             descriptors += [str(d) for d in descriptor]
         return ", ".join(descriptors) if descriptors else "No descriptors found"
 
-    @property
-    def to_json(self):
-        """
-        Returns a dictionary representation of the ingredient
-        :return:
-        """
-        return {
-            'id': self.id,
-            'common_name': self.common_name,
-            'other_names': self.other_names,
-            'cas': self.cas,
-            'descriptors': self.get_descriptors(),
-            'type': self.ingredient_type,
-            'use': self.use,
-            'volatility': self.volatility,
-            'is_restricted': "Yes" if self.is_restricted else "No"
-        }
 
     class Meta:
         """
@@ -118,8 +104,37 @@ class Ingredient(models.Model):
         unique_together = ('cas', 'common_name')
         db_table = 'ingredients'
 
-class SuggestedIngredient(Ingredient):
+
+class SuggestedIngredient(models.Model):
     """
-    This model represents an ingredient suggested by a user #TODO implement this
+    This model represents an ingredient suggested by a user
     """
-    ...
+
+    # the user fills these out
+    common_name = models.CharField(max_length=200, verbose_name="Name", default="unchanged")
+    other_names = models.TextField(null=True, blank=True, verbose_name="Other Names", default="unchanged")
+    cas = models.CharField(max_length=30, null=True, blank=True, verbose_name="CAS", default="unchanged")
+    ingredient_type = models.CharField(max_length=15, null=True, verbose_name="Type",
+                                       choices=Ingredient.INGREDIENT_TYPES, default="unchanged")
+    use = models.TextField(null=True, blank=True, verbose_name="Use", default=1)
+    volatility = models.CharField(max_length=20, null=True, blank=True, verbose_name="Volatility", default="unchanged")
+    is_restricted = models.BooleanField(null=True, verbose_name="Restricted", default=None)
+    origin = models.TextField(null=True, blank=True, verbose_name="Origin", default="unchanged")
+    constituents = models.TextField(verbose_name="Constituents", blank=True, default="unchanged")
+    similar_ingredients = models.TextField(verbose_name="Similar Ingredients", blank=True, default=None)
+    message = models.TextField(null=True, blank=True)
+
+    # the system fills these out
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    date_suggested = models.DateTimeField(auto_now_add=True)
+
+    status = models.CharField(max_length=20, default='pending',
+                              choices=[('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')])
+
+    class Meta:
+        """
+        """
+        verbose_name = "suggested ingredient"
+        verbose_name_plural = "suggested ingredients"
+        db_table = 'suggested_ingredients'

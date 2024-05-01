@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views import generic
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from .models import CollectionIngredient, Ingredient, User, CustomCollectionIngredient
 from rest_framework.views import APIView
@@ -182,12 +183,16 @@ class CollectionAPI(APIView):
             }
             return JsonResponse(empty_ingredient, status=200)
 
+        paginator = PageNumberPagination()
+        paginator.page_size = request.query_params.get('page_size', paginator.page_size)
+
         collection_serializer = CollectionIngredientSerializer(collection_ingredients, many=True)
         custom_collection_serializer = CustomCollectionIngredientSerializer(custom_collection_ingredients, many=True)
         combined_data = list(chain(collection_serializer.data, custom_collection_serializer.data))
         sorted_data = sorted(combined_data, key=lambda x: x['common_name'])
 
-        return Response(sorted_data)
+        result_page = paginator.paginate_queryset(sorted_data, request)
+        return paginator.get_paginated_response(result_page)
 
     # this is the browse functionality
     def post(self, request, user_id):

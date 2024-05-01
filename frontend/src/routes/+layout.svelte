@@ -1,14 +1,9 @@
 <script>
   import "../app.css";
-  import Footer from "$lib/components/Footer.svelte";
 </script>
-
-
-
-
-<div class="flex flex-col min-h-screen">
-  <div class="mb-auto">
-    <slot></slot>
-  </div>
-  <Footer />
+<div class="text-gray-800/90 bg-white/90 dark:text-stone-100/90 dark:bg-stone-900">
+  <slot />
 </div>
+
+<style>
+</style>

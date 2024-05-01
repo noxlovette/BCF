@@ -90,7 +90,7 @@ $: {
 
 </script>
 
-<header class="flex h-20 m-2">
+<header class="flex h-20 m-4">
   <a href="/" class="size-20 flex-none z-15"
   on:mouseenter={toggleDropdown}>
     <img
@@ -101,21 +101,25 @@ $: {
     />
   </a>
   <div class= "flex-col h-full w-full">
-    <div id="wider-part" class="flex flex-grow h-2/3 border-b border-slate-400 shadow-sm z-10">
+    <div id="wider-part" class="flex flex-grow h-2/3 border-b border-slate-400 dark:border-slate-100z-10">
       {#if currentPage === "browse"}
-            <p class="m-2 text-3xl text-light tracking-wider text-gray-800">browse</p>
+            <p class="m-2 text-3xl text-light">browse</p>
           {:else if currentPage === "home"}
-            <p class="m-2 text-3xl text-light tracking-wider text-gray-800">BCF</p>
+            <p class="m-2 text-3xl text-light ">BCF</p>
             {:else if currentPage === "login"}
-            <p class="m-2 text-3xl text-light tracking-wider text-gray-800">login</p>
+            <p class="m-2 text-3xl text-light ">login</p>
             {:else if currentPage === "collect"}
-            <p class="m-2 text-3xl text-light tracking-wider text-gray-800">collect</p>
+            <p class="m-2 text-3xl text-light ">collect</p>
             {:else if currentPage === "formulate"}
-            <p class="m-2 text-3xl text-light tracking-wider text-gray-800">formulate</p>
+            <p class="m-2 text-3xl text-light">formulate</p>
             {:else if currentPage === "signup"}
-            <p class="m-2 text-3xl text-light tracking-wider text-gray-800">sign up</p>
+            <p class="m-2 text-3xl text-light">sign up</p>
+            {:else if currentPage === "profile"}
+            <p class="m-2 text-3xl text-light">profile</p>
+            {:else if currentPage === "paperwork"}
+            <p class="m-2 text-3xl text-light">paperwork</p>
           {:else}
-            <p class="m-2 text-3xl text-light tracking-wider text-gray-800">page not found</p>
+            <p class="m-2 text-3xl text-light">page not found</p>
         {/if}
 
         {#if $notification}
@@ -128,24 +132,29 @@ $: {
           </div>
         {/if}
 
-        <div id="user" class="flex flex-row ml-auto mr-2 mt-auto mb-auto space-x-4">
+        <div id="user" class="flex flex-row ml-auto mt-auto mb-auto space-x-4">
+          
           {#if is_authenticated}
-            <a href="/profile" class="">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+          </svg>
+          
+
+            <a href="/profile" class="dark:hover:text-amber-300/90 hover:text-amber-900/90">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
               </svg>
               
               
             </a>
-            <p class="text-gray-800 justify-self-center mr-auto">welcome, {username}</p>
-            <button on:click={logout} class="text-gray-800">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <button on:click={logout} class="dark:hover:text-amber-300/90 hover:text-amber-900/90">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
               </svg>   
             </button>
           {:else}
-            <a href="/auth/login" class="text-gray-800 hover:text-amber-900">login</a>
-            <a href="/auth/signup" class="text-gray-800 hover:text-amber-900">sign up</a>
+            <a href="/auth/login" class=" dark:hover:text-amber-300/90 hover:text-amber-900/90">login</a>
+            <a href="/auth/signup" class=" dark:hover:text-amber-300/90 hover:text-amber-900/90">sign up</a>
           {/if}
         </div>
     </div>
@@ -168,17 +177,17 @@ $: {
               class="flex flex-row z-10"
             >
               <ul class= "flex space-x-5">
-                <li class=" text-gray-800 hover:text-amber-900">
+                <li class=" dark:hover:text-amber-300/90 hover:text-amber-900/90">
                   <a href="/browse" 
                   >
                     browse
                   </a>
                 </li>
-                <li class="text-gray-800 hover:text-amber-900">
+                <li class=" dark:hover:text-amber-300/90 hover:text-amber-900/90">
                   <a href="/collect" 
                   >collect</a>
                 </li>
-                <li class="text-gray-800 hover:text-amber-900">
+                <li class=" dark:hover:text-amber-300/90 hover:text-amber-900/90">
                   <a href="/formulate"
                   >formulate</a>
                 </li>

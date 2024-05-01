@@ -5,6 +5,7 @@
   import { fade } from "svelte/transition";
   import Header from "$lib/components/Header.svelte";
   import { writable } from "svelte/store";
+    import Footer from "$lib/components/Footer.svelte";
 
   let notification = writable("");
   let randomPhrase = writable("");
@@ -66,11 +67,14 @@ function stopNotificationInterval() {
 
 
 </script>
-<Header currentPage="home" notification = {notification} />
-<main>
-  <div id="hero" class="flex flex-auto items-center justify-center m-10 p-2">
-    <div class="text-center">
+<div class="flex flex-col min-h-screen mb-auto transition-opacity" style="background: url('/assets/bg/bbblurry-main.svg') no-repeat center center fixed; background-size: cover;">
+
+    <Header currentPage="home" notification = {notification} />
+
+  <div id="hero" class="flex flex-auto items-center m-10 p-2">
+    <div class="flex space-x-4 ml-10 mb-40 text-left">
       {#if isMounted}
+
         <h1
           class="text-9xl font-thin tracking-widest"
           transition:scale={{
@@ -83,69 +87,40 @@ function stopNotificationInterval() {
         >
           PERFUMERY
         </h1>
-        <h2
-          class="text-3xl font-thin tracking-normal mt-2"
+
+        <div id = "right side" class="flex flex-col">
+          <h2
+          class="text-3xl font-thin tracking-normal mt-2 text-stone-600/60 dark:text-stone-100/60"
           transition:fade={{
             duration: 500,
             delay: 100,
 
             easing: quintOut,
           }}
-        >
-          nothing else.
+        >nothing else.
         </h2>
+
         <div
-          id="buttons"
-          class="mt-6 flex justify-center"
-          transition:fade={{
-            duration: 500,
-            delay: 600,
-
-            easing: quintOut,
-          }}
-        >
-          <a
-            href="/browse"
-            class="button"
-            role="button"
-            transition:fade={{
-              duration: 500,
-              delay: 300,
-
-              easing: quintOut,
-            }}>Browse</a
-          >
-          <a href="/collect" class="button" role="button">Collect</a>
-          <a href="/formulate" class="button" role="button">Formulate</a>
+        id="buttons"
+        class="mt-auto flex flex-row items-center justify-center *:m-2 *:p-2 *:ml-0 *:pl-0 font-light"
+        transition:fade={{duration: 500, delay: 600, easing: quintOut,}}>
+        <a href="/browse"class="button hover:text-sky-300/80">browse</a>
+        <a href="/collect" class="button hover:text-pink-400/80">collect</a>
+        <a href="/formulate" class="button hover:text-lime-300/80">formulate</a>
+      </div>
         </div>
-        <p
-          class="mt-6 font-regular tracking-wide text-gray-800"
-          transition:fade={{
-            duration: 500,
-            delay: 300,
 
-            easing: quintOut,
-          }}
-        >
-          Browse our database. Add ingredients to your collection. Formulate a
-          revolution.
-        </p>
+        
       {/if}
     </div>
   </div>
-</main>
+  <Footer />
+  </div>
+  
+
+
+
 
 <style>
-  .button {
-    @apply py-2 px-4 bg-amber-700 text-white rounded-md mr-4;
-    transition:
-      background-color 0.5s ease,
-      transform 0.5s ease,
-      box-shadow 0.5s ease;
-  }
 
-  .button:hover {
-    @apply bg-amber-600 shadow;
-    transform: scale(1.2);
-  }
 </style>

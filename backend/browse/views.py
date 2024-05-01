@@ -1,11 +1,10 @@
-from django.views import generic
-from .models import Ingredient
+from .models import Ingredient, SuggestedIngredient
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.core.paginator import Paginator
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
-from django.views.decorators.cache import cache_page
+from .serialisers import IngredientSerialiser, SuggestedIngredientSerialiser
+from rest_framework.generics import CreateAPIView
 
 
 class BrowseView(APIView):
@@ -32,7 +31,8 @@ class BrowseView(APIView):
         page_of_ingredients = paginator.paginate_queryset(ingredients, request)
 
         # Convert the page of ingredients to JSON
-        ingredients_json = [ingredient.to_json for ingredient in page_of_ingredients]
+        serializer = IngredientSerialiser(page_of_ingredients, many=True)
+        ingredients_json = serializer.data
 
         return paginator.get_paginated_response(ingredients_json)
 
@@ -44,5 +44,10 @@ class CustomPageNumberPagination(PageNumberPagination):
             'total_pages': self.page.paginator.num_pages,  # total number of pages
             'results': data  # results for the current page
         })
+
+class SuggestedIngredientCreateView(CreateAPIView):
+    queryset = SuggestedIngredient.objects.all()
+    serializer_class = SuggestedIngredientSerialiser
+
 
 # Path: browse/urls.py
