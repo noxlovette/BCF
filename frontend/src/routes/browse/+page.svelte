@@ -6,6 +6,7 @@
     import Footer from "$lib/components/Footer.svelte";
     import { writable } from "svelte/store";
     import {fade} from "svelte/transition";
+    import {blur} from "svelte/transition";
 
 
   export let data;
@@ -23,7 +24,9 @@
     currentPage = Math.floor(Math.random() * 100) + 1;
     searchTerm = "";
     data = await load();
-    isLoading = false; // Set loading state to false after data is fetched
+    setTimeout(() => {
+      isLoading = false;
+    }, 500); // Set loading state to false after 1 second
   });
 
 
@@ -33,7 +36,7 @@
 
   async function reset() {
     searchTerm = "";
-    currentPage = Math.floor(Math.random() * 100) + 1;
+    currentPage = Math.floor(Math.random() * data.total_pages) + 1;
     goto(`/browse?page=${currentPage}&search=${searchTerm}`);
     data = await load();
   }
@@ -84,9 +87,6 @@
 let showSuggestion = false;
 let suggestedIngredient = null;
 
-$: {
-  console.log("Suggested ingredient:", suggestedIngredient);
-}
 
 function toggleSuggestion(ingredient) {
   showSuggestion = !showSuggestion;
@@ -154,10 +154,13 @@ try {
   }
 
   async function nextPage() {
+    if (currentPage < data.total_pages){
     currentPage++;
     notification.set(`you are on page ${currentPage}`);
     goto(`/browse?page=${currentPage}&search=${searchTerm}`);
     data = await load();
+    }
+    
   }
 
 let pageSize = 10;
@@ -168,8 +171,8 @@ let initialVisibleFields = [
   { name: "cas", visible: false },
   { name: "volatility", visible: false },
   { name: "ingredient_type", visible: false},
-  { name: "use", visible: true },
-  { name: "descriptors", visible: false },
+  { name: "use", visible: false },
+  { name: "descriptors", visible: true },
   { name: "origin", visible: false},
   { name: "constituents", visible: false},
   { name: "similar_ingredients", visible: false},
@@ -206,19 +209,19 @@ async function updatePageSize() {
 <div class="flex flex-col min-h-screen z-0" style="background: url('/assets/bg/bbblurry-browse.svg') no-repeat center center fixed; background-size: cover;">
   <Header currentPage="browse" notification = {notification}/>
   <div class="mb-auto">
-    <div id = "app" class="flex flex-col antialiased items-center mt-0 lowercase font-light text-sky-900/80 dark:text-sky-200/90">
+    <div id = "app" class="flex flex-col items-center mt-0 lowercase font-light text-sky-900/80 dark:text-sky-200/90">
       {#if showSuggestion}
       <div id = "suggestion" class="flex flex-col space-x-2 w-3/4 h-80 justify-center items-stretch p-4 m-4 bg-white/20 dark:bg-black/20 rounded-lg text-sky-900/80">
         <div class="flex flex-row items-start align-middle">
         <h2 class="flex text-center font-black p-4 text-2xl">you are editing {suggestedIngredient.common_name}</h2>
         <div class="flex flex-row ml-auto space-x-4">
           <button on:click={submitSuggestion}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-amber-400/90 transition-all hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
             </svg>
           </button>
           <button on:click={toggleSuggestion}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-amber-400/90 transition-all hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>          
           </button>
@@ -226,12 +229,14 @@ async function updatePageSize() {
         </div>
         <div id="suggestion grid" class="grid grid-cols-3 space-x-4 p-4 space-y-1 mb-auto">
         {#each Object.entries(suggestedIngredient).slice(2, -1) as [key, value]}
-          <label class="flex items-center font-bold ml-4">{key}
+        
+        <label class="flex items-center font-bold ml-4">{key.replace(/_/g, ' ')}
           <textarea class="flex ml-auto font-light border-slate-400 bg-white/20 dark:bg-black/20 rounded-lg focus:ring focus:ring-amber-400/70 focus:border-amber-400/70" placeholder={value} bind:value={suggestedIngredient[key]}/>
         </label>
+
         {/each}
         <label class="flex items-center font-bold ml-4 border-slate-400 bg-white/20 dark:bg-black/20 rounded-lg focus:ring focus:ring-amber-400/70 focus:border-amber-400/70">message
-          <textarea class="flex ml-auto font-light" bind:value={message}/>
+          <textarea class="flex ml-auto font-light border-slate-400 bg-white/20 dark:bg-black/20 rounded-lg focus:ring focus:ring-amber-400/70 focus:border-amber-400/70" bind:value={message}/>
         </label>
         
       </div>
@@ -242,7 +247,7 @@ async function updatePageSize() {
         <div id="search-bar" class="flex flex-row w-1/2 justify-between space-x-2">
           
           <button on:click={toggleTuneMenu}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 transition-all hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
             </svg>
             
@@ -266,7 +271,7 @@ async function updatePageSize() {
               
               
               type="checkbox" id={field.name} bind:checked={field.visible} on:click={() => toggleFieldVisibility(field) && console.log("clicked")} />
-              <label for={field.name}>{field.name}</label>
+              <label for={field.name}>{field.name.replace(/_/g, ' ')}</label>
               </div>
             {/each}
           </div>
@@ -275,7 +280,7 @@ async function updatePageSize() {
       {:else if showTuneMenu === false}
           <input
             type="text"
-            class = "flex w-full p-2 shadow border-slate-400 bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg focus:scale-95 transition-all"
+            class = "flex w-full p-2 shadow border-slate-400 bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
             bind:value={searchTerm}
             on:keydown={handleSearch}
             placeholder="search..."
@@ -284,13 +289,13 @@ async function updatePageSize() {
 
           {/if}
           <button on:click={searchIngredients}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 transition-all hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
             
           </button>
           <button on:click={reset} title="Reset the search field">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 transition-all hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
             </svg>
             
@@ -305,7 +310,7 @@ async function updatePageSize() {
         
         {#if isLoading}
           <!-- If isLoading is true, display a loading message -->
-          <div class="spinner" />
+          <div id="spinner" class="flex loader size-16 m-10 border-4 border-sky-400 border-dotted rounded-full animate-spin" />
     
     
           {:else if data.error}
@@ -313,33 +318,38 @@ async function updatePageSize() {
           <p>{data.error}</p>
           {:else if data.results.length === 0}
           <!-- If there are no results, display a message -->
-          <div class="spinner" />
+          <p class="text-2xl">hm. try a different search?</p>
         {:else}
 
         <button class="pl-2"on:click={prevPage}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-amber-400/90 transition-all hover:scale-110 hover:-translate-x-2 duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110 hover:-translate-x-2 duration-300">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
           </svg>
           
           
         </button>
-          <div id="table bg" class="bg-gradient-to-br from-sky-300/20 to-sky-500/20 rounded-lg p-4 mt-4">
+          <div id="table bg" class="shadow bg-gradient-to-br from-sky-300/20 to-sky-500/20 rounded-lg p-4 mt-4"
+          style="background: rgb(125 211 252 / 0.2) url('/assets/bg/texture/nnnoise-gray-2.svg') no-repeat; background-size:cover;"
+          transition:blur={{duration: 500}}
+          >
 
           
-          <table class="bg-blend-screen shadow-lg size-full table-fixed border-collapse border-spacing-0 bg-gradient-to-br from-sky-50/90 to-sky-100/30 dark:bg-sky-800/80">
-            <thead class="bg-gradient-to-br from-sky-600/40 to-sky-700/40 h-8 dark:text-sky-300/80 text-xl text-sky-900/80 *:align-middle" style="background: rgb(2 132 199 / 0.3) url('/assets/bg/texture/nnnoise.svg') no-repeat; background-size:cover;">
+          <table class="bg-blend-screen rounded-lg shadow-lg size-full table-fixed border-collapse border-spacing-0 bg-gradient-to-br from-sky-50/90 to-sky-100/30 dark:bg-sky-800/80"
+          transition:fade={{delay:250, duration: 500}}
+          >
+            <thead class="bg-gradient-to-br from-sky-600/40 to-sky-700/40 h-8 dark:text-sky-300/80 text-xl text-sky-900/80 *:align-middle">
               <tr>
                 {#each $visibleFields as header}
                   {#if header.name === 'common_name' && header.visible}
                     <th class="w-1/4 rounded-tl-lg">ingredient</th>
                   {:else if header.name === 'cas' && header.visible}
-                  <th class="w-min-fit">CAS</th>
+                  <th class="max-w-fit">CAS</th>
                   {:else if header.name === 'use' && header.visible}
-                  <th class="w-1/3">use</th>
+                  <th class="w-1/4">use</th>
                   {:else if header.name === 'similar_ingredients' && header.visible}
-                  <th class="w-1/3">similar</th>
+                  <th>similar</th>
                   {:else if header.name === 'actions' && header.visible}
-                  <th class="w-min-fit max-w-xs rounded-tr-lg">
+                  <th class="max-w-fit rounded-tr-lg">
                     <div id="icon container" class="flex justify-center">
 
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -349,7 +359,7 @@ async function updatePageSize() {
                     </div>
                   </th>
                   {:else if header.visible}
-                  <th class="w-min-fit">{header.name}</th>
+                  <th class="max-w-fit">{header.name}</th>
                 {/if}
               {/each}
               </tr>
@@ -362,20 +372,22 @@ async function updatePageSize() {
                   {#each $visibleFields as field}
 
                     {#if field.name === 'common_name' && field.visible}
-                      <td title = "{ingredient.other_names}" class="align-middle m-4 p-4 text-2xl font-thin rounded-l-lg">{ingredient.common_name}</td>
+                      <td title = "{ingredient.other_names}" class="align-middle m-4 p-4 text-2xl tracking-tight rounded-l-lg">{ingredient.common_name}</td>
+                      {:else if field.name === 'is_restricted' && field.visible}
+                      <td class="align-middle m-4 p-4">{ingredient[field.name] ? "yes" : "no"}</td>
                     {:else if field.name === 'actions' && field.visible}
                     <td class="align-middle m-4 p-4 rounded-r-lg ">
                       <div id="icon container" class="flex align-middle justify-center h-full space-x-2">
 
                         <button on:click={() => addToCollection(ingredient.id)} title="Add this ingredient to your collection">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 transition-all hover:scale-110">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 active:scale-90 active:text-amber-500/90 transition-all hover:scale-110">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                           </svg>
                           
                         </button>
                         <button on:click = {() => toggleSuggestion(ingredient)} title="want to contribute?">
   
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 transition-all hover:scale-110">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                           </svg>
   
@@ -388,7 +400,7 @@ async function updatePageSize() {
                       {#if ingredient[field.name] === null || ingredient[field.name] === ""}
                       <td class="align-middle m-4 p-4">
                       <div id="icon container" class="flex align-middle justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 transition-all hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
                         </svg>
                       </div>
@@ -411,7 +423,7 @@ async function updatePageSize() {
 
 
           <button class="pr-2" on:click={nextPage}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-amber-400/90 transition-all hover:scale-110 hover:translate-x-2 duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110 hover:translate-x-2 duration-300">
               <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
             </svg>
             
@@ -432,18 +444,4 @@ async function updatePageSize() {
 
 <style>
 
-.spinner {
-    border: 16px solid #f0f9ff;
-    border-top: 16px solid #7dd3fc;
-    border-radius: 50%;
-    width: 120px;
-    height: 120px;
-    animation: spin 2s linear infinite;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
 </style>

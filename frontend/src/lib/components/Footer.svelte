@@ -1,7 +1,7 @@
 <script>
 </script>
 
-<footer class="clear-end grid grid-cols-3 justify-center w-full text-sm font-light">
+<footer class="clear-end grid grid-cols-3 justify-center w-full text-sm font-light mt-4">
 <block id = "empty">
 
 </block>

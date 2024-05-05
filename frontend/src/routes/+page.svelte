@@ -5,7 +5,8 @@
   import { fade } from "svelte/transition";
   import Header from "$lib/components/Header.svelte";
   import { writable } from "svelte/store";
-    import Footer from "$lib/components/Footer.svelte";
+   import Footer from "$lib/components/Footer.svelte";
+
 
   let notification = writable("");
   let randomPhrase = writable("");

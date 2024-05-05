@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 from collection.models import CollectionIngredient, Ingredient, CustomCollectionIngredient
-from django.apps import apps
+from main_project.utils import decrypt_field, encrypt_field
 
 
 class Tag(models.Model):
@@ -29,21 +29,55 @@ class Formula(models.Model):
     In each formula, there is a list of used ingredients and their amount. You can access all IngModels from here
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    description = models.TextField()
+    encrypted_name = models.BinaryField(null=True, blank=True, editable=False)
+    encrypted_description = models.BinaryField(null=True, blank=True, editable=False)
+    encrypted_notes = models.BinaryField(null=True, blank=True, editable=False)
+
     tags = models.ManyToManyField(Tag, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f"{self.name} - {self.description}"
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._description = None
+        self._name = None
+        self._notes = None
+
+    def prepare_for_serialization(self):
+        self._description = decrypt_field(self.encrypted_description) if self.encrypted_description else None
+        self._name = decrypt_field(self.encrypted_name) if self.encrypted_name else None
+        self._notes = decrypt_field(self.encrypted_notes) if self.encrypted_notes else None
+
+    def refresh_from_db(self, *args, **kwargs):
+        self._description = decrypt_field(self.encrypted_description) if self.encrypted_description else None
+        self._name = decrypt_field(self.encrypted_name) if self.encrypted_name else None
+        self._notes = decrypt_field(self.encrypted_notes) if self.encrypted_notes else None
+
+        super().refresh_from_db(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self._description:
+            self.encrypted_description = encrypt_field(self._description)
+        if self._name:
+            self.encrypted_name = encrypt_field(self._name)
+        if self._notes:
+            self.encrypted_notes = encrypt_field(self._notes)
+
+        # Clear the temporary attributes.
+        self._description = None
+        self._name = None
+        self._notes = None
+
+        super().save(*args, **kwargs)
 
     class Meta:
-        unique_together = ['user', 'name']
+        unique_together = ['user']
         verbose_name = "User's Formula"
         verbose_name_plural = "User's Formulae"
         db_table = 'formulae'
-        ordering = ['user', '-updated_at', '-name']
+        ordering = ['user', '-updated_at']
 
 
 class FormulaIngredient(models.Model):
@@ -79,24 +113,6 @@ class FormulaIngredient(models.Model):
             return self.custom_collection_ingredient
         else:
             return None
-
-    def get_ingredient_name(self):
-        """
-        Return the common name of the associated ingredient.
-        """
-        if self.collection_ingredient:
-            return self.collection_ingredient.ingredient.common_name
-        elif self.custom_collection_ingredient:
-            return self.custom_collection_ingredient.common_name
-        else:
-            return None
-
-    def __str__(self):
-        """
-        Return a string representation of the FormulaIngredient.
-        """
-        ingredient_name = self.get_ingredient_name() or "Unknown Ingredient"
-        return f"{self.formula.name} - {ingredient_name} - {self.amount} {self.unit} - {self.id} - {self.collection_ingredient} - {self.custom_collection_ingredient}"
 
     class Meta:
         db_table = 'formula_ingredients'

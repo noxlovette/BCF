@@ -1,16 +1,17 @@
-from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 import logging
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
+from django.views.decorators.http import require_safe
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate, login
 from collection.models import CustomCollectionIngredient
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +52,7 @@ class UserSignupAPI(APIView):
 
 class UserLoginAPI(APIView):
     # TODO CAPTCHA, verify email
+    @method_decorator(ensure_csrf_cookie)
     def post(self, request, *args, **kwargs):
         data = request.data
         username = data.get('username')
@@ -83,8 +85,9 @@ def get_user_id(request):
     return JsonResponse({'user_id': request.user.id})
 
 
+@require_safe  # Ensures that the view only responds to safe GET requests
 def get_csrf_token(request):
-    # Get the CSRF token
-    csrf_token = get_token(request)
-    # Return the CSRF token in a JSON response
-    return JsonResponse({'csrfToken': csrf_token})
+    csrf_token = get_token(request)  # Ensures CSRF cookie is set and retrieves the token
+    return JsonResponse({'csrfToken': csrf_token})  # Send CSRF token in JSON response
+
+

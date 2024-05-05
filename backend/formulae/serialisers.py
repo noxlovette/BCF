@@ -93,11 +93,15 @@ class FormulaSerializer(serializers.ModelSerializer):
     ingredients = FormulaIngredientSerializer(many=True)
     created = DateTimeSerializer(source='created_at', read_only=True)
     updated = DateTimeSerializer(source='updated_at', read_only=True)
+    name = serializers.CharField(source='_name', required=True)
+    description = serializers.CharField(source='_description', required=False, allow_null=True, allow_blank=True)
+    notes = serializers.CharField(source='_notes', required=False, allow_null=True, allow_blank=True)
 
     def update(self, instance, validated_data):
         # Update existing Formula fields
-        instance.name = validated_data.get('name', instance.name)
-        instance.description = validated_data.get('description', instance.description)
+        instance._name = validated_data.get('_name', instance._name)
+        instance._description = validated_data.get('_description', instance._description)
+        instance._notes = validated_data.get('_notes', instance._notes)
         user_id = validated_data.get('user')
         instance.save()
 
@@ -166,7 +170,6 @@ class FormulaSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         ingredients_data = validated_data.pop('ingredients', [])
         user_id = validated_data.get('user')
-        print(f"validated_data create function: {validated_data}")
         formula = Formula.objects.create(**validated_data)
         for ingredient_data in ingredients_data:
             FormulaIngredient.objects.create(user_id=user_id, formula=formula, **ingredient_data)
@@ -174,5 +177,5 @@ class FormulaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Formula
-        fields = ['updated', 'created', 'id', 'user', 'name', 'description', 'ingredients', 'created_at', 'updated_at']
+        fields = ['updated', 'created', 'id', 'user', 'name', 'description', 'ingredients', 'notes', 'created_at']
         read_only_fields = ['id', 'user', 'created_at', 'updated_at']

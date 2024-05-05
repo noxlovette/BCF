@@ -30,7 +30,7 @@ def get_public_key():
         )
 
 
-def decrypt_field(self, encrypted):
+def decrypt_field(encrypted):
     if encrypted:
         private_key = get_private_key()
         if isinstance(encrypted, memoryview):
@@ -47,7 +47,7 @@ def decrypt_field(self, encrypted):
     return None
 
 
-def encrypt_field(self, data):
+def encrypt_field(data):
     if data is not None:
         public_key = get_public_key()
         if isinstance(data, str):

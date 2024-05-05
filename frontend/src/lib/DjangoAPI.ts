@@ -1,24 +1,31 @@
 // src/routes/DjangoAPI.ts
 
-// Function to fetch CSRF token from Django
+let csrfToken = '';
+
+
 export async function fetchCSRFToken() {
-  const response = await fetch("http://localhost:8000/api/get-csrf-token/");
-  if (!response.ok) {
-    throw new Error("Failed to fetch CSRF token");
-  }
+  const response = await fetch("http://localhost:8000/api/get-csrf/", {
+      method: 'GET',
+      credentials: 'include'  // Necessary to include cookies if they are accessible
+  });
   const data = await response.json();
-  return data.csrfToken;
+  console.log(data.csrfToken);
+  return data.csrfToken;  // Use this token for subsequent POST, PUT, DELETE requests
+  
 }
+
 
 // Function to fetch data from Django API
 export async function fetchDataFromDjango(
   endpoint: string,
   method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
   body: any = null,
-  credentials: RequestCredentials = "same-origin"
+  credentials: RequestCredentials = "include"  // Set to include to ensure cookies are sent
 ): Promise<any> {
-  // function body
-  const csrfToken = await fetchCSRFToken();
+  // Ensure CSRF token is set
+  if (!csrfToken) {
+    csrfToken = await fetchCSRFToken();
+  }
 
   // Construct headers with CSRF token included
   const headers = {
@@ -30,7 +37,6 @@ export async function fetchDataFromDjango(
   const options = {
     method,
     headers,
-    // Include any other necessary options such as body for POST requests
     body: body ? JSON.stringify(body) : null,
     credentials,
   };
@@ -48,3 +54,4 @@ export async function fetchDataFromDjango(
     return data;
   }
 }
+

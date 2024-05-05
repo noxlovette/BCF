@@ -8,6 +8,7 @@ from rest_framework import generics
 from django.contrib.auth.models import User
 
 
+
 class BrowseView(APIView):
     """
     API endpoint that allows ingredients to be viewed.
