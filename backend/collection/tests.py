@@ -1,87 +1,26 @@
 from django.test import TestCase
-import requests
 
+from collection.models import CustomCollectionIngredient
+from django.contrib.auth.models import User
 
-class CollectionAPITest(TestCase):
-    """
-    test the CollectionAPI
-    """
-    def test_search_param_in_request(self):
-        # Simulate a GET request with query parameters
-        response = self.client.get('/collection/api/collection/3/', {'search': 'Aldehyde'})
+class RefreshFromDBTest(TestCase):
+    def setUp(self):
+        # Setup test data
+        self.user = User.objects.create_user('testuser')
+        self.ingredient = CustomCollectionIngredient()
+        self.ingredient.user = self.user
+        self.ingredient._common_name = "Vanilla"
+        self.ingredient.save()
 
-        # Check if the request was successful (status code 200)
-        self.assertEqual(response.status_code, 200)
+    def test_refresh_from_db(self):
+        # Change the data directly in the database.
+        changed_text = "Changed Vanilla"
+        encrypted = self.ingredient.encrypt_field(changed_text)
+        self.new_instance = CustomCollectionIngredient.objects.get(pk=self.ingredient.pk)
+        self.new_instance.encrypted_common_name = encrypted
 
-        # Access the request object from the response
-        request = response.wsgi_request
+        # Refresh instance data from the database
+        self.new_instance.refresh_from_db()
 
-        # Access the query parameters from the request
-        search_param = request.GET.get('search', None)
-
-        # Assert that the search parameter is present and has the expected value
-        self.assertEqual(search_param, 'Aldehyde')
-
-    def test_fetch_data_with_search_param(self):
-        url = 'http://localhost:8000/collection/api/collection/3/'
-        params = {'search': 'Aldehyde'}
-
-        # Make a GET request to the API endpoint
-        response = requests.get(url, params=params)
-
-        # Check if the request was successful (status code 200)
-        self.assertEqual(response.status_code, 200)
-
-        # Check if the response contains the expected data
-        json_data = response.json()
-        self.assertTrue(json_data)  # Check if response is not empty
-
-        # Check if the response contains the expected common_name and cas
-        expected_common_name = "Aldehyde C 16"
-        expected_cas = "77-83-8"
-        self.assertEqual(json_data['common_name'], expected_common_name)
-        self.assertEqual(json_data['cas'], expected_cas)
-
-    def test_data_without_search_param(self):
-        url = 'http://localhost:8000/collection/api/collection/3/'
-
-        # Make a GET request to the API endpoint
-        response = requests.get(url)
-
-        # Check if the request was successful (status code 200)
-        self.assertEqual(response.status_code, 200)
-
-        # Check if the response contains the expected data
-        json_data = response.json()
-        self.assertTrue(json_data)  # Check if response is not empty
-
-        json_data = response.json()
-        self.assertIsInstance(json_data, list)
-        self.assertGreater(len(json_data), 0)
-
-    def test_data_empty_collection(self):
-        url = 'http://localhost:8000/collection/api/collection/1/'
-
-        # Make a GET request to the API endpoint
-        response = requests.get(url)
-
-        # Check if the request was successful (status code 200)
-        self.assertEqual(response.status_code, 200)
-
-        # Check if the response contains the expected data
-        json_data = response.json()
-        self.assertTrue(json_data)  # Check if response is not empty
-
-        empty_ingredient = {
-            'ingredient': '',
-            'ingredient.cas': '',
-            'ingredient.volatility': '',
-            'ingredient.use': '',
-            'amount': '',
-            'colour': '',
-            'impression': '',
-            'date_added': '',
-            'is_collection': False
-        }
-
-        self.assertEqual(json_data, empty_ingredient)
+        # Test if the data is correctly decrypted and updated
+        self.assertEqual(self.new_instance._common_name, changed_text)

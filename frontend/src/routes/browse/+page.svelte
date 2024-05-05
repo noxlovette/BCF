@@ -206,19 +206,19 @@ async function updatePageSize() {
 <div class="flex flex-col min-h-screen z-0" style="background: url('/assets/bg/bbblurry-browse.svg') no-repeat center center fixed; background-size: cover;">
   <Header currentPage="browse" notification = {notification}/>
   <div class="mb-auto">
-    <div id = "app" class="flex flex-col items-center mt-0 lowercase font-light text-sky-900/80 dark:text-sky-200/90">
+    <div id = "app" class="flex flex-col antialiased items-center mt-0 lowercase font-light text-sky-900/80 dark:text-sky-200/90">
       {#if showSuggestion}
       <div id = "suggestion" class="flex flex-col space-x-2 w-3/4 h-80 justify-center items-stretch p-4 m-4 bg-white/20 dark:bg-black/20 rounded-lg text-sky-900/80">
         <div class="flex flex-row items-start align-middle">
         <h2 class="flex text-center font-black p-4 text-2xl">you are editing {suggestedIngredient.common_name}</h2>
         <div class="flex flex-row ml-auto space-x-4">
           <button on:click={submitSuggestion}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-amber-400/90">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-amber-400/90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
             </svg>
           </button>
           <button on:click={toggleSuggestion}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-amber-400/90">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-amber-400/90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>          
           </button>
@@ -227,10 +227,10 @@ async function updatePageSize() {
         <div id="suggestion grid" class="grid grid-cols-3 space-x-4 p-4 space-y-1 mb-auto">
         {#each Object.entries(suggestedIngredient).slice(2, -1) as [key, value]}
           <label class="flex items-center font-bold ml-4">{key}
-          <textarea class="flex ml-auto font-light border-slate-400 bg-white/20 dark:bg-black/20 rounded-lg focus:ring:2 focus:ring-amber-400/70 focus:border-amber-400/70" placeholder={value} bind:value={suggestedIngredient[key]}/>
+          <textarea class="flex ml-auto font-light border-slate-400 bg-white/20 dark:bg-black/20 rounded-lg focus:ring focus:ring-amber-400/70 focus:border-amber-400/70" placeholder={value} bind:value={suggestedIngredient[key]}/>
         </label>
         {/each}
-        <label class="flex items-center font-bold ml-4 border-slate-400 bg-white/20 dark:bg-black/20 rounded-lg focus:ring:2 focus:ring-amber-400/70 focus:border-amber-400/70">message
+        <label class="flex items-center font-bold ml-4 border-slate-400 bg-white/20 dark:bg-black/20 rounded-lg focus:ring focus:ring-amber-400/70 focus:border-amber-400/70">message
           <textarea class="flex ml-auto font-light" bind:value={message}/>
         </label>
         
@@ -242,17 +242,17 @@ async function updatePageSize() {
         <div id="search-bar" class="flex flex-row w-1/2 justify-between space-x-2">
           
           <button on:click={toggleTuneMenu}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
             </svg>
             
           </button>
           {#if showTuneMenu}
         <div class="flex flex-row w-full p-2 border border-slate-400 bg-white/20 dark:bg-black/20 space-y-2 items-center rounded-lg divide-x-2">
-          <div class="flex flex-col w-1/4 align-middle justify-start">
-          <label class="flex flex-col items-start">
+          <div class="flex flex-col w-1/4 justify-center items-center">
+          <label class="flex items-center p-4">
             per page:
-            <input type="number" class = 'flex border-slate-400 bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg pl-2 ml-4 w-2/3' min="1" bind:value={pageSize} on:change={updatePageSize}/>
+            <input type="number" class = 'flex border-slate-400 bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg pl-2 ml-4 w-1/3' min="1" bind:value={pageSize} on:change={updatePageSize}/>
           </label>
         </div>
           <div id="visibility" class="grid grid-cols-2 ">
@@ -260,7 +260,7 @@ async function updatePageSize() {
             <div class="flex flex-row space-x-2 ml-2">
               <input class= 
               "mx-2
-              size-4 rounded-full shadow border-slate-400 text-amber-600/90 focus:ring-amber-400/30 checked:bg-amber-700/70 checked:ring-amber-700/30 hover:checked:bg-amber-600/80
+              size-4 rounded-full shadow border-slate-400 text-amber-600/90 focus:ring-amber-400/30 checked:bg-amber-700/70 checked:ring-amber-700/30 hover:checked:bg-amber-600/80 transition-all hover:scale-110
               
               " 
               
@@ -275,7 +275,7 @@ async function updatePageSize() {
       {:else if showTuneMenu === false}
           <input
             type="text"
-            class = "flex w-full p-2 border-slate-400 bg-white/20 dark:bg-black/20 focus:ring-amber-700/70 focus:ring-2 rounded-lg"
+            class = "flex w-full p-2 shadow border-slate-400 bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg focus:scale-95 transition-all"
             bind:value={searchTerm}
             on:keydown={handleSearch}
             placeholder="search..."
@@ -284,13 +284,13 @@ async function updatePageSize() {
 
           {/if}
           <button on:click={searchIngredients}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
             
           </button>
           <button on:click={reset} title="Reset the search field">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
             </svg>
             
@@ -317,15 +317,17 @@ async function updatePageSize() {
         {:else}
 
         <button class="pl-2"on:click={prevPage}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-amber-400/90">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-amber-400/90 transition-all hover:scale-110 hover:-translate-x-2 duration-300">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
           </svg>
           
           
         </button>
-          <!-- Once data is fetched, render the #each block -->
-          <table class="bg-blend-screen size-full table-fixed border-collapse border-spacing-0 bg-sky-200/20 dark:bg-sky-800/20">
-            <thead class=" bg-gradient-to-r from-sky-600/30 to-sky-700/30 h-8 dark:text-sky-300/80 text-xl text-sky-900/80 *:align-middle" style="background: rgb(2 132 199 / 0.3) url('/assets/bg/texture/nnnoise.svg') no-repeat; background-size:cover;">
+          <div id="table bg" class="bg-gradient-to-br from-sky-300/20 to-sky-500/20 rounded-lg p-4 mt-4">
+
+          
+          <table class="bg-blend-screen shadow-lg size-full table-fixed border-collapse border-spacing-0 bg-gradient-to-br from-sky-50/90 to-sky-100/30 dark:bg-sky-800/80">
+            <thead class="bg-gradient-to-br from-sky-600/40 to-sky-700/40 h-8 dark:text-sky-300/80 text-xl text-sky-900/80 *:align-middle" style="background: rgb(2 132 199 / 0.3) url('/assets/bg/texture/nnnoise.svg') no-repeat; background-size:cover;">
               <tr>
                 {#each $visibleFields as header}
                   {#if header.name === 'common_name' && header.visible}
@@ -355,7 +357,7 @@ async function updatePageSize() {
             <tbody class="text-center divide-y-4 divide-double divide-amber-700/10 dark:divide-amber-400/10 border-b-6 border-sky-600/30" transition:fade={{duration: 500}}>
     
               {#each data.results as ingredient}
-                <tr on:dblclick={() => addToCollection(ingredient.id)} class="hover:bg-amber-400/10 divide-x-4 divide-double divide-sky-600/10">
+                <tr on:dblclick={() => addToCollection(ingredient.id)} class="hover:bg-amber-400/20 divide-x-4 divide-double divide-sky-600/10 transition-all hover:rounded duration-300">
 
                   {#each $visibleFields as field}
 
@@ -366,14 +368,14 @@ async function updatePageSize() {
                       <div id="icon container" class="flex align-middle justify-center h-full space-x-2">
 
                         <button on:click={() => addToCollection(ingredient.id)} title="Add this ingredient to your collection">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 transition-all hover:scale-110">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                           </svg>
                           
                         </button>
                         <button on:click = {() => toggleSuggestion(ingredient)} title="want to contribute?">
   
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 transition-all hover:scale-110">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                           </svg>
   
@@ -386,7 +388,7 @@ async function updatePageSize() {
                       {#if ingredient[field.name] === null || ingredient[field.name] === ""}
                       <td class="align-middle m-4 p-4">
                       <div id="icon container" class="flex align-middle justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 transition-all hover:scale-110">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
                         </svg>
                       </div>
@@ -404,8 +406,12 @@ async function updatePageSize() {
               {/each}
             </tbody>
           </table>
+
+        </div>
+
+
           <button class="pr-2" on:click={nextPage}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-amber-400/90">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-amber-400/90 transition-all hover:scale-110 hover:translate-x-2 duration-300">
               <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
             </svg>
             

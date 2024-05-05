@@ -14,17 +14,19 @@ class DateTimeSerializer(serializers.DateTimeField):
 
 class BaseCollectionIngredientSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    common_name = serializers.CharField()
-    cas = serializers.CharField()
-    volatility = serializers.CharField()
-    use = serializers.CharField()
+
     amount = serializers.IntegerField()
     unit = serializers.CharField()
-    colour = serializers.CharField(allow_null=True, allow_blank=True)
     date_added = DateTimeSerializer(read_only=True)
-    impression = serializers.CharField(allow_null=True, allow_blank=True)
-    ideas = serializers.CharField(allow_null=True, allow_blank=True)
-    associations = serializers.CharField(allow_null=True, allow_blank=True)
+
+    impression = serializers.CharField(allow_null=True, allow_blank=True, source='_impression')
+    ideas = serializers.CharField(allow_null=True, allow_blank=True, source='_ideas')
+    associations = serializers.CharField(allow_null=True, allow_blank=True, source='_associations')
+    colour = serializers.CharField(allow_null=True, allow_blank=True, source='_colour')
+    common_name = serializers.CharField(source='_common_name')
+    cas = serializers.CharField(source='_cas', allow_null=True, allow_blank=True)
+    volatility = serializers.CharField(source='_volatility', allow_null=True, allow_blank=True)
+    use = serializers.CharField(source='_use', allow_null=True, allow_blank=True)
 
     class Meta:
         fields = ['type', 'id', 'common_name', 'cas', 'volatility', 'use', 'date_added', 'colour', 'impression',
@@ -49,6 +51,33 @@ class CollectionIngredientSerializer(BaseCollectionIngredientSerializer):
 
 class CustomCollectionIngredientSerializer(BaseCollectionIngredientSerializer):
     type = serializers.SerializerMethodField()
+
+    def create(self, validated_data):
+        # Extract custom attributes and remove them from validated_data
+        custom_name = validated_data.pop('_common_name', None)
+        cas = validated_data.pop('_cas', None)
+        volatility = validated_data.pop('_volatility', None)
+        use = validated_data.pop('_use', None)
+        colour = validated_data.pop('_colour', None)
+        impression = validated_data.pop('_impression', None)
+        associations = validated_data.pop('_associations', None)
+        ideas = validated_data.pop('_ideas', None)
+
+        # Create the model instance with remaining validated_data
+        instance = CustomCollectionIngredient.objects.create(**validated_data)
+
+        # Manually set custom attributes
+        instance._common_name = custom_name
+        instance._cas = cas
+        instance._volatility = volatility
+        instance._use = use
+        instance._colour = colour
+        instance._impression = impression
+        instance._associations = associations
+        instance._ideas = ideas
+
+        instance.save()
+        return instance
 
     def get_type(self, obj):
         return 'CustomCollectionIngredient'

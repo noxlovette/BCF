@@ -141,15 +141,15 @@ class CollectionAPI(APIView):
     """
     API VIEW TO DISPLAY THE USER'S COLLECTION
     """
+
     def get_collection(self, request, user_id):
         user = User.objects.get(id=user_id)
         if not user:
             return JsonResponse({'error': 'user not logged in'}, status=400)
 
         search_param = request.query_params.get('search', None)
-
         collection_ingredients = CollectionIngredient.objects.filter(user=user).order_by('ingredient__common_name')
-        custom_collection_ingredients = CustomCollectionIngredient.objects.filter(user=user).order_by('common_name')
+        custom_collection_ingredients = CustomCollectionIngredient.objects.filter(user=user)
 
         if search_param:
             collection_ingredients = collection_ingredients.filter(
@@ -158,10 +158,19 @@ class CollectionAPI(APIView):
                 Q(ingredient__cas__icontains=search_param)
             ).order_by('ingredient__common_name')
 
-            custom_collection_ingredients = custom_collection_ingredients.filter(
-                Q(common_name__icontains=search_param) |
-                Q(cas__icontains=search_param)
-            ).order_by('common_name')
+        # Prepare data for serialization
+        for ingredient in collection_ingredients:
+            ingredient.prepare_for_serialization()
+        for custom_ingredient in custom_collection_ingredients:
+            custom_ingredient.prepare_for_serialization()
+
+        if search_param:
+            # Filter custom_collection_ingredients in Python based on transient attributes
+            custom_collection_ingredients = [
+                ci for ci in custom_collection_ingredients
+                if search_param.lower() in ci._common_name.lower()
+                   or search_param.lower() in ci._cas.lower()
+            ]
 
         return collection_ingredients, custom_collection_ingredients
 
@@ -169,19 +178,10 @@ class CollectionAPI(APIView):
         logger.info('GET request received')
         collection_ingredients, custom_collection_ingredients = self.get_collection(request, user_id)
 
-        if not collection_ingredients.exists() and not custom_collection_ingredients.exists():
-            empty_ingredient = {
-                'ingredient': 'this is a sample ingredient',
-                'ingredient.cas': '',
-                'ingredient.volatility': '',
-                'ingredient.use': '',
-                'amount': '',
-                'colour': '',
-                'impression': '',
-                'date_added': '',
-                'is_collection': False
-            }
-            return JsonResponse(empty_ingredient, status=200)
+        for ingredient in collection_ingredients:
+            ingredient.prepare_for_serialization()
+        for custom_ingredient in custom_collection_ingredients:
+            custom_ingredient.prepare_for_serialization()
 
         paginator = PageNumberPagination()
         paginator.page_size = request.query_params.get('page_size', paginator.page_size)
