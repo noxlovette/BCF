@@ -1,272 +1,28 @@
 <script>
-  import { onMount } from "svelte";
-  import { fetchDataFromDjango } from "$lib/DjangoAPI.ts";
-    import Header from "$lib/components/Header.svelte";
-    import { fade } from "svelte/transition";
-    import { writable } from "svelte/store";
-    import Footer from "$lib/components/Footer.svelte";
-    import { goto } from '$app/navigation';
-    import {blur} from 'svelte/transition';
+  import { onDestroy, onMount } from "svelte";
+  import { saveEditedIngredient, fetchCollection, deleteFromCollection, createCustomIngredient } from "$lib/DjangoAPI.ts";
+  import Header from "$lib/components/Header.svelte";
+  import { fade } from "svelte/transition";
+  import { writable } from "svelte/store";
+  import Footer from "$lib/components/Footer.svelte";
+  import { goto } from '$app/navigation';
+  import {blur} from 'svelte/transition';
+  import { browser } from '$app/environment';
 
 
+  export let data;
   let userId = 0;
-  /**
-     * @type {any[]}
-     */
-  let ingredients = [];
-  if (typeof window !== "undefined") {
-    userId = window.sessionStorage.getItem("user_id");
-  }
-  
-  
-
-
-  let pageSize = 10;
-  let currentPage = 1;
-  let searchTerm = "";
-
-  async function fetchIngredients() {
-    console.log("Fetching ingredients...");
-    let url = `http://localhost:8000/collection/api/collection/${userId}/?page=${currentPage}&search=${searchTerm}&page_size=${pageSize}`;
-    let response = await fetchDataFromDjango(url);
-    const data = response.results;
-
-
-    ingredients = Array.isArray(data) ? data : [data];
-    ingredients = ingredients.map((ingredient) => ({
-      ...ingredient,
-      
-    }
-  ));
-  isEditing: false;
-  }
-
-  async function updatePageSize() {
-    currentPage = 1;
-    const url = `/collect?page=${currentPage}&search=${searchTerm}&page_size=${pageSize}`;
-    goto(url);
-    data = await fetchIngredients(); // Wait for the URL to be updated before loading new data
-}
-  
-async function prevPage() {
-    if (currentPage > 1) {
-    currentPage--;
-    notification.set(`you are on page ${currentPage}`);
-    goto(`/collect?page=${currentPage}&search=${searchTerm}`);
-    data = await fetchIngredients();
-  }
-    
-  }
-
-  async function nextPage() {
-    currentPage++;
-    notification.set(`you are on page ${currentPage}`);
-    goto(`/collect?page=${currentPage}&search=${searchTerm}`);
-    const data = await fetchIngredients();
-  }
-    
-    async function reset() {
-      searchTerm = "";
-    currentPage = 1;
-    goto(`/collect?page=${currentPage}&search=${searchTerm}`);
-    const data = await fetchIngredients();
-    isEditing: false;
-    }
-
-
-async function handleSearch(event) {
-    if (event.key === 'Enter') {
-      searchIngredients();
-    }
-  }
-
-  async function searchIngredients() {
-    currentPage = 1;
-    notification.set(`Searching for ${searchTerm}...`);
-    goto(`/collect?page=${currentPage}&search=${searchTerm}`);
-    data = await fetchIngredients();
-  }
-
-  // delete ingredient, custom or otherwise
-
-  
-     /**
-     * @param {MouseEvent & { currentTarget: EventTarget & HTMLButtonElement; }} ingredient
-     */
-     async function handleDeleteClick(ingredient) {
-    let url;
-    if (ingredient.type === "CollectionIngredient") {
-        url = `http://localhost:8000/collection/api/ingredient/${userId}/${ingredient.id}/delete/`;
-    } else if (ingredient.type === "CustomCollectionIngredient") {
-        url = `http://localhost:8000/collection/api/ingredient/${userId}/custom/${ingredient.id}/delete/`;
-    }
-    try {
-        const response = await fetchDataFromDjango(url, "DELETE");
-        console.log("Response:", response);
-        notification.set("Ingredient deleted");
-        fetchIngredients();
-    } catch (error) {
-        console.error("Error deleting ingredient:", error);
-        notification.set("Error deleting ingredient");
-    }
-}
-
-
-// editing functionality
-
-    const editableFields = {
-  CollectionIngredient: ["colour", "impression", "amount", "ideas", "associations"],
-  CustomCollectionIngredient: ["common_name", "cas", "volatility", "use", "colour", "impression", "amount"]
-};
-
-
-    /**
-     * @param {PropertyKey} ingredientType
-     * @param {string} fieldName
-     */
-function isEditableField(ingredientType, fieldName) {
-  // Check if the ingredient type exists in the editableFields dictionary
-  if (editableFields.hasOwnProperty(ingredientType)) {
-    // If the field name is included in the list of editable fields for the ingredient type, return true
-    return editableFields[ingredientType].includes(fieldName);
-  } else {
-    // If the ingredient type is not found in the dictionary, default to false
-    return false;
-  }
-}
-
+  let pageSize = writable(10);
+  let currentPage = writable(1);
+  let searchTerm = writable("");
+  let searchInput;
+  let notification = writable("");
+  let isLoading = true;
+  let isEditing = false;
   let editingObject = null;
   let editingRowId = null;
-     /**
-     * @param {{object: any;}} ingredient
-     */
-     function toggleEdit(ingredient) {
-      console.log("Toggling edit for ingredient:", ingredient);
-    editingRowId = editingRowId === ingredient.id ? null : ingredient.id;
-    editingObject = editingObject === ingredient ? null : ingredient;
-  }
-  
-
-
-  /**
-     * @param {{ common_name: any; cas: any; volatility: any; use: any; colour: any; impression: any; is_collection: any; amount: number; unit: any; type: string; id: any; ideas: string; associations: string; }} ingredientToSave
-     */
-     async function saveEdit(ingredientToSave) {
-    // Collect the data from the input fields
-    const data = {
-      common_name: ingredientToSave.common_name,
-      cas: ingredientToSave.cas,
-      volatility: ingredientToSave.volatility,
-      use: ingredientToSave.use,
-      colour: ingredientToSave.colour,
-      impression: ingredientToSave.impression,
-      ideas: ingredientToSave.ideas,
-      associations: ingredientToSave.associations,
-      amount: ingredientToSave.amount,
-      unit: ingredientToSave.unit,
-    };
-
-    // Define the URL for the PUT request
-    let url;
-    if (ingredientToSave.type === "CollectionIngredient") {
-      url = `http://localhost:8000/collection/api/ingredient/${userId}/${ingredientToSave.id}/update/`;
-    } else if (ingredientToSave.type === "CustomCollectionIngredient") {
-      url = `http://localhost:8000/collection/api/ingredient/${userId}/custom/${ingredientToSave.id}/update/`;
-    }
-
-    // Send the PUT request to the server
-    try {
-      const response = await fetchDataFromDjango(url, "PUT", data);
-      console.log("Response:", response);
-      // Fetch the updated ingredients
-      fetchIngredients();
-    } catch (error) {
-      console.error("Error saving edited ingredient:", error);
-    }
-
-    toggleEdit(ingredientToSave);
-  }
-
-
-
-
-  // logic for creating a custom ingredient
-
-  let common_name = '';
-  let cas = '';
-  let volatility = '';
-  let use ='';
-  let colour ='';
-  let associations ='';
-  let ideas ='';
-  let impression ='';
-  let amount = 0;
-
   let isModalVisible = false;
-
-  function toggleModal() {
-    isModalVisible = !isModalVisible;
-  }
-
-  async function createCustomIngredient() {
-    // Collect the data from the input fields
-    const data = {
-      common_name,
-      cas,
-      volatility,
-      use,
-      colour,
-      impression,
-      associations,
-      ideas,
-      amount,
-      unit: "g",
-    };
-
-    // Define the URL for the POST request
-    const url = `http://localhost:8000/collection/api/ingredient/${userId}/new/`;
-
-    // Send the POST request to the server
-    try {
-      const response = await fetchDataFromDjango(url, "POST", data);
-      console.log("Response:", response);
-      // Fetch the updated ingredients
-      fetchIngredients();
-      hideModal();
-    } catch (error) {
-      console.error("Error creating custom ingredient:", error);
-    }
-  }
-
-  function cancelCreate() {
-    common_name = '';
-    cas = '';
-    volatility = '';
-    use ='';
-    toggleModal();
-  }
-
-// logic for searching ingredients and tools functionality
-
-
-    let tuneMenuVisible = false
-    function toggleTuneMenu() {
-        tuneMenuVisible = !tuneMenuVisible;
-    }
-
-    function toggleFieldVisibility(field) {
-  console.log('Before toggle:', field, $visibleFields); // log the state before the toggle
-
-  field.visible = !field.visible;
-  visibleFields.update(fields => [...fields]); 
-  
-
-  console.log('After toggle:', field, $visibleFields); // log the state after the toggle
-}
-
-// logic for the tune menu
-
-let initialVisibleFields = [
+  let initialVisibleFields = [
   { name: "common_name", visible: true },
   { name: "cas", visible: false },
   { name: "volatility", visible: false },
@@ -278,28 +34,235 @@ let initialVisibleFields = [
   { name: "amount", visible: true },
   { name: 'date_added', visible: false }
 ];
-export let visibleFields = writable(initialVisibleFields);
-
-
-
-// logic for the notification
-
-let notification = writable("");
-let isLoading = true;
-
-onMount(async () => {
-    // redirect the user the hell out of here if they are not authenticated. TODO add to all pages
-    let is_authenticated = sessionStorage.getItem("is_authenticated");
-  if (is_authenticated === "false" || is_authenticated === null) {
-    window.location.href = "/auth/login";
+  export let visibleFields = writable(initialVisibleFields);
+  
+  //fetch logic
+  //TODO error handing for handleFetch
+  async function handleFetch(forceReload = false) {
+    data = await fetchCollection(userId, $currentPage, $searchTerm, $pageSize, { forceReload: forceReload });
+    isLoading = false;
+    return data;
   }
-    fetchIngredients();
-    setTimeout(() => {
-        isLoading = false;
-    }, 1000);
+
+  async function reset() {
+    searchTerm.set("");
+    currentPage.set(1);
+    goto(`/collect?page=$${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
+    data = await handleFetch(true);
+    }
+
+  // pagination logic, pagesize logic
+async function updatePageSize() {
+    currentPage = 1;
+    goto(`/collect?page=$${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
+    data = await handleFetch(); 
+}
+  
+async function changePage(newPage) {
+    if (newPage >= 1 && newPage <= data.total_pages) {
+      currentPage.set(newPage);
+      notification.set(`you are on page ${$currentPage}`);
+      goto(`/collect?page=$${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
+      data = await handleFetch();
+    }
+    else {
+      notification.set(`there is nothing to seek there`);
+  }
+}
+    
+// search functionality
+async function handleSearch(event) {
+    if (event.key === 'Enter') {
+      searchIngredients();
+    } else if (event.key === 'Escape') {
+      searchTerm.set("");
+      searchInput.blur();
+      searchIngredients();
+    }
+  }
+
+async function searchIngredients() {
+    currentPage.set(1);
+    if ($searchTerm === "") {
+      notification.set("")
+    } else {
+      notification.set(`Searching for ${$searchTerm}...`);
+    }
+    goto(`/collect?page=$${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
+    data = await handleFetch();
+  }
+
+// delete ingredient, custom or otherwise
+     /**
+     * @param {MouseEvent & { currentTarget: EventTarget & HTMLButtonElement; }} ingredient
+     */
+     async function handleDeleteClick(ingredient) {
+        const response = await deleteFromCollection(ingredient, userId);
+        console.log("response:", response);
+        notification.set(response);
+        editingRowId = null;
+        data = await handleFetch(true);
+}
+
+// editing functionality
+    const editableFields = {
+  CollectionIngredient: ["colour", "impression", "amount", "ideas", "associations"],
+  CustomCollectionIngredient: ["common_name", "cas", "volatility", "use", "colour", "impression", "amount"]
+};
+
+    /**
+     * @param {PropertyKey} ingredientType
+     * @param {string} fieldName
+     */
+function isEditableField(ingredientType, fieldName) {
+  if (editableFields.hasOwnProperty(ingredientType)) {
+    return editableFields[ingredientType].includes(fieldName);
+  } else {
+    return false;
+  }
+}  
+
+     /**
+     * @param {{object: any;}} ingredient
+     */
+function toggleEdit(ingredient) {
+    console.log("Toggling edit for ingredient:", ingredient);
+    isEditing = !isEditing;
+    editingRowId = editingRowId === ingredient.id ? null : ingredient.id;
+    editingObject = editingObject === ingredient ? null : ingredient;
+  }
+   
+async function saveEdit(ingredientToSave) {
+  try {
+    const response = await saveEditedIngredient(ingredientToSave, userId);
+    console.log("Response:", response);
+    toggleEdit(ingredientToSave);
+    data = await handleFetch(true);
+  } catch (error) {
+    console.error("Error saving edited ingredient:", error);
+  }
+}
+
+function handleKeydown(event) {
+    if (isEditing) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        console.log("enter key pressed")
+        saveEdit(editingObject);
+      } else if (event.key === "Escape") {
+        event.preventDefault();
+        console.log("Escape key pressed")
+        toggleEdit(editingObject); // Assuming you want to clear the editing state
+      }
+    } else if (event.key === '/') {
+        event.preventDefault();  // Prevents the default action associated with the '/' key
+
+        // Toggle focus
+        if (document.activeElement === searchInput) {
+            searchInput.blur();  // If the searchInput is already focused, unfocus it
+        } else {
+            searchInput.focus();  // Otherwise, set the focus on the searchInput
+        }
+    }
+  }
+
+
+  // logic for creating a custom ingredient
+function toggleModal() {
+    isModalVisible = !isModalVisible;
+  }
+
+  let newCustomCommonName = '';
+  let newCustomCas = '';
+  let newCustomVolatility = '';
+  let newCustomUse ='';
+
+async function handleCreateCustomIngredient() {
+    const newCustom = {
+    common_name: newCustomCommonName,
+    cas: newCustomCas,
+    volatility: newCustomVolatility,
+    use: newCustomUse,
+    colour: '',
+    impression: '',
+    ideas: '',
+    associations: '',
+    amount: 0,
+    unit: 'g'
+  };
+    try {
+      const response = await createCustomIngredient(newCustom, userId);
+      console.log("Response:", response);
+      handleFetch(true);
+      toggleModal();
+    } catch (error) {
+      console.error("Error creating custom ingredient:", error);
+    }
+  }
+
+function cancelCreate() {
+    newCustomCommonName = '';
+    newCustomCas = '';
+    newCustomVolatility = '';
+    newCustomUse ='';
+    toggleModal();
+  }
+
+    let tuneMenuVisible = false
+    function toggleTuneMenu() {
+        tuneMenuVisible = !tuneMenuVisible;
+    }
+
+
+// field visibility logic
+function toggleFieldVisibility(field) {
+  console.log('Before toggle:', field, $visibleFields); // log the state before the toggle
+
+  field.visible = !field.visible;
+  visibleFields.update(fields => [...fields]); 
+  
+
+  console.log('After toggle:', field, $visibleFields); // log the state after the toggle
+}
+
+onMount(() => {
+    let is_authenticated = sessionStorage.getItem("is_authenticated");
+    if (is_authenticated === "false" || is_authenticated === null) {
+      window.location.href = "/auth/login";
+    } else {
+      // This block should only execute if we're certain window is defined.
+      userId = sessionStorage.getItem("user_id");  // No need to prefix with window, consistency maintained
+      currentPage.set((parseInt(sessionStorage.getItem('currentPageCollect')) || 1));
+    pageSize.set((parseInt(localStorage.getItem('pageSizeCollect')) || 10));
+    searchTerm.set((sessionStorage.getItem('searchTermCollect') || ""));
+    }
+    
+    console.log('Current page when the page loaded:', $currentPage);
+
+    data = handleFetch();
+
+    currentPage.subscribe(value => {
+        sessionStorage.setItem('currentPageCollect', value);
+    });
+
+    pageSize.subscribe(value => {
+        localStorage.setItem('pageSizeCollect', value);
+    });
+
+    searchTerm.subscribe(value => {
+        sessionStorage.setItem('searchTermCollect', value);
+    });
+  });
+
+  onDestroy(() => {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('keydown', handleKeydown);
+    }
   });
 
 </script>
+
+<svelte:window on:keydown={handleKeydown}/>
 
 <div class="flex flex-col min-h-screen" style="background: url('/assets/bg/bbblurry-collect.svg') no-repeat center center fixed; background-size: cover;">
   <Header currentPage="collect" notification = {notification}/>
@@ -317,11 +280,11 @@ onMount(async () => {
         
       </button>
       {#if tuneMenuVisible}
-      <div id="tune-menu" class="flex w-full p-2 border-slate-400 bg-white/20 dark:bg-black/20 space-y-2 top-10 justify-start align-middle text-sm rounded-lg">
+      <div id="tune-menu" class="flex w-full p-2 border-none bg-white/20 dark:bg-black/20 space-y-2 top-10 justify-start align-middle text-sm rounded-lg">
         <div class="flex flex-row align-middle justify-start">
           <label class='flex items-center'> 
             page size:
-            <input type="number" class='flex border-slate-400 bg-white/20 dark:bg-black/20 pl-2 ml-4 w-20 focus:ring-green-700/70 focus:ring-2 rounded-lg' min="1" bind:value={pageSize} on:change={updatePageSize}/>
+            <input type="number" class='flex border-none bg-white/20 dark:bg-black/20 pl-2 ml-4 w-20 focus:ring-green-700/70 focus:ring-2 rounded-lg' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
           </label>
             
             </div>
@@ -329,7 +292,7 @@ onMount(async () => {
             <div id="visibility" class="grid grid-cols-3">
               {#each $visibleFields.slice(1) as field}
               <div class="flex flex-row space-x-2 ml-2">
-                <input class="size-4 rounded-full shadow border-slate-400 text-green-700/90 focus:ring-green-700/30 checked:bg-green-700/70 active:scale-90 checked:ring-green-700/30 hover:checked:bg-green-700/80 transition-all hover:scale-110" type="checkbox" id={field.name} bind:checked={field.visible} on:click={() => toggleFieldVisibility(field) && console.log("clicked")} />
+                <input class="size-4 rounded-full shadow border-none text-green-700/90 focus:ring-green-700/30 checked:bg-green-700/70 active:scale-90 checked:ring-green-700/30 hover:checked:bg-green-700/80 transition-all hover:scale-110" type="checkbox" id={field.name} bind:checked={field.visible} on:click={() => toggleFieldVisibility(field) && console.log("clicked")} />
                 <label for={field.name}>{field.name}</label>
                 </div>
               {/each}
@@ -338,10 +301,11 @@ onMount(async () => {
         {:else if tuneMenuVisible === false}
           <input
         type="text"
-        class = "flex w-full p-2 bg-white/20 border-slate-400 dark:bg-black/20 shadow rounded-lg focus:ring:2 focus:ring-green-700/70 focus:border-green-900/70 focus:scale-95 transition-all"
-        bind:value={searchTerm}
+        class = "flex w-full p-2 bg-white/20 border-none dark:bg-black/20 shadow rounded-lg focus:ring-2 focus:ring-green-700/70 focus:border-green-900/70 focus:scale-95 transition-all"
+        bind:value={$searchTerm}
+        bind:this = {searchInput}
         on:keydown={handleSearch}
-        placeholder="search..."
+        placeholder="/ search..."
         title="find an ingredient by CAS or the multiple names that it has"
       />
         {/if}
@@ -366,15 +330,15 @@ onMount(async () => {
     </button>
       
     {#if isModalVisible}
-      <div id="modal" class="flex bg-white/20 border-slate-400 dark:bg-black/20 rounded-lg p-6 text-xs">
+      <div id="modal" class="flex bg-white/20 border-none dark:bg-black/20 rounded-lg p-6 text-xs">
         <form id="new_ingredient" class="grid grid-cols-2 gap-1">
-          <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-slate-400" bind:value={common_name} placeholder="name" />
-          <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-slate-400" bind:value={cas} placeholder="CAS" />
-          <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-slate-400" bind:value={volatility} placeholder="volatility" />
-          <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-slate-400" bind:value={use} placeholder="use" />
+          <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-none" bind:value={newCustomCommonName} placeholder="name" />
+          <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-none" bind:value={newCustomCas} placeholder="CAS" />
+          <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-none" bind:value={newCustomVolatility} placeholder="volatility" />
+          <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-none" bind:value={newCustomUse} placeholder="use" />
         </form>
         <div class="flex flex-col space-y-2 p-2">
-          <button on:click={createCustomIngredient}>
+          <button on:click={handleCreateCustomIngredient}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
             </svg>            
@@ -402,6 +366,9 @@ onMount(async () => {
 <div id="table-wrapper" class="flex flex-row ml-6 mr-6 mt-0 p-2 overflow-x-auto overflow-y-auto text-sm items-center">
 {#if isLoading}
 <div id="spinner" class="flex size-16 border-4 m-10 border-rose-400 border-dotted rounded-full animate-spin" />
+{:else if data.error}
+          <!-- If there is an error fetching data, display the error message -->
+          <p>{data.error}</p>
         {:else}
   {#if editingRowId !== null}
 <button class="pl-2"on:click={saveEdit(editingObject)}>
@@ -411,21 +378,21 @@ onMount(async () => {
 </button>
   
   {:else}
-  <button class="pl-2"on:click={prevPage}>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:-translate-x-2 duration-300">
+  <button class="pl-2"on:click={changePage(currentPage-1)}>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:-transtone-x-2 duration-300">
       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
     </svg>
   </button>
   {/if}
     
-  <div id="table bg" class="shadow rounded-lg p-4 mt-4 flex bg-gradient-to-br from-rose-300/20 to-rose-500/20"
-  style="background: rgb(253 164 175 / 0.2) url('/assets/bg/texture/nnnoise-gray-2.svg') no-repeat; background-size:cover;"
-  transition:blur={{duration:500}}
+  <div id="table bg" class="shadow rounded-lg p-4 mt-4 flex bg-gradient-to-br from-rose-300/10 to-rose-500/10"
+
+  transition:blur={{duration:150}}
   >
-  <table class="shadow bg-blend-overlay size-full table-fixed text-sm border-collapse overflow-hidden bg-gradient-to-br from-rose-50/90 to-rose-100/30 dark:from-rose-950/60 dark:to-rose-900/50 rounded-lg"
-  transition:fade={{delay:250, duration:500}}
+  <table class="shadow bg-blend-overlay size-full table-fixed text-sm border-collapse overflow-hidden bg-gradient-to-br from-rose-50/90 to-rose-100/30 dark:from-rose-900/20 dark:to-rose-950/20 rounded-lg"
+  transition:fade={{delay:50, duration:150}}
   >
-  <thead class="rounded-lg bg-gradient-to-r from-rose-800/30 to-rose-800/40 text-rose-900/90 dark:text-rose-400/90 space-x-2 h-10 text-xl tracking-widest align-middle text-center">
+  <thead class="rounded-lg bg-gradient-to-r from-rose-800/40 to-rose-800/30 text-rose-900/90 dark:text-rose-400/90 space-x-2 h-10 text-xl tracking-widest align-middle text-center">
     <tr>
       {#each $visibleFields as header}
         {#if header.name === "use" && header.visible}
@@ -459,24 +426,20 @@ onMount(async () => {
   </thead>
   
   <tbody class="text-center divide-y-4 divide-double divide-rose-900/30 dark:divide-rose-200/20 rounded-lg">
-  {#each ingredients as ingredient}
+  {#each data.results as ingredient}
     <tr on:dblclick={() => toggleEdit(ingredient)} class="hover:bg-green-700/10 dark:hover:bg-green-300/10 divide-x-4 divide-double divide-green-900/10 dark:divide-green-200/10 transition-all duration-300">
 
       {#each $visibleFields as field, index}
   {#if field.visible}
-    <td class="align-middle m-4 p-4 {index === 0 ? 'text-2xl tracking-tight' : ''}">
+    <td class="align-middle m-4 p-4 {index === 0 ? 'text-2xl tracking-tight dark:bg-rose-900/20' : ''}">
       {#if isEditableField(ingredient.type, field.name) && editingRowId === ingredient.id}
         <textarea
           type="text"
           rows="3"
-          class="bg-white/20 dark:bg-black/20 text-center font-light flex w-full focus:ring-green-700/70 focus:ring-2 rounded-lg"
+          class="bg-white/20 dark:bg-black/20 text-center border-none font-light flex w-full focus:ring-green-700/70 focus:ring-2 rounded-lg"
           bind:value={ingredient[field.name]}
           placeholder="{field.name}"
-          on:keydown={(event) => {
-            if (event.key === "Enter") {
-              saveEdit(ingredient);
-            }
-          }}
+          
         />
       {:else if field.name === "amount"}
           {ingredient[field.name]} {ingredient.unit}
@@ -514,8 +477,8 @@ onMount(async () => {
   {:else}
   <button class="pr-2" 
   
-  on:click={nextPage}>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:translate-x-2 duration-300">
+  on:click={changePage(currentPage+1)}>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:transtone-x-2 duration-300">
       <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
     </svg>
 

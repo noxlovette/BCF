@@ -12,6 +12,7 @@ from rest_framework.exceptions import ParseError
 import logging
 from .serialisers import CollectionIngredientSerializer, \
     CustomCollectionIngredientSerializer
+from browse.views import CustomPageNumberPagination
 
 logger = logging.getLogger(__name__)
 
@@ -111,37 +112,10 @@ class CustomIngredientDeleteView(generics.DestroyAPIView):
 
 
 # LIST VIEWS
-class CollectionView(generic.ListView):
-    """
-    VIEW TO DISPLAY THE USER'S COLLECTION
-    """
-    template_name = "collection/collection.html"
-    context_object_name = "collection"
-
-    def get_queryset(self):
-        collection = self.request.session.get('collection', [])
-        collection_ingredient_ids = [id for item in collection if len(item) == 2 and item[0] == 'CollectionIngredient'
-                                     for type, id in [item]]
-        custom_collection_ids = [id for item in collection if len(item) == 2 and item[0] == 'CustomCollectionIngredient'
-                                 for type, id in [item]]
-
-        collection_ingredient = list(CollectionIngredient.objects.filter(id__in=collection_ingredient_ids))
-        custom_collection = list(CustomCollectionIngredient.objects.filter(id__in=custom_collection_ids))
-        for obj in collection_ingredient:
-            obj.type = 'CollectionIngredient'
-        for obj in custom_collection:
-            obj.type = 'CustomCollectionIngredient'
-
-        combined_collection = collection_ingredient + custom_collection
-
-        return combined_collection
-
-
 class CollectionAPI(APIView):
     """
     API VIEW TO DISPLAY THE USER'S COLLECTION
     """
-
     def get_collection(self, request, user_id):
         user = User.objects.get(id=user_id)
         if not user:
@@ -183,7 +157,7 @@ class CollectionAPI(APIView):
         for custom_ingredient in custom_collection_ingredients:
             custom_ingredient.prepare_for_serialization()
 
-        paginator = PageNumberPagination()
+        paginator = CustomPageNumberPagination()
         paginator.page_size = request.query_params.get('page_size', paginator.page_size)
 
         collection_serializer = CollectionIngredientSerializer(collection_ingredients, many=True)
@@ -220,3 +194,5 @@ class CollectionAPI(APIView):
             return JsonResponse({'error': 'user or ingredient does not exist'}, status=400)
         except ParseError:
             return JsonResponse({'error': 'invalid JSON data'}, status=400)
+
+

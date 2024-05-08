@@ -10,15 +10,15 @@
     id="social-copyright"
     class="flex flex-col items-center w-full justify-center"
   >
-    <ul class="flex items-center space-x-2">
+    <ul class="flex items-center space-x-2 dark:text-stone-200/80 text-stone-900/80">
       <li>
         <a href="https://twitter.com/BCF_app">
           <img
-            src="/assets/img/x-logo/logo-black.png"
+            src="/assets/img/x-logo/logo.svg"
             alt="Twitter"
             width="16"
             height="16"
-            class="hover:scale-110 ease-in-out duration-1000"
+            class="hover:scale-110 ease-in-out duration-300 "
           />
         </a>
       </li>
@@ -28,11 +28,11 @@
           class=""
         >
           <img
-            src="/assets/img/patreon-logo/PATREON_SYMBOL_1_BLACK_RGB.png"
+            src="/assets/img/patreon-logo/logo.svg"
             alt="Patreon"
             width="16"
             height="16"
-            class="hover:scale-110 ease-in-out duration-1000"
+            class="hover:scale-110 ease-in-out duration-300"
           />
         </a>
       </li>
@@ -42,11 +42,11 @@
           class=""
         >
           <img
-            src="/assets/img/github-mark/github-mark.png"
+            src="/assets/img/github-mark/logo-white.svg"
             alt="GitHub Logo"
             width="19"
             height="19"
-            class="hover:scale-110 ease-in-out duration-1000"
+            class="hover:scale-110 ease-in-out duration-300"
           />
         </a>
       </li>
@@ -57,13 +57,13 @@
   <div id="paperwork" class="ml-auto mr-4 flex">
     <ul class="flex items-center space-x-2">
       <li>
-        <a href="/paperwork/manifesto" class="hover:text-amber-900"> manifesto </a>
+        <a href="/paperwork/manifesto" class="hover:text-amber-900/80 dark:hover:text-amber-400/80 transition-all"> manifesto </a>
       </li>
       <li>
-        <a href="/paperwork/privacy-policy" class="hover:text-amber-900"> privacy policy </a>
+        <a href="/paperwork/privacy-policy" class="hover:text-amber-900 dark:hover:text-amber-400/80 transition-all"> privacy policy </a>
       </li>
       <li>
-        <a href="/paperwork/terms-of-service" class="hover:text-amber-900"> terms of service </a>
+        <a href="/paperwork/terms-of-service" class="hover:text-amber-900 dark:hover:text-amber-400/80 transition-all"> terms of service </a>
       </li>
     </ul>
   </div>

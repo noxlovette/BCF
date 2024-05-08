@@ -93,15 +93,15 @@ class FormulaSerializer(serializers.ModelSerializer):
     ingredients = FormulaIngredientSerializer(many=True)
     created = DateTimeSerializer(source='created_at', read_only=True)
     updated = DateTimeSerializer(source='updated_at', read_only=True)
-    name = serializers.CharField(source='_name', required=True)
-    description = serializers.CharField(source='_description', required=False, allow_null=True, allow_blank=True)
-    notes = serializers.CharField(source='_notes', required=False, allow_null=True, allow_blank=True)
+    name = serializers.CharField(source='_name')
+    description = serializers.CharField(source='_description', allow_null=True, allow_blank=True)
+    notes = serializers.CharField(source='_notes', allow_null=True, allow_blank=True)
 
     def update(self, instance, validated_data):
         # Update existing Formula fields
-        instance._name = validated_data.get('_name', instance._name)
-        instance._description = validated_data.get('_description', instance._description)
-        instance._notes = validated_data.get('_notes', instance._notes)
+        instance._name = validated_data.pop('_name', instance._name)
+        instance._description = validated_data.pop('_description', instance._description)
+        instance._notes = validated_data.pop('_notes', instance._notes)
         user_id = validated_data.get('user')
         instance.save()
 
@@ -169,11 +169,23 @@ class FormulaSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         ingredients_data = validated_data.pop('ingredients', [])
+
         user_id = validated_data.get('user')
-        formula = Formula.objects.create(**validated_data)
+        name = validated_data.pop('_name', None)
+        description = validated_data.pop('_description', None)
+        notes = validated_data.pop('_notes', None)
+        instance = Formula.objects.create(**validated_data)
+
+        instance._name = name
+        instance._description = description
+        instance._notes = notes
+
         for ingredient_data in ingredients_data:
-            FormulaIngredient.objects.create(user_id=user_id, formula=formula, **ingredient_data)
-        return formula
+            FormulaIngredient.objects.create(user_id=user_id, formula=instance, **ingredient_data)
+
+        instance.save()
+        return instance
+
 
     class Meta:
         model = Formula

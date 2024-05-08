@@ -6,6 +6,7 @@
   import { fetchDataFromDjango } from "$lib/DjangoAPI.ts";
 
 
+
   let is_authenticated = false;
   let username = "";
 
@@ -72,10 +73,10 @@ function updateNotification(newNotification) {
 
   notification.set(newNotification);
 
-  // Set a new timeout to clear the notification after 5 seconds
+  // Set a new timeout to clear the notification after 3 seconds
   notificationTimeout = setTimeout(() => {
     notification.set('');
-  }, 5000);
+  }, 3000);
 }
 
 $: {
@@ -89,8 +90,8 @@ $: {
 
 </script>
 
-<header class="flex h-20 m-4">
-  <a href="/" class="size-20 flex-none z-15"
+<header class="flex h-20 m-4 ">
+  <a href="/" class="size-20 flex-none z-15" 
   on:mouseenter={toggleDropdown}>
     <img
       id="logo"
@@ -100,17 +101,17 @@ $: {
     />
   </a>
   <div class= "flex-col h-full w-full">
-    <div id="wider-part" class="flex flex-grow h-2/3 border-b border-slate-400 dark:border-slate-100z-10">
+    <div id="wider-part" class="flex flex-grow h-2/3 border-b-2 border-stone-400/10 dark:border-stone-100/10 shadow">
       {#if currentPage === "browse"}
-            <p class="m-2 text-3xl text-light">browse</p>
+            <p class="m-2 text-3xl text-light text-sky-950/80 dark:text-sky-50/80">browse</p>
           {:else if currentPage === "home"}
             <p class="m-2 text-3xl text-light ">BCF</p>
             {:else if currentPage === "login"}
             <p class="m-2 text-3xl text-light ">login</p>
             {:else if currentPage === "collect"}
-            <p class="m-2 text-3xl text-light ">collect</p>
+            <p class="m-2 text-3xl text-light text-rose-950/80 dark:text-rose-50/80">collect</p>
             {:else if currentPage === "formulate"}
-            <p class="m-2 text-3xl text-light">formulate</p>
+            <p class="m-2 text-3xl text-light text-lime-950/80 dark:text-lime-50/80">formulate</p>
             {:else if currentPage === "signup"}
             <p class="m-2 text-3xl text-light">sign up</p>
             {:else if currentPage === "profile"}
@@ -123,7 +124,7 @@ $: {
 
         {#if $notification}
           <div class="ml-auto mr-10 content-center font-light lowercase"
-          transition:fade={{ delay: 250, duration: 500 }}       
+          transition:fade={{duration: 150}}       
           >
             <p class = "">
               {$notification}
@@ -142,21 +143,21 @@ $: {
           </svg>
           
       
-            <a href="/profile" class="dark:hover:text-amber-300/90 hover:text-amber-900/90">
+            <a href="/profile" class="dark:hover:text-amber-300/90 hover:text-amber-900/90 transition-all" >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
               </svg>
               
               
             </a>
-            <button on:click={logout} class="dark:hover:text-amber-300/90 hover:text-amber-900/90">
+            <button on:click={logout} class="dark:hover:text-amber-300/90 hover:text-amber-900/90 transition-all" >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
               </svg>   
             </button>
           {:else}
-            <a href="/auth/login" class=" dark:hover:text-amber-300/90 hover:text-amber-900/90">login</a>
-            <a href="/auth/signup" class=" dark:hover:text-amber-300/90 hover:text-amber-900/90">sign up</a>
+            <a href="/auth/login" class=" dark:hover:text-amber-300/90 hover:text-amber-900/90 transition-all" >login</a>
+            <a href="/auth/signup" class=" dark:hover:text-amber-300/90 hover:text-amber-900/90 transition-all" >sign up</a>
           {/if}
         </div>
     </div>
@@ -179,18 +180,18 @@ $: {
               class="flex flex-row z-10"
             >
               <ul class= "flex space-x-5">
-                <li class=" dark:hover:text-amber-300/90 hover:text-amber-900/90">
-                  <a href="/browse" 
+                <li class="hover:text-sky-300/80 transition-all">
+                  <a href="/browse"
                   >
                     browse
                   </a>
                 </li>
-                <li class=" dark:hover:text-amber-300/90 hover:text-amber-900/90">
+                <li class=" hover:text-pink-400/80 transition-all">
                   <a href="/collect" 
                   >collect</a>
                 </li>
-                <li class=" dark:hover:text-amber-300/90 hover:text-amber-900/90">
-                  <a href="/formulate"
+                <li class=" hover:text-lime-500/80 transition-all">
+                  <a href="/formulate" 
                   >formulate</a>
                 </li>
               </ul>

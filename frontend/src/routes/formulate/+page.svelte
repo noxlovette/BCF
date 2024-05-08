@@ -97,6 +97,7 @@
       user: userId,
       name: editedFormula.name,
       description: editedFormula.description,
+      notes: editedFormula.notes,
       ingredients: updatedIngredients,
     };
 
@@ -115,6 +116,7 @@
     const formData = {
       name: "New Formula",
       description: "Write something inspiring here!",
+      notes: "Add some notes here...",
       ingredients: [],
       user: userId,
     };
@@ -273,32 +275,32 @@
 </script>
 
 
-<div class="flex flex-col min-h-screen" style="background: url('/assets/bg/bbblurry-formulate.svg') no-repeat center center fixed; background-size: cover;">
+<div class=" flex flex-col min-h-screen" style="background: url('/assets/bg/bbblurry-formulate.svg') no-repeat center center fixed; background-size: cover;">
   <Header currentPage="formulate" notification = {notification}/>
   <div class="mb-auto flex justify-center items-center">
     {#if isLoading}
-<div id="spinner" class="flex size-16 border-4 m-10 border-lime-400 border-dotted rounded-full animate-spin" />
+<div id="spinner" class="flex size-16 border-4 m-10 border-lime-600 border-dotted rounded-full animate-spin" />
 {:else}
-  <div id="app" class="flex flex-row rounded-lg shadow items-stretch size-3/4 m-2 mt-0 p-4 lowercase font-light text-amber-950/90 dark:text-amber-200/80 bg-amber-50/60"
+  <div id="app" class="flex flex-row rounded-lg shadow items-stretch size-5/6 m-2 mt-0 p-4 lowercase font-light text-amber-950/90 dark:text-amber-200/60 bg-amber-900/10"
   transition:fade={{duration: 500}}
   >
 
     
-  <div id="sidebar" class="flex flex-col w-1/4 mr-auto bg-lime-800/70 text-amber-100/90 rounded-lg drop-shadow p-4"
+  <div id="sidebar" class="flex flex-col w-1/6 hover:w-1/4 mr-auto bg-lime-800/70 dark:bg-lime-800/20 rounded-lg drop-shadow p-4 transition-all duration-500"
   transition:fade={{delay:250, duration: 500}}
   >
     <h2 id="formula-header" class= "text-4xl mb-4 border-b-2 border-amber-100/20">my formulae</h2>
-    <ul id="formulate-list" class= "tracking-tight overflow-y-hidden divide-y-2 divide-amber-100/20">
+    <ul id="formulate-list" class= "tracking-tight overflow-y-hidden divide-y-2 divide-amber-100/20 items-start flex flex-col">
       {#each formulae as formula}
-        <li id="formula-item" class="flex flex-col  hover:bg-amber-100/80 hover:text-amber-800/60 hover:rounded-lg hover:shadow p-2 transition-all duration-300" on:dblclick={() => viewFormula(formula.id)} title={formula.description}>
+        <button id="formula-item" class="flex lowercase flex-col w-full hover:translate-x-1  hover:bg-amber-50/80 hover:text-amber-800/80 dark:hover:bg-amber-800/20 dark:hover:text-amber-50/60 hover:rounded-lg hover:shadow p-2 transition-all duration-150" on:click={() => viewFormula(formula.id)} title={formula.description}>
           <p id="formula-name" class="font-regular text-lg">{formula.name}</p>
           <p id="formula-edit-time" class="font-thin">{formula.updated}</p>
-        </li>
+        </button>
       {/each}
-      <li id="formula-item" class="flex flex-col hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-2 transition-all duration-300" on:dblclick={createFormula}>create new formula</li>
+      <button id="formula-item" class="flex flex-col hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:click={createFormula}>create new formula</button>
     </ul>
   </div>
-  <div id="main-content" class="flex flex-row items-start flex-1 bg-amber-50/80 rounded-lg shadow ml-4">
+  <div id="main-content" class="flex flex-row items-start flex-1 p-4 bg-amber-50/80 dark:bg-amber-800/10 rounded-lg shadow ml-4">
     {#if formulaDetail}
       {#if formulaDetail.id == 0}
         <button
@@ -309,14 +311,14 @@
       {/if}
       {#if editing}
         <!-- Editing mode -->
-        <div id="description-etc" class="flex flex-col mr-auto w-1/4 p-4 h-full divide-y-4 divide-amber-800/60 space-y-4 bg-amber-100/80 rounded-lg shadow">
+        <div id="description-etc" class="flex flex-col mr-auto w-1/4 p-4 h-full divide-y-4 divide-amber-800/60 dark:divide-amber-50/60 space-y-4 dark:bg-amber-800/20 bg-amber-50/80 rounded-lg shadow">
           <div>
             <h3 class="font-bold">description: </h3>
-            <input class="flex w-full bg-amber-50/20 dark:bg-amber-950/20  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-slate-400" bind:value={editedFormula.description} />
+            <textarea class="flex w-full bg-amber-50/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none" bind:value={editedFormula.description} />
           </div>  
-            <div class="font-bold">
-              <h3 >notes: </h3>
-              <textarea class="flex w-full bg-amber-50/20 dark:bg-amber-950/20  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-slate-400" bind:value={editedFormula.notes} />
+            <div>
+              <h3 class="font-bold">notes: </h3>
+              <textarea class="flex w-full bg-amber-50/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none" bind:value={editedFormula.notes} />
             </div>
             
           <div id="controls" class="pt-4">
@@ -348,21 +350,21 @@
           </div>
         </div>
         <div id="table-wrapper" class="flex flex-col items-start m-2 pl-2 w-full">
-        <input class="flex w-full text-6xl tracking-widest bg-amber-50/20 dark:bg-amber-950/20  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-slate-400" bind:value={editedFormula.name} />
+        <input class="flex w-full text-6xl tracking-widest bg-amber-50/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none" bind:value={editedFormula.name} />
         <table id="formula-ingredient-table" class="table-fixed text-left w-full m-2 pl-2">
           <thead>
-            <tr class="*:p-2">
-              <th class="w-min">#</th>
-              <th class="w-1/2"> Ingredient </th>
+            <tr class="">
+              <th class="w-1/12">#</th>
+              <th class="w-1/3"> Ingredient </th>
               <th class="w-1/6"> Volatility </th>
               <th class="w-1/6"> Amount </th>
-              <th class="w-1/12"> % </th>
+              <th class="w-1/6"> % </th>
             </tr>
           </thead>
           <tbody>
             {#if Array.isArray(editedFormula.ingredients)}
               {#each editedFormula.ingredients as ingredient, i (ingredient.id)}
-              <tr>
+              <tr class="">
                 <td class="align-middle">
                   <button class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110" on:click={() => deleteIngredient(ingredient.id)}
                     ><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-300/60">
@@ -374,25 +376,25 @@
                 <td>
                   <input
                     type="text"
-                    class="flex w-full bg-amber-50/20 dark:bg-amber-950/20  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-slate-400"
+                    class="flex w-5/6 bg-amber-50/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none"
                     bind:value={ingredient.ingredient}
                     on:input={(event) => handleInput(event, ingredient)}
                   />
                   <ul
                     id="ingredient-dropdown"
-                    class="dropdown-menu *:p-1 bg-lime-800/20 rounded-lg shadow-lg items-center flex transition-all duration-300"
+                    class="dropdown-menu bg-lime-800/20 rounded-lg shadow-lg items-center flex transition-all duration-150"
                     class:active={$activeIngredient &&
                       $activeIngredient.id === ingredient.id}
                   >
                     {#if $dropdownItems.length === 0}
-                      <button class="dropdown-item rounded-lg hover:text-amber-100/90 dark:hover:text-lime-300/60 w-full font-light"
+                      <button class="dropdown-item rounded-lg hover:text-amber-100/90 dark:hover:text-amber-50/80 w-full font-light"
                         >No matching ingredients found</button
                       >
                     {:else if Array.isArray($dropdownItems)}
                       {#each $dropdownItems as item (item.common_name)}
                         {#if $dropdownItems.length < 6}
                           <button
-                            class="dropdown-item hover:bg-lime-800/60 rounded-lg hover:text-amber-100/90 dark:hover:text-lime-300/60 w-full font-light text-sm transition-all duration-300"
+                            class="dropdown-item hover:bg-lime-800/60 rounded-lg hover:text-amber-100/90 dark:hover:text-amber-50/80 w-full font-light text-sm transition-all duration-150"
                             on:click={() => selectItem(item)}
                             >{item.common_name}</button
                           >
@@ -409,10 +411,10 @@
                   <td>{ingredient.volatility}</td> <!-- unchangeable -->
 
                   <td>
-                    <input type="number" bind:value={ingredient.amount} class="flex w-full bg-amber-50/20 dark:bg-amber-950/20  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-slate-400"/>
+                    <input type="number" bind:value={ingredient.amount} class="flex w-2/3 bg-amber-50/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none"/>
                   </td>
                   <td>
-                    <input type="number" bind:value={ingredient.percentage} class="flex w-full bg-amber-50/20 dark:bg-amber-950/20  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-slate-400"/>
+                    <input type="number" bind:value={ingredient.percentage} class="flex w-2/3 bg-amber-50/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none"/>
                   </td>
 
                 
@@ -428,12 +430,12 @@
                 
               </button>
               </td>
-              <tr id="functional">
-                <td class="pl-2">x</td>
-                <td class="pl-2">alcohol</td>
-                <td class="pl-2">solvent</td>
-                <td class="pl-2 {solventValue < 0 ? 'text-red-700/80' : ''}">{solventValue}</td>
-                <td class="pl-2">100</td>
+              <tr id="functional" class="border-t border-amber-950/20 dark:border-amber-100/10">
+                <td>x</td>
+                <td>alcohol</td>
+                <td>solvent</td>
+                <td class="{solventValue < 0 ? 'text-red-700/80' : ''}">{solventValue}</td>
+                <td>100</td>
               </tr>
           </tbody>
 
@@ -442,7 +444,7 @@
       </div>
 
       {:else}
-          <div id="description-etc" class="flex flex-col mr-auto w-1/4 p-4 h-full divide-y-4 divide-amber-800/60 space-y-4 bg-amber-100/80 rounded-lg shadow">
+          <div id="description-etc" class="flex flex-col mr-auto w-1/4 p-4 h-full divide-y-4 divide-amber-800/60 dark:divide-amber-50/60 space-y-4 bg-amber-50/80 dark:bg-amber-800/20 rounded-lg shadow">
             <div>
               <h3 class="font-bold">description: </h3>
               <p class="">{formulaDetail.description}</p>
@@ -479,30 +481,30 @@
           <h2 class="text-6xl tracking-widest mb-4">{formulaDetail.name}</h2>
           <table id="formula-ingredient-table" class="table-fixed text-left w-full">
             <thead>
-              <tr class="*:p-2">
-                <th class="w-min">#</th>
-                <th class="w-1/2"> Ingredient </th>
-                <th class="w-1/6"> Volatility </th>
-                <th class="w-1/6"> Amount </th>
-                <th class="w-1/12"> % </th>
+              <tr class="2">
+                <th class="w-1/12">#</th>
+              <th class="w-1/3"> Ingredient </th>
+              <th class="w-1/6"> Volatility </th>
+              <th class="w-1/6"> Amount </th>
+              <th class="w-1/6"> % </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="rounded-lg">
               {#each formulaDetail.ingredients as ingredient, i (ingredient.id)}
-                <tr>
-                  <td class="pl-2">{i + 1}</td>
-                  <td class="pl-2">{ingredient.ingredient}</td>
-                  <td class="pl-2">{ingredient.volatility}</td>
-                  <td class="pl-2">{ingredient.amount}</td>
-                  <td class="pl-2">{ingredient.percentage}</td>
+                <tr class="">
+                  <td>{i + 1}</td>
+                  <td>{ingredient.ingredient}</td>
+                  <td>{ingredient.volatility}</td>
+                  <td>{ingredient.amount}</td>
+                  <td>{ingredient.percentage}</td>
                 </tr>
               {/each}
-              <tr id="functional">
-                <td class="pl-2">x</td>
-                <td class="pl-2">alcohol</td>
-                <td class="pl-2">solvent</td>
-                <td class="pl-2 {solventValue < 0 ? 'text-red-700/80' : ''}">{solventValue}</td>
-                <td class="pl-2">100</td>
+              <tr id="functional" class="border-t border-amber-950/20 dark:border-amber-100/10">
+                <td class="">x</td>
+                <td class="">alcohol</td>
+                <td class="">solvent</td>
+                <td class="{solventValue < 0 ? 'text-red-700/80 dark:text-red-500/80' : ''}">{solventValue}</td>
+                <td class="">100</td>
               </tr>
             </tbody>
           </table>

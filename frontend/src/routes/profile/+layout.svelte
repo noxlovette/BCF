@@ -23,8 +23,9 @@
 </script>
 
 <div class="lowercase flex flex-col min-h-screen z-0" style="background: url('/assets/bg/bbblurry-auth.svg') no-repeat center center fixed; background-size: cover;">
-    <div class="mb-auto">
+    
     <Header currentPage="profile" notification={notification}/>
+    <div class="mb-auto flex justify-center items-center">
     <slot></slot>
     </div>
     <Footer/>

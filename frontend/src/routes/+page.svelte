@@ -8,6 +8,7 @@
    import Footer from "$lib/components/Footer.svelte";
 
 
+
   let notification = writable("");
   let randomPhrase = writable("");
 
@@ -114,9 +115,9 @@ function stopNotificationInterval() {
         id="buttons"
         class="mt-auto flex flex-row items-center justify-center *:m-2 *:p-2 *:ml-0 *:pl-0 font-light"
         transition:fade={{duration: 500, delay: 2500, easing: quintOut,}}>
-        <a href="/browse"class="button hover:text-sky-300/80">browse</a>
-        <a href="/collect" class="button hover:text-pink-400/80">collect</a>
-        <a href="/formulate" class="button hover:text-lime-500/80">formulate</a>
+        <a href="/browse"class="button hover:text-sky-300/80 transition-all" >browse</a>
+        <a href="/collect" class="button hover:text-pink-400/80 transition-all" >collect</a>
+        <a href="/formulate" class="button hover:text-lime-500/80 transition-all" >formulate</a>
       </div>
         </div>
 

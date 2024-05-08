@@ -1,17 +1,15 @@
-import json
 from django.shortcuts import render
-from django.utils import timezone
 from rest_framework.exceptions import ValidationError
-from rest_framework.response import Response
 from rest_framework import generics
 from collection.models import CustomCollectionIngredient
 from collection.serialisers import CustomCollectionIngredientSerializer
 from .models import Formula, FormulaIngredient, Tag
 from .serialisers import FormulaSerializer, FormulaIngredientSerializer
-from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.core.cache import cache
-from django.views.decorators.cache import cache_page
+from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView
+from rest_framework.response import Response
+from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 def index_view(request):
@@ -21,9 +19,6 @@ def index_view(request):
     :return:
     """
     return render(request, 'formulae/index.html')
-
-
-from django.contrib.auth.models import User
 
 
 class FormulaCreateAPI(generics.CreateAPIView):
@@ -41,9 +36,9 @@ class FormulaCreateAPI(generics.CreateAPIView):
         serializer.save(user=user, created_at=timezone.now(), updated_at=timezone.now())
 
 
-class FormulaListViewAPI(generics.ListAPIView):
+class FormulaListViewAPI(ListAPIView):
     """
-    LIST OF FORMULAE. The page is populated by JS
+    LIST OF FORMULAE. The page is populated by JS.
     """
     serializer_class = FormulaSerializer
 
@@ -59,36 +54,44 @@ class FormulaListViewAPI(generics.ListAPIView):
             # If user_id is not provided, return an empty queryset
             queryset = Formula.objects.none()
 
+        # Prepare each object for serialization
+        queryset = [formula.prepare_for_serialization() for formula in queryset]
+
         # Serialize the queryset and return the response
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
 
-class FormulaDetailViewAPI(generics.RetrieveUpdateAPIView):
+class FormulaDetailViewAPI(RetrieveUpdateAPIView):
     """
     Looks for pk in the url and returns the formula. Can also edit it.
     """
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
 
+    def get_object(self):
+        """
+        Retrieves and prepares the object for serialization.
+        """
+        obj = super().get_object()  # Retrieve the object as usual
+        obj.prepare_for_serialization()  # Prepare data for serialization
+        return obj
+
     def update(self, request, *args, **kwargs):
-        raw_data = request.body.decode('utf-8')
-        data = json.loads(raw_data)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=data, partial=True)
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
+        instance = serializer.save()  # After updating the instance, prepare it again for response
+        instance.prepare_for_serialization()
         return Response(serializer.data)
 
-    def get_serializer(self, *args, **kwargs):
-        # Specify partial=True for partial updates
-        kwargs['partial'] = True
-        return super().get_serializer(*args, **kwargs)
-
     def partial_update(self, request, *args, **kwargs):
-        # Set the updated_at field to the current time
-        request.data['updated_at'] = timezone.now()
-        return super().partial_update(request, *args, **kwargs)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()
+        instance.prepare_for_serialization()
+        return Response(serializer.data)
 
 
 class FormulaIngredientDeleteAPIView(generics.DestroyAPIView):

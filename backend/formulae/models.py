@@ -37,8 +37,6 @@ class Formula(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._description = None
@@ -49,6 +47,8 @@ class Formula(models.Model):
         self._description = decrypt_field(self.encrypted_description) if self.encrypted_description else None
         self._name = decrypt_field(self.encrypted_name) if self.encrypted_name else None
         self._notes = decrypt_field(self.encrypted_notes) if self.encrypted_notes else None
+
+        return self
 
     def refresh_from_db(self, *args, **kwargs):
         self._description = decrypt_field(self.encrypted_description) if self.encrypted_description else None
@@ -73,7 +73,6 @@ class Formula(models.Model):
         super().save(*args, **kwargs)
 
     class Meta:
-        unique_together = ['user']
         verbose_name = "User's Formula"
         verbose_name_plural = "User's Formulae"
         db_table = 'formulae'
