@@ -99,9 +99,8 @@
             <div id = 'handle pass' class="flex flex-col items-center justify-between">
                     <input type="password" class='flex bg-stone-50/20 dark:bg-stone-950/20 p-2 w-full m-4 shadow focus:ring-amber-700/70 border-none focus:ring-2 rounded-lg' placeholder="password" bind:value={password}/>
                     <div class="flex flex-row justify-center space-x-4">
-                        <span class:valid={validCase} class="normal-case rounded-lg p-1"> a..Z </span>
+                    <span class:valid={validCase} class="normal-case rounded-lg p-1"> a..Z </span>
                     <span class:valid={validLength} class="rounded-lg p-1"> 8+ </span>
-                    
                     <span class:valid={validSpecial} class="rounded-lg p-1">~&#</span>
                     </div>
             </div>
@@ -113,7 +112,7 @@
                 <a href="/paperwork/terms-of-service" class="dark:hover:text-amber-300/90 hover:text-amber-900/90 ">I agree to the terms of use </a>
                 <input type="checkbox" bind:checked={agreeTerms} class="size-4 rounded-full shadow border-none text-amber-700/90 focus:ring-amber-700/30 checked:bg-amber-700/70 active:scale-90 checked:ring-amber-700/30 hover:checked:bg-amber-700/80 transition-all hover:scale-110" />            
             </div>
-            <button type="submit" class="p-6 disabled:text-stone-400/70 hover:amber-400/60" disabled={!allValid}>create account</button>
+            <button type="submit" class="p-6 disabled:text-stone-400/70 hover:text-amber-400/60" disabled={!allValid}>create account</button>
         </form>
         
     </div>

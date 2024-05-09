@@ -36,7 +36,7 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
         if obj.collection_ingredient:
             return obj.collection_ingredient.ingredient.common_name
         elif obj.custom_collection_ingredient:
-            return obj.custom_collection_ingredient.common_name
+            return obj.custom_collection_ingredient._common_name
         return None
 
     def get_cas(self, obj):
@@ -46,7 +46,7 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
         if obj.collection_ingredient:
             return obj.collection_ingredient.ingredient.cas
         elif obj.custom_collection_ingredient:
-            return obj.custom_collection_ingredient.cas
+            return obj.custom_collection_ingredient._cas
         return None
 
     def get_volatility(self, obj):
@@ -56,7 +56,7 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
         if obj.collection_ingredient:
             return obj.collection_ingredient.ingredient.volatility
         elif obj.custom_collection_ingredient:
-            return obj.custom_collection_ingredient.volatility
+            return obj.custom_collection_ingredient._volatility
         return None
 
     def get_use(self, obj):
@@ -66,7 +66,7 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
         if obj.collection_ingredient:
             return obj.collection_ingredient.ingredient.use
         elif obj.custom_collection_ingredient:
-            return obj.custom_collection_ingredient.use
+            return obj.custom_collection_ingredient._use
         return None
 
     def get_collection_ingredient_type(self, obj):

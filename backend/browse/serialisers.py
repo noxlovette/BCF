@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SuggestedIngredient, Ingredient
+from .models import SuggestedIngredient, Ingredient, Descriptor
 
 
 class DateTimeSerializer(serializers.DateTimeField):
@@ -34,7 +34,7 @@ class IngredientSerialiser(serializers.ModelSerializer):
         return [descriptor.name for descriptor in descriptors]
 
     class Meta:
-        fields = ('id', 'descriptors', 'common_name', 'other_names', 'cas',  'ingredient_type', 'use', 'volatility',
+        fields = ('id', 'descriptors', 'common_name', 'other_names', 'cas', 'ingredient_type', 'use', 'volatility',
                   'is_restricted', 'origin', 'constituents', 'similar_ingredients', 'contributors')
         model = Ingredient
 
@@ -45,3 +45,9 @@ class SuggestedIngredientSerialiser(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = SuggestedIngredient
+
+
+class DescriptorSerialiser(serializers.ModelSerializer):
+    class Meta:
+        fields = '__all__'
+        model = Descriptor

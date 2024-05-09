@@ -57,8 +57,12 @@ export async function fetchDataFromDjango(
 }
 
 // Function to fetch ingredients data from Django API (browse)
-export async function fetchIngredients(currentPage: number, searchTerm = "", pageSize = 10, { forceReload = false } = {}) {
-  const cacheKey = `ingredients-${currentPage}-${searchTerm}-${pageSize}`;
+export async function fetchIngredients(currentPage: number, searchTerm = "", pageSize = 10, chosenDescriptors = [], { forceReload = false } = {}) {
+  const descriptors = chosenDescriptors.map(descriptor => `descriptors=${encodeURIComponent(descriptor.name)}`).join('&');
+
+  console.log("Descriptors on the server:", descriptors);
+
+  const cacheKey = `ingredients-${currentPage}-${searchTerm}-${pageSize}-${descriptors}`;
   let data = forceReload ? null : localStorage.getItem(cacheKey);
   if (data) {
     console.log("Data from cache:", data);
@@ -68,7 +72,7 @@ export async function fetchIngredients(currentPage: number, searchTerm = "", pag
     return JSON.parse(data);
   } else {
     try {
-      const endpoint = `${BASE_URL}/browse/api/ingredients?page=${currentPage}&search=${searchTerm}&page_size=${pageSize}`;
+      const endpoint = `${BASE_URL}/browse/api/ingredients?page=${currentPage}&search=${searchTerm}&page_size=${pageSize}&${descriptors}`;
       const ingredientsData = await fetchDataFromDjango(endpoint);
       console.log("Data from Django:", ingredientsData);
       localStorage.setItem(cacheKey, JSON.stringify(ingredientsData));
@@ -248,11 +252,117 @@ export async function saveEditedIngredient(ingredientToSave: any, userId: any) {
   export async function listSuggestedIngredients(userId: any) {
     const url = `${BASE_URL}/browse/api/suggested-ingredients/${userId}/`;
     try {
-        const data = fetchDataFromDjango(url, "GET");
+        const data = await fetchDataFromDjango(url, "GET");
         console.log(data)
         return data
     } catch (error) {
         console.error("Failed to load ingredients");
         return error.message;
     }
+}
+
+export async function fetchDescriptors() {
+  const url = `${BASE_URL}/browse/api/descriptors/`;
+  const cacheKey = "descriptors";
+  if (localStorage.getItem(cacheKey)) {
+      console.log("Data from cache: " + localStorage.getItem(cacheKey));
+      return JSON.parse(localStorage.getItem(cacheKey));
+  } else {
+  try {
+      const response = await fetchDataFromDjango(url, "GET");
+      console.log(response)
+      localStorage.setItem(cacheKey, JSON.stringify(response));
+      return response
+  } catch (error) {
+      console.error("Failed to load descriptors");
+      return error.message;
+  }
+}
+}
+
+export async function addFormulaAsCustomIngredient(userId:any, formula:any) {
+  console.log("Adding as custom");
+  const data = {
+    user: userId,
+    common_name: formula.name,
+    use: formula.description,
+    formula: formula.id,
+    cas: 'BASE',
+    volatility: 'base',
+    amount: 0,
+    unit: 'g',
+    ideas: '',
+    impression: '',
+    associations: '',
+    colour: '',
+  };
+  let url = `http://localhost:8000/formulae/api/formula/${userId}/${formula.id}/add_as_custom/`;
+
+  try {
+    // Assuming fetchDataFromDjango is a function that handles the fetch API call
+    let response = await fetchDataFromDjango(url, "POST", data);
+    if (response.ok) {
+      console.log("Server Response:", await response.json());
+      return "Formula added as custom ingredient";
+    } else {
+      // Parse the JSON response body to get the error message
+      const errorData = await response.json();
+      throw new Error(errorData.detail || "Unknown error occurred");
+    }
+  } catch (error) {
+    console.error("Error fetching data from Django:", error);
+    return `error. you might already have this formula in your collection`;
+  }
+}
+
+export async function saveChangesFormula (userId, formData, editedFormulaId) {
+  let url = `http://localhost:8000/formulae/api/formula/${userId}/${editedFormulaId}/`;
+  let data = await fetchDataFromDjango(url, "PUT", formData);
+  return data;
+}
+
+export async function createFormulaAPI (userId) {
+  const formData = {
+    name: "New Formula",
+    description: "Write something inspiring here!",
+    notes: "Add some notes here...",
+    ingredients: [],
+    user: userId,
+  };
+  let url = `http://localhost:8000/formulae/api/formula/${userId}/new/`;
+  let data = await fetchDataFromDjango(url, "POST", formData);
+  return data;
+}
+
+export async function populateApiDropdown (userId, query) {
+  let url = `http://localhost:8000/collection/api/collection/${userId}/?page=1&search=${query}&page_size=5`;
+  let data = await fetchDataFromDjango(url, "GET");
+  console.log("server-side", data);
+  return data;
+}
+
+export async function deleteFormulaAPI (userId, formulaId) {
+  let url = `http://localhost:8000/formulae/api/formula/${userId}/${formulaId}/delete/`;
+  let data = await fetchDataFromDjango(url, "DELETE");
+  return data;
+}
+
+export async function deleteIngredientApi (userId, ingredientId) {
+  let url = `http://localhost:8000/formulae/api/ingredient/${userId}/${ingredientId}/delete/`;
+  let data = await fetchDataFromDjango(url, "DELETE");
+  return data;
+}
+
+export async function fetchFormulaeApi(userId) {
+  console.log("Fetching formulae");
+  let url = `http://localhost:8000/formulae/api/formula/${userId}/list/`;
+  const data = await fetchDataFromDjango(url);
+  console.log(data);
+  return data;
+}
+
+export async function fetchFormulaApi(userId, formulaId) {
+  let url = `http://localhost:8000/formulae/api/formula/${userId}/${formulaId}/`;
+  const data = await fetchDataFromDjango(url);
+  return data;
 }

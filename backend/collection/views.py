@@ -140,11 +140,14 @@ class CollectionAPI(APIView):
 
         if search_param:
             # Filter custom_collection_ingredients in Python based on transient attributes
-            custom_collection_ingredients = [
-                ci for ci in custom_collection_ingredients
-                if search_param.lower() in ci._common_name.lower()
-                   or search_param.lower() in ci._cas.lower()
-            ]
+            try:
+                custom_collection_ingredients = [
+                    ci for ci in custom_collection_ingredients
+                    if search_param.lower() in ci._common_name.lower()
+                       or search_param.lower() in ci._cas.lower()
+                ]
+            except AttributeError:
+                pass
 
         return collection_ingredients, custom_collection_ingredients
 
@@ -163,9 +166,8 @@ class CollectionAPI(APIView):
         collection_serializer = CollectionIngredientSerializer(collection_ingredients, many=True)
         custom_collection_serializer = CustomCollectionIngredientSerializer(custom_collection_ingredients, many=True)
         combined_data = list(chain(collection_serializer.data, custom_collection_serializer.data))
-        sorted_data = sorted(combined_data, key=lambda x: x['common_name'])
 
-        result_page = paginator.paginate_queryset(sorted_data, request)
+        result_page = paginator.paginate_queryset(combined_data, request)
         return paginator.get_paginated_response(result_page)
 
     # this is the browse functionality

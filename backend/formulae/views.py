@@ -111,6 +111,13 @@ class FormulaAsCustomIngredientAPI(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         formula_id = self.kwargs.get('formula_id')
+        common_name = self.request.data.get('name')
+        description = self.request.data.get('description')
+        user_id = self.kwargs.get('user_id')
+        # Get the user object
+        user = User.objects.get(id=user_id)
+        # Set the user field before saving the object
+
 
         try:
             formula = Formula.objects.get(id=formula_id)
@@ -123,22 +130,17 @@ class FormulaAsCustomIngredientAPI(generics.CreateAPIView):
             raise ValidationError("A relationship between this formula and a custom ingredient already exists")
 
         # Create the CustomCollectionIngredient instance
-        custom_ingredient = CustomCollectionIngredient.objects.create(
-            common_name=formula.name,
+        serializer.save(
+            _common_name=common_name,
             amount=0,
             unit='g',
-            user=formula.user,
+            user=user,
             date_added=timezone.now(),
-            use=formula.description,
-            cas='BASE',
+            _use=description,
+            _cas='BASE',
+            content_type=ContentType.objects.get_for_model(Formula),
+            object_id=formula_id
         )
-
-        # Set the content type and object id fields for the generic relationship
-        custom_ingredient.content_type = ContentType.objects.get_for_model(Formula)
-        custom_ingredient.object_id = formula.id
-
-        # Save the CustomCollectionIngredient instance
-        custom_ingredient.save()
 
 
 class FormulaTagAPI(generics.RetrieveUpdateAPIView):

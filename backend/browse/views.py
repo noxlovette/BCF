@@ -1,12 +1,11 @@
-from .models import Ingredient, SuggestedIngredient
+from .models import Ingredient, SuggestedIngredient, Descriptor
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
-from .serialisers import IngredientSerialiser, SuggestedIngredientSerialiser
+from .serialisers import IngredientSerialiser, SuggestedIngredientSerialiser, DescriptorSerialiser
 from rest_framework import generics
 from django.contrib.auth.models import User
-
 
 
 class BrowseView(APIView):
@@ -18,13 +17,22 @@ class BrowseView(APIView):
         # get the search term from the query string
         search_term = request.query_params.get('search', None)
         page_size = request.query_params.get('page_size', 10)
+        descriptors = request.query_params.getlist('descriptors', None)
 
-        # Get all ingredients
+
         ingredients = Ingredient.objects.filter(
             Q(common_name__icontains=search_term) |
             Q(other_names__icontains=search_term) |
             Q(cas__icontains=search_term)
         ).order_by('common_name')
+
+        if descriptors:
+            # Apply filter using the list of descriptors
+            ingredients = ingredients.filter(
+                Q(descriptor1__name__in=descriptors) |
+                Q(descriptor2__name__in=descriptors) |
+                Q(descriptor3__name__in=descriptors)
+            ).distinct()
 
         # Create a paginator
         paginator = CustomPageNumberPagination()  # Use the custom pagination class
@@ -73,4 +81,11 @@ class SuggestedIngredientListView(generics.RetrieveAPIView):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
+
+class DescriptorsListAPIView(generics.ListAPIView):
+    """
+    This view returns a list of all descriptors in the database
+    """
+    queryset = Descriptor.objects.all()
+    serializer_class = DescriptorSerialiser
 # Path: browse/urls.py
