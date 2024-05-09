@@ -86,7 +86,6 @@ export async function fetchIngredients(currentPage: number, searchTerm = "", pag
   }
   }
 
-// Function to fetch ingredient details from Django API
 export async function addToCollection(ingredientId: number, userId: any) {
   try {
     const endpoint = `${BASE_URL}/collection/api/collection/${userId}/`;
@@ -173,6 +172,7 @@ export async function createCustomIngredient(body: any, userId: any) {
   const endpoint = `${BASE_URL}/collection/api/ingredient/${userId}/new/`;
     const response = await fetchDataFromDjango(endpoint, "POST", body);
     console.log("Custom ingredient creation response from Django:", response);
+    fetchCollection(userId, { forceReload: true });
     return response;
   } catch (error) {
     console.error("Error creating custom ingredient:", error);
@@ -234,9 +234,9 @@ export async function saveEditedIngredient(ingredientToSave: any, userId: any) {
     // Define the URL for the PUT request
     let endpoint: string;
     if (ingredientToSave.type === "CollectionIngredient") {
-      endpoint = `http://localhost:8000/collection/api/ingredient/${userId}/${ingredientToSave.id}/update/`;
+      endpoint = `${BASE_URL}/collection/api/ingredient/${userId}/${ingredientToSave.id}/update/`;
     } else if (ingredientToSave.type === "CustomCollectionIngredient") {
-      endpoint = `http://localhost:8000/collection/api/ingredient/${userId}/custom/${ingredientToSave.id}/update/`;
+      endpoint = `${BASE_URL}/collection/api/ingredient/${userId}/custom/${ingredientToSave.id}/update/`;
     }
 
     // Make the PUT request to the Django API
@@ -296,7 +296,7 @@ export async function addFormulaAsCustomIngredient(userId:any, formula:any) {
     associations: '',
     colour: '',
   };
-  let url = `http://localhost:8000/formulae/api/formula/${userId}/${formula.id}/add_as_custom/`;
+  let url = `${BASE_URL}/formulae/api/formula/${userId}/${formula.id}/add_as_custom/`;
 
   try {
     // Assuming fetchDataFromDjango is a function that handles the fetch API call
@@ -316,8 +316,11 @@ export async function addFormulaAsCustomIngredient(userId:any, formula:any) {
 }
 
 export async function saveChangesFormula (userId, formData, editedFormulaId) {
-  let url = `http://localhost:8000/formulae/api/formula/${userId}/${editedFormulaId}/`;
+  let url = `${BASE_URL}/formulae/api/formula/${userId}/${editedFormulaId}/`;
   let data = await fetchDataFromDjango(url, "PUT", formData);
+  const cacheKey = `formula-${userId}-${editedFormulaId}`;
+  sessionStorage.setItem(cacheKey, JSON.stringify(data));
+  fetchFormulaeApi(userId, { forceReload: true });
   return data;
 }
 
@@ -329,40 +332,66 @@ export async function createFormulaAPI (userId) {
     ingredients: [],
     user: userId,
   };
-  let url = `http://localhost:8000/formulae/api/formula/${userId}/new/`;
+  let url = `${BASE_URL}/formulae/api/formula/${userId}/new/`;
   let data = await fetchDataFromDjango(url, "POST", formData);
   return data;
 }
 
-export async function populateApiDropdown (userId, query) {
-  let url = `http://localhost:8000/collection/api/collection/${userId}/?page=1&search=${query}&page_size=5`;
-  let data = await fetchDataFromDjango(url, "GET");
-  console.log("server-side", data);
-  return data;
-}
-
 export async function deleteFormulaAPI (userId, formulaId) {
-  let url = `http://localhost:8000/formulae/api/formula/${userId}/${formulaId}/delete/`;
+  let url = `${BASE_URL}/formulae/api/formula/${userId}/${formulaId}/delete/`;
   let data = await fetchDataFromDjango(url, "DELETE");
   return data;
 }
 
 export async function deleteIngredientApi (userId, ingredientId) {
-  let url = `http://localhost:8000/formulae/api/ingredient/${userId}/${ingredientId}/delete/`;
+  let url = `${BASE_URL}/formulae/api/ingredient/${userId}/${ingredientId}/delete/`;
   let data = await fetchDataFromDjango(url, "DELETE");
   return data;
 }
 
-export async function fetchFormulaeApi(userId) {
-  console.log("Fetching formulae");
-  let url = `http://localhost:8000/formulae/api/formula/${userId}/list/`;
-  const data = await fetchDataFromDjango(url);
-  console.log(data);
-  return data;
+export async function fetchFormulaeApi(userId, {forceReload = false} = {}) {
+  const cacheKey = `formulae-${userId}`;
+  let data = forceReload ? null : sessionStorage.getItem(cacheKey);
+  if (data) {
+    console.log("formulae from cache:", data);
+    return JSON.parse(data);
+  } else {
+    try {
+      console.log("Fetching formulae");
+      const endpoint = `${BASE_URL}/formulae/api/formula/${userId}/list/`;
+      const data = await fetchDataFromDjango(endpoint);
+      sessionStorage.setItem(cacheKey, JSON.stringify(data));
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching data from Django:", error);
+      return {
+        error: "Failed to fetch formulae data",
+      };
+    
+  }
+}
 }
 
-export async function fetchFormulaApi(userId, formulaId) {
-  let url = `http://localhost:8000/formulae/api/formula/${userId}/${formulaId}/`;
-  const data = await fetchDataFromDjango(url);
-  return data;
+export async function fetchFormulaApi(userId, formulaId, {forceReload = false} = {}) {
+  const cacheKey = `formula-${userId}-${formulaId}`;
+  let data = forceReload ? null : sessionStorage.getItem(cacheKey);
+  if (data) {
+    console.log("formula from cache:", data);
+    return JSON.parse(data);
+  } else {
+    try {
+      console.log("Fetching formula");
+      const endpoint = `${BASE_URL}/formulae/api/formula/${userId}/${formulaId}/`;
+      const data = await fetchDataFromDjango(endpoint);
+      sessionStorage.setItem(cacheKey, JSON.stringify(data));
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching data from Django:", error);
+      return {
+        error: "Failed to fetch formula data",
+      };
+  }
+  }
 }

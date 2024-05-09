@@ -8,6 +8,7 @@
   import { goto } from '$app/navigation';
   import {blur} from 'svelte/transition';
   import { browser } from '$app/environment';
+  import Loader from "$lib/components/Loader.svelte";
 
 
   export let collection = [];
@@ -23,6 +24,8 @@
   let editingRowId = null;
   let isModalVisible = false;
   let filteredCollection = [];
+  let startIndex = 0;
+  let paginatedCollection = [];
   let initialVisibleFields = [
   { name: "common_name", visible: true },
   { name: "cas", visible: false },
@@ -258,13 +261,19 @@ const searchCollection = () => {
 };
   
 
-$:{
-  console.log('Current page:', $currentPage);
-  console.log('Page size:', $pageSize);
-  console.log('Search term:', $searchTerm);
-  console.log('collection', collection);
-  console.log("filtered collection", filteredCollection);
+// Compute the start index for slicing the array based on the current page and page size
+$: {
+
+  startIndex = ($currentPage - 1) * $pageSize;
+  console.log('current page -1', $currentPage - 1);
+  console.log('Start index:', startIndex);
 }
+
+$: {
+  paginatedCollection = filteredCollection.slice(startIndex, startIndex + $pageSize);
+  console.log('Paginated collection:', paginatedCollection);
+}
+
 
 onMount( async () => {
     let is_authenticated = sessionStorage.getItem("is_authenticated");
@@ -276,6 +285,7 @@ onMount( async () => {
       currentPage.set((parseInt(sessionStorage.getItem('currentPageCollect')) || 1));
     pageSize.set((parseInt(localStorage.getItem('pageSizeCollect')) || 10));
     searchTerm.set((sessionStorage.getItem('searchTermCollect') || ""));
+    visibleFields.set(JSON.parse(sessionStorage.getItem('visibleFieldsCollect')) || initialVisibleFields);
     }
     
     console.log('Current page when the page loaded:', $currentPage);
@@ -297,6 +307,11 @@ onMount( async () => {
 
     searchTerm.subscribe(value => {
         sessionStorage.setItem('searchTermCollect', value);
+    });
+
+    visibleFields.subscribe(value => {
+      console.log('VisibleFieldsCollect:', value);
+      sessionStorage.setItem('visibleFieldsCollect', JSON.stringify(value));
     });
   });
 
@@ -411,7 +426,7 @@ onMount( async () => {
 
 <div id="table-wrapper" class="flex flex-row ml-6 mr-6 mt-0 p-2 overflow-x-auto overflow-y-auto text-sm items-center">
 {#if isLoading}
-<div id="spinner" class="flex size-16 border-4 m-10 border-rose-400 border-dotted rounded-full animate-spin" />
+<Loader colour="rose" />
 {:else if collection.error}
           <!-- If there is an error fetching data, display the error message -->
           <p>{collection.error}</p>
@@ -423,15 +438,15 @@ onMount( async () => {
   </svg>
 </button>
   
-  {:else}
-  <button class="pl-2"on:click={changePage(currentPage-1)}>
+{:else if filteredCollection.length !== 0}
+  <button class="pl-2"on:click={changePage($currentPage-1)}>
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:-transtone-x-2 duration-300">
       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
     </svg>
   </button>
   {/if}
     
-  <div id="table bg" class="shadow rounded-lg p-4 mt-4 flex bg-gradient-to-br from-rose-300/10 to-rose-500/10"
+  <div id="table bg" class="shadow rounded-lg p-4 mt-4 flex items-center flex-col bg-gradient-to-br from-rose-300/10 to-rose-500/10"
 
   transition:blur={{duration:150}}
   >
@@ -471,8 +486,15 @@ onMount( async () => {
     
   </thead>
   
+
+
   <tbody class="text-center divide-y-4 divide-double divide-rose-900/30 dark:divide-rose-200/20 rounded-lg">
-  {#each filteredCollection as ingredient}
+    
+      
+          
+
+  
+  {#each paginatedCollection as ingredient}
     <tr on:dblclick={() => toggleEdit(ingredient)} class="hover:bg-green-700/10 dark:hover:bg-green-300/10 divide-x-4 divide-double divide-green-900/10 dark:divide-green-200/10 transition-all duration-300">
 
       {#each $visibleFields as field, index}
@@ -504,9 +526,22 @@ onMount( async () => {
 
     </tr>
   {/each}
-  </tbody>
+  
+</tbody>
 
   </table>
+  {#if filteredCollection.length === 0}
+  <div class="flex justify-center items-center w-full m-20 text-2xl tracking-widest font-light text-center">
+    <p class="flex items-center justify-center gap-2.5"> <!-- Added gap for spacing between text and SVG -->
+        no ingredients found
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 16.318A4.486 4.486 0 0 0 12.016 15a4.486 4.486 0 0 0-3.198 1.318M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
+        </svg>
+    </p>
+</div>
+
+
+  {/if}  
   
 </div>
 
@@ -520,10 +555,10 @@ onMount( async () => {
   
 </button>
 
-  {:else}
+  {:else if filteredCollection.length !== 0}
   <button class="pr-2" 
   
-  on:click={changePage(currentPage+1)}>
+  on:click={changePage($currentPage+1)}>
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:transtone-x-2 duration-300">
       <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
     </svg>

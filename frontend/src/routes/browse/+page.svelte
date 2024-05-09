@@ -9,6 +9,7 @@
   import { writable } from "svelte/store";
   import {fade} from "svelte/transition";
   import {blur} from "svelte/transition";
+  import Loader from "$lib/components/Loader.svelte";
 
   export let data;
   export let currentPage = writable();
@@ -98,8 +99,20 @@ async function fetchWithDescriptors() {
         } else {
             searchInput.focus();  // Otherwise, set the focus on the searchInput
         }
-    }
+    } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        changePage(- 1);
+    } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        changePage(+ 1);
+    } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        changePage(- 1);
+    } else if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        changePage(+ 1);
 }
+  }
 
   async function load() {
     return await fetchIngredients($currentPage, $searchTerm, $pageSize, chosenDescriptors);
@@ -355,8 +368,7 @@ async function handleAddIngredient(ingredientId) {
         
         {#if isLoading}
           <!-- If isLoading is true, display a loading message -->
-          <div id="spinner" class="flex loader size-16 m-10 border-4 border-sky-400 border-dotted rounded-full animate-spin" />
-    
+          <Loader colour="sky" />
     
           {:else if data.error}
           <!-- If there is an error fetching data, display the error message -->
@@ -432,7 +444,7 @@ async function handleAddIngredient(ingredientId) {
                     </div>
                   </th>
                   {:else if header.visible}
-                  <th class="max-w-fit">{header.name}</th>
+                  <th class="max-w-fit">{header.name.replace(/_/g, ' ')}</th>
                 {/if}
               {/each}
               </tr>

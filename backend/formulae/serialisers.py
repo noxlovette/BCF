@@ -2,6 +2,7 @@ from rest_framework import serializers, generics
 
 from collection.models import CollectionIngredient, CustomCollectionIngredient
 from formulae.models import FormulaIngredient, Formula, Tag
+from main_project.utils import decrypt_field
 
 
 class DateTimeSerializer(serializers.DateTimeField):
@@ -29,10 +30,19 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
     collection_ingredient_type = serializers.SerializerMethodField()
     percentage = serializers.FloatField(allow_null=True)
 
+    def prepare_for_serialization(self, obj):
+        if obj.custom_collection_ingredient:
+            obj.custom_collection_ingredient._common_name = decrypt_field(obj.custom_collection_ingredient.encrypted_common_name) if obj.custom_collection_ingredient.encrypted_common_name else None
+            obj.custom_collection_ingredient._cas = decrypt_field(obj.custom_collection_ingredient.encrypted_cas) if obj.custom_collection_ingredient.encrypted_cas else None
+            obj.custom_collection_ingredient._use = decrypt_field(obj.custom_collection_ingredient.encrypted_use) if obj.custom_collection_ingredient.encrypted_use else None
+            obj.custom_collection_ingredient._volatility = decrypt_field(obj.custom_collection_ingredient.encrypted_volatility) if obj.custom_collection_ingredient.encrypted_volatility else None
+
     def get_ingredient(self, obj):
         """
         Return the common name of the ingredient.
         """
+        self.prepare_for_serialization(obj)
+
         if obj.collection_ingredient:
             return obj.collection_ingredient.ingredient.common_name
         elif obj.custom_collection_ingredient:
@@ -43,6 +53,7 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
         """
         Return the CAS number of the ingredient.
         """
+        self.prepare_for_serialization(obj)
         if obj.collection_ingredient:
             return obj.collection_ingredient.ingredient.cas
         elif obj.custom_collection_ingredient:
@@ -53,6 +64,7 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
         """
         Return the volatility of the ingredient.
         """
+        self.prepare_for_serialization(obj)
         if obj.collection_ingredient:
             return obj.collection_ingredient.ingredient.volatility
         elif obj.custom_collection_ingredient:
@@ -63,6 +75,7 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
         """
         Return the use of the ingredient.
         """
+        self.prepare_for_serialization(obj)
         if obj.collection_ingredient:
             return obj.collection_ingredient.ingredient.use
         elif obj.custom_collection_ingredient:

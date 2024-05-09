@@ -6,6 +6,7 @@
   import { fade } from "svelte/transition";
   import { scale } from "svelte/transition";
   import { quintOut } from "svelte/easing";
+  import { fetchCollection } from "$lib/DjangoAPI.ts";
 
   let username = "";
   let password = "";
@@ -22,6 +23,7 @@
         console.error("Server responded with an error:", data.error);
         notification.set("Login failed...")
       } else {
+        fetchCollection(data.user_id);
         sessionStorage.setItem("user_id", data.user_id);
         sessionStorage.setItem("username", data.username);
         sessionStorage.setItem("is_authenticated", data.is_authenticated);
