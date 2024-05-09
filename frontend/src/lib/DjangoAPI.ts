@@ -92,6 +92,7 @@ export async function addToCollection(ingredientId: number, userId: any) {
     const endpoint = `${BASE_URL}/collection/api/collection/${userId}/`;
     const body = { user_id: userId, ingredient_id: ingredientId };
     const response = await fetchDataFromDjango(endpoint, "POST", body);
+    fetchCollection(userId, { forceReload: true });
 
     if (response.success) {
       return "ingredient successfully added to collection!";
@@ -123,18 +124,17 @@ export async function addSuggestion(body: any) {
   }
 }
 
-export async function fetchCollection(userId: any, currentPage: number, searchTerm = "", pageSize = 10, { forceReload = false } = {}) {
-  const cacheKey = `collection-${userId}-${currentPage}-${searchTerm}-${pageSize}`;
-  let data = forceReload ? null : localStorage.getItem(cacheKey);
+export async function fetchCollection(userId: any, { forceReload = false } = {}) {
+  const cacheKey = `collection-${userId}`;
+  let data = forceReload ? null : sessionStorage.getItem(cacheKey);
   if (data) {
-    console.log("collection data from cache:", data);
     return JSON.parse(data);
   } else {
     try {
-      const endpoint = `${BASE_URL}/collection/api/collection/${userId}/?page=${currentPage}&search=${searchTerm}&page_size=${pageSize}`;
+      const endpoint = `${BASE_URL}/collection/api/collection/${userId}/`;
       const data = await fetchDataFromDjango(endpoint);
       console.log("collection data from Django:", data);
-      localStorage.setItem(cacheKey, JSON.stringify(data));
+      sessionStorage.setItem(cacheKey, JSON.stringify(data));
       return data;
     } catch (error) {
       console.error("Error fetching data from Django:", error);

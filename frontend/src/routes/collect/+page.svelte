@@ -10,7 +10,7 @@
   import { browser } from '$app/environment';
 
 
-  export let data;
+  export let collection = [];
   let userId = 0;
   let pageSize = writable(10);
   let currentPage = writable(1);
@@ -22,6 +22,7 @@
   let editingObject = null;
   let editingRowId = null;
   let isModalVisible = false;
+  let filteredCollection = [];
   let initialVisibleFields = [
   { name: "common_name", visible: true },
   { name: "cas", visible: false },
@@ -39,31 +40,28 @@
   //fetch logic
   //TODO error handing for handleFetch
   async function handleFetch(forceReload = false) {
-    data = await fetchCollection(userId, $currentPage, $searchTerm, $pageSize, { forceReload: forceReload });
-    isLoading = false;
+    const data = await fetchCollection(userId, { forceReload: forceReload });
     return data;
   }
 
   async function reset() {
     searchTerm.set("");
     currentPage.set(1);
-    goto(`/collect?page=$${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
-    data = await handleFetch(true);
+    goto(`/collect?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
+    collection = await handleFetch(true);
     }
 
   // pagination logic, pagesize logic
 async function updatePageSize() {
-    currentPage = 1;
-    goto(`/collect?page=$${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
-    data = await handleFetch(); 
+    currentPage.set(1);
+    goto(`/collect?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
 }
   
 async function changePage(newPage) {
-    if (newPage >= 1 && newPage <= data.total_pages) {
+    if (newPage >= 1 && newPage <= Math.ceil(filteredCollection.length / $pageSize)) {
       currentPage.set(newPage);
       notification.set(`you are on page ${$currentPage}`);
-      goto(`/collect?page=$${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
-      data = await handleFetch();
+      goto(`/collect?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
     }
     else {
       notification.set(`there is nothing to seek there`);
@@ -72,8 +70,10 @@ async function changePage(newPage) {
     
 // search functionality
 async function handleSearch(event) {
-    if (event.key === 'Enter') {
-      searchIngredients();
+    if (event.key === 'Escape') {
+      searchTerm.set("");
+      searchInput.blur();
+
     } else if (event.key === 'Escape') {
       searchTerm.set("");
       searchInput.blur();
@@ -88,8 +88,7 @@ async function searchIngredients() {
     } else {
       notification.set(`Searching for ${$searchTerm}...`);
     }
-    goto(`/collect?page=$${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
-    data = await handleFetch();
+    goto(`/collect?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
   }
 
 // delete ingredient, custom or otherwise
@@ -101,7 +100,7 @@ async function searchIngredients() {
         console.log("response:", response);
         notification.set(response);
         editingRowId = null;
-        data = await handleFetch(true);
+        collection = await handleFetch(true);
 }
 
 // editing functionality
@@ -137,7 +136,8 @@ async function saveEdit(ingredientToSave) {
     const response = await saveEditedIngredient(ingredientToSave, userId);
     console.log("Response:", response);
     toggleEdit(ingredientToSave);
-    data = await handleFetch(true);
+    collection = await handleFetch(true);
+
   } catch (error) {
     console.error("Error saving edited ingredient:", error);
   }
@@ -156,16 +156,35 @@ function handleKeydown(event) {
       }
     } else if (event.key === '/') {
         event.preventDefault();  // Prevents the default action associated with the '/' key
-
         // Toggle focus
         if (document.activeElement === searchInput) {
             searchInput.blur();  // If the searchInput is already focused, unfocus it
         } else {
             searchInput.focus();  // Otherwise, set the focus on the searchInput
         }
+    } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        changePage($currentPage - 1);
+    } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        changePage($currentPage + 1);
+    } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        changePage($currentPage - 1);
+    } else if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        changePage($currentPage + 1);
+    } else if (event.key === 'Escape') {
+      if (document.activeElement === searchInput) {
+        searchTerm.set('')
+        searchCollection();
+        searchInput.blur();
+      } else {
+        event.preventDefault();
+        reset();
     }
   }
-
+}
 
   // logic for creating a custom ingredient
 function toggleModal() {
@@ -225,7 +244,29 @@ function toggleFieldVisibility(field) {
   console.log('After toggle:', field, $visibleFields); // log the state after the toggle
 }
 
-onMount(() => {
+
+const searchCollection = () => {
+  console.log("changed value search collection", $searchTerm);
+  filteredCollection = collection.filter(ingredient => {
+    const commonName = ingredient.common_name || '';
+    const cas = ingredient.cas || '';
+    console.log(commonName, cas)
+    return commonName.toLowerCase().includes($searchTerm.toLowerCase()) ||
+           cas.toLowerCase().includes($searchTerm.toLowerCase());
+  });
+  return filteredCollection;
+};
+  
+
+$:{
+  console.log('Current page:', $currentPage);
+  console.log('Page size:', $pageSize);
+  console.log('Search term:', $searchTerm);
+  console.log('collection', collection);
+  console.log("filtered collection", filteredCollection);
+}
+
+onMount( async () => {
     let is_authenticated = sessionStorage.getItem("is_authenticated");
     if (is_authenticated === "false" || is_authenticated === null) {
       window.location.href = "/auth/login";
@@ -239,7 +280,12 @@ onMount(() => {
     
     console.log('Current page when the page loaded:', $currentPage);
 
-    data = handleFetch();
+    collection = await handleFetch();
+    if (collection) {
+      isLoading = false;
+    }
+    filteredCollection = collection;
+    console.log('Filtered collection:', filteredCollection);
 
     currentPage.subscribe(value => {
         sessionStorage.setItem('currentPageCollect', value);
@@ -304,7 +350,7 @@ onMount(() => {
         class = "flex w-full p-2 bg-white/20 border-none dark:bg-black/20 shadow rounded-lg focus:ring-2 focus:ring-green-700/70 focus:border-green-900/70 focus:scale-95 transition-all"
         bind:value={$searchTerm}
         bind:this = {searchInput}
-        on:keydown={handleSearch}
+        on:input = {searchCollection}
         placeholder="/ search..."
         title="find an ingredient by CAS or the multiple names that it has"
       />
@@ -366,9 +412,9 @@ onMount(() => {
 <div id="table-wrapper" class="flex flex-row ml-6 mr-6 mt-0 p-2 overflow-x-auto overflow-y-auto text-sm items-center">
 {#if isLoading}
 <div id="spinner" class="flex size-16 border-4 m-10 border-rose-400 border-dotted rounded-full animate-spin" />
-{:else if data.error}
+{:else if collection.error}
           <!-- If there is an error fetching data, display the error message -->
-          <p>{data.error}</p>
+          <p>{collection.error}</p>
         {:else}
   {#if editingRowId !== null}
 <button class="pl-2"on:click={saveEdit(editingObject)}>
@@ -426,7 +472,7 @@ onMount(() => {
   </thead>
   
   <tbody class="text-center divide-y-4 divide-double divide-rose-900/30 dark:divide-rose-200/20 rounded-lg">
-  {#each data.results as ingredient}
+  {#each filteredCollection as ingredient}
     <tr on:dblclick={() => toggleEdit(ingredient)} class="hover:bg-green-700/10 dark:hover:bg-green-300/10 divide-x-4 divide-double divide-green-900/10 dark:divide-green-200/10 transition-all duration-300">
 
       {#each $visibleFields as field, index}

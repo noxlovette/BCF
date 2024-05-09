@@ -17,11 +17,11 @@
   if (typeof window !== "undefined") {
     userId = window.sessionStorage.getItem("user_id");
   }
-  let ingredientCounter = 0; // Add this line
+  let ingredientCounter = 0; 
   // dropdown functionality
   let text = "";
   let dropdownItems = writable([]);
-  let activeIngredient = writable(null); // Add this line
+  let activeIngredient = writable(null);
   let cleanup = () => {};
 
   async function fetchFormulae() {

@@ -121,33 +121,14 @@ class CollectionAPI(APIView):
         if not user:
             return JsonResponse({'error': 'user not logged in'}, status=400)
 
-        search_param = request.query_params.get('search', None)
         collection_ingredients = CollectionIngredient.objects.filter(user=user).order_by('ingredient__common_name')
         custom_collection_ingredients = CustomCollectionIngredient.objects.filter(user=user)
-
-        if search_param:
-            collection_ingredients = collection_ingredients.filter(
-                Q(ingredient__common_name__icontains=search_param) |
-                Q(ingredient__other_names__icontains=search_param) |
-                Q(ingredient__cas__icontains=search_param)
-            ).order_by('ingredient__common_name')
 
         # Prepare data for serialization
         for ingredient in collection_ingredients:
             ingredient.prepare_for_serialization()
         for custom_ingredient in custom_collection_ingredients:
             custom_ingredient.prepare_for_serialization()
-
-        if search_param:
-            # Filter custom_collection_ingredients in Python based on transient attributes
-            try:
-                custom_collection_ingredients = [
-                    ci for ci in custom_collection_ingredients
-                    if search_param.lower() in ci._common_name.lower()
-                       or search_param.lower() in ci._cas.lower()
-                ]
-            except AttributeError:
-                pass
 
         return collection_ingredients, custom_collection_ingredients
 
@@ -160,15 +141,11 @@ class CollectionAPI(APIView):
         for custom_ingredient in custom_collection_ingredients:
             custom_ingredient.prepare_for_serialization()
 
-        paginator = CustomPageNumberPagination()
-        paginator.page_size = request.query_params.get('page_size', paginator.page_size)
-
         collection_serializer = CollectionIngredientSerializer(collection_ingredients, many=True)
         custom_collection_serializer = CustomCollectionIngredientSerializer(custom_collection_ingredients, many=True)
         combined_data = list(chain(collection_serializer.data, custom_collection_serializer.data))
 
-        result_page = paginator.paginate_queryset(combined_data, request)
-        return paginator.get_paginated_response(result_page)
+        return JsonResponse(combined_data, safe=False)
 
     # this is the browse functionality
     def post(self, request, user_id):
