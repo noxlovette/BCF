@@ -1,47 +1,42 @@
 <script>
   import { goto } from "$app/navigation";
   import { logIn } from "$lib/DjangoAPI.ts";
-  import Header from "$lib/components/Header.svelte";
-  import { writable } from "svelte/store";
-  import { fade } from "svelte/transition";
-  import { scale } from "svelte/transition";
+  import {scale, fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import { fetchCollection } from "$lib/DjangoAPI.ts";
+  import Header from "$lib/components/Header.svelte";
+  import { writable } from "svelte/store";
 
   let username = "";
   let password = "";
   let notification = writable("");
 
-  const handleSubmit = async () => {
-    try {
-      let body = {
-        username: username,
-        password: password,
-      };
-      const data = await logIn(body);
-      if (data.error) {
-        console.error("Server responded with an error:", data.error);
-        notification.set("Login failed...")
-      } else {
-        fetchCollection(data.user_id);
-        sessionStorage.setItem("user_id", data.user_id);
-        sessionStorage.setItem("username", data.username);
-        sessionStorage.setItem("is_authenticated", data.is_authenticated);
-        notification.set("Login successful!")
-        goto("/collect/");
-      }
-    } catch (error) {
-      console.error("Failed to fetch:", error);
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // prevent form from submitting the traditional way
+    const body = { username, password };
+    const data = await logIn(body);
+    if (data.error) {
+      console.error("Server responded with an error:", data.error);
+      notification.set(data.error);
+    } else {
+      // Process success scenario
+      fetchCollection(data.user_id);
+      sessionStorage.setItem("user_id", data.user_id);
+      sessionStorage.setItem("username", data.username);
+      sessionStorage.setItem("is_authenticated", 'true');
+      notification.set("Login successful!");
+      goto("/collect/");
     }
   };
 </script>
+
 
 <Header currentPage="login" notification={notification}/>
 
 <main class="lowercase">
   
   <div id = "authentification" class="flex flex-col items-center m-10">
-    <h1 class="flex font-light text-6xl"
+    <h1 class="flex font-light tracking-tighter text-6xl"
     in:scale={{
       duration: 500,
       opacity: 0.5,
@@ -67,7 +62,6 @@
       
       
     </form>
-
 
   </div>
   

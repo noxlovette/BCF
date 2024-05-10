@@ -80,10 +80,10 @@
     // Create a new ingredient object
     let newIngredient = {
       id: `new-${ingredientCounter}`, // Use the counter to generate a unique id
-      ingredient: "Something new", // Set the initial ingredient to an empty string
+      ingredient: "", // Set the initial ingredient to an empty string
       volatility: "", // Set the initial volatility to an empty string
       amount: 0, // Set the initial amount to 0
-      percentage: 100, // Set the initial percentage to 0
+      percentage: 10, // Set the initial percentage to 0
     };
 
     // Push the new ingredient to the editedFormula.ingredients array
@@ -93,6 +93,8 @@
     editedFormula.ingredients = [...editedFormula.ingredients];
 
     ingredientCounter++; // Increment the counter
+
+    activeEditId = newIngredient.id; // Set the active edit ID to the new ingredient ID
   }
 
 </script>
@@ -109,12 +111,12 @@
       </div>
       
     <div id="controls" class="pt-4">
-      <button class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110" on:click={saveChanges}>
+      <button tabindex="-1" class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110" on:click={saveChanges}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-950/60 dark:hover:text-amber-400/60">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         </svg>
       </button>
-      <button class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110"
+      <button tabindex="-1" class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110"
         on:click={() => {
           editing = false;
           editedFormula = null;
@@ -146,7 +148,7 @@
         {#each editedFormula.ingredients as ingredient, i (ingredient.id)}
         <tr class="">
           <td class="align-middle">
-            <button class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110" on:click={() => deleteIngredient(ingredient.id)}
+            <button tabindex="-1" class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110" on:click={() => deleteIngredient(ingredient.id)}
               ><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-300/60">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
               </svg>
@@ -157,7 +159,7 @@
             {#if activeEditId === ingredient.id}
             <Dropdown bind:selectedIngredient={ingredient} {userId} searchTerm={ingredient.ingredient}/>
           {:else}
-            <button on:click={() => toggleEdit(ingredient.id)}>{ingredient.ingredient}</button>
+            <button tabindex="-1" on:click={() => toggleEdit(ingredient.id)}>{ingredient.ingredient}</button>
           {/if}
           </td>
 
@@ -176,7 +178,7 @@
         
       {/if}
       <td>
-        <button on:click={addIngredient}>
+        <button tabindex="-1" on:click={addIngredient}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>

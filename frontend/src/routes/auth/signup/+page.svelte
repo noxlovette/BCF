@@ -20,7 +20,7 @@
     let allValid = false;
     let confirmPassword = '';
 
-    function check() {
+    function checkPassword() {
         validLength =(password.length >= 8);
         validCase = password.toUpperCase() != password && password.toLowerCase() != password;
         validSpecial = password.replaceAll(/\w/g, "").length > 0;
@@ -36,7 +36,7 @@
     }
     
 
-    $: check(password);
+    $: checkPassword(password);
     $: checkEmail(email);
     $: passwordsMatch(password, confirmPassword);
     $: allValid = validLength && validCase && validSpecial && validEmail && validDuplicate && agreeTerms;
@@ -73,7 +73,7 @@
 
 <main class = "lowercase">
     <div id = "authentification" class="flex flex-col items-center justify-center m-10">
-        <h1 class="flex font-light text-6xl"
+        <h1 class="flex font-light text-6xl tracking-tighter"
         in:scale={{
             duration: 500,
             opacity: 0.5,

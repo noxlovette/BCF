@@ -77,17 +77,17 @@ function stopNotificationInterval() {
 </script>
 <div class="flex flex-col min-h-screen mb-auto transition-opacity" style="background: url('/assets/bg/bbblurry-main.svg') no-repeat center center fixed; background-size: cover;">
 
-<Header 
+  <Header 
     currentPage="home" 
-    notification = {notification}  
-    />
+    notification={notification}  
+  />
     
-  <div id="hero" class="flex flex-auto items-center m-10 p-2">
+  <div class="flex flex-auto items-center justify-center m-10 p-2"> <!-- Added justify-center -->
     <div class="flex space-x-4 ml-10 mb-40 text-left">
       {#if isMounted}
 
         <h1
-          class="text-9xl font-thin tracking-widest"
+          class="text-9xl font-thin tracking-tighter"
           transition:scale={{
             duration: 500,
             delay: 0,
@@ -99,36 +99,35 @@ function stopNotificationInterval() {
           PERFUMERY
         </h1>
 
-        <div id = "right side" class="flex flex-col">
+        <div id="right side" class="flex flex-col">
           <h2
-          class="text-3xl font-thin tracking-normal mt-2 text-stone-600/60 dark:text-stone-100/60"
-          transition:fade={{
-            duration: 500,
-            delay: 1000,
+            class="text-3xl font-thin tracking-normal mt-2 text-stone-600/60 dark:text-stone-100/60"
+            transition:fade={{
+              duration: 500,
+              delay: 1000,
+              easing: quintOut,
+            }}
+          >
+            nothing else.
+          </h2>
 
-            easing: quintOut,
-          }}
-        >nothing else.
-        </h2>
-
-        <div
-        id="buttons"
-        class="mt-auto flex flex-row items-center justify-center *:m-2 *:p-2 *:ml-0 *:pl-0 font-light"
-        transition:fade={{duration: 500, delay: 2500, easing: quintOut,}}>
-        <a href="/browse"class="button hover:text-sky-300/80 transition-all" >browse</a>
-        <a href="/collect" class="button hover:text-pink-400/80 transition-all" >collect</a>
-        <a href="/formulate" class="button hover:text-lime-500/80 transition-all" >formulate</a>
-      </div>
+          <div
+            id="buttons"
+            class="mt-auto flex flex-row items-center justify-center *:m-2 *:p-2 *:ml-0 *:pl-0 font-light"
+            transition:fade={{duration: 500, delay: 2500, easing: quintOut,}}
+          >
+            <a href="/browse" class="button hover:text-sky-300/80 transition-all">browse</a>
+            <a href="/collect" class="button hover:text-pink-400/80 transition-all">collect</a>
+            <a href="/formulate" class="button hover:text-lime-500/80 transition-all">formulate</a>
+          </div>
         </div>
 
-        
       {/if}
     </div>
   </div>
-  <Footer />
-  </div>
   
-
+  <Footer />
+</div>
 
 
 

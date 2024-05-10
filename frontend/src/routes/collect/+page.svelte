@@ -147,47 +147,64 @@ async function saveEdit(ingredientToSave) {
 }
 
 function handleKeydown(event) {
-    if (isEditing) {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        console.log("enter key pressed")
-        saveEdit(editingObject);
-      } else if (event.key === "Escape") {
-        event.preventDefault();
-        console.log("Escape key pressed")
-        toggleEdit(editingObject); // Assuming you want to clear the editing state
-      }
-    } else if (event.key === '/') {
-        event.preventDefault();  // Prevents the default action associated with the '/' key
-        // Toggle focus
-        if (document.activeElement === searchInput) {
-            searchInput.blur();  // If the searchInput is already focused, unfocus it
-        } else {
-            searchInput.focus();  // Otherwise, set the focus on the searchInput
+    // Handle global key presses like Escape first
+    if (event.key === 'Escape') {
+        if (isEditing) {
+            // Priority given to exiting editing mode
+            event.preventDefault();
+            console.log("Escape key pressed during editing");
+            toggleEdit(editingObject);
+            return;
         }
-    } else if (event.key === 'ArrowLeft') {
-        event.preventDefault();
-        changePage($currentPage - 1);
-    } else if (event.key === 'ArrowRight') {
-        event.preventDefault();
-        changePage($currentPage + 1);
-    } else if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        changePage($currentPage - 1);
-    } else if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        changePage($currentPage + 1);
-    } else if (event.key === 'Escape') {
-      if (document.activeElement === searchInput) {
-        searchTerm.set('')
-        searchCollection();
-        searchInput.blur();
-      } else {
-        event.preventDefault();
-        reset();
+        if (document.activeElement === searchInput) {
+            // Clear search if it's focused
+            searchTerm.set('');
+            searchCollection();
+            searchInput.blur();
+            event.preventDefault();
+            return;
+        }
+        if (isModalVisible) {
+            // Close modal if it's visible
+            event.preventDefault();
+            toggleModal();
+            return;
+        }
+        // Add more global Escape conditions here if necessary
     }
-  }
+
+    // Specific contextual key handling below
+    if (isEditing && event.key === "Enter") {
+        event.preventDefault();
+        console.log("Enter key pressed");
+        saveEdit(editingObject);
+        return;
+    }
+
+    if (!isEditing) { // Only allow these keys when not editing
+        switch (event.key) {
+            case '/':
+                event.preventDefault();  // Toggle focus on search input
+                if (document.activeElement === searchInput) {
+                    searchInput.blur();
+                } else {
+                    searchInput.focus();
+                }
+                break;
+            case 'ArrowLeft':
+            case 'ArrowUp': // Combine up and left as they do the same thing
+                event.preventDefault();
+                changePage($currentPage - 1);
+                break;
+            case 'ArrowRight':
+            case 'ArrowDown': // Combine down and right as they do the same thing
+                event.preventDefault();
+                changePage($currentPage + 1);
+                break;
+        }
+    }
 }
+
 
   // logic for creating a custom ingredient
 function toggleModal() {
@@ -331,66 +348,68 @@ onMount( async () => {
 <div id = "app" class="flex flex-col items-center content-center lowercase font-light w-full text-rose-950/90 dark:text-rose-200/80">
 
   <div id="tools" class="flex flex-row w-full justify-center space-x-2">
-    <div id="search-bar" class="flex flex-row w-1/2 justify-between space-x-2">
-      
-      <button on:click={toggleTuneMenu}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 active:scale-90 hover:text-green-700/90 dark:hover:text-green-600/90 transition-all hover:scale-110">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-        </svg>
+    {#if isModalVisible === false}
 
+      <div id="search-bar" class="flex flex-row w-1/2 justify-between space-x-2">
         
-      </button>
-      {#if tuneMenuVisible}
-      <div id="tune-menu" class="flex w-full p-2 border-none bg-white/20 dark:bg-black/20 space-y-2 top-10 justify-start align-middle text-sm rounded-lg">
-        <div class="flex flex-row align-middle justify-start">
-          <label class='flex items-center'> 
-            page size:
-            <input type="number" class='flex border-none bg-white/20 dark:bg-black/20 pl-2 ml-4 w-20 focus:ring-green-700/70 focus:ring-2 rounded-lg' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
-          </label>
-            
+        <button on:click={toggleTuneMenu}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 active:scale-90 hover:text-green-700/90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+          </svg>
+  
+          
+        </button>
+        {#if tuneMenuVisible}
+        <div id="tune-menu" class="flex w-full p-2 border-none bg-white/20 dark:bg-black/20 space-y-2 top-10 justify-start align-middle text-sm rounded-lg">
+          <div class="flex flex-row align-middle justify-start">
+            <label class='flex items-center'> 
+              page size:
+              <input type="number" class='flex border-none bg-white/20 dark:bg-black/20 pl-2 ml-4 w-20 focus:ring-green-700/70 focus:ring-2 rounded-lg' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
+            </label>
+              
+              </div>
+              
+              <div id="visibility" class="grid grid-cols-3">
+                {#each $visibleFields.slice(1) as field}
+                <div class="flex flex-row space-x-2 ml-2">
+                  <input class="size-4 rounded-full shadow border-none text-green-700/90 focus:ring-green-700/30 checked:bg-green-700/70 active:scale-90 checked:ring-green-700/30 hover:checked:bg-green-700/80 transition-all hover:scale-110" type="checkbox" id={field.name} bind:checked={field.visible} on:click={() => toggleFieldVisibility(field) && console.log("clicked")} />
+                  <label for={field.name}>{field.name}</label>
+                  </div>
+                {/each}
+              </div>
             </div>
-            
-            <div id="visibility" class="grid grid-cols-3">
-              {#each $visibleFields.slice(1) as field}
-              <div class="flex flex-row space-x-2 ml-2">
-                <input class="size-4 rounded-full shadow border-none text-green-700/90 focus:ring-green-700/30 checked:bg-green-700/70 active:scale-90 checked:ring-green-700/30 hover:checked:bg-green-700/80 transition-all hover:scale-110" type="checkbox" id={field.name} bind:checked={field.visible} on:click={() => toggleFieldVisibility(field) && console.log("clicked")} />
-                <label for={field.name}>{field.name}</label>
-                </div>
-              {/each}
-            </div>
-          </div>
-        {:else if tuneMenuVisible === false}
-          <input
-        type="text"
-        class = "flex w-full p-2 bg-white/20 border-none dark:bg-black/20 shadow rounded-lg focus:ring-2 focus:ring-green-700/70 focus:border-green-900/70 focus:scale-95 transition-all"
-        bind:value={$searchTerm}
-        bind:this = {searchInput}
-        on:input = {searchCollection}
-        placeholder="/ search..."
-        title="find an ingredient by CAS or the multiple names that it has"
-      />
-        {/if}
-      
-      <button on:click={searchIngredients}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-        </svg>
+          {:else if tuneMenuVisible === false}
+            <input
+          type="text"
+          class = "flex w-full p-2 bg-white/20 border-none dark:bg-black/20 shadow rounded-lg focus:ring-2 focus:ring-green-700/70 focus:border-green-900/70 focus:scale-95 transition-all"
+          bind:value={$searchTerm}
+          bind:this = {searchInput}
+          on:input = {searchCollection}
+          placeholder="/ search..."
+          title="find an ingredient by CAS or the multiple names that it has"
+        />
+          {/if}
         
-      </button>
-      <button on:click={reset} title="Reset the search field">
+        <button on:click={searchIngredients}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          </svg>
+          
+        </button>
+        <button on:click={reset} title="Reset the search field">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+          
+        </button>
+      </div>
+      <button on:click={toggleModal} title="add a new ingredient. nobody but you will see it">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
-        
       </button>
-    </div>
-    <button on:click={toggleModal} title="add a new ingredient. nobody but you will see it">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-      </svg>
-    </button>
       
-    {#if isModalVisible}
+    {:else if isModalVisible}
       <div id="modal" class="flex bg-white/20 border-none dark:bg-black/20 rounded-lg p-6 text-xs">
         <form id="new_ingredient" class="grid grid-cols-2 gap-1">
           <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-none" bind:value={newCustomCommonName} placeholder="name" />
@@ -426,7 +445,7 @@ onMount( async () => {
 
 <div id="table-wrapper" class="flex flex-row ml-6 mr-6 mt-0 p-2 overflow-x-auto overflow-y-auto text-sm items-center">
 {#if isLoading}
-<Loader colour="rose" />
+<Loader colour="red" />
 {:else if collection.error}
           <!-- If there is an error fetching data, display the error message -->
           <p>{collection.error}</p>

@@ -109,9 +109,11 @@ export async function addToCollection(ingredientId: number, userId: any) {
 
 export async function addSuggestion(body: any) {
   try {
-    const endpoint = `${BASE_URL}/browse/api/suggestions/`;
+    const endpoint = `${BASE_URL}/browse/api/suggested-ingredients/new/`;
     const response = await fetchDataFromDjango(endpoint, "POST", body);
-    if (response.success) {
+    
+    if (response.id || response.success === true || response === '') {
+      listSuggestedIngredients(body.user, { forceReload: true });
       return "Suggestion successfully added!";
     } else {
       console.error(response.error);
@@ -180,15 +182,14 @@ export async function createCustomIngredient(body: any, userId: any) {
   }
 }
 
-export async function logIn (body: any) {
+export async function logIn(body) {
+  const endpoint = `${BASE_URL}/api/login/`;
   try {
-    const endpoint = `${BASE_URL}/api/login/`;
     const response = await fetchDataFromDjango(endpoint, "POST", body);
-    console.log("Login response from Django:", response);
-    return response;
+    return response; // This will be your user data on successful login
   } catch (error) {
     console.error("Error logging in:", error);
-    return error.message;
+    return { error: error.message }; // Structure the error in a consistent format
   }
 }
 
@@ -249,17 +250,29 @@ export async function saveEditedIngredient(ingredientToSave: any, userId: any) {
       return error.message;
     }
   }
-  export async function listSuggestedIngredients(userId: any) {
+  export async function listSuggestedIngredients(userId, { forceReload = false } = {}) {
+    const cacheKey = `suggested-ingredients-${userId}`;
     const url = `${BASE_URL}/browse/api/suggested-ingredients/${userId}/`;
+
+    if (!forceReload) {
+        const cachedData = localStorage.getItem(cacheKey);
+        if (cachedData) {
+            console.log("Data from cache: " + cachedData);
+            return JSON.parse(cachedData);
+        }
+    }
+
     try {
         const data = await fetchDataFromDjango(url, "GET");
-        console.log(data)
-        return data
+        localStorage.setItem(cacheKey, JSON.stringify(data));
+        return data;
     } catch (error) {
-        console.error("Failed to load ingredients");
-        return error.message;
+        console.error("Failed to load ingredients: ", error.message);
+        // Consider whether to return an error object or throw it
+        throw new Error(error.message); // Throwing allows the caller to handle errors more flexibly.
     }
 }
+
 
 export async function fetchDescriptors() {
   const url = `${BASE_URL}/browse/api/descriptors/`;
@@ -340,6 +353,7 @@ export async function createFormulaAPI (userId) {
 export async function deleteFormulaAPI (userId, formulaId) {
   let url = `${BASE_URL}/formulae/api/formula/${userId}/${formulaId}/delete/`;
   let data = await fetchDataFromDjango(url, "DELETE");
+  fetchFormulaeApi(userId, { forceReload: true });
   return data;
 }
 

@@ -154,6 +154,7 @@ async function submitSuggestion() {
   const response = await addSuggestion(body);
   showSuggestion = false;
   message = null;
+  console.log(response);
   notification.set(response);
 }
 

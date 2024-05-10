@@ -21,15 +21,35 @@
     });
 
     function handleKeydown(event) {
-      if (event.key === "Escape") {
+    switch (event.key) {
+      case "Escape":
         isDropdownVisible = false;
         searchInput.blur();
-      } else if (event.key === "Enter") {
-        if (filteredCollection.length > 0) {
-          selectItem(filteredCollection[0]);
+        break;
+      case "Enter":
+        if (filteredCollection.length > 0 && highlightedIndex < filteredCollection.length) {
+          selectItem(filteredCollection[highlightedIndex]);
+          isDropdownVisible = false; // Optionally close dropdown
         }
-      }
+        break;
+      case "ArrowDown":
+        if (highlightedIndex < filteredCollection.length - 1) {
+          highlightedIndex++;
+        } else {
+          highlightedIndex = 0; // Optionally wrap around to the top
+        }
+        event.preventDefault(); // Prevent the default action (scrolling the page)
+        break;
+      case "ArrowUp":
+        if (highlightedIndex > 0) {
+          highlightedIndex--;
+        } else {
+          highlightedIndex = filteredCollection.length - 1; // Optionally wrap around to the bottom
+        }
+        event.preventDefault(); // Prevent the default action
+        break;
     }
+  }
   
     const searchDropdown = (event) => {
       searchTerm = event.target.value;
@@ -70,6 +90,7 @@
     class="flex w-5/6 bg-amber-300/20 dark:bg-amber-950/30 focus:ring-amber-700/70 focus:ring-2 text-amber-700/80 rounded-lg border-none"
     bind:value={searchTerm}
     bind:this={searchInput}
+    placeholder="something new"
     on:input={searchDropdown}
     on:focus = {() => isDropdownVisible = true}
     in:fade={{duration: 150, opacity: 0.5}}
