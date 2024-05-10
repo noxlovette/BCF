@@ -1,11 +1,11 @@
 <script>
   import { onDestroy, onMount } from "svelte";
   import { writable } from "svelte/store";
-  import Header from "$lib/components/Header.svelte";
   import { fade } from "svelte/transition";
+  import {createFormula, fetchFormulas, fetchFormula } from "$lib/DjangoAPI.ts";
+  import Header from "$lib/components/Header.svelte";
   import Footer from "$lib/components/Footer.svelte";
   import Loader from "$lib/components/Loader.svelte";
-  import {createFormulaAPI, fetchFormulaeApi, fetchFormulaApi } from "$lib/DjangoAPI.ts";
   import FormulaDetail from "./FormulaDetail.svelte";
   
   // main functionality
@@ -24,7 +24,7 @@
     window.location.href = "/auth/login";
   }
   userId = sessionStorage.getItem("user_id");
-  formulae = await fetchFormulaeApi(userId)
+  formulae = await fetchFormulas(userId)
   
   if (formulae) isLoading = false;
   
@@ -36,7 +36,7 @@
 
 
   async function fetchFormulaDetail(formulaId) {
-    formulaDetail = await fetchFormulaApi(userId, formulaId);
+    formulaDetail = await fetchFormula(userId, formulaId);
   }
 
   function viewFormula(formulaId) {
@@ -51,12 +51,12 @@
       console.log(activeFormulaId)
     }
   }  
-  async function createFormula() {
-    let data = await createFormulaAPI(userId);
+  async function handleCreateFormula() {
+    let data = await createFormula(userId);
     console.log("created formula", data);
 
     notification.set("new formula created");
-    formulae = await fetchFormulaeApi(userId, {forceReload: true });
+    formulae = await fetchFormulas(userId, {forceReload: true });
   }
 
   function handleKeydown(event) {
@@ -96,9 +96,9 @@
         </button>
       {/each}
       {#if formulae.length === 0}
-      <button id="formula-item" class="flex flex-col text-2xl hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:click={createFormula}>make it your first</button>
+      <button id="formula-item" class="flex flex-col text-2xl hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:click={handleCreateFormula}>make it your first</button>
         {:else}
-      <button id="formula-item" class="flex flex-col hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:click={createFormula}>create new formula</button>
+      <button id="formula-item" class="flex flex-col hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:click={handleCreateFormula}>create new formula</button>
       {/if}
     </ul>
   </div>

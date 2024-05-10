@@ -1,14 +1,12 @@
 <script>
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import {addSuggestion, fetchDescriptors} from "$lib/DjangoAPI.ts";
-  import { fetchIngredients } from "$lib/DjangoAPI.ts";
-  import { addToCollection } from "$lib/DjangoAPI.ts";
+  import {addSuggestionBrowse, fetchDescriptors, addToCollectionBrowse, fetchIngredientsBrowse} from "$lib/DjangoAPI.ts";
+
+  import { writable } from "svelte/store";
+  import {blur, fade} from "svelte/transition";
   import Header from "$lib/components/Header.svelte";
   import Footer from "$lib/components/Footer.svelte";
-  import { writable } from "svelte/store";
-  import {fade} from "svelte/transition";
-  import {blur} from "svelte/transition";
   import Loader from "$lib/components/Loader.svelte";
 
   export let data;
@@ -115,7 +113,7 @@ async function fetchWithDescriptors() {
   }
 
   async function load() {
-    return await fetchIngredients($currentPage, $searchTerm, $pageSize, chosenDescriptors);
+    return await fetchIngredientsBrowse($currentPage, $searchTerm, $pageSize, chosenDescriptors);
   }
 
   async function reset() {
@@ -151,7 +149,7 @@ async function submitSuggestion() {
   similar_ingredients: suggestedIngredient.similar_ingredients ? JSON.stringify(suggestedIngredient.similar_ingredients) : null,
   is_restricted: suggestedIngredient.is_restricted,
 };
-  const response = await addSuggestion(body);
+  const response = await addSuggestionBrowse(body);
   showSuggestion = false;
   message = null;
   console.log(response);
@@ -234,7 +232,7 @@ function toggleFieldVisibility(field) {
 
 async function handleAddIngredient(ingredientId) {
   if (userId !== null) {
-    const response = await addToCollection(ingredientId, userId);
+    const response = await addToCollectionBrowse(ingredientId, userId);
     notification.set(response);
   } else {
     notification.set("you need to be logged in to add ingredients to your collection");

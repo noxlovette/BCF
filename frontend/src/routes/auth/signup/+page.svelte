@@ -1,7 +1,7 @@
 <script>
     import Header from "$lib/components/Header.svelte";
     import { goto } from '$app/navigation';
-    import { fetchDataFromDjango } from '$lib/DjangoAPI.ts';
+    import { fetchCentralDjangoApi } from '$lib/DjangoAPI.ts';
     import { writable } from 'svelte/store';
     import { fade } from "svelte/transition";
     import { scale } from "svelte/transition";
@@ -41,6 +41,7 @@
     $: passwordsMatch(password, confirmPassword);
     $: allValid = validLength && validCase && validSpecial && validEmail && validDuplicate && agreeTerms;
 
+    // TODO TRANSFER TO CENTRAL API
     async function createUser() {
         try {
             const url = 'http://localhost:8000/api/signup/';
@@ -49,7 +50,7 @@
                 email: email,
                 password: password,
             };
-            const data = await fetchDataFromDjango(url, 'POST', body);
+            const data = await fetchCentralDjangoApi(url, 'POST', body);
 
             if (data.error) {
                 console.error('Server responded with an error:', data.error);

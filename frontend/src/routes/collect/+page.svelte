@@ -1,6 +1,6 @@
 <script>
   import { onDestroy, onMount } from "svelte";
-  import { saveEditedIngredient, fetchCollection, deleteFromCollection, createCustomIngredient } from "$lib/DjangoAPI.ts";
+  import { saveEditedIngredientCollect, fetchCollection, deleteFromCollection, createCustomIngredientCollect } from "$lib/DjangoAPI.ts";
   import Header from "$lib/components/Header.svelte";
   import { fade } from "svelte/transition";
   import { writable } from "svelte/store";
@@ -136,7 +136,7 @@ function toggleEdit(ingredient) {
    
 async function saveEdit(ingredientToSave) {
   try {
-    const response = await saveEditedIngredient(ingredientToSave, userId);
+    const response = await saveEditedIngredientCollect(ingredientToSave, userId);
     console.log("Response:", response);
     toggleEdit(ingredientToSave);
     collection = await handleFetch(true);
@@ -230,7 +230,7 @@ async function handleCreateCustomIngredient() {
     unit: 'g'
   };
     try {
-      const response = await createCustomIngredient(newCustom, userId);
+      const response = await createCustomIngredientCollect(newCustom, userId);
       console.log("Response:", response);
       handleFetch(true);
       toggleModal();

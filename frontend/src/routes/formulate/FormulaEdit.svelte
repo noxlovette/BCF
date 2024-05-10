@@ -1,6 +1,6 @@
 <script>
 
-    import {saveChangesFormula, deleteIngredientApi } from "$lib/DjangoAPI.ts";
+    import {saveChangesFormula, deleteIngredientFormulate } from "$lib/DjangoAPI.ts";
     import Dropdown from "./Dropdown.svelte";
     export let editedFormula = null;
     export let formulaDetail = null;
@@ -20,8 +20,8 @@
     activeEditId = activeEditId === id ? null : id; // Toggle edit mode on and off
   }
 
-  async function deleteIngredient(ingredientId) {
-    let response = deleteIngredientApi(userId, ingredientId);
+  async function handleDeleteIngredient(ingredientId) {
+    let response = deleteIngredientFormulate(userId, ingredientId);
     console.log(response);
     editedFormula.ingredients = editedFormula.ingredients.filter(
       (ingredient) => ingredient.id !== ingredientId,
@@ -148,7 +148,7 @@
         {#each editedFormula.ingredients as ingredient, i (ingredient.id)}
         <tr class="">
           <td class="align-middle">
-            <button tabindex="-1" class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110" on:click={() => deleteIngredient(ingredient.id)}
+            <button tabindex="-1" class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110" on:click={() => handleDeleteIngredient(ingredient.id)}
               ><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-300/60">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
               </svg>

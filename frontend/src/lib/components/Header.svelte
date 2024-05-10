@@ -3,7 +3,7 @@
   import { fade } from "svelte/transition";
   import { writable } from "svelte/store";
   import { goto } from "$app/navigation";
-  import { fetchDataFromDjango } from "$lib/DjangoAPI.ts";
+  import { fetchCentralDjangoApi } from "$lib/DjangoAPI.ts";
 
 
 
@@ -15,7 +15,7 @@
     const url = "http://localhost:8000/api/logout/";
 
     try {
-      const response = await fetchDataFromDjango(url, "POST", {});
+      const response = await fetchCentralDjangoApi(url, "POST", {});
       console.log("Response:", response);
       is_authenticated = false;
       sessionStorage.clear();

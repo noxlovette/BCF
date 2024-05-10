@@ -19,7 +19,6 @@ class BrowseView(APIView):
         page_size = request.query_params.get('page_size', 10)
         descriptors = request.query_params.getlist('descriptors', None)
 
-
         ingredients = Ingredient.objects.filter(
             Q(common_name__icontains=search_term) |
             Q(other_names__icontains=search_term) |
