@@ -2,14 +2,10 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { writable } from "svelte/store";
-  import { goto } from "$app/navigation";
   import { fetchCentralDjangoApi } from "$lib/DjangoAPI.ts";
-
-
 
   let is_authenticated = false;
   let username = "";
-
 
   async function logout() {
     const url = "http://localhost:8000/api/logout/";

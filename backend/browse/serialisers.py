@@ -14,15 +14,7 @@ class DateTimeSerializer(serializers.DateTimeField):
 
 class IngredientSerialiser(serializers.ModelSerializer):
     """
-     'id': self.id,
-        'common_name': self.common_name,
-        'other_names': self.other_names,
-        'cas': self.cas,
-        'descriptors': self.get_descriptors(),
-        'type': self.ingredient_type,
-        'use': self.use,
-        'volatility': self.volatility,
-        'is_restricted': "Yes" if self.is_restricted else "No"
+    Serialiser for the Ingredient model
     """
 
     descriptors = serializers.SerializerMethodField()
@@ -31,7 +23,8 @@ class IngredientSerialiser(serializers.ModelSerializer):
 
     def get_descriptors(self, obj):
         descriptors = list(obj.descriptor1.all()) + list(obj.descriptor2.all()) + list(obj.descriptor3.all())
-        return [descriptor.name for descriptor in descriptors]
+        descriptor_names = [descriptor.name for descriptor in descriptors]
+        return ", ".join(descriptor_names) if descriptor_names else "No descriptors found"
 
     class Meta:
         fields = ('id', 'descriptors', 'common_name', 'other_names', 'cas', 'ingredient_type', 'use', 'volatility',
@@ -43,7 +36,7 @@ class SuggestedIngredientSerialiser(serializers.ModelSerializer):
     date_suggested = DateTimeSerializer(read_only=True)
 
     class Meta:
-        fields = '__all__'
+        exclude = ('user', )
         model = SuggestedIngredient
 
 

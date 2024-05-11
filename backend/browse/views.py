@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from rest_framework.exceptions import PermissionDenied
 from .models import Ingredient, SuggestedIngredient, Descriptor
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -5,12 +7,11 @@ from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 from .serialisers import IngredientSerialiser, SuggestedIngredientSerialiser, DescriptorSerialiser
 from rest_framework import generics
-from django.contrib.auth.models import User
 
 
 class BrowseView(APIView):
     """
-    API endpoint that allows ingredients to be viewed.
+    the basic view for the browse page, search functionality in-built
     """
 
     def get(self, request):
@@ -48,6 +49,10 @@ class BrowseView(APIView):
 
 
 class CustomPageNumberPagination(PageNumberPagination):
+    """
+    defines a custom pagination class that returns the current page number and the total number of pages in the response
+    """
+
     def get_paginated_response(self, data):
         return Response({
             'page': self.page.number,  # current page number
@@ -56,9 +61,24 @@ class CustomPageNumberPagination(PageNumberPagination):
         })
 
 
+class DescriptorsListAPIView(generics.ListAPIView):
+    """
+    This view returns a list of all descriptors in the database. shows instead of the table on the browse page
+    """
+    queryset = Descriptor.objects.all()
+    serializer_class = DescriptorSerialiser
+
+
+
 class SuggestedIngredientCreateView(generics.CreateAPIView):
     queryset = SuggestedIngredient.objects.all()
     serializer_class = SuggestedIngredientSerialiser
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied('You must be logged in to perform this action')
+        serializer.save(user=user)
 
 
 class SuggestedIngredientListView(generics.RetrieveAPIView):
@@ -66,11 +86,13 @@ class SuggestedIngredientListView(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         # Get the user_id from the URL
-        user_id = self.kwargs.get('user_id')
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied('You must be logged in to perform this action')
 
-        if user_id is not None:
+        if user is not None:
             # Get the user object
-            user = User.objects.get(id=user_id)
+            user = user
             queryset = SuggestedIngredient.objects.filter(user=user)
         else:
             # If user_id is not provided, return an empty queryset
@@ -80,11 +102,4 @@ class SuggestedIngredientListView(generics.RetrieveAPIView):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
-
-class DescriptorsListAPIView(generics.ListAPIView):
-    """
-    This view returns a list of all descriptors in the database
-    """
-    queryset = Descriptor.objects.all()
-    serializer_class = DescriptorSerialiser
 # Path: browse/urls.py

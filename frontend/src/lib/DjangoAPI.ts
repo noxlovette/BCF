@@ -84,12 +84,12 @@ export async function fetchIngredientsBrowse(currentPage: number, searchTerm = "
   }
   }
 
-export async function addToCollectionBrowse(ingredientId: number, userId: any) {
+export async function addToCollectionBrowse(ingredientId: number) {
   try {
-    const endpoint = `${BASE_URL}/collection/api/collection/${userId}/`;
-    const body = { user_id: userId, ingredient_id: ingredientId };
+    const endpoint = `${BASE_URL}/collection/api/collection/`;
+    const body = { ingredient_id: ingredientId };
     const response = await fetchCentralDjangoApi(endpoint, "POST", body);
-    fetchCollection(userId, { forceReload: true });
+    fetchCollection({ forceReload: true });
 
     if (response.success) {
       return "ingredient successfully added to collection!";
@@ -111,7 +111,7 @@ export async function addSuggestionBrowse(body: any) {
     const response = await fetchCentralDjangoApi(endpoint, "POST", body);
     
     if (response.id || response.success === true || response === '') {
-      listSuggestedIngredients(body.user, { forceReload: true });
+      listSuggestedIngredients({ forceReload: true });
       return "Suggestion successfully added!";
     } else {
       console.error(response.error);
@@ -125,18 +125,25 @@ export async function addSuggestionBrowse(body: any) {
 
 // COLLECT PAGE
 
-export async function fetchCollection(userId: any, { forceReload = false } = {}) {
-  const cacheKey = `collection-${userId}`;
+export async function fetchCollection({ forceReload = false } = {}) {
+  const cacheKey = `collection`;
   let data = forceReload ? null : sessionStorage.getItem(cacheKey);
   if (data) {
     return JSON.parse(data);
   } else {
     try {
-      const endpoint = `${BASE_URL}/collection/api/collection/${userId}/`;
+      const endpoint = `${BASE_URL}/collection/api/collection/`;
       const data = await fetchCentralDjangoApi(endpoint);
-      console.log("collection data from Django:", data);
-      sessionStorage.setItem(cacheKey, JSON.stringify(data));
-      return data;
+
+      if (Array.isArray(data) && data.length > 0 && data[0].hasOwnProperty('common_name')) {
+        const sortedData = data.sort((a, b) => a.common_name.localeCompare(b.common_name));
+        console.log("collection data from Django:", data);
+        sessionStorage.setItem(cacheKey, JSON.stringify(sortedData));
+        return sortedData;
+      } else {
+        console.error('Data is not in expected array format or missing "name" property:', data);
+        return data; // return data as is if not sortable
+      }
     } catch (error) {
       console.error("Error fetching data from Django:", error);
       return {
@@ -146,13 +153,13 @@ export async function fetchCollection(userId: any, { forceReload = false } = {})
 }
 }
 
-export async function deleteFromCollection(ingredient: any, userId: any) {
+export async function deleteFromCollection(ingredient: any) {
   try {
     let endpoint: string;
     if (ingredient.type === "CollectionIngredient") {
-      endpoint = `${BASE_URL}/collection/api/ingredient/${userId}/${ingredient.id}/delete/`;
+      endpoint = `${BASE_URL}/collection/api/ingredient/${ingredient.id}/delete/`;
   } else if (ingredient.type === "CustomCollectionIngredient") {
-      endpoint = `${BASE_URL}/collection/api/ingredient/${userId}/custom/${ingredient.id}/delete/`;
+      endpoint = `${BASE_URL}/collection/api/ingredient/custom/${ingredient.id}/delete/`;
   }
     const response = await fetchCentralDjangoApi(endpoint, "DELETE");
     console.log("DELETE response from Django:", response);
@@ -170,12 +177,12 @@ export async function deleteFromCollection(ingredient: any, userId: any) {
 }
 
 
-export async function createCustomIngredientCollect(body: any, userId: any) {
+export async function createCustomIngredientCollect(body: any) {
   try {
-  const endpoint = `${BASE_URL}/collection/api/ingredient/${userId}/new/`;
+  const endpoint = `${BASE_URL}/collection/api/ingredient/new/`;
     const response = await fetchCentralDjangoApi(endpoint, "POST", body);
     console.log("Custom ingredient creation response from Django:", response);
-    fetchCollection(userId, { forceReload: true });
+    fetchCollection({ forceReload: true });
     return response;
   } catch (error) {
     console.error("Error creating custom ingredient:", error);
@@ -195,7 +202,7 @@ export async function logIn(body) {
 }
 
 
-export async function saveEditedIngredientCollect(ingredientToSave: any, userId: any) {
+export async function saveEditedIngredientCollect(ingredientToSave: any) {
     // Collect the data from the input fields
     const data = {
       common_name: ingredientToSave.common_name,
@@ -213,9 +220,9 @@ export async function saveEditedIngredientCollect(ingredientToSave: any, userId:
     // Define the URL for the PUT request
     let endpoint: string;
     if (ingredientToSave.type === "CollectionIngredient") {
-      endpoint = `${BASE_URL}/collection/api/ingredient/${userId}/${ingredientToSave.id}/update/`;
+      endpoint = `${BASE_URL}/collection/api/ingredient/${ingredientToSave.id}/update/`;
     } else if (ingredientToSave.type === "CustomCollectionIngredient") {
-      endpoint = `${BASE_URL}/collection/api/ingredient/${userId}/custom/${ingredientToSave.id}/update/`;
+      endpoint = `${BASE_URL}/collection/api/ingredient/custom/${ingredientToSave.id}/update/`;
     }
 
     // Make the PUT request to the Django API
@@ -232,10 +239,9 @@ export async function saveEditedIngredientCollect(ingredientToSave: any, userId:
 
   // FORMULATE PAGE
 
-export async function addFormulaAsCustomIngredient(userId:any, formula:any) {
+export async function addFormulaAsCustomIngredient(formula:any) {
   console.log("Adding as custom");
   const data = {
-    user: userId,
     common_name: formula.name,
     use: formula.description,
     formula: formula.id,
@@ -248,7 +254,7 @@ export async function addFormulaAsCustomIngredient(userId:any, formula:any) {
     associations: '',
     colour: '',
   };
-  let url = `${BASE_URL}/formulae/api/formula/${userId}/${formula.id}/add_as_custom/`;
+  let url = `${BASE_URL}/formulae/api/formula/${formula.id}/add_as_custom/`;
 
   try {
     // Assuming fetchCentralDjangoApi is a function that handles the fetch API call
@@ -267,43 +273,42 @@ export async function addFormulaAsCustomIngredient(userId:any, formula:any) {
   }
 }
 
-export async function saveChangesFormula (userId, formData, editedFormulaId) {
-  let url = `${BASE_URL}/formulae/api/formula/${userId}/${editedFormulaId}/`;
+export async function saveChangesFormula (formData, editedFormulaId) {
+  let url = `${BASE_URL}/formulae/api/formula/${editedFormulaId}/`;
   let data = await fetchCentralDjangoApi(url, "PUT", formData);
-  const cacheKey = `formula-${userId}-${editedFormulaId}`;
+  const cacheKey = `formula-${editedFormulaId}`;
   sessionStorage.setItem(cacheKey, JSON.stringify(data));
-  fetchFormulas(userId, { forceReload: true });
+  fetchFormulas();
   return data;
 }
 
-export async function createFormula (userId) {
+export async function createFormula () {
   const formData = {
     name: "New Formula",
     description: "Write something inspiring here!",
     notes: "Add some notes here...",
     ingredients: [],
-    user: userId,
   };
-  let url = `${BASE_URL}/formulae/api/formula/${userId}/new/`;
+  let url = `${BASE_URL}/formulae/api/formula/new/`;
   let data = await fetchCentralDjangoApi(url, "POST", formData);
   return data;
 }
 
-export async function deleteFormula (userId, formulaId) {
-  let url = `${BASE_URL}/formulae/api/formula/${userId}/${formulaId}/delete/`;
+export async function deleteFormula (formulaId) {
+  let url = `${BASE_URL}/formulae/api/formula/${formulaId}/delete/`;
   let data = await fetchCentralDjangoApi(url, "DELETE");
-  fetchFormulas(userId, { forceReload: true });
+  fetchFormulas({ forceReload: true });
   return data;
 }
 
-export async function deleteIngredientFormulate (userId, ingredientId) {
-  let url = `${BASE_URL}/formulae/api/ingredient/${userId}/${ingredientId}/delete/`;
+export async function deleteIngredientFormulate (ingredientId) {
+  let url = `${BASE_URL}/formulae/api/ingredient/${ingredientId}/delete/`;
   let data = await fetchCentralDjangoApi(url, "DELETE");
   return data;
 }
 
-export async function fetchFormulas(userId, {forceReload = false} = {}) {
-  const cacheKey = `formulae-${userId}`;
+export async function fetchFormulas({forceReload = false} = {}) {
+  const cacheKey = `formulae`;
   let data = forceReload ? null : sessionStorage.getItem(cacheKey);
   if (data) {
     console.log("formulae from cache:", data);
@@ -311,7 +316,7 @@ export async function fetchFormulas(userId, {forceReload = false} = {}) {
   } else {
     try {
       console.log("Fetching formulae");
-      const endpoint = `${BASE_URL}/formulae/api/formula/${userId}/list/`;
+      const endpoint = `${BASE_URL}/formulae/api/formula/list/`;
       const data = await fetchCentralDjangoApi(endpoint);
       sessionStorage.setItem(cacheKey, JSON.stringify(data));
       console.log(data);
@@ -326,8 +331,8 @@ export async function fetchFormulas(userId, {forceReload = false} = {}) {
 }
 }
 
-export async function fetchFormula(userId, formulaId, {forceReload = false} = {}) {
-  const cacheKey = `formula-${userId}-${formulaId}`;
+export async function fetchFormula(formulaId, {forceReload = false} = {}) {
+  const cacheKey = `formula-${formulaId}`;
   let data = forceReload ? null : sessionStorage.getItem(cacheKey);
   if (data) {
     console.log("formula from cache:", data);
@@ -335,7 +340,7 @@ export async function fetchFormula(userId, formulaId, {forceReload = false} = {}
   } else {
     try {
       console.log("Fetching formula");
-      const endpoint = `${BASE_URL}/formulae/api/formula/${userId}/${formulaId}/`;
+      const endpoint = `${BASE_URL}/formulae/api/formula/${formulaId}/`;
       const data = await fetchCentralDjangoApi(endpoint);
       sessionStorage.setItem(cacheKey, JSON.stringify(data));
       console.log(data);
@@ -375,9 +380,9 @@ export async function fetchFormula(userId, formulaId, {forceReload = false} = {}
   }
 
 
-  export async function listSuggestedIngredients(userId, { forceReload = false } = {}) {
-    const cacheKey = `suggested-ingredients-${userId}`;
-    const url = `${BASE_URL}/browse/api/suggested-ingredients/${userId}/`;
+  export async function listSuggestedIngredients({ forceReload = false } = {}) {
+    const cacheKey = `suggested-ingredients`;
+    const url = `${BASE_URL}/browse/api/suggested-ingredients/`;
 
     if (!forceReload) {
         const cachedData = localStorage.getItem(cacheKey);

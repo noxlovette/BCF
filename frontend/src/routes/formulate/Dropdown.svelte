@@ -5,15 +5,15 @@
     let searchInput;
 
 
-    export let userId = 0;
     export let searchTerm = "";
     let collection = [];
     let filteredCollection = [];
     export let selectedIngredient = null;
     let isDropdownVisible = true;
+    let highlightedIndex = 0;
 
     onMount(async () => {
-      collection = await fetchCollection(userId);
+      collection = await fetchCollection();
       
       if (searchInput) {
         searchInput.focus();  // Focus on the input element when the component mounts

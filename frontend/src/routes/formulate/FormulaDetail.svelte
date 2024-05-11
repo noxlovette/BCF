@@ -1,14 +1,16 @@
 <script>
     import { addFormulaAsCustomIngredient, deleteFormula} from "$lib/DjangoAPI.ts";
     import FormulaEdit from "./FormulaEdit.svelte";
+    import {writable } from 'svelte/store';
 
 
     export let formulaDetail;
-    export let userId;
     export let formulae;
+    export let notification = writable('');
     let solventValue = 0;
     let editing = false;
     let editedFormula = null;
+    let solventName = "alcohol";
 
     $: if (formulaDetail && formulaDetail.ingredients) {
         let totalAmount = formulaDetail.ingredients.reduce((acc, ingredient) => acc + ingredient.amount, 0);
@@ -16,7 +18,7 @@
     }
 
   async function handleAddAsCustom (formulaDetail) {
-    const response = await addFormulaAsCustomIngredient(userId, formulaDetail);
+    const response = await addFormulaAsCustomIngredient(formulaDetail);
     notification.set(response)
   }
 
@@ -32,16 +34,58 @@
   }
 
   async function handleDeleteFormula(formulaId) {
-    let data = await deleteFormula(userId, formulaId);
+    let data = await deleteFormula(formulaId);
     console.log(data);
     // Remove the deleted formula from the formulae array
     formulae = formulae.filter((formula) => formula.id !== formulaId);
   }
 
+  let sortColumn = writable('ingredient'); // Default sort column
+  let sortOrder = writable('asc'); // Default sort order ('asc' or 'desc')
+
+  function sortIngredients() {
+    let sorted = [...formulaDetail.ingredients];
+    switch ($sortColumn) {
+      case 'ingredient':
+        sorted.sort((a, b) => {
+          return $sortOrder === 'asc' ? a.ingredient.localeCompare(b.ingredient) : b.ingredient.localeCompare(a.ingredient);
+        });
+        break;
+      case 'amount':
+        sorted.sort((a, b) => {
+          return $sortOrder === 'asc' ? a.amount - b.amount : b.amount - a.amount;
+        });
+        break;
+        case 'volatility':
+  const order = {
+    "head": 1, "head/heart": 2, "heart/head": 3, "heart": 4,
+    "heart/base": 5, "base/heart": 6, null: 7
+  };
+  sorted.sort((a, b) => {
+    const orderA = order[a.volatility] !== undefined ? order[a.volatility] : 8; // default value if not found
+    const orderB = order[b.volatility] !== undefined ? order[b.volatility] : 8; // default value if not found
+    return $sortOrder === 'asc' ? orderA - orderB : orderB - orderA;
+  });
+  break;
+    }
+    formulaDetail.ingredients = sorted;
+  }
+
+  // This handles the sorting logic when a header is clicked
+  function handleSort(column) {
+    if ($sortColumn === column) {
+      sortOrder.update(n => n === 'asc' ? 'desc' : 'asc');
+    } else {
+      sortColumn.set(column);
+      sortOrder.set('asc');
+    }
+    sortIngredients();
+  }
+
 </script>
 
 {#if editing}
-    <FormulaEdit {formulaDetail} {editedFormula} {userId} bind:editing bind:solventValue />
+    <FormulaEdit {formulaDetail} {editedFormula} bind:editing bind:solventValue bind:solventName />
 {:else}
 
 <div id="description-etc" class="flex flex-col mr-auto w-1/4 p-4 h-full divide-y-4 divide-amber-800/60 dark:divide-amber-50/60 space-y-4 bg-amber-50/80 dark:bg-amber-800/20 rounded-lg shadow">
@@ -83,9 +127,31 @@
     <thead>
       <tr class="2">
         <th class="w-1/12">#</th>
-      <th class="w-1/3"> Ingredient </th>
-      <th class="w-1/6"> Volatility </th>
-      <th class="w-1/6"> Amount </th>
+        <th class="w-1/3 cursor-pointer hover:text-amber-700/90 active:translate-y-1 transition-all" on:click={() => handleSort('ingredient')}>
+          <div class="flex items-center">
+            Ingredient 
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+            </svg>
+          </div>
+        </th>
+        
+      <th class="w-1/6 cursor-pointer hover:text-amber-700/90 active:translate-y-1 transition-all" on:click={() => handleSort('volatility')}> 
+        <div class="flex items-center">
+        Volatility 
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+            </svg>
+      </div>
+      </th>
+      <th class="w-1/6 cursor-pointer hover:text-amber-700/90 active:translate-y-1 transition-all" on:click={() => handleSort('amount')}> 
+        <div class="flex items-center">
+        Amount 
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+            </svg>
+      </div>
+      </th>
       <th class="w-1/6"> % </th>
       </tr>
     </thead>
@@ -101,7 +167,7 @@
       {/each}
       <tr id="functional" class="border-t border-amber-950/20 dark:border-amber-100/10">
         <td class="">x</td>
-        <td class="">alcohol</td>
+        <td class="">{solventName}</td>
         <td class="">solvent</td>
         <td class="{solventValue < 0 ? 'text-red-700/80 dark:text-red-500/80' : ''}">{solventValue}</td>
         <td class="">100</td>

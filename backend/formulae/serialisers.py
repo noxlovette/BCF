@@ -2,7 +2,7 @@ from rest_framework import serializers, generics
 
 from collection.models import CollectionIngredient, CustomCollectionIngredient
 from formulae.models import FormulaIngredient, Formula, Tag
-from main_project.utils import decrypt_field
+from main_project.encryption import decrypt_field
 
 
 class DateTimeSerializer(serializers.DateTimeField):
@@ -183,7 +183,6 @@ class FormulaSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         ingredients_data = validated_data.pop('ingredients', [])
 
-        user_id = validated_data.get('user')
         name = validated_data.pop('_name', None)
         description = validated_data.pop('_description', None)
         notes = validated_data.pop('_notes', None)
@@ -194,7 +193,7 @@ class FormulaSerializer(serializers.ModelSerializer):
         instance._notes = notes
 
         for ingredient_data in ingredients_data:
-            FormulaIngredient.objects.create(user_id=user_id, formula=instance, **ingredient_data)
+            FormulaIngredient.objects.create(formula=instance, **ingredient_data)
 
         instance.save()
         return instance
@@ -202,5 +201,5 @@ class FormulaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Formula
-        fields = ['updated', 'created', 'id', 'user', 'name', 'description', 'ingredients', 'notes', 'created_at']
-        read_only_fields = ['id', 'user', 'created_at', 'updated_at']
+        fields = ['updated', 'created', 'id', 'name', 'description', 'ingredients', 'notes', 'created_at']
+        read_only_fields = ['id', 'created_at', 'updated_at']

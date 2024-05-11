@@ -12,7 +12,7 @@
 
 
   export let collection = [];
-  let userId = 0;
+
   let pageSize = writable(10);
   let currentPage = writable(1);
   let searchTerm = writable("");
@@ -43,7 +43,7 @@
   //fetch logic
   //TODO error handing for handleFetch
   async function handleFetch(forceReload = false) {
-    const data = await fetchCollection(userId, { forceReload: forceReload });
+    const data = await fetchCollection({ forceReload: forceReload });
     return data;
   }
 
@@ -70,19 +70,6 @@ async function changePage(newPage) {
       notification.set(`there is nothing to seek there`);
   }
 }
-    
-// search functionality
-async function handleSearch(event) {
-    if (event.key === 'Escape') {
-      searchTerm.set("");
-      searchInput.blur();
-
-    } else if (event.key === 'Escape') {
-      searchTerm.set("");
-      searchInput.blur();
-      searchIngredients();
-    }
-  }
 
 async function searchIngredients() {
     currentPage.set(1);
@@ -99,7 +86,7 @@ async function searchIngredients() {
      * @param {MouseEvent & { currentTarget: EventTarget & HTMLButtonElement; }} ingredient
      */
      async function handleDeleteClick(ingredient) {
-        const response = await deleteFromCollection(ingredient, userId);
+        const response = await deleteFromCollection(ingredient);
         console.log("response:", response);
         notification.set(response);
         editingRowId = null;
@@ -136,7 +123,7 @@ function toggleEdit(ingredient) {
    
 async function saveEdit(ingredientToSave) {
   try {
-    const response = await saveEditedIngredientCollect(ingredientToSave, userId);
+    const response = await saveEditedIngredientCollect(ingredientToSave);
     console.log("Response:", response);
     toggleEdit(ingredientToSave);
     collection = await handleFetch(true);
@@ -230,7 +217,7 @@ async function handleCreateCustomIngredient() {
     unit: 'g'
   };
     try {
-      const response = await createCustomIngredientCollect(newCustom, userId);
+      const response = await createCustomIngredientCollect(newCustom);
       console.log("Response:", response);
       handleFetch(true);
       toggleModal();
@@ -280,7 +267,6 @@ const searchCollection = () => {
 
 // Compute the start index for slicing the array based on the current page and page size
 $: {
-
   startIndex = ($currentPage - 1) * $pageSize;
   console.log('current page -1', $currentPage - 1);
   console.log('Start index:', startIndex);
@@ -298,8 +284,7 @@ onMount( async () => {
       window.location.href = "/auth/login";
     } else {
       // This block should only execute if we're certain window is defined.
-      userId = sessionStorage.getItem("user_id");  // No need to prefix with window, consistency maintained
-      currentPage.set((parseInt(sessionStorage.getItem('currentPageCollect')) || 1));
+    currentPage.set((parseInt(sessionStorage.getItem('currentPageCollect')) || 1));
     pageSize.set((parseInt(localStorage.getItem('pageSizeCollect')) || 10));
     searchTerm.set((sessionStorage.getItem('searchTermCollect') || ""));
     visibleFields.set(JSON.parse(sessionStorage.getItem('visibleFieldsCollect')) || initialVisibleFields);
@@ -311,6 +296,7 @@ onMount( async () => {
     if (collection) {
       isLoading = false;
     }
+    
     filteredCollection = collection;
     console.log('Filtered collection:', filteredCollection);
 

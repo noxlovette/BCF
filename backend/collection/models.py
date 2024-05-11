@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from browse.models import Ingredient
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from main_project.utils import decrypt_field, encrypt_field
+from main_project.encryption import decrypt_field, encrypt_field
 
 
 class BaseCollectionIngredient(models.Model):

@@ -1,18 +1,14 @@
 from itertools import chain
 from django.db import IntegrityError
-from django.db.models import Q
 from django.http import JsonResponse
-from django.views import generic
 from rest_framework import generics
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from .models import CollectionIngredient, Ingredient, User, CustomCollectionIngredient
 from rest_framework.views import APIView
-from rest_framework.exceptions import ParseError
+from rest_framework.exceptions import ParseError, PermissionDenied
 import logging
-from .serialisers import CollectionIngredientSerializer, \
+from .serialisers import StandardCollectionIngredientSerializer, \
     CustomCollectionIngredientSerializer
-from browse.views import CustomPageNumberPagination
 
 logger = logging.getLogger(__name__)
 
@@ -22,27 +18,26 @@ class IngredientCreateView(generics.CreateAPIView):
     """
     CREATE A NEW CUSTOM INGREDIENT
     """
-
     serializer_class = CustomCollectionIngredientSerializer
 
     def perform_create(self, serializer):
-        # Get the user_id from the URL
-        user_id = self.kwargs.get('user_id')
-        # Get the user object
-        user = User.objects.get(id=user_id)
-        # Set the user field before saving the object
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied('You must be logged in to perform this action')
         serializer.save(user=user)
 
 
-# UPDATE VIEWS
+# UPDATE VIEWS. #TODO identical. Can be combined
 class CustomIngredientUpdateView(generics.UpdateAPIView):
     queryset = CustomCollectionIngredient.objects.all()
     serializer_class = CustomCollectionIngredientSerializer
     lookup_url_kwarg = 'customCollectionIngredientId'
 
     def get_queryset(self):
-        user_id = self.kwargs.get('user_id')
-        return self.queryset.filter(user=user_id)
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied('You must be logged in to perform this action')
+        return self.queryset.filter(user=user)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', True)
@@ -61,12 +56,14 @@ class CustomIngredientUpdateView(generics.UpdateAPIView):
 
 class IngredientUpdateView(generics.UpdateAPIView):
     queryset = CollectionIngredient.objects.all()
-    serializer_class = CollectionIngredientSerializer
+    serializer_class = StandardCollectionIngredientSerializer
     lookup_url_kwarg = 'collectionIngredientId'
 
     def get_queryset(self):
-        user_id = self.kwargs.get('user_id')
-        return self.queryset.filter(user=user_id)
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied('You must be logged in to perform this action')
+        return self.queryset.filter(user=user)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', True)
@@ -84,18 +81,19 @@ class IngredientUpdateView(generics.UpdateAPIView):
 
 
 # DELETE VIEWS
-
 class IngredientDeleteView(generics.DestroyAPIView):
     """
     DELETE A COLLECTION INGREDIENT
     """
     queryset = CollectionIngredient.objects.all()
-    serializer_class = CollectionIngredientSerializer
+    serializer_class = StandardCollectionIngredientSerializer
     lookup_url_kwarg = 'collectionIngredientId'
 
     def get_queryset(self):
-        user_id = self.kwargs.get('user_id')
-        return self.queryset.filter(user=user_id)
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied('You must be logged in to perform this action')
+        return self.queryset.filter(user=user)
 
 
 class CustomIngredientDeleteView(generics.DestroyAPIView):
@@ -107,8 +105,10 @@ class CustomIngredientDeleteView(generics.DestroyAPIView):
     lookup_url_kwarg = 'customCollectionIngredientId'
 
     def get_queryset(self):
-        user_id = self.kwargs.get('user_id')
-        return self.queryset.filter(user=user_id)
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied('You must be logged in to perform this action')
+        return self.queryset.filter(user=user)
 
 
 # LIST VIEWS
@@ -116,10 +116,11 @@ class CollectionAPI(APIView):
     """
     API VIEW TO DISPLAY THE USER'S COLLECTION
     """
-    def get_collection(self, request, user_id):
-        user = User.objects.get(id=user_id)
-        if not user:
-            return JsonResponse({'error': 'user not logged in'}, status=400)
+
+    def get_collection(self, request):
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied('You must be logged in to perform this action')
 
         collection_ingredients = CollectionIngredient.objects.filter(user=user).order_by('ingredient__common_name')
         custom_collection_ingredients = CustomCollectionIngredient.objects.filter(user=user)
@@ -132,38 +133,33 @@ class CollectionAPI(APIView):
 
         return collection_ingredients, custom_collection_ingredients
 
-    def get(self, request, user_id):
+    def get(self, request):
         logger.info('GET request received')
-        collection_ingredients, custom_collection_ingredients = self.get_collection(request, user_id)
+        collection_ingredients, custom_collection_ingredients = self.get_collection(request)
 
         for ingredient in collection_ingredients:
             ingredient.prepare_for_serialization()
         for custom_ingredient in custom_collection_ingredients:
             custom_ingredient.prepare_for_serialization()
 
-        collection_serializer = CollectionIngredientSerializer(collection_ingredients, many=True)
+        collection_serializer = StandardCollectionIngredientSerializer(collection_ingredients, many=True)
         custom_collection_serializer = CustomCollectionIngredientSerializer(custom_collection_ingredients, many=True)
         combined_data = list(chain(collection_serializer.data, custom_collection_serializer.data))
 
         return JsonResponse(combined_data, safe=False)
 
     # this is the browse functionality
-    def post(self, request, user_id):
+    def post(self, request):
         """
         adds a new ingredient to the user's collection (FROM THE BROWSE APP)
         :param request:
-        :param user_id:
         :return:
         """
         try:
             data = request.data
             ingredient_id = data.get('ingredient_id')
-
-            # Get the user and ingredient from the database using the provided IDs
-            user = User.objects.get(id=user_id)
+            user = self.request.user
             ingredient = Ingredient.objects.get(id=ingredient_id)
-
-            # Create a new CollectionIngredient object
             CollectionIngredient.objects.create(user=user, ingredient=ingredient)
 
             return JsonResponse({'success': True})
@@ -173,5 +169,3 @@ class CollectionAPI(APIView):
             return JsonResponse({'error': 'user or ingredient does not exist'}, status=400)
         except ParseError:
             return JsonResponse({'error': 'invalid JSON data'}, status=400)
-
-

@@ -4,9 +4,9 @@
     import Dropdown from "./Dropdown.svelte";
     export let editedFormula = null;
     export let formulaDetail = null;
-    export let userId = 0;
     export let editing = true;
-    let solventValue = 0;
+    export let solventValue = 0;
+    export let solventName = "alcohol";
     let activeEditId = null;
     let ingredientCounter = 0;
 
@@ -21,7 +21,7 @@
   }
 
   async function handleDeleteIngredient(ingredientId) {
-    let response = deleteIngredientFormulate(userId, ingredientId);
+    let response = deleteIngredientFormulate(ingredientId);
     console.log(response);
     editedFormula.ingredients = editedFormula.ingredients.filter(
       (ingredient) => ingredient.id !== ingredientId,
@@ -57,7 +57,6 @@
     console.log(updatedIngredients)
 
     const formData = {
-      user: userId,
       name: editedFormula.name,
       description: editedFormula.description,
       notes: editedFormula.notes,
@@ -66,7 +65,7 @@
     editing = false;
     
 
-    let data = await saveChangesFormula(userId, formData, editedFormula.id);
+    let data = await saveChangesFormula(formData, editedFormula.id);
     editedFormula = null;
     console.log("updated formula", data);
 
@@ -157,7 +156,7 @@
           </td> 
           <td>
             {#if activeEditId === ingredient.id}
-            <Dropdown bind:selectedIngredient={ingredient} {userId} searchTerm={ingredient.ingredient}/>
+            <Dropdown bind:selectedIngredient={ingredient} searchTerm={ingredient.ingredient}/>
           {:else}
             <button tabindex="-1" on:click={() => toggleEdit(ingredient.id)}>{ingredient.ingredient}</button>
           {/if}
@@ -187,7 +186,9 @@
         </td>
         <tr id="functional" class="border-t border-amber-950/20 dark:border-amber-100/10">
           <td>x</td>
-          <td>alcohol</td>
+          <td>
+            <input type="text" bind:value={solventName} placeholder="solvent" class="flex w-2/3 bg-amber-50/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none"/>
+          </td>
           <td>solvent</td>
           <td class="{solventValue < 0 ? 'text-red-700/80' : ''}">{solventValue}</td>
           <td>100</td>

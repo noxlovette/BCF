@@ -12,7 +12,7 @@ class DateTimeSerializer(serializers.DateTimeField):
         return formatted_datetime
 
 
-class BaseCollectionIngredientSerializer(serializers.ModelSerializer):
+class CollectionIngredientSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 
     amount = serializers.IntegerField()
@@ -35,7 +35,7 @@ class BaseCollectionIngredientSerializer(serializers.ModelSerializer):
         abstract = True
 
 
-class CollectionIngredientSerializer(BaseCollectionIngredientSerializer):
+class StandardCollectionIngredientSerializer(CollectionIngredientSerializer):
     common_name = serializers.StringRelatedField(source='ingredient.common_name')
     cas = serializers.StringRelatedField(source='ingredient.cas')
     volatility = serializers.StringRelatedField(source='ingredient.volatility')
@@ -45,11 +45,11 @@ class CollectionIngredientSerializer(BaseCollectionIngredientSerializer):
     def get_type(self, obj):
         return 'CollectionIngredient'
 
-    class Meta(BaseCollectionIngredientSerializer.Meta):
+    class Meta(CollectionIngredientSerializer.Meta):
         model = CollectionIngredient
 
 
-class CustomCollectionIngredientSerializer(BaseCollectionIngredientSerializer):
+class CustomCollectionIngredientSerializer(CollectionIngredientSerializer):
     type = serializers.SerializerMethodField()
 
     def create(self, validated_data):
@@ -82,11 +82,11 @@ class CustomCollectionIngredientSerializer(BaseCollectionIngredientSerializer):
     def get_type(self, obj):
         return 'CustomCollectionIngredient'
 
-    class Meta(BaseCollectionIngredientSerializer.Meta):
+    class Meta(CollectionIngredientSerializer.Meta):
         model = CustomCollectionIngredient
 
 
 class UnifiedCollectionIngredientSerializer(serializers.Serializer):
-    collection_ingredient = CollectionIngredientSerializer(many=True)
+    collection_ingredient = StandardCollectionIngredientSerializer(many=True)
     custom_collection_ingredient = CustomCollectionIngredientSerializer(many=True)
 # Path: collection/views.py

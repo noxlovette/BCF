@@ -20,8 +20,7 @@
       notification.set(data.error);
     } else {
       // Process success scenario
-      fetchCollection(data.user_id);
-      sessionStorage.setItem("user_id", data.user_id);
+      await fetchCollection();
       sessionStorage.setItem("username", data.username);
       sessionStorage.setItem("is_authenticated", 'true');
       notification.set("Login successful!");

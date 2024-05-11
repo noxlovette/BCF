@@ -4,20 +4,21 @@
     import Settings from './Settings.svelte';
     import Contributions from './Contributions.svelte';
     import HelpCentre from './HelpCentre.svelte';
-
-    let currentPage = writable('');
+    import { goto } from "$app/navigation";
+    
+    
     let username = "";
-    let userId = "";
+    let currentPage = writable('');
+    let is_authenticated = false;
     let greeting = writable("");
 
     onMount(async () => {
-        userId = sessionStorage.getItem('user_id');
+        is_authenticated = sessionStorage.getItem('is_authenticated');
         username = sessionStorage.getItem('username');
-
-        if (!userId) {
-            window.location.href = '/auth/login';
+        if (!is_authenticated) {
+        goto(`/auth/login`);
         }
-
+        
         // Set the greeting based on local time
         updateGreeting();
 
@@ -56,7 +57,7 @@
         {#if $currentPage === 'settings'}
             <Settings />
         {:else if $currentPage === 'contributions'}
-            <Contributions userId={userId} />
+            <Contributions />
         {:else if $currentPage === 'help'}
             <HelpCentre />
         {:else}

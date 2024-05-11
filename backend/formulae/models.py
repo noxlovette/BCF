@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 from collection.models import CollectionIngredient, Ingredient, CustomCollectionIngredient
-from main_project.utils import decrypt_field, encrypt_field
+from main_project.encryption import decrypt_field, encrypt_field
 
 
 class Tag(models.Model):

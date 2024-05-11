@@ -4,7 +4,6 @@ from django.urls import path, include
 from .views import get_csrf_token
 
 urlpatterns = [
-    path('api/user_id', views.get_user_id,  name='user_id'),
     path("browse/", include('browse.urls')),
     path("collection/", include('collection.urls')),
     path("formulae/", include('formulae.urls')),

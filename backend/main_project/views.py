@@ -32,16 +32,15 @@ class UserSignupAPI(APIView):
         # Create new user
         try:
             user = User.objects.create_user(username=username, email=email, password=password)
-            gift = CustomCollectionIngredient.objects.create(
-                user_id=user.id,
+            giftedIngredient = CustomCollectionIngredient.objects.create(
+                user=user,
                 common_name="test ingredient",
                 cas="123456-78-9",
-                amount=100, unit='g', colour='green', impression='this is your first ingredient in collectoin',
+                amount=100, unit='g', colour='green', impression='this is your first ingredient in collection',
                 associations='write what you want about it', ideas='think of how you can use it')
-            gift.save()
+            giftedIngredient.save()
             meow = {
                 'message': 'User created successfully',
-                'user_id': user.id,
                 'username': user.username,
                 'is_authenticated': user.is_authenticated,
             }
@@ -75,14 +74,8 @@ class UserLoginAPI(APIView):
 
 class UserLogoutAPI(APIView):
     def post(self, request, *args, **kwargs):
-
         logout(request)
         return Response({'message': 'User logged out successfully'})
-
-
-@login_required
-def get_user_id(request):
-    return JsonResponse({'user_id': request.user.id})
 
 
 @require_safe  # Ensures that the view only responds to safe GET requests

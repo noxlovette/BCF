@@ -102,6 +102,9 @@
     <input type="radio" name="unit" value="imperial" id="imperial">
     <label for="metric">metric</label>
     <input type="radio" name="unit" value="metric" id="metric" checked>
+    <h3 class="mt-4 font-normal">default percent</h3>
+    <input type="number" min="0" max="100" value="10">
+    <h3 class="mt-4 font-normal">default volume</h3>
     <h3 class="mt-4 font-normal">language</h3>
     <p>currently supports only English</p>
     </div>  

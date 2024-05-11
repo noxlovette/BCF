@@ -9,7 +9,6 @@
   import FormulaDetail from "./FormulaDetail.svelte";
   
   // main functionality
-  let userId = 0;
   let formulae = null;
   let formulaDetail = null;
   let cleanup = () => {};
@@ -23,8 +22,7 @@
   if (is_authenticated === "false" || is_authenticated === null) {
     window.location.href = "/auth/login";
   }
-  userId = sessionStorage.getItem("user_id");
-  formulae = await fetchFormulas(userId)
+  formulae = await fetchFormulas()
   
   if (formulae) isLoading = false;
   
@@ -36,7 +34,7 @@
 
 
   async function fetchFormulaDetail(formulaId) {
-    formulaDetail = await fetchFormula(userId, formulaId);
+    formulaDetail = await fetchFormula(formulaId);
   }
 
   function viewFormula(formulaId) {
@@ -52,11 +50,11 @@
     }
   }  
   async function handleCreateFormula() {
-    let data = await createFormula(userId);
+    let data = await createFormula();
     console.log("created formula", data);
 
     notification.set("new formula created");
-    formulae = await fetchFormulas(userId, {forceReload: true });
+    formulae = await fetchFormulas({forceReload: true });
   }
 
   function handleKeydown(event) {
@@ -104,7 +102,7 @@
   </div>
   <div id="main-content" class="flex flex-row items-center justify-center flex-1 p-4 bg-amber-50/80 dark:bg-amber-800/10 rounded-lg shadow ml-4">
     {#if formulaDetail}
-    <FormulaDetail formulaDetail = {formulaDetail} userId = {userId} bind:formulae />
+    <FormulaDetail formulaDetail = {formulaDetail} bind:formulae bind:notification />
     {:else}
     <div class="flex flex-col items-center">
       <h2 class="text-4xl">welcome</h2>

@@ -2,14 +2,14 @@
     import { listSuggestedIngredients } from '$lib/DjangoAPI.ts';
     import { onMount } from 'svelte';
     
-    export let userId = "";
+
     let ingredients = null;
     let isLoading = true;
     let error = null;
     
     onMount(async () => {
         try {
-            ingredients = await listSuggestedIngredients(userId);
+            ingredients = await listSuggestedIngredients();
         } catch (e) {
             error = e.message;
         } finally {

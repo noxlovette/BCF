@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, PermissionDenied
 from rest_framework import generics
 from collection.models import CustomCollectionIngredient
 from collection.serialisers import CustomCollectionIngredientSerializer
@@ -9,16 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView
 from rest_framework.response import Response
 from django.utils import timezone
-from django.contrib.auth.models import User
 
-
-def index_view(request):
-    """
-    renders the minimalistic index page
-    :param request:
-    :return:
-    """
-    return render(request, 'formulae/index.html')
 
 
 class FormulaCreateAPI(generics.CreateAPIView):
@@ -28,11 +19,7 @@ class FormulaCreateAPI(generics.CreateAPIView):
     serializer_class = FormulaSerializer
 
     def perform_create(self, serializer):
-        # Get the user_id from the URL
-        user_id = self.kwargs.get('user_id')
-        # Get the user object
-        user = User.objects.get(id=user_id)
-        # Set the user field before saving the object
+        user = self.request.user
         serializer.save(user=user, created_at=timezone.now(), updated_at=timezone.now())
 
 
@@ -43,21 +30,12 @@ class FormulaListViewAPI(ListAPIView):
     serializer_class = FormulaSerializer
 
     def get(self, request, *args, **kwargs):
-        # Get the user_id from the URL
-        user_id = self.kwargs.get('user_id')
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied('You must be logged in to perform this action')
 
-        if user_id is not None:
-            # Get the user object
-            user = User.objects.get(id=user_id)
-            queryset = Formula.objects.filter(user=user)
-        else:
-            # If user_id is not provided, return an empty queryset
-            queryset = Formula.objects.none()
-
-        # Prepare each object for serialization
+        queryset = Formula.objects.filter(user=user)
         queryset = [formula.prepare_for_serialization() for formula in queryset]
-
-        # Serialize the queryset and return the response
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
@@ -113,14 +91,10 @@ class FormulaAsCustomIngredientAPI(generics.CreateAPIView):
         formula_id = self.kwargs.get('formula_id')
         common_name = self.request.data.get('name')
         description = self.request.data.get('description')
-        user_id = self.kwargs.get('user_id')
-        # Get the user object
-        user = User.objects.get(id=user_id)
-        # Set the user field before saving the object
-
+        user = self.request.user
 
         try:
-            formula = Formula.objects.get(id=formula_id)
+            _ = Formula.objects.get(id=formula_id)
         except Formula.DoesNotExist:
             raise ValidationError("Formula with id {} does not exist".format(formula_id))
 
@@ -143,6 +117,7 @@ class FormulaAsCustomIngredientAPI(generics.CreateAPIView):
         )
 
 
+#TODO not implemented
 class FormulaTagAPI(generics.RetrieveUpdateAPIView):
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer

@@ -36,16 +36,16 @@
 
   export let visibleFields = writable();
   let showTuneMenu = false;
-  let userId;
   let isLoading = true;
   let notification = writable("");
   let descriptors = []
   let searchTermDescriptor = "";
   let filteredDescriptors = [];
+  let is_authenticated = null;
+  let sortedDescriptors = [];
 
   onMount(async () => {
     // Set currentPage and searchTerm based on the initial props
-    userId = sessionStorage.getItem("user_id");
     currentPage.set((parseInt(sessionStorage.getItem('currentPage')) || 1));
     pageSize.set((parseInt(localStorage.getItem('pageSize')) || 10));
     searchTerm.set((sessionStorage.getItem('searchTerm') || ""));
@@ -54,6 +54,7 @@
     console.log('Current page when the page loaded:', $currentPage);
     data = await load();
     isLoading = false;
+    is_authenticated = sessionStorage.getItem("is_authenticated");
     
     descriptors = await fetchDescriptors();
     filteredDescriptors = descriptors;
@@ -75,7 +76,12 @@
   });
   });
 
+  function sortDescriptors(descriptors) {
+    return descriptors.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   $: {
+    sortedDescriptors = sortDescriptors(filteredDescriptors);
     if (chosenDescriptors.length > 0) {
       console.log(chosenDescriptors);
       fetchWithDescriptors();
@@ -124,7 +130,7 @@ async function fetchWithDescriptors() {
   }
 
 function toggleSuggestion(ingredient) {
-  if (userId === null) {
+  if (is_authenticated === null) {
     notification.set("you need to be logged in to suggest changes");
     return;
   } else {
@@ -136,7 +142,6 @@ function toggleSuggestion(ingredient) {
 let message = null;
 async function submitSuggestion() {
   let body = { 
-  user: userId, 
   message: message,
   ingredient: suggestedIngredient.id,
   common_name: suggestedIngredient.common_name,
@@ -231,8 +236,8 @@ function toggleFieldVisibility(field) {
 }
 
 async function handleAddIngredient(ingredientId) {
-  if (userId !== null) {
-    const response = await addToCollectionBrowse(ingredientId, userId);
+  if (is_authenticated !== null) {
+    const response = await addToCollectionBrowse(ingredientId);
     notification.set(response);
   } else {
     notification.set("you need to be logged in to add ingredients to your collection");
@@ -391,19 +396,19 @@ async function handleAddIngredient(ingredientId) {
         >
 
         {#if showFilterMenu}
-      <div id="filter" class="grid grid-cols-6 gap-4 w-full p-2 border border-none bg-white/20 dark:bg-black/20 space-y-2 items-center rounded-lg divide-x-2"
+      <div id="filter" class="grid grid-cols-6 gap-4 w-full p-2 border-none bg-white/20 dark:bg-black/20 items-center rounded-lg"
       in:fade={{duration: 150}}
       >
         {#if filteredDescriptors.length !== 0 && filteredDescriptors}
-        {#each filteredDescriptors as descriptor}
-              <label>
+        {#each sortedDescriptors as descriptor}
+              <label title={descriptor.description}>
             <input class= 
             "mx-2
             size-4 rounded-full shadow border-none text-amber-600/90 focus:ring-amber-400/30 checked:bg-amber-700/70 checked:ring-amber-700/30 hover:checked:bg-amber-600/80 transition-all hover:scale-110
             
             " 
             
-            type="checkbox" id={descriptor.name} bind:group={chosenDescriptors} value = {descriptor} on:change={() => handleDescriptorChange() && console.log("clicked")} />
+            type="checkbox" id={descriptor.name}  bind:group={chosenDescriptors} value = {descriptor} on:change={() => handleDescriptorChange() && console.log("clicked")} />
             {descriptor.name}
             </label>
 

@@ -2,23 +2,6 @@
     import Header from "$lib/components/Header.svelte";
     import Footer from "$lib/components/Footer.svelte";
     import { writable } from "svelte/store";
-    import { onMount } from "svelte";
-
-    let userId = "";
-    let username = "";
-
-    onMount(() => {
-        userId = sessionStorage.getItem('user_id');
-
-        if (!userId) {
-        window.location.href = '/auth/login';
-        notification.set("Please log in to view your profile")
-    }
-
-    });
-
-    // If the user is not logged in, redirect to the login page
-
     let notification = writable("");
 </script>
 

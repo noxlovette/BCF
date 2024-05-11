@@ -1,5 +1,12 @@
 <script>
-export let colour = "amber";
+    import { onMount } from "svelte";
+    
+    export let colour = "amber";
+
+onMount(() => {
+  console.log("Component mounted");
+  console.log("Colour loader:", colour);
+});
 let quotes = [
       "Perfume is the art that makes memory speak. — Francis Kurkdjian",
       "A woman who doesn't wear perfume has no future. — Coco Chanel",
@@ -25,7 +32,7 @@ let quotes = [
 
 </script>
 
-<div id="spinner" class="flex size-16 border-4 m-10 border-{colour}-400 border-dotted rounded-full animate-spin" />
+<div id="spinner" class="flex size-16 border-4 m-10 border-{colour}-800 border-dotted rounded-full animate-spin" />
 <p>{chosenQuote}</p>
   
   
