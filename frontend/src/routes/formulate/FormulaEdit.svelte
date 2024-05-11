@@ -6,7 +6,6 @@
     export let formulaDetail = null;
     export let editing = true;
     export let solventValue = 0;
-    export let solventName = "alcohol";
     let activeEditId = null;
     let ingredientCounter = 0;
 
@@ -61,6 +60,7 @@
       description: editedFormula.description,
       notes: editedFormula.notes,
       ingredients: updatedIngredients,
+      solvent: editedFormula.solvent,
     };
     editing = false;
     
@@ -187,7 +187,7 @@
         <tr id="functional" class="border-t border-amber-950/20 dark:border-amber-100/10">
           <td>x</td>
           <td>
-            <input type="text" bind:value={solventName} placeholder="solvent" class="flex w-2/3 bg-amber-50/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none"/>
+            <input type="text" bind:value={editedFormula.solvent} placeholder="solvent" class="flex w-2/3 bg-amber-50/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none"/>
           </td>
           <td>solvent</td>
           <td class="{solventValue < 0 ? 'text-red-700/80' : ''}">{solventValue}</td>

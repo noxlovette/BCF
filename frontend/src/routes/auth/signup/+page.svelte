@@ -56,7 +56,6 @@
                 console.error('Server responded with an error:', data.error);
                 notification.set('Login failed...');
             } else {
-                sessionStorage.setItem('user_id', data.user_id);
                 sessionStorage.setItem('username', data.username);
                 sessionStorage.setItem('is_authenticated', data.is_authenticated);
                 notification.set('Signup successful!');

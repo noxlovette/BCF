@@ -5,16 +5,21 @@
     import Contributions from './Contributions.svelte';
     import HelpCentre from './HelpCentre.svelte';
     import { goto } from "$app/navigation";
+    import Header from "$lib/components/Header.svelte";
+    import Footer from "$lib/components/Footer.svelte";
     
     
     let username = "";
+    let email = "";
     let currentPage = writable('');
     let is_authenticated = false;
     let greeting = writable("");
+    export let notification = writable('');
 
     onMount(async () => {
         is_authenticated = sessionStorage.getItem('is_authenticated');
         username = sessionStorage.getItem('username');
+        email = sessionStorage.getItem('email');
         if (!is_authenticated) {
         goto(`/auth/login`);
         }
@@ -36,7 +41,10 @@
         }
     }
 </script>
-
+<div class="lowercase flex flex-col min-h-screen z-0" style="background: url('/assets/bg/bbblurry-auth.svg') no-repeat center center fixed; background-size: cover;">
+    <Header currentPage="profile" notification={notification}/>
+    <div class="mb-auto flex justify-center items-center">
+    
 <div id="app" class="flex flex-row rounded-lg shadow bg-stone-400/30 dark:bg-stone-800/30 items-stretch size-5/6 m-2 mt-0 p-4 lowercase font-light">
     <div id="sidebar" class="dark:bg-stone-600/50 flex flex-col w-1/6 hover:w-1/5 mr-auto rounded-lg drop-shadow p-4 transition-all duration-500">
         <h2 id="header" class="text-4xl mb-4 border-b-2 tracking-tight border-stone-400/20">{username}</h2>
@@ -55,7 +63,7 @@
     </div>
     <div id="main-content" class="dark:bg-stone-700/20 bg-stone-100/80 flex flex-row items-start flex-1 p-4 rounded-lg shadow ml-4">
         {#if $currentPage === 'settings'}
-            <Settings />
+            <Settings bind:notification {email} {username} />
         {:else if $currentPage === 'contributions'}
             <Contributions />
         {:else if $currentPage === 'help'}
@@ -64,4 +72,7 @@
             <p class="font-semibold text-4xl">{$greeting}, {username}!</p>
         {/if}
     </div>
+</div>
+</div>
+<Footer/>
 </div>

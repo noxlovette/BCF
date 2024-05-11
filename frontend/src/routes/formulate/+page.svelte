@@ -84,7 +84,7 @@
       {#each formulae as formula}
         <button class:active={formula.id === activeFormulaId} 
         id="formula-item" 
-        class="flex lowercase flex-col w-5/6 hover:translate-x-1 active:scale-95 hover:bg-amber-50/80 hover:text-amber-800/80 dark:hover:bg-amber-800/20 dark:hover:text-amber-50/60 hover:rounded-lg hover:shadow p-2 transition-all duration-150" 
+        class="flex lowercase text-left flex-col w-5/6 hover:translate-x-1 active:scale-95 hover:bg-amber-50/80 hover:text-amber-800/80 dark:hover:bg-amber-800/20 dark:hover:text-amber-50/60 hover:rounded-lg hover:shadow p-2 transition-all duration-150" 
         on:click={() => viewFormula(formula.id)} 
         title={formula.description}
         
@@ -102,7 +102,7 @@
   </div>
   <div id="main-content" class="flex flex-row items-center justify-center flex-1 p-4 bg-amber-50/80 dark:bg-amber-800/10 rounded-lg shadow ml-4">
     {#if formulaDetail}
-    <FormulaDetail formulaDetail = {formulaDetail} bind:formulae bind:notification />
+    <FormulaDetail bind:formulae bind:formulaDetail bind:notification />
     {:else}
     <div class="flex flex-col items-center">
       <h2 class="text-4xl">welcome</h2>

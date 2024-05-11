@@ -109,20 +109,15 @@ class FormulaSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='_name')
     description = serializers.CharField(source='_description', allow_null=True, allow_blank=True)
     notes = serializers.CharField(source='_notes', allow_null=True, allow_blank=True)
+    solvent = serializers.CharField(allow_null=True, allow_blank=True)
 
     def update(self, instance, validated_data):
         # Update existing Formula fields
         instance._name = validated_data.pop('_name', instance._name)
         instance._description = validated_data.pop('_description', instance._description)
         instance._notes = validated_data.pop('_notes', instance._notes)
-        user_id = validated_data.get('user')
+        instance.solvent = validated_data.get('solvent', instance.solvent)
         instance.save()
-
-        # update or create tags
-        tags_data = validated_data.pop('tags', [])
-        for tag_name in tags_data:
-            tag, created = Tag.objects.get_or_create(name=tag_name, user_id=user_id)
-            instance.tags.add(tag)
 
         # Update existing FormulaIngredient instances or create new ones
         ingredients_data = validated_data.pop('ingredients', [])
@@ -201,5 +196,5 @@ class FormulaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Formula
-        fields = ['updated', 'created', 'id', 'name', 'description', 'ingredients', 'notes', 'created_at']
+        fields = ['updated', 'created', 'id', 'name', 'description', 'ingredients', 'notes', 'created_at', 'solvent']
         read_only_fields = ['id', 'created_at', 'updated_at']

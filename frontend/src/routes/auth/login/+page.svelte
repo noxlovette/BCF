@@ -23,6 +23,7 @@
       await fetchCollection();
       sessionStorage.setItem("username", data.username);
       sessionStorage.setItem("is_authenticated", 'true');
+      sessionStorage.setItem('email', data.email);
       notification.set("Login successful!");
       goto("/collect/");
     }

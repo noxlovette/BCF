@@ -50,7 +50,6 @@
   async function reset() {
     searchTerm.set("");
     currentPage.set(1);
-    goto(`/collect?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
     collection = await handleFetch(true);
     }
 
@@ -64,7 +63,7 @@ async function changePage(newPage) {
     if (newPage >= 1 && newPage <= Math.ceil(filteredCollection.length / $pageSize)) {
       currentPage.set(newPage);
       notification.set(`you are on page ${$currentPage}`);
-      goto(`/collect?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
+
     }
     else {
       notification.set(`there is nothing to seek there`);
@@ -87,10 +86,15 @@ async function searchIngredients() {
      */
      async function handleDeleteClick(ingredient) {
         const response = await deleteFromCollection(ingredient);
+        if (response === "Ingredient successfully removed from collection!") {
+        filteredCollection = filteredCollection.filter(ingredientInside => ingredientInside.id !== ingredient.id);
         console.log("response:", response);
         notification.set(response);
         editingRowId = null;
-        collection = await handleFetch(true);
+      } else {
+        console.error("Error deleting ingredient:", response);
+        notification.set(response);
+      }
 }
 
 // editing functionality

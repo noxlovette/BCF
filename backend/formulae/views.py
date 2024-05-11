@@ -88,8 +88,8 @@ class FormulaAsCustomIngredientAPI(generics.CreateAPIView):
     serializer_class = CustomCollectionIngredientSerializer
 
     def perform_create(self, serializer):
-        formula_id = self.kwargs.get('formula_id')
-        common_name = self.request.data.get('name')
+        formula_id = self.request.data.get('formula_id')
+        common_name = self.request.data.get('common_name')
         description = self.request.data.get('description')
         user = self.request.user
 

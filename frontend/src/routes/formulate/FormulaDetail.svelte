@@ -10,7 +10,6 @@
     let solventValue = 0;
     let editing = false;
     let editedFormula = null;
-    let solventName = "alcohol";
 
     $: if (formulaDetail && formulaDetail.ingredients) {
         let totalAmount = formulaDetail.ingredients.reduce((acc, ingredient) => acc + ingredient.amount, 0);
@@ -34,10 +33,12 @@
   }
 
   async function handleDeleteFormula(formulaId) {
+    formulaDetail = null;
     let data = await deleteFormula(formulaId);
     console.log(data);
     // Remove the deleted formula from the formulae array
     formulae = formulae.filter((formula) => formula.id !== formulaId);
+    notification.set("formula deleted");
   }
 
   let sortColumn = writable('ingredient'); // Default sort column
@@ -85,7 +86,7 @@
 </script>
 
 {#if editing}
-    <FormulaEdit {formulaDetail} {editedFormula} bind:editing bind:solventValue bind:solventName />
+    <FormulaEdit {formulaDetail} {editedFormula} bind:editing bind:solventValue/>
 {:else}
 
 <div id="description-etc" class="flex flex-col mr-auto w-1/4 p-4 h-full divide-y-4 divide-amber-800/60 dark:divide-amber-50/60 space-y-4 bg-amber-50/80 dark:bg-amber-800/20 rounded-lg shadow">
@@ -167,7 +168,7 @@
       {/each}
       <tr id="functional" class="border-t border-amber-950/20 dark:border-amber-100/10">
         <td class="">x</td>
-        <td class="">{solventName}</td>
+        <td class="">{formulaDetail.solvent}</td>
         <td class="">solvent</td>
         <td class="{solventValue < 0 ? 'text-red-700/80 dark:text-red-500/80' : ''}">{solventValue}</td>
         <td class="">100</td>

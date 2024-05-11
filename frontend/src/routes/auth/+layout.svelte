@@ -1,8 +1,5 @@
 <script>
 import Footer from "$lib/components/Footer.svelte";
-import { writable } from "svelte/store";
-
-let notification = writable("");
 
 </script>
 

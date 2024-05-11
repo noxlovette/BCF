@@ -34,6 +34,7 @@ class Formula(models.Model):
     encrypted_notes = models.BinaryField(null=True, blank=True, editable=False)
 
     tags = models.ManyToManyField(Tag, blank=True)
+    solvent = models.CharField(max_length=100, blank=True, null=True, default='Ethanol')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

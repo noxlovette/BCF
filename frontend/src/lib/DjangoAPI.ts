@@ -126,6 +126,7 @@ export async function addSuggestionBrowse(body: any) {
 // COLLECT PAGE
 
 export async function fetchCollection({ forceReload = false } = {}) {
+  csrfToken = await fetchCSRFToken();
   const cacheKey = `collection`;
   let data = forceReload ? null : sessionStorage.getItem(cacheKey);
   if (data) {
@@ -136,10 +137,18 @@ export async function fetchCollection({ forceReload = false } = {}) {
       const data = await fetchCentralDjangoApi(endpoint);
 
       if (Array.isArray(data) && data.length > 0 && data[0].hasOwnProperty('common_name')) {
-        const sortedData = data.sort((a, b) => a.common_name.localeCompare(b.common_name));
         console.log("collection data from Django:", data);
+        const sortedData = data.sort((a, b) => {
+            // Handle null or undefined common_name values by replacing them with an empty string
+            const nameA = a.common_name || "";
+            const nameB = b.common_name || "";
+    
+            return nameA.localeCompare(nameB);
+        });
+        console.log("Sorted collection data:", sortedData);
         sessionStorage.setItem(cacheKey, JSON.stringify(sortedData));
         return sortedData;
+    
       } else {
         console.error('Data is not in expected array format or missing "name" property:', data);
         return data; // return data as is if not sortable
@@ -165,6 +174,7 @@ export async function deleteFromCollection(ingredient: any) {
     console.log("DELETE response from Django:", response);
 
     if (response === undefined || response.success) {
+      fetchCollection({ forceReload: true });
       return "Ingredient successfully removed from collection!";
     } else {
       console.error(response.error);
@@ -194,7 +204,9 @@ export async function logIn(body) {
   const endpoint = `${BASE_URL}/api/login/`;
   try {
     const response = await fetchCentralDjangoApi(endpoint, "POST", body);
+    csrfToken = await fetchCSRFToken();
     return response; // This will be your user data on successful login
+
   } catch (error) {
     console.error("Error logging in:", error);
     return { error: error.message }; // Structure the error in a consistent format
@@ -244,7 +256,7 @@ export async function addFormulaAsCustomIngredient(formula:any) {
   const data = {
     common_name: formula.name,
     use: formula.description,
-    formula: formula.id,
+    formula_id: formula.id,
     cas: 'BASE',
     volatility: 'base',
     amount: 0,
@@ -256,20 +268,14 @@ export async function addFormulaAsCustomIngredient(formula:any) {
   };
   let url = `${BASE_URL}/formulae/api/formula/${formula.id}/add_as_custom/`;
 
-  try {
-    // Assuming fetchCentralDjangoApi is a function that handles the fetch API call
+    // Assuming fetchCentralDjangoApi is a function that wraps fetch and handles the response
     let response = await fetchCentralDjangoApi(url, "POST", data);
-    if (response.ok) {
-      console.log("Server Response:", await response.json());
+
+    if (response.id) { // Check if 'id' is present in the response
+      fetchCollection({ forceReload: true }); // Force reload if needed
       return "Formula added as custom ingredient";
-    } else {
-      // Parse the JSON response body to get the error message
-      const errorData = await response.json();
-      throw new Error(errorData.detail || "Unknown error occurred");
-    }
-  } catch (error) {
-    console.error("Error fetching data from Django:", error);
-    return `error. you might already have this formula in your collection`;
+  } else {
+      return "error occured. you might have already added this formula as custom ingredient.";
   }
 }
 
@@ -287,6 +293,7 @@ export async function createFormula () {
     name: "New Formula",
     description: "Write something inspiring here!",
     notes: "Add some notes here...",
+    solvent: "Ethanol",
     ingredients: [],
   };
   let url = `${BASE_URL}/formulae/api/formula/new/`;
@@ -360,6 +367,7 @@ export async function fetchFormula(formulaId, {forceReload = false} = {}) {
       const endpoint = `${BASE_URL}/api/logout/`;
       const response = await fetchCentralDjangoApi(endpoint, "POST");
       console.log("Logout response from Django:", response);
+      csrfToken = null;
       return response;
     } catch (error) {
       console.error("Error logging out:", error);
@@ -372,6 +380,7 @@ export async function fetchFormula(formulaId, {forceReload = false} = {}) {
       const endpoint = `${BASE_URL}/api/signup/`;
       const response = await fetchCentralDjangoApi(endpoint, "POST", body);
       console.log("Signup response from Django:", response);
+      csrfToken = await fetchCSRFToken();
       return response;
     } catch (error) {
       console.error("Error signing up:", error);
@@ -405,6 +414,7 @@ export async function fetchFormula(formulaId, {forceReload = false} = {}) {
 
 
 export async function fetchDescriptors() {
+  csrfToken = await fetchCSRFToken();
   const url = `${BASE_URL}/browse/api/descriptors/`;
   const cacheKey = "descriptors";
   if (localStorage.getItem(cacheKey)) {
@@ -418,8 +428,35 @@ export async function fetchDescriptors() {
       return response
   } catch (error) {
       console.error("Failed to load descriptors");
-      return error.message;
+      throw error;
   }
 }
 }
 
+export async function updateUserProfile(body: string) {
+  const endpoint = `${BASE_URL}/api/profile/update/`;
+  console.log("body sent to update", body);
+  try {
+      const response = await fetchCentralDjangoApi(endpoint, "PUT", body);
+      console.log('Changes saved successfully');
+      csrfToken = await fetchCSRFToken();
+      return response;
+  } catch (error) {
+      console.error("Error updating profile:", error);
+      throw error;
+
+  }
+}
+
+export async function deleteUserProfile() {
+  const endpoint = `${BASE_URL}/api/profile/delete/`;
+  try {
+      const response = await fetchCentralDjangoApi(endpoint, "DELETE");
+      logOut();
+      console.log('Profile deleted successfully');
+      return response;
+  } catch (error) {
+      console.error("Error deleting profile:", error);
+      throw error;
+  }
+}

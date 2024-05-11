@@ -13,4 +13,6 @@ urlpatterns = [
     path('api/login/', views.UserLoginAPI.as_view(), name='api-login'),
     path('api/signup/', views.UserSignupAPI.as_view(), name='api-signup'),
     path('api/logout/', views.UserLogoutAPI.as_view(), name='api-logout'),
+    path('api/profile/update/', views.UserProfileUpdateAPI.as_view(), name='api-profile-update'),
+    path('api/profile/delete/', views.UserDeleteAPI.as_view(), name='api-delete'),
 ]

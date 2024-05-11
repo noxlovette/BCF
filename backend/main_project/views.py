@@ -1,17 +1,18 @@
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+import json
 from django.contrib.auth import logout
-import logging
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.http import require_safe
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.contrib.auth import authenticate, login
-from collection.models import CustomCollectionIngredient
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, update_session_auth_hash, login
+from rest_framework import permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+import logging
+from collection.models import CustomCollectionIngredient
 
 logger = logging.getLogger(__name__)
 
@@ -32,17 +33,11 @@ class UserSignupAPI(APIView):
         # Create new user
         try:
             user = User.objects.create_user(username=username, email=email, password=password)
-            giftedIngredient = CustomCollectionIngredient.objects.create(
-                user=user,
-                common_name="test ingredient",
-                cas="123456-78-9",
-                amount=100, unit='g', colour='green', impression='this is your first ingredient in collection',
-                associations='write what you want about it', ideas='think of how you can use it')
-            giftedIngredient.save()
             meow = {
                 'message': 'User created successfully',
                 'username': user.username,
                 'is_authenticated': user.is_authenticated,
+                'email': user.email,
             }
             return Response(meow, status=status.HTTP_201_CREATED)
         except Exception as e:
@@ -62,9 +57,9 @@ class UserLoginAPI(APIView):
         if user is not None:
             login(request, user)
             return Response({
-                'user_id': user.id,
                 'username': user.username,
                 'is_authenticated': user.is_authenticated,
+                'email': user.email,
             })
         else:
             return Response({
@@ -73,14 +68,70 @@ class UserLoginAPI(APIView):
 
 
 class UserLogoutAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         logout(request)
         return Response({'message': 'User logged out successfully'})
+
+
+class UserProfileUpdateAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        logging.debug("Raw data received: %s", request.data)
+        user = request.user
+        data = request.data
+        if isinstance(data, str):
+            try:
+                data = json.loads(data)
+            except json.JSONDecodeError:
+                return Response({'error': 'Invalid JSON data'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the password change is requested and validate the old password
+        old_password = data.get('oldPassword')
+        new_password = data.get('newPassword')
+        if old_password and new_password:
+            if not user.check_password(old_password):
+                return Response({"error": "Wrong password"}, status=status.HTTP_400_BAD_REQUEST)
+            user.set_password(new_password)
+
+        # Update email and username if provided
+        if email := data.get('email'):
+            if User.objects.filter(email=email).exclude(username=user.username).exists():
+                return Response({"error": "Email already in use"}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                user.email = email
+
+        if username := data.get('username'):
+            if User.objects.filter(username=username).exclude(email=user.email).exists():
+                return Response({"error": "Username already in use"}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                user.username = username
+        user.save()
+
+        # Keep the session valid after changing password
+        if new_password:
+            update_session_auth_hash(request, user)
+
+        return Response({"success": "Profile updated"}, status=status.HTTP_200_OK)
+
+
+class UserDeleteAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            user = request.user
+            user.delete()
+            return Response({'message': 'User deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        except ObjectDoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @require_safe  # Ensures that the view only responds to safe GET requests
 def get_csrf_token(request):
     csrf_token = get_token(request)  # Ensures CSRF cookie is set and retrieves the token
     return JsonResponse({'csrfToken': csrf_token})  # Send CSRF token in JSON response
-
-
