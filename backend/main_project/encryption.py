@@ -7,11 +7,12 @@ import os
 load_dotenv()
 
 PRIVATE_KEY_PASSWORD = os.getenv('PRIVATE_KEY_PASSWORD')
-LICENSE_LOCATION = os.getenv('LICENSE_LOCATION')
+PRIVATE_KEY_PATH = os.getenv('PRIVATE_KEY_PATH_DEV')
+LICENSE_LOCATION = os.getenv('LICENSE_LOCATION_DEV')
 
 
 def get_private_key():
-    key_path = os.getenv('PRIVATE_KEY_PATH', '/Volumes/Thor/private_key.pem')
+    key_path = PRIVATE_KEY_PATH
     with open(key_path, 'rb') as key_file:
         return serialization.load_pem_private_key(
             key_file.read(),
@@ -22,7 +23,7 @@ def get_private_key():
 
 
 def get_public_key():
-    key_path = os.getenv('PUBLIC_KEY_PATH', LICENSE_LOCATION)
+    key_path = LICENSE_LOCATION
     with open(key_path, 'rb') as key_file:
         return serialization.load_pem_public_key(
             key_file.read(),

@@ -60,11 +60,11 @@ MIDDLEWARE = [
 
 CSRF_COOKIE_HTTPONLY = False
 
-#CSRF_TRUSTED_ORIGINS = [
-#    'http://localhost:5173',
- #   'http://frontend:5173',
-  #  'http://172.21.0.4:5173',
-#]
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:5173',
+    'http://172.21.0.4:5173',
+    'http://frontend:5173',
+]
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
@@ -100,11 +100,11 @@ print('Database host:', os.environ.get('DB_HOST'))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST', default='db'),
-        'PORT': os.environ.get('DB_PORT', default='5432'),
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST', default='db'),
+        'PORT': os.environ.get('POSTGRES_PORT', default='5432'),
     }
 }
 

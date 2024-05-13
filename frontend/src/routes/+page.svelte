@@ -102,7 +102,7 @@ function startNotificationInterval() {
         <span class="text-amber-300">
         perfume? 
       </span>
-        We've got you covered.
+        We've got you covered. YES IT WORKS!
         </h1>
       </div>
     </div>

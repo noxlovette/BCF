@@ -4,7 +4,8 @@ services:
     ports:
       - "5173:5173"
     volumes:
-      - ./frontend:/app
+      - ./frontend/static:/app/static
+      - ./frontend/src:/app/src
     environment:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
@@ -22,11 +23,11 @@ services:
       - ./backend:/app
       - /Volumes/Thor/:/app/Volumes/Thor/
     environment:
-      - DB_NAME=postgres
-      - DB_USER=postgres
-      - DB_PASSWORD=p3rfume$ucks
-      - DB_HOST=db
-      - DB_PORT=5432
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=p3rfume$ucks
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
     env_file:
       - ./backend/.env
     command: python manage.py runserver 0.0.0.0:8000
