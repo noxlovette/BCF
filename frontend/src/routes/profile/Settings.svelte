@@ -178,9 +178,9 @@
     <h3 class="font-normal">measurement unit</h3>
     <p class="font-thin">coming soon</p>
     <label for="imperial">imperial</label>
-    <input type="radio" name="unit" value="imperial" id="imperial">
+    <input type="radio" class="focus:ring-0 active:ring-0 hover:ring-0 active:bg-amber-300  checked:bg-amber-400 hover:checked:bg-amber-500 text-amber-400 bg-none border-none ring-amber-50 active:svale-90 transition-all" name="unit" value="imperial" id="imperial">
     <label for="metric">metric</label>
-    <input type="radio" name="unit" value="metric" id="metric" checked>
+    <input type="radio" class="focus:ring-0 active:ring-0 hover:ring-0 active:bg-amber-300  checked:bg-amber-400 hover:checked:bg-amber-500 text-amber-400 bg-none border-none ring-amber-50 active:svale-90 transition-all" name="unit" value="metric" id="metric" checked>
     <h3 class="mt-4 font-normal">default percent</h3>
     <p class="font-thin">coming soon</p>
     <h3 class="mt-4 font-normal">default solvent</h3>
@@ -192,9 +192,9 @@
     <h2 class="mb-2 font-bold">notifications</h2>
 <h3 class=" font-normal">email notifications</h3>
 <p class="font-thin">coming soon</p>
-<input type='radio' name='email' value='on' id='email-on' checked>
+<input type='radio' class="focus:ring-0 active:ring-0 hover:ring-0 active:bg-amber-300  checked:bg-amber-400 hover:checked:bg-amber-500 text-amber-400 bg-none border-none ring-amber-50 active:svale-90 transition-all" name='email' value='on' id='email-on' checked>
 <label for='email-on'>on</label>
-<input type='radio' name='email' value='off' id='email-off'>
+<input type='radio' class="focus:ring-0 active:ring-0 hover:ring-0 active:bg-amber-300  checked:bg-amber-400 hover:checked:bg-amber-500 text-amber-400 bg-none border-none ring-amber-50 active:svale-90 transition-all" name='email' value='off' id='email-off'>
 <label for='email-off'>off</label>
 </div>
 

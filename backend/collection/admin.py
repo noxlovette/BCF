@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CollectionIngredient
+from .models import RegularCollectionIngredient
 
 
-admin.site.register(CollectionIngredient)
+admin.site.register(RegularCollectionIngredient)

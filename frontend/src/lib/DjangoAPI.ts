@@ -1,18 +1,6 @@
 // src/routes/DjangoAPI.ts
-
-let csrfToken: string | null = null;
 const BASE_URL = "http://localhost:8000";
 
-
-export async function fetchCSRFToken() {
-  const response = await fetch(`${BASE_URL}/api/get-csrf/`, {
-      method: 'GET',
-      credentials: 'include'  // Necessary to include cookies if they are accessible
-  });
-  const data = await response.json();
-  console.log(data.csrfToken);
-  return data.csrfToken;  // Use this token for subsequent POST, PUT, DELETE requests 
-}
 
 // the central bridge to the Django API
 export async function fetchCentralDjangoApi(
@@ -21,15 +9,11 @@ export async function fetchCentralDjangoApi(
   body: any = null,
   credentials: RequestCredentials = "include"  // Set to include to ensure cookies are sent
 ): Promise<any> {
-  // Ensure CSRF token is set
-  if (!csrfToken) {
-    csrfToken = await fetchCSRFToken();
-  }
+  const csrfToken = getCookie('csrftoken'); // Function to get CSRF token from cookies
 
-  // Construct headers with CSRF token included
   const headers = {
     "Content-Type": "application/json",
-    "X-CSRFToken": csrfToken,
+    ...(csrfToken && { "X-CSRFToken": csrfToken }), // Conditionally add CSRF token to headers
   };
 
   // Make a request to Django API with CSRF token included in headers
@@ -39,6 +23,8 @@ export async function fetchCentralDjangoApi(
     body: body ? JSON.stringify(body) : null,
     credentials,
   };
+
+  console.log(options);  // Add this line before fetch call to inspect the request payload
 
   const response = await fetch(endpoint, options);
 
@@ -54,6 +40,23 @@ export async function fetchCentralDjangoApi(
   }
 }
 
+// Helper function to get a cookie by name
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+
 // BROWSE PAGE
 export async function fetchIngredientsBrowse(currentPage: number, searchTerm = "", pageSize = 10, chosenDescriptors = [], { forceReload = false } = {}) {
   const descriptors = chosenDescriptors.map(descriptor => `descriptors=${encodeURIComponent(descriptor.name)}`).join('&');
@@ -64,9 +67,7 @@ export async function fetchIngredientsBrowse(currentPage: number, searchTerm = "
   let data = forceReload ? null : localStorage.getItem(cacheKey);
   if (data) {
     console.log("Data from cache:", data);
-    if (!csrfToken) {
-      csrfToken = await fetchCSRFToken();
-    }
+    
     return JSON.parse(data);
   } else {
     try {
@@ -126,7 +127,7 @@ export async function addSuggestionBrowse(body: any) {
 // COLLECT PAGE
 
 export async function fetchCollection({ forceReload = false } = {}) {
-  csrfToken = await fetchCSRFToken();
+
   const cacheKey = `collection`;
   let data = forceReload ? null : sessionStorage.getItem(cacheKey);
   if (data) {
@@ -204,7 +205,7 @@ export async function logIn(body) {
   const endpoint = `${BASE_URL}/api/login/`;
   try {
     const response = await fetchCentralDjangoApi(endpoint, "POST", body);
-    csrfToken = await fetchCSRFToken();
+
     return response; // This will be your user data on successful login
 
   } catch (error) {
@@ -367,7 +368,7 @@ export async function fetchFormula(formulaId, {forceReload = false} = {}) {
       const endpoint = `${BASE_URL}/api/logout/`;
       const response = await fetchCentralDjangoApi(endpoint, "POST");
       console.log("Logout response from Django:", response);
-      csrfToken = null;
+
       return response;
     } catch (error) {
       console.error("Error logging out:", error);
@@ -380,7 +381,7 @@ export async function fetchFormula(formulaId, {forceReload = false} = {}) {
       const endpoint = `${BASE_URL}/api/signup/`;
       const response = await fetchCentralDjangoApi(endpoint, "POST", body);
       console.log("Signup response from Django:", response);
-      csrfToken = await fetchCSRFToken();
+
       return response;
     } catch (error) {
       console.error("Error signing up:", error);
@@ -414,7 +415,7 @@ export async function fetchFormula(formulaId, {forceReload = false} = {}) {
 
 
 export async function fetchDescriptors() {
-  csrfToken = await fetchCSRFToken();
+  
   const url = `${BASE_URL}/browse/api/descriptors/`;
   const cacheKey = "descriptors";
   if (localStorage.getItem(cacheKey)) {
@@ -439,7 +440,7 @@ export async function updateUserProfile(body: string) {
   try {
       const response = await fetchCentralDjangoApi(endpoint, "PUT", body);
       console.log('Changes saved successfully');
-      csrfToken = await fetchCSRFToken();
+      
       return response;
   } catch (error) {
       console.error("Error updating profile:", error);

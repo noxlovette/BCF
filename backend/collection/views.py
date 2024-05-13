@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.response import Response
-from .models import CollectionIngredient, Ingredient, User, CustomCollectionIngredient
+from .models import RegularCollectionIngredient, Ingredient, User, CustomCollectionIngredient
 from rest_framework.views import APIView
 from rest_framework.exceptions import ParseError, PermissionDenied
 import logging
@@ -55,7 +55,7 @@ class CustomIngredientUpdateView(generics.UpdateAPIView):
 
 
 class IngredientUpdateView(generics.UpdateAPIView):
-    queryset = CollectionIngredient.objects.all()
+    queryset = RegularCollectionIngredient.objects.all()
     serializer_class = StandardCollectionIngredientSerializer
     lookup_url_kwarg = 'collectionIngredientId'
 
@@ -85,7 +85,7 @@ class IngredientDeleteView(generics.DestroyAPIView):
     """
     DELETE A COLLECTION INGREDIENT
     """
-    queryset = CollectionIngredient.objects.all()
+    queryset = RegularCollectionIngredient.objects.all()
     serializer_class = StandardCollectionIngredientSerializer
     lookup_url_kwarg = 'collectionIngredientId'
 
@@ -122,7 +122,7 @@ class CollectionAPI(APIView):
         if not user.is_authenticated:
             raise PermissionDenied('You must be logged in to perform this action')
 
-        collection_ingredients = CollectionIngredient.objects.filter(user=user).order_by('ingredient__common_name')
+        collection_ingredients = RegularCollectionIngredient.objects.filter(user=user).order_by('ingredient__common_name')
         custom_collection_ingredients = CustomCollectionIngredient.objects.filter(user=user)
 
         # Prepare data for serialization
@@ -160,7 +160,7 @@ class CollectionAPI(APIView):
             ingredient_id = data.get('ingredient_id')
             user = self.request.user
             ingredient = Ingredient.objects.get(id=ingredient_id)
-            CollectionIngredient.objects.create(user=user, ingredient=ingredient)
+            RegularCollectionIngredient.objects.create(user=user, ingredient=ingredient)
 
             return JsonResponse({'success': True})
         except IntegrityError:

@@ -71,7 +71,7 @@
   <Header currentPage="formulate" notification = {notification}/>
   <div class="mb-auto flex justify-center items-center">
     {#if isLoading}
-    <Loader colour="green" />
+    <Loader />
     {:else}
     <div id="app" class="flex flex-row rounded-lg shadow items-stretch size-5/6 m-2 mt-0 p-4 lowercase font-light text-amber-950/90 dark:text-amber-200/60 bg-amber-600/30"
     in:fade={{duration: 150}}

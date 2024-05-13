@@ -2,6 +2,8 @@ from django.contrib import admin
 from . import views
 from django.urls import path, include
 from .views import get_csrf_token
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("browse/", include('browse.urls')),

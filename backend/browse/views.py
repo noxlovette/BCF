@@ -12,6 +12,7 @@ from rest_framework import generics
 class BrowseView(APIView):
     """
     the basic view for the browse page, search functionality in-built
+    accommodates search term and descriptors
     """
 
     def get(self, request):
@@ -21,6 +22,7 @@ class BrowseView(APIView):
         descriptors = request.query_params.getlist('descriptors', None)
 
         ingredients = Ingredient.objects.filter(
+            # Search in the common_name, other_names, and cas fields
             Q(common_name__icontains=search_term) |
             Q(other_names__icontains=search_term) |
             Q(cas__icontains=search_term)
@@ -34,11 +36,9 @@ class BrowseView(APIView):
                 Q(descriptor3__name__in=descriptors)
             ).distinct()
 
-        # Create a paginator
-        paginator = CustomPageNumberPagination()  # Use the custom pagination class
-        paginator.page_size = page_size  # Set the number of items per page
-
-        # Get the page of ingredients
+        # a custom paginator to yield total_pages
+        paginator = CustomPageNumberPagination()
+        paginator.page_size = page_size  # set the page size
         page_of_ingredients = paginator.paginate_queryset(ingredients, request)
 
         # Convert the page of ingredients to JSON
@@ -69,12 +69,17 @@ class DescriptorsListAPIView(generics.ListAPIView):
     serializer_class = DescriptorSerialiser
 
 
-
 class SuggestedIngredientCreateView(generics.CreateAPIView):
+    """
+    This view allows users to suggest ingredients to be added to the database
+    """
     queryset = SuggestedIngredient.objects.all()
     serializer_class = SuggestedIngredientSerialiser
 
     def perform_create(self, serializer):
+        """
+        an additional level of validation to ensure that the user is authenticated before creating a suggestion
+        """
         user = self.request.user
         if not user.is_authenticated:
             raise PermissionDenied('You must be logged in to perform this action')
@@ -82,23 +87,22 @@ class SuggestedIngredientCreateView(generics.CreateAPIView):
 
 
 class SuggestedIngredientListView(generics.RetrieveAPIView):
+    """
+    This view returns a list of all ingredients suggested by the user. Shows on the profile page
+    """
     serializer_class = SuggestedIngredientSerialiser
 
     def get(self, request, *args, **kwargs):
-        # Get the user_id from the URL
         user = self.request.user
         if not user.is_authenticated:
             raise PermissionDenied('You must be logged in to perform this action')
 
         if user is not None:
-            # Get the user object
             user = user
             queryset = SuggestedIngredient.objects.filter(user=user)
         else:
-            # If user_id is not provided, return an empty queryset
             queryset = SuggestedIngredient.objects.none()
 
-        # Serialize the queryset and return the response
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 

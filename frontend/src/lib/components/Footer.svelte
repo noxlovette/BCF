@@ -57,13 +57,13 @@
   <div id="paperwork" class="ml-auto mr-4 flex">
     <ul class="flex items-center space-x-4">
       <li>
-        <a href="/paperwork/manifesto" class="hover:text-amber-900/80 dark:hover:text-amber-400/80 transition-all"> manifesto </a>
+        <a href="/paperwork/about" class=" hover:text-amber-400/80 transition-all"> about </a>
       </li>
       <li>
-        <a href="/paperwork/privacy-policy" class="hover:text-amber-900 dark:hover:text-amber-400/80 transition-all"> privacy policy </a>
+        <a href="/paperwork/privacy-policy" class=" hover:text-amber-400/80 transition-all"> privacy policy </a>
       </li>
       <li>
-        <a href="/paperwork/terms-of-service" class="hover:text-amber-900 dark:hover:text-amber-400/80 transition-all"> terms of service </a>
+        <a href="/paperwork/terms-of-service" class=" hover:text-amber-400/80 transition-all"> terms of service </a>
       </li>
     </ul>
   </div>

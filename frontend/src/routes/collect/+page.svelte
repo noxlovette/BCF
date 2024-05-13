@@ -435,7 +435,7 @@ onMount( async () => {
 
 <div id="table-wrapper" class="flex flex-row ml-6 mr-6 mt-0 p-2 overflow-x-auto overflow-y-auto text-sm items-center">
 {#if isLoading}
-<Loader colour="red" />
+<Loader />
 {:else if collection.error}
           <!-- If there is an error fetching data, display the error message -->
           <p>{collection.error}</p>

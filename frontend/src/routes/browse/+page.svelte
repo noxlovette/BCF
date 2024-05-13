@@ -90,6 +90,7 @@
   }
 
 async function fetchWithDescriptors() {
+  currentPage.set(1);
   data = await load()
 }
 
@@ -368,11 +369,11 @@ async function handleAddIngredient(ingredientId) {
       </div>
       {/if}
     
-      <div id="table-wrapper" class="flex flex-row ml-8 mr-8 mt-0 p-2 overflow-x-auto overflow-y-auto text-sm items-center">
+      <div id="table-wrapper" class="flex flex-row ml-8 mr-8 mt-0 p-2 overflow-x-auto overflow-y-auto items-center xl:font-medium font-normal">
         
         {#if isLoading}
           <!-- If isLoading is true, display a loading message -->
-          <Loader colour="sky" />
+          <Loader />
     
           {:else if data.error}
           <!-- If there is an error fetching data, display the error message -->
@@ -461,7 +462,7 @@ async function handleAddIngredient(ingredientId) {
                   {#each $visibleFields as field}
 
                     {#if field.name === 'common_name' && field.visible}
-                      <td title = "{ingredient.other_names}" class="align-middle m-4 p-4 text-2xl tracking-tight dark:bg-sky-700/10">{ingredient.common_name}</td>
+                      <td title = "{ingredient.other_names}" class="align-middle m-4 p-4 text-2xl tracking-tight text-ellipsis text-balance dark:bg-sky-700/10">{ingredient.common_name}</td>
                       {:else if field.name === 'is_restricted' && field.visible}
                       <td class="align-middle m-4 p-4">{ingredient[field.name] ? "yes" : "no"}</td>
                     {:else if field.name === 'actions' && field.visible}
@@ -495,7 +496,7 @@ async function handleAddIngredient(ingredientId) {
                       </div>
                     </td>
                       {:else}
-                      <td class="align-middle m-4 p-4">{ingredient[field.name]}</td>
+                      <td class="align-middle m-4 p-4 text-pretty">{ingredient[field.name]}</td>
                       {/if}
                     {/if}
                   

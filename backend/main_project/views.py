@@ -18,7 +18,10 @@ logger = logging.getLogger(__name__)
 
 
 class UserSignupAPI(APIView):
-    # TODO: CAPTCHA, verify email
+    # TODO: CAPTCHA, verify email.
+    """
+    Check if username or email already exists. If not, create a new user. Auth is handled by django.
+    """
     def post(self, request, *args, **kwargs):
         data = request.data
         username = data.get('username')
@@ -29,6 +32,12 @@ class UserSignupAPI(APIView):
         if not username or not email or not password:
             return Response({'error': 'Please provide username, email, and password'},
                             status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(username=username).exists():
+            return Response({'error': 'Username already in use'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(email=email).exists():
+            return Response({'error': 'Email already in use'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Create new user
         try:
@@ -46,6 +55,9 @@ class UserSignupAPI(APIView):
 
 class UserLoginAPI(APIView):
     # TODO CAPTCHA, verify email
+    """
+    Check if user exists and login. Auth is handled by django.
+    """
     @method_decorator(ensure_csrf_cookie)
     def post(self, request, *args, **kwargs):
         data = request.data
@@ -68,6 +80,9 @@ class UserLoginAPI(APIView):
 
 
 class UserLogoutAPI(APIView):
+    """
+    Logout the user. Invalidate the session.
+    """
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
@@ -76,6 +91,9 @@ class UserLogoutAPI(APIView):
 
 
 class UserProfileUpdateAPI(APIView):
+    """
+    Update the user's profile. Change password if requested. Change username and email if provided.
+    """
     permission_classes = [permissions.IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
@@ -118,6 +136,9 @@ class UserProfileUpdateAPI(APIView):
 
 
 class UserDeleteAPI(APIView):
+    """
+    Delete the user. Auth is handled by django.
+    """
     permission_classes = [permissions.IsAuthenticated]
 
     def delete(self, request, *args, **kwargs):

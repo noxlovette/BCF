@@ -1,18 +1,15 @@
 from rest_framework import serializers
-from .models import CollectionIngredient, CustomCollectionIngredient
-
-
-class DateTimeSerializer(serializers.DateTimeField):
-    """
-    custom time representation
-    """
-
-    def to_representation(self, value):
-        formatted_datetime = value.strftime("%d.%m.%Y, %I:%M%p")
-        return formatted_datetime
+from .models import RegularCollectionIngredient, CustomCollectionIngredient
+from browse.serialisers import DateTimeSerializer
 
 
 class CollectionIngredientSerializer(serializers.ModelSerializer):
+    """
+    Abstract serializer for CollectionIngredient models. It includes common fields for both RegularCollectionIngredient
+    and CustomCollectionIngredient models. Predefines all encrypted hell in one place. The custom attributes are
+    included in the custom collection ingredient serializer. Source works thanks to "prepare_for_serialization" function.
+    """
+
     id = serializers.IntegerField(read_only=True)
 
     amount = serializers.IntegerField()
@@ -36,6 +33,10 @@ class CollectionIngredientSerializer(serializers.ModelSerializer):
 
 
 class StandardCollectionIngredientSerializer(CollectionIngredientSerializer):
+    """
+    Serializer for RegularCollectionIngredient model. Overrides the encrypted hell with the common_name, cas, volatility
+    and use fields from the Ingredient model. The type field is added to distinguish between the two types of ingredients.
+    """
     common_name = serializers.StringRelatedField(source='ingredient.common_name')
     cas = serializers.StringRelatedField(source='ingredient.cas')
     volatility = serializers.StringRelatedField(source='ingredient.volatility')
@@ -43,13 +44,21 @@ class StandardCollectionIngredientSerializer(CollectionIngredientSerializer):
     type = serializers.SerializerMethodField()
 
     def get_type(self, obj):
+        """
+        Returns the type of the ingredient. Used to distinguish between the two types of ingredients.
+        """
         return 'CollectionIngredient'
 
     class Meta(CollectionIngredientSerializer.Meta):
-        model = CollectionIngredient
+        model = RegularCollectionIngredient
 
 
 class CustomCollectionIngredientSerializer(CollectionIngredientSerializer):
+    """
+    Serializer for CustomCollectionIngredient model. The Create magic is necessary, otherwise the serialiser will not
+    populate the saved instance with the custom attributes. The type field is added to distinguish between the two types
+    of ingredients.
+    """
     type = serializers.SerializerMethodField()
 
     def create(self, validated_data):
@@ -80,13 +89,13 @@ class CustomCollectionIngredientSerializer(CollectionIngredientSerializer):
         return instance
 
     def get_type(self, obj):
+        """
+        Returns the type of the ingredient. Used to distinguish between the two types of ingredients.
+        """
         return 'CustomCollectionIngredient'
 
     class Meta(CollectionIngredientSerializer.Meta):
         model = CustomCollectionIngredient
 
-
-class UnifiedCollectionIngredientSerializer(serializers.Serializer):
-    collection_ingredient = StandardCollectionIngredientSerializer(many=True)
-    custom_collection_ingredient = CustomCollectionIngredientSerializer(many=True)
-# Path: collection/views.py
+# Compare this snippet from browse/models.py:
+# Path: collection/serialisers.py

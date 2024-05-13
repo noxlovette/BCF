@@ -33,17 +33,22 @@
 
 <Header currentPage="login" notification={notification}/>
 
-<main class="lowercase">
+<main class="">
   
-  <div id = "authentification" class="flex flex-col items-center m-10">
-    <h1 class="flex font-light tracking-tighter text-6xl"
+  
+    <div class="mx-auto max-w-[800px] xl:max-w-7xl">
+      <div id = "authentification" class="flex flex-col items-center m-10">
+    
+    <h1 class="text-center text-6xl xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem] font-bold tracking-tight text-pretty"
     in:scale={{
       duration: 500,
       opacity: 0.5,
       delay: 0,
       easing: quintOut}}
-    >welcome back</h1>
-    <form on:submit|preventDefault={handleSubmit} class= "flex flex-col justify-center items-center w-1/3 bg-stone-50/20 dark:bg-stone-950/20 rounded-lg shadow p-4"
+    >Welcome back!</h1>
+    <form on:submit|preventDefault={handleSubmit} 
+    
+    class= "flex flex-col justify-center items-center w-full bg-stone-50/20 dark:bg-stone-950/20 rounded-lg shadow p-4"
     in:fade={{
       duration: 500,
       delay: 500,
@@ -64,5 +69,6 @@
     </form>
 
   </div>
+</div>
   
 </main>

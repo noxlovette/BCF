@@ -4,7 +4,7 @@ from .models import SuggestedIngredient, Ingredient, Descriptor
 
 class DateTimeSerializer(serializers.DateTimeField):
     """
-    custom time representation
+    custom time representation, gives flexibility to the date time format
     """
 
     def to_representation(self, value):
@@ -14,7 +14,8 @@ class DateTimeSerializer(serializers.DateTimeField):
 
 class IngredientSerialiser(serializers.ModelSerializer):
     """
-    Serialiser for the Ingredient model
+    Serialiser for the Ingredient model. It doubles the conversion of descriptors defined in the Ingredient model,
+    making the list accessible to the API.
     """
 
     descriptors = serializers.SerializerMethodField()
@@ -33,6 +34,9 @@ class IngredientSerialiser(serializers.ModelSerializer):
 
 
 class SuggestedIngredientSerialiser(serializers.ModelSerializer):
+    """
+    Serialiser for the SuggestedIngredient model. It excludes the user field from the API response.
+    """
     date_suggested = DateTimeSerializer(read_only=True)
 
     class Meta:
@@ -41,6 +45,9 @@ class SuggestedIngredientSerialiser(serializers.ModelSerializer):
 
 
 class DescriptorSerialiser(serializers.ModelSerializer):
+    """
+    Serialiser for the Descriptor model. It includes all fields in the model.
+    """
     class Meta:
         fields = '__all__'
         model = Descriptor

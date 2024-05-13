@@ -11,10 +11,9 @@ from rest_framework.response import Response
 from django.utils import timezone
 
 
-
 class FormulaCreateAPI(generics.CreateAPIView):
     """
-    CREATE A NEW FORMULA
+    CREATE A NEW FORMULA. for more info see the serialiser.
     """
     serializer_class = FormulaSerializer
 
@@ -25,7 +24,7 @@ class FormulaCreateAPI(generics.CreateAPIView):
 
 class FormulaListViewAPI(ListAPIView):
     """
-    LIST OF FORMULAE. The page is populated by JS.
+    LIST OF FORMULAE. for more info see the serialiser.
     """
     serializer_class = FormulaSerializer
 
@@ -42,7 +41,7 @@ class FormulaListViewAPI(ListAPIView):
 
 class FormulaDetailViewAPI(RetrieveUpdateAPIView):
     """
-    Looks for pk in the url and returns the formula. Can also edit it.
+    RETRIEVE AND UPDATE A FORMULA. for more info see the serialiser.
     """
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
@@ -73,18 +72,25 @@ class FormulaDetailViewAPI(RetrieveUpdateAPIView):
 
 
 class FormulaIngredientDeleteAPIView(generics.DestroyAPIView):
+    """
+    DELETE A FORMULA INGREDIENT. Straightforward.
+    """
     queryset = FormulaIngredient.objects.all()
     serializer_class = FormulaIngredientSerializer
 
 
 class FormulaDeleteAPIView(generics.DestroyAPIView):
+    """
+    DELETE A FORMULA. Straightforward.
+    """
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
 
 
-# Path: formulae/urls.py
-
 class FormulaAsCustomIngredientAPI(generics.CreateAPIView):
+    """
+    CREATE A NEW CUSTOM INGREDIENT FROM A FORMULA. for more info see the serialiser.
+    """
     serializer_class = CustomCollectionIngredientSerializer
 
     def perform_create(self, serializer):
@@ -117,8 +123,10 @@ class FormulaAsCustomIngredientAPI(generics.CreateAPIView):
         )
 
 
-#TODO not implemented
 class FormulaTagAPI(generics.RetrieveUpdateAPIView):
+    """
+    #TODO not implemented yet
+    """
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
 
@@ -149,3 +157,5 @@ class FormulaTagAPI(generics.RetrieveUpdateAPIView):
         self.perform_update(serializer)
 
         return Response(serializer.data)
+
+# Path: formulae/urls.py

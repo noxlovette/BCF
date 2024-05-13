@@ -71,17 +71,18 @@
 
 <Header currentPage="signup" notification={notification}/>
 
-<main class = "lowercase">
+<main class = "">
+    <div class="mx-auto max-w-[800px] xl:max-w-7xl">
     <div id = "authentification" class="flex flex-col items-center justify-center m-10">
-        <h1 class="flex font-light text-6xl tracking-tighter"
+        <h1 class="text-center text-6xl xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem] font-bold tracking-tight text-pretty"
         in:scale={{
             duration: 500,
             opacity: 0.5,
             delay: 0,
             easing: quintOut
-        }}>welcome</h1>
+        }}>Welcome!</h1>
         
-        <form on:submit|preventDefault={createUser} class= "flex flex-col justify-center items-center w-1/3 bg-stone-50/20 dark:bg-stone-950/20 rounded-lg shadow p-4"
+        <form on:submit|preventDefault={createUser} class= "flex flex-col justify-center items-center w-full bg-stone-100/20 dark:bg-stone-950/20 rounded-lg shadow p-4"
         in:fade={{
             duration: 500,
             delay: 500,
@@ -114,7 +115,7 @@
             </div>
             <button type="submit" class="p-6 disabled:text-stone-400/70 hover:text-amber-400/60" disabled={!allValid}>create account</button>
         </form>
-        
+    </div>
     </div>
 
 </main>
