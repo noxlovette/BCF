@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
   import { onDestroy, onMount } from "svelte";
   import { writable } from "svelte/store";
   import { fade } from "svelte/transition";
-  import {createFormula, fetchFormulas, fetchFormula } from "$lib/DjangoAPI.ts";
+  import {createFormula, fetchFormulas, fetchFormula } from "$lib/DjangoAPI";
   import Header from "$lib/components/Header.svelte";
   import Footer from "$lib/components/Footer.svelte";
   import Loader from "$lib/components/Loader.svelte";

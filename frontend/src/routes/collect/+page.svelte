@@ -1,13 +1,12 @@
-<script>
+<script lang="ts">
   import { onDestroy, onMount } from "svelte";
-  import { saveEditedIngredientCollect, fetchCollection, deleteFromCollection, createCustomIngredientCollect } from "$lib/DjangoAPI.ts";
+  import { saveEditedIngredientCollect, fetchCollection, deleteFromCollection, createCustomIngredientCollect } from "$lib/DjangoAPI";
   import Header from "$lib/components/Header.svelte";
   import { fade } from "svelte/transition";
   import { writable } from "svelte/store";
   import Footer from "$lib/components/Footer.svelte";
   import { goto } from '$app/navigation';
   import {blur} from 'svelte/transition';
-  import { browser } from '$app/environment';
   import Loader from "$lib/components/Loader.svelte";
 
 
@@ -246,13 +245,10 @@ function cancelCreate() {
 
 // field visibility logic
 function toggleFieldVisibility(field) {
-  console.log('Before toggle:', field, $visibleFields); // log the state before the toggle
+
 
   field.visible = !field.visible;
   visibleFields.update(fields => [...fields]); 
-  
-
-  console.log('After toggle:', field, $visibleFields); // log the state after the toggle
 }
 
 
@@ -304,13 +300,9 @@ onMount( async () => {
     filteredCollection = collection;
     console.log('Filtered collection:', filteredCollection);
 
-    currentPage.subscribe(value => {
-        sessionStorage.setItem('currentPageCollect', value);
-    });
+    currentPage.subscribe(value => sessionStorage.setItem('currentPageCollect', value.toString()));
 
-    pageSize.subscribe(value => {
-        localStorage.setItem('pageSizeCollect', value);
-    });
+    pageSize.subscribe(value => localStorage.setItem('pageSizeCollect', value.toString()));
 
     searchTerm.subscribe(value => {
         sessionStorage.setItem('searchTermCollect', value);
@@ -362,7 +354,9 @@ onMount( async () => {
               <div id="visibility" class="grid grid-cols-3">
                 {#each $visibleFields.slice(1) as field}
                 <div class="flex flex-row space-x-2 ml-2">
-                  <input class="size-4 rounded-full shadow border-none text-green-700/90 focus:ring-green-700/30 checked:bg-green-700/70 active:scale-90 checked:ring-green-700/30 hover:checked:bg-green-700/80 transition-all hover:scale-110" type="checkbox" id={field.name} bind:checked={field.visible} on:click={() => toggleFieldVisibility(field) && console.log("clicked")} />
+                  <input class="size-4 rounded-full shadow border-none text-green-700/90 focus:ring-green-700/30 checked:bg-green-700/70 active:scale-90 checked:ring-green-700/30 hover:checked:bg-green-700/80 transition-all hover:scale-110" type="checkbox" id={field.name} 
+                  bind:checked={field.visible} 
+                  on:click={() => toggleFieldVisibility(field)} />
                   <label for={field.name}>{field.name}</label>
                   </div>
                 {/each}
@@ -441,14 +435,14 @@ onMount( async () => {
           <p>{collection.error}</p>
         {:else}
   {#if editingRowId !== null}
-<button class="pl-2"on:click={saveEdit(editingObject)}>
+<button class="pl-2" on:click={() => saveEdit(editingObject)}>
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
     <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
   </svg>
 </button>
   
 {:else if filteredCollection.length !== 0}
-  <button class="pl-2"on:click={changePage($currentPage-1)}>
+  <button class="pl-2"on:click={() => changePage($currentPage-1)}>
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:-transtone-x-2 duration-300">
       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
     </svg>
@@ -567,7 +561,7 @@ onMount( async () => {
   {:else if filteredCollection.length !== 0}
   <button class="pr-2" 
   
-  on:click={changePage($currentPage+1)}>
+  on:click={() => changePage($currentPage+1)}>
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:transtone-x-2 duration-300">
       <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
     </svg>

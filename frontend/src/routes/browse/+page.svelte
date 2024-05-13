@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import {addSuggestionBrowse, fetchDescriptors, addToCollectionBrowse, fetchIngredientsBrowse} from "$lib/DjangoAPI.ts";
+  import {addSuggestionBrowse, fetchDescriptors, addToCollectionBrowse, fetchIngredientsBrowse} from "$lib/DjangoAPI";
 
   import { writable } from "svelte/store";
   import {blur, fade} from "svelte/transition";
@@ -9,17 +9,26 @@
   import Footer from "$lib/components/Footer.svelte";
   import Loader from "$lib/components/Loader.svelte";
 
-  export let data;
+  export let data: any = null;
   export let currentPage = writable();
   export let pageSize = writable();
   export let searchTerm = writable();
   let chosenDescriptors = [];
   let showSuggestion = false;
   let showFilterMenu = false;
-  let suggestedIngredient = null;
+  let suggestedIngredient: Ingredient = null;
   let searchInput;
   
-  let initialVisibleFields = [
+  interface Field {
+  name: string;
+  visible: boolean;
+}
+
+interface Ingredient {
+  [key: string]: string; // Index signature for dynamic properties
+}
+
+  let initialVisibleFields: Field[] = [
   { name: "common_name", visible: true },
   { name: "cas", visible: false },
   { name: "volatility", visible: false },
@@ -34,7 +43,8 @@
   { name: "actions", visible: true },
 ];
 
-  export let visibleFields = writable();
+  const visibleFields = writable<Field[]>(initialVisibleFields);
+  
   let showTuneMenu = false;
   let isLoading = true;
   let notification = writable("");
@@ -59,17 +69,11 @@
     descriptors = await fetchDescriptors();
     filteredDescriptors = descriptors;
 
-    currentPage.subscribe(value => {
-        sessionStorage.setItem('currentPage', value);
-    });
+    currentPage.subscribe(value => sessionStorage.setItem('currentPage', String(value)));
 
-    pageSize.subscribe(value => {
-        localStorage.setItem('pageSize', value);
-    });
+    pageSize.subscribe(value => localStorage.setItem('pageSize', String(value)));
 
-    searchTerm.subscribe(value => {
-        sessionStorage.setItem('searchTerm', value);
-    });
+    searchTerm.subscribe(value => sessionStorage.setItem('searchTerm', String(value)));
 
     visibleFields.subscribe(fields => {
     localStorage.setItem('visibleFields', JSON.stringify(fields));
@@ -120,7 +124,7 @@ async function fetchWithDescriptors() {
   }
 
   async function load() {
-    return await fetchIngredientsBrowse($currentPage, $searchTerm, $pageSize, chosenDescriptors);
+    return await fetchIngredientsBrowse(Number($currentPage), String($searchTerm), Number($pageSize), chosenDescriptors);
   }
 
   async function reset() {
@@ -198,7 +202,7 @@ async function submitSuggestion() {
 
   async function changePage(increment) {
     console.log('Current page when changepage clicked:', $currentPage);
-    if ($currentPage + increment >= 1 && $currentPage + increment <= data.total_pages) {
+    if ($currentPage + increment >= 1 && $currentPage + increment <= (data as { total_pages: number }).total_pages) {
       console.log('Setting current page to:', $currentPage + increment);
       currentPage.update((value) => value + increment);
       notification.set(`you are on page ${$currentPage}`);
@@ -229,12 +233,12 @@ function loadFieldPreference() {
     return storedFields ? JSON.parse(storedFields) : initialVisibleFields;
   }
 
-function toggleFieldVisibility(field) {
-
+//! might not work as expected
+  function toggleFieldVisibility(field) {
   field.visible = !field.visible;
   visibleFields.update(fields => [...fields]); 
-
 }
+
 
 async function handleAddIngredient(ingredientId) {
   if (is_authenticated !== null) {
@@ -321,7 +325,7 @@ async function handleAddIngredient(ingredientId) {
               " 
               
               
-              type="checkbox" id={field.name} bind:checked={field.visible} on:click={() => toggleFieldVisibility(field) && console.log("clicked")} />
+              type="checkbox" id={field.name} bind:checked={field.visible} on:click={() => toggleFieldVisibility(field)} />
               <label for={field.name}>{field.name.replace(/_/g, ' ')}</label>
               </div>
             {/each}
@@ -375,9 +379,7 @@ async function handleAddIngredient(ingredientId) {
           <!-- If isLoading is true, display a loading message -->
           <Loader />
     
-          {:else if data.error}
-          <!-- If there is an error fetching data, display the error message -->
-          <p>{data.error}</p>
+          
           {:else if data.results.length === 0}
           <!-- If there are no results, display a message -->
           <p class="text-2xl">hm. try a different search?</p>
@@ -409,7 +411,9 @@ async function handleAddIngredient(ingredientId) {
             
             " 
             
-            type="checkbox" id={descriptor.name}  bind:group={chosenDescriptors} value = {descriptor} on:change={() => handleDescriptorChange() && console.log("clicked")} />
+            type="checkbox" id={descriptor.name} bind:group={chosenDescriptors} value={descriptor}
+            on:change={() => { handleDescriptorChange(); console.log("clicked"); }} />
+
             {descriptor.name}
             </label>
 

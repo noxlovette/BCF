@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
 
-    import {saveChangesFormula, deleteIngredientFormulate } from "$lib/DjangoAPI.ts";
+    import {saveChangesFormula, deleteIngredientFormulate } from "$lib/DjangoAPI";
     import Dropdown from "./Dropdown.svelte";
     export let editedFormula = null;
     export let formulaDetail = null;

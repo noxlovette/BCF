@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
     import Header from "$lib/components/Header.svelte";
     import { goto } from '$app/navigation';
-    import { fetchCentralDjangoApi } from '$lib/DjangoAPI.ts';
+    import { fetchCentralDjangoApi } from '$lib/DjangoAPI';
     import { writable } from 'svelte/store';
     import { fade } from "svelte/transition";
     import { scale } from "svelte/transition";
@@ -36,8 +36,8 @@
     }
     
 
-    $: checkPassword(password);
-    $: checkEmail(email);
+    $: checkPassword();
+    $: checkEmail();
     $: passwordsMatch(password, confirmPassword);
     $: allValid = validLength && validCase && validSpecial && validEmail && validDuplicate && agreeTerms;
 
@@ -69,7 +69,7 @@
     };
 </script>
 
-<Header currentPage="signup" notification={notification}/>
+<Header currentPage="signup" />
 
 <main class = "">
     <div class="mx-auto max-w-[800px] xl:max-w-7xl">
@@ -122,6 +122,6 @@
 
 <style>
     .valid {
-        @apply bg-lime-600/50;
+        background-color: rgb (101 163 13 / 0.5);
     }
 </style>

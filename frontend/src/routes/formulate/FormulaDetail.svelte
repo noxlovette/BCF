@@ -1,5 +1,5 @@
-<script>
-    import { addFormulaAsCustomIngredient, deleteFormula} from "$lib/DjangoAPI.ts";
+<script lang="ts">
+    import { addFormulaAsCustomIngredient, deleteFormula} from "$lib/DjangoAPI";
     import FormulaEdit from "./FormulaEdit.svelte";
     import {writable } from 'svelte/store';
 

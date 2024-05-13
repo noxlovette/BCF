@@ -1,5 +1,5 @@
-<script>
-    import { fetchCollection } from "$lib/DjangoAPI.ts";
+<script lang="ts">
+    import { fetchCollection } from "$lib/DjangoAPI";
     import {fade} from "svelte/transition";
     import {onMount} from "svelte";
     let searchInput;
@@ -93,7 +93,7 @@
     placeholder="something new"
     on:input={searchDropdown}
     on:focus = {() => isDropdownVisible = true}
-    in:fade={{duration: 150, opacity: 0.5}}
+    in:fade={{duration: 150}}
   />
   {#if isDropdownVisible}
   <ul

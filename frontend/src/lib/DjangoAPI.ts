@@ -1,4 +1,4 @@
-// src/routes/DjangoAPI.ts
+// src/routes/DjangoAPI
 const BASE_URL = "http://localhost:8000";
 
 

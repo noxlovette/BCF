@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { writable } from "svelte/store";
-  import { fetchCentralDjangoApi } from "$lib/DjangoAPI.ts";
+  import { fetchCentralDjangoApi } from "$lib/DjangoAPI";
 
   let is_authenticated = false;
   let username = "";

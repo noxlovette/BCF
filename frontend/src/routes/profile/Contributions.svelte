@@ -1,5 +1,5 @@
-<script>
-    import { listSuggestedIngredients } from '$lib/DjangoAPI.ts';
+ <script lang="ts">
+    import { listSuggestedIngredients } from '$lib/DjangoAPI';
     import { onMount } from 'svelte';
     
 

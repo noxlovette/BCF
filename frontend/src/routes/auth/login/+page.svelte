@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { goto } from "$app/navigation";
-  import { logIn } from "$lib/DjangoAPI.ts";
+  import { logIn } from "$lib/DjangoAPI";
   import {scale, fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
-  import { fetchCollection } from "$lib/DjangoAPI.ts";
+  import { fetchCollection } from "$lib/DjangoAPI";
   import Header from "$lib/components/Header.svelte";
   import { writable } from "svelte/store";
 

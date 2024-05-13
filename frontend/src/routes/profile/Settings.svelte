@@ -1,7 +1,6 @@
-<script>
-    import {updateUserProfile} from '$lib/DjangoAPI.ts';
+<script lang="ts">
+    import {updateUserProfile, deleteUserProfile} from '$lib/DjangoAPI';
     import {writable} from 'svelte/store';
-    import {deleteUserProfile} from '$lib/DjangoAPI.ts';
     import { goto } from '$app/navigation';
 
     export let notification = writable('');
@@ -59,14 +58,14 @@
     
 
     $: if (oldPassword && newPassword || oldPassword && confirmPassword) {checkPassword(newPassword);
-        checkPasswordsMatch(newPassword, confirmPassword);
+        checkPasswordsMatch();
     } else {
         validLength = true;
         validCase = true;
         validSpecial = true;
         validDuplicate = true;
     };
-    $: if (email) {checkEmail(email)
+    $: if (email) {checkEmail()
     } else {
         validEmail = true;  // if email is empty, it's valid
     }

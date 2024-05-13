@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
     import { writable } from "svelte/store";
     import Settings from './Settings.svelte';
@@ -17,7 +17,7 @@
     export let notification = writable('');
 
     onMount(async () => {
-        is_authenticated = sessionStorage.getItem('is_authenticated');
+        is_authenticated = Boolean(sessionStorage.getItem('is_authenticated'));
         username = sessionStorage.getItem('username');
         email = sessionStorage.getItem('email');
         if (!is_authenticated) {
