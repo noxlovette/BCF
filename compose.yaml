@@ -23,9 +23,9 @@ services:
       - ./backend:/app
       - /Volumes/Thor/:/app/Volumes/Thor/
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=p3rfume
+      - POSTGRES_DB=${POSTGRES_DB:-defaultdb}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
     env_file:

@@ -1,13 +1,6 @@
 # syntax=docker/dockerfile:1
 ARG NODE_VERSION=22.1.0
-FROM node:${NODE_VERSION}
-
-# Install necessary packages
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    python3 \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+FROM node:${NODE_VERSION}-alpine
 
 # Set a working directory
 WORKDIR /app
