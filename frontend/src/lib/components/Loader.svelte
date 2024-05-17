@@ -18,7 +18,6 @@ let quotes = [
     "Only a few find the way, some don't recognize it when they do – some… don't ever want to.",
     "Then you'll see, that it is not the spoon that bends, it is only yourself",
     "...sooner or later you're going to realize just as I did that there's a difference between knowing the path and walking the path.",
-    
     ];
     let chosenQuote = getRandomQuote();
   

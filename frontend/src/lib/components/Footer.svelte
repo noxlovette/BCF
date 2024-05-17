@@ -1,70 +1,96 @@
-<script>
+<script lang="ts">
+
+  import { fade } from "svelte/transition";
+
+let legalOn = false;
+
+  function toggleLegal() {
+    legalOn = !legalOn;
+  }
+
+
 </script>
 
-<footer class="clear-end grid grid-cols-3 justify-center w-full text-sm font-light mt-4">
-<block id = "empty">
+<footer class="relative flex flex-col items-center justify-center py-4 z-40" >
+  <div class="clear-end grid grid-cols-3 justify-center max-w-7xl text-sm font-semibold mt-4">
+<div id = "social"
+class="flex items-center w-full justify-center"
+>
+  <ul class="flex items-center space-x-4 ">
+    <li class="">
+      <a href="https://twitter.com/BCF_app">
+        <svg width="18" height="18" viewBox="0 0 1200 1227" fill="none" xmlns="http://www.w3.org/2000/svg" class="hover:text-amber-400 transition-all hover:scale-110 active:scale-90">
+          <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z" 
+          fill="currentColor"
+          />
+          </svg>
+          
+      </a>
 
-</block>
+      
+    </li>
+    <li>
+      <a
+        href="patreon.com/BCF_app"
+        class=""
+      >
+      <svg width="18" height="18" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg" class="hover:text-amber-400 transition-all hover:scale-110 active:scale-90">
+        <path d="M1033.05,324.45c-0.19-137.9-107.59-250.92-233.6-291.7c-156.48-50.64-362.86-43.3-512.28,27.2
+	C106.07,145.41,49.18,332.61,47.06,519.31c-1.74,153.5,13.58,557.79,241.62,560.67c169.44,2.15,194.67-216.18,273.07-321.33
+	c55.78-74.81,127.6-95.94,216.01-117.82C929.71,603.22,1033.27,483.3,1033.05,324.45z" fill="currentColor"/>
+      </svg>
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://github.com/noxlovette"
+        class=""
+      >
+
+        <svg width="20" height="20" viewBox="0 0 98 96" xmlns="http://www.w3.org/2000/svg" class="hover:text-amber-400 transition-all hover:scale-110 active:scale-90">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"/>
+        </svg>
+        
+
+      </a>
+    </li>
+  </ul>
+</div>
 
   <div
-    id="social-copyright"
-    class="flex flex-col items-center w-full justify-center"
+    id="copyright"
+    class="flex items-center w-full justify-center"
   >
-    <ul class="flex items-center space-x-2 dark:text-stone-200/80 text-stone-900/80">
-      <li class="">
-        <a href="https://twitter.com/BCF_app">
-          <img
-            src="/assets/img/x-logo/logo.svg"
-            alt="Twitter"
-            width="16"
-            height="16"
-            class="hover:scale-110 ease-in-out duration-300"
-          />
-        </a>
-      </li>
-      <li>
-        <a
-          href="patreon.com/BCF_app"
-          class=""
-        >
-          <img
-            src="/assets/img/patreon-logo/logo-white.svg"
-            alt="Patreon"
-            width="16"
-            height="16"
-            class="hover:scale-110 ease-in-out duration-300"
-          />
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/noxlovette"
-          class=""
-        >
-          <img
-            src="/assets/img/github-mark/logo-white.svg"
-            alt="GitHub Logo"
-            width="19"
-            height="19"
-            class="hover:scale-110 ease-in-out duration-300"
-          />
-        </a>
-      </li>
-    </ul>
+    
     <p class="m-4">copyright&nbsp;© 2024 Danila Volkov</p>
   </div>
 
-  <div id="paperwork" class="ml-auto mr-4 flex">
-    <ul class="flex items-center space-x-4">
+  <div id="paperwork" class="ml-auto mr-8 flex sm:mr-4 sm:text-sm md:text-md">
+    <ul class="flex items-center space-x-4 sm:space-x-2 xl:space-x-6">
       <li>
         <a href="/paperwork/about" class=" hover:text-amber-400/80 transition-all"> about </a>
       </li>
       <li>
+        <a href="/paperwork/contact-us" class=" hover:text-amber-400/80 transition-all"> contact us </a>
+      </li>
+      <li>
+        <button on:click={toggleLegal} class=" hover:text-amber-400/80 transition-all"> legal 
+        </button>
+  
+      </li>
+      {#if legalOn}
+      <div class="flex flex-col p-2 space-y-4"
+      in:fade
+      >
+      <li>
         <a href="/paperwork/privacy-policy" class=" hover:text-amber-400/80 transition-all"> privacy policy </a>
       </li>
       <li>
-        <a href="/paperwork/terms-of-service" class=" hover:text-amber-400/80 transition-all"> terms of service </a>
+        <a href="/paperwork/terms-of-service" class=" hover:text-amber-400/80 transition-all"> terms of use </a>
       </li>
+    </div>
+      {/if}
     </ul>
   </div>
+</div>
 </footer>

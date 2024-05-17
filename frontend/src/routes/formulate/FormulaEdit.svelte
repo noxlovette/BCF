@@ -102,11 +102,11 @@
 <div id="description-etc" class="flex flex-col mr-auto w-1/4 p-4 h-full divide-y-4 divide-amber-800/60 dark:divide-amber-50/60 space-y-4 dark:bg-amber-800/20 bg-amber-50/80 rounded-lg shadow">
     <div>
       <h3 class="font-bold">description: </h3>
-      <textarea class="flex w-full bg-amber-300/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none" bind:value={editedFormula.description} />
+      <textarea class="flex w-full bg-amber-100/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none" bind:value={editedFormula.description} />
     </div>  
       <div>
         <h3 class="font-bold">notes: </h3>
-        <textarea class="flex w-full bg-amber-300/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none" bind:value={editedFormula.notes} />
+        <textarea class="flex w-full bg-amber-100/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none" bind:value={editedFormula.notes} />
       </div>
       
     <div id="controls" class="pt-4">
@@ -131,8 +131,8 @@
     </div>
   </div>
   <div id="table-wrapper" class="flex flex-col items-start m-2 pl-2 w-full">
-  <input class="flex w-full text-6xl tracking-widest bg-amber-300/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none" bind:value={editedFormula.name} />
-  <table id="formula-ingredient-table" class="table-fixed text-left w-full m-2 pl-2">
+  <input class="flex w-full text-6xl tracking-widest bg-amber-100/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none" bind:value={editedFormula.name} />
+  <table id="formula-ingredient-table" class="table-fixed lowercase text-left w-full m-2 pl-2">
     <thead>
       <tr class="">
         <th class="w-1/12">#</th>
@@ -165,10 +165,10 @@
             <td>{ingredient.volatility}</td> <!-- unchangeable -->
 
             <td>
-              <input type="number" bind:value={ingredient.amount} class="flex w-2/3 bg-amber-50/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none"/>
+              <input type="number" bind:value={ingredient.amount} class="flex w-2/3 bg-amber-100/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none"/>
             </td>
             <td>
-              <input type="number" bind:value={ingredient.percentage} class="flex w-2/3 bg-amber-50/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none"/>
+              <input type="number" bind:value={ingredient.percentage} class="flex w-2/3 bg-amber-100/20 dark:bg-amber-950/30  focus:ring-amber-700/70 focus:ring-2 rounded-lg border-none"/>
             </td>
 
           

@@ -124,7 +124,7 @@
   </div>
   <div id="table-wrapper" class="flex flex-col items-start justify-start m-2 pl-2 size-full">
   <h2 class="text-6xl tracking-widest mb-4">{formulaDetail.name}</h2>
-  <table id="formula-ingredient-table" class="table-fixed text-left w-full">
+  <table id="formula-ingredient-table" class="table-fixed lowercase text-left w-full">
     <thead>
       <tr class="2">
         <th class="w-1/12">#</th>

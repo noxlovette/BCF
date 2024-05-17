@@ -73,30 +73,35 @@
     {#if isLoading}
     <Loader />
     {:else}
-    <div id="app" class="flex flex-row rounded-lg shadow items-stretch size-5/6 m-2 mt-0 p-4 lowercase font-light text-amber-950/90 dark:text-amber-200/60 bg-amber-600/30"
+    <div id="app" class="flex flex-row rounded-lg shadow items-stretch size-5/6 m-2 mt-0 p-4 text-amber-950/90 dark:text-amber-200/60 bg-amber-600/30"
     in:fade={{duration: 150}}
     >
   <div id="sidebar" class="flex flex-col w-1/6 hover:w-1/5 mr-auto bg-lime-800/70 dark:bg-lime-800/20 text-amber-100/90 rounded-lg drop-shadow p-4 transition-all duration-500"
   in:fade={{delay:150, duration: 150}}
   >
-    <h2 id="formula-header" class= "text-4xl mb-4 border-b-2 border-amber-100/20">my formulae</h2>
-    <ul id="formulate-list" class= "tracking-tight divide-y-2 divide-amber-100/20 items-start flex flex-col">
+    <h2 id="formula-header" class= "text-4xl font-semibold mb-4 border-b-2 border-amber-100/20">my formulae</h2>
+    <ul id="formulate-list" class= "tracking-tight divide-y-4 divide-amber-100/20 items-start flex flex-col">
       {#each formulae as formula}
         <button class:active={formula.id === activeFormulaId} 
         id="formula-item" 
-        class="flex lowercase text-left flex-col w-5/6 hover:translate-x-1 active:scale-95 hover:bg-amber-50/80 hover:text-amber-800/80 dark:hover:bg-amber-800/20 dark:hover:text-amber-50/60 hover:rounded-lg hover:shadow p-2 transition-all duration-150" 
+        class="flex text-left flex-col w-5/6 hover:w-3/4 hover:py-4 hover:translate-x-1 active:scale-95 hover:bg-amber-50/80 hover:text-amber-800/80 dark:hover:bg-amber-800/20 dark:hover:text-amber-50/60 hover:rounded-lg hover:shadow p-2 transition-all duration-150" 
         on:click={() => viewFormula(formula.id)} 
         title={formula.description}
         
         >
-          <p id="formula-name" class="font-regular text-lg">{formula.name}</p>
-          <p id="formula-edit-time" class="font-thin">{formula.updated}</p>
+          <p id="formula-name" class="font-semiboldtext-lg">{formula.name}</p>
+          <p id="formula-edit-time" class="font-bold text-sm">{formula.updated}</p>
         </button>
       {/each}
       {#if formulae.length === 0}
       <button id="formula-item" class="flex flex-col text-2xl hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:click={handleCreateFormula}>make it your first</button>
         {:else}
-      <button id="formula-item" class="flex flex-col hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:click={handleCreateFormula}>create new formula</button>
+        
+      <button id="formula-item" class="flex w-5/6 hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-2 transition-all hover:scale-105 active-scale-90 duration-500" on:click={handleCreateFormula}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+      </button>
       {/if}
     </ul>
   </div>
@@ -105,7 +110,7 @@
     <FormulaDetail bind:formulae bind:formulaDetail bind:notification />
     {:else}
     <div class="flex flex-col items-center">
-      <h2 class="text-4xl">welcome</h2>
+      <h2 class="text-4xl font-semibold">welcome</h2>
       <p class="text-2xl">Select a formula to view</p>
     </div>
     {/if}

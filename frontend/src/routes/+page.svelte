@@ -1,13 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { scale } from "svelte/transition";
-  import { quintOut } from "svelte/easing";
+  import BigText from "$lib/components/BigText.svelte";
   import { fade } from "svelte/transition";
   import Header from "$lib/components/Header.svelte";
   import { writable } from "svelte/store";
    import Footer from "$lib/components/Footer.svelte";
 
-
+  const bigText = `Want to create your own <span class="text-amber-300"> perfume? </span>We've got you covered<span class="text-amber-300">.</span>`
 
   let notification = writable("");
   let randomPhrase = writable("");
@@ -79,42 +78,15 @@ function startNotificationInterval() {
     currentPage="BCF" 
     notification={notification}  
   />
-  <div class="mb-auto">  
-    
+  <div class="mb-auto">
     <div class="py-12 sm:py-8 md:py-12 lg:py-14 xl:py-12 2xl:py-28">
-    <div class="lg:px-8">
-      <div class="flex flex-col items-center"> 
-    <div class= "mx-auto max-w-[800px] xl:max-w-7xl">
-    <div class= "max-w-md px-4 sm:max-w-2xl sm:px-6 md:max-w-3xl lg:max-w-4xl lg:px-0 xl:max-w-5xl 2xl:max-w-6x1">
-    <div class="flex w-full flex-col items-center gap-4">
-      <div class="flex flex-col items-start justify-between">
-      <div id = "big text"class="">
-        <h1
-          class="text-center text-6xl xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem] font-bold tracking-tight text-pretty"
-          in:scale={{
-            duration: 500,
-            delay: 0,
-            opacity: 0.5,
-            start: 0.5,
-          }}
-        >
-        Want to create your own
-        <span class="text-amber-300">
-        perfume? 
-      </span>
-        We've got you covered. YES IT WORKS!
-        </h1>
-      </div>
-    </div>
-    </div>
-  </div>
-</div>
 
-    </div>
-    </div>
 
-    <div class="py-12 sm:py-8 md:py-12 lg:py-14 xl:py-12 2xl:py-28"
-    in:fade={{duration: 500, delay: 1000}}
+    <BigText text = {bigText} />
+    
+    
+    <div id="blabla" class="py-6 sm:py-4 md:py-6 lg:py-7 xl:py-6 2xl:py-14"
+    in:fade={{duration: 500, delay: 1500}}
     >
       <section id="browse" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty">
         <div class="mx-auto flex max-w-[800px] flex-col gap-2 md:gap-4 xl:max-w-full">
@@ -224,9 +196,9 @@ function startNotificationInterval() {
 </div>
 </div>
 </div>
-</div>
-</div>
 
+</div>
+</div>
 </div>
   <Footer />
 </div>
