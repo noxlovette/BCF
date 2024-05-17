@@ -1,8 +1,14 @@
+import { sentrySvelteKit } from "@sentry/sveltekit";
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  plugins: [sveltekit()],
+  plugins: [sentrySvelteKit({
+    sourceMapsUploadOptions: {
+      org: "danila-volkov",
+      project: "javascript-sveltekit"
+    }
+  }), sveltekit()],
   server: {
     host: '0.0.0.0',
     port: 5173
