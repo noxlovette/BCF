@@ -86,11 +86,11 @@ print('Database host:', os.environ.get('DB_HOST'))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB'),
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': os.environ.get('POSTGRES_HOST', default='db'),
-        'PORT': os.environ.get('POSTGRES_PORT', default='5432'),
+        'NAME': os.environ.get('PGNAME'),
+        'USER': os.environ.get('PGUSER'),
+        'PASSWORD': os.environ.get('PGPASSWORD'),
+        'HOST': os.environ.get('PGHOST', default='db'),
+        'PORT': os.environ.get('PGPORT', default='5432'),
     }
 }
 
@@ -172,7 +172,7 @@ LOGGING = {
     },
 }
 sentry_sdk.init(
-    dsn="https://229e4a0e22b1d5059776cb3668155487@o4507272574468096.ingest.de.sentry.io/4507272712618064",
+    dsn=os.environ.get('SENTRY_DSN'),
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     traces_sample_rate=1.0,
