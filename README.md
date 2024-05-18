@@ -40,9 +40,9 @@ You may not have to create a key pair, but not doing so will prevent 2/3 of the 
 docker compose up --build
 ```
 ## Usage
-The docker is set in such a way as to hot-swap your frontend src and static folder, and it enables full sync with django. You can just launch your VSCode (with an official svelte plugin) and start work like you always would. Just make sure you have configured the environment.
+The docker setup lets you hot-swap your frontend src and static folder, and it enables full sync with django. You can just launch your VSCode (with an official svelte plugin) and start work like you always would. Just make sure you have configured the environment.
 
-The reason why a fuller sync with a local frontend is not possible is the fact that rollup, which vite uses, does not install additional dependencies on darwin. 
+*The reason why a fuller sync with a local frontend is not possible is the fact that rollup, which vite uses, does not install additional dependencies on darwin.*
 
 When it comes to the database, I think I could add a small dump file for you to have fun with, but it will only include a couple of ingredients and only from the Ingredient model (more in the documentation).
 
