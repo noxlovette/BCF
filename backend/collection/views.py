@@ -160,6 +160,7 @@ class CollectionAPI(APIView):
             ingredient_id = data.get('ingredient_id')
             user = self.request.user
             ingredient = Ingredient.objects.get(id=ingredient_id)
+            logger.info(f'Adding ingredient {ingredient.common_name} to user {user.username}')
             RegularCollectionIngredient.objects.create(user=user, ingredient=ingredient)
 
             return JsonResponse({'success': True})

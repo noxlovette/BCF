@@ -7,29 +7,23 @@ import os
 load_dotenv()
 
 PRIVATE_KEY_PASSWORD = os.getenv('PRIVATE_KEY_PASSWORD')
-PRIVATE_KEY_PATH = os.getenv('PRIVATE_KEY_PATH_DEV')
-LICENSE_LOCATION = os.getenv('LICENSE_LOCATION_DEV')
-
+PUBLIC_KEY = os.getenv('PUBLIC_KEY')
+PRIVATE_KEY = os.getenv('PRIVATE_KEY')
 
 def get_private_key():
-    key_path = PRIVATE_KEY_PATH
-    with open(key_path, 'rb') as key_file:
-        return serialization.load_pem_private_key(
-            key_file.read(),
-            # TODO HARDCODED PASSWORD
-            password=os.getenv('PRIVATE_KEY_PASSWORD', PRIVATE_KEY_PASSWORD).encode(),
-            backend=default_backend()
-        )
-
+    private_key_text = PRIVATE_KEY
+    return serialization.load_pem_private_key(
+        private_key_text.encode(),
+        password=PRIVATE_KEY_PASSWORD.encode() if PRIVATE_KEY_PASSWORD else None,
+        backend=default_backend()
+    )
 
 def get_public_key():
-    key_path = LICENSE_LOCATION
-    with open(key_path, 'rb') as key_file:
-        return serialization.load_pem_public_key(
-            key_file.read(),
-            backend=default_backend()
-        )
-
+    public_key_text = PUBLIC_KEY
+    return serialization.load_pem_public_key(
+        public_key_text.encode(),
+        backend=default_backend()
+    )
 
 def decrypt_field(encrypted):
     if encrypted:
@@ -46,7 +40,6 @@ def decrypt_field(encrypted):
         )
         return decrypted.decode()
     return None
-
 
 def encrypt_field(data):
     if data is not None:

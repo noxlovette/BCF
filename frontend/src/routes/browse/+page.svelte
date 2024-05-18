@@ -61,7 +61,7 @@ interface Ingredient {
     searchTerm.set((sessionStorage.getItem('searchTerm') || ""));
     visibleFields.set(loadFieldPreference());
     
-    console.log('Current page when the page loaded:', $currentPage);
+    
     data = await load();
     isLoading = false;
     is_authenticated = sessionStorage.getItem("is_authenticated");
@@ -87,7 +87,7 @@ interface Ingredient {
   $: {
     sortedDescriptors = sortDescriptors(filteredDescriptors);
     if (chosenDescriptors.length > 0) {
-      console.log(chosenDescriptors);
+      
       fetchWithDescriptors();
 
     }
@@ -162,7 +162,7 @@ async function submitSuggestion() {
   const response = await addSuggestionBrowse(body);
   showSuggestion = false;
   message = null;
-  console.log(response);
+  
   notification.set(response);
 }
 
@@ -190,7 +190,7 @@ async function submitSuggestion() {
   }
 
   function handleDescriptorChange() {
-    console.log("descriptor changed");
+    
     }
   
     
@@ -201,9 +201,9 @@ async function submitSuggestion() {
   
 
   async function changePage(increment) {
-    console.log('Current page when changepage clicked:', $currentPage);
+    
     if ($currentPage + increment >= 1 && $currentPage + increment <= (data as { total_pages: number }).total_pages) {
-      console.log('Setting current page to:', $currentPage + increment);
+      
       currentPage.update((value) => value + increment);
       notification.set(`you are on page ${$currentPage}`);
       goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
@@ -216,7 +216,7 @@ async function submitSuggestion() {
 
 async function updatePageSize() {
     goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
-    console.log('Setting page size to:', pageSize);
+    
     data = await load(); // Wait for the URL to be updated before loading new data
 }
 function toggleTuneMenu() {
@@ -375,7 +375,7 @@ async function handleAddIngredient(ingredientId) {
     
       <div id="table-wrapper" class="flex flex-row ml-8 mr-8 mt-0 p-2 overflow-x-auto overflow-y-auto items-center xl:font-medium font-normal">
         
-        {#if isLoading}
+        {#if isLoading || data === null}
           <!-- If isLoading is true, display a loading message -->
           <Loader />
     
@@ -412,7 +412,7 @@ async function handleAddIngredient(ingredientId) {
             " 
             
             type="checkbox" id={descriptor.name} bind:group={chosenDescriptors} value={descriptor}
-            on:change={() => { handleDescriptorChange(); console.log("clicked"); }} />
+            on:change={() => { handleDescriptorChange();  }} />
 
             {descriptor.name}
             </label>

@@ -1,18 +1,20 @@
 from pathlib import Path
 from dotenv import load_dotenv
 import sentry_sdk
+from corsheaders.defaults import default_headers
 import os
+
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
-# TODO SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', default='False') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    'main_project',
     'browse.apps.BrowseConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,22 +40,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# CORS_ALLOWED_ORIGINS = [
-#    'http://localhost:5173',
-#    'http://frontend:5173',
-#   'http://172.21.0.4:5173',
-#]
-
-CSRF_COOKIE_HTTPONLY = False
-
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:5173',
-    'http://172.21.0.4:5173',
-    'http://frontend:5173',
-]
-
+# NETWORKING
+# Environment variables should be retrieved as strings and split into lists if they are supposed to be lists
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:5173').split()
+CORS_ALLOW_ALL_ORIGINS = os.environ.get('CORS_ALLOW_ALL_ORIGINS', 'False') == 'True'
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost:5173').split()
+CSRF_COOKIE_HTTPONLY = os.environ.get('CSRF_COOKIE_HTTPONLY', 'True') == 'True'
+CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'True') == 'True'
+SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', 'True') == 'True'
+CSRF_COOKIE_DOMAIN = os.environ.get('CSRF_COOKIE_DOMAIN', 'localhost')
+CSRF_COOKIE_PATH = '/'
+
 
 ROOT_URLCONF = 'main_project.urls'
 
@@ -61,27 +59,9 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
-
 WSGI_APPLICATION = 'main_project.wsgi.application'
 AUTH_USER_MODEL = 'auth.User'
 
-print('Database host:', os.environ.get('DB_HOST'))
 # Database
 DATABASES = {
     'default': {
@@ -95,14 +75,12 @@ DATABASES = {
 }
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_AGE = 3600*12
+SESSION_COOKIE_AGE = 3600 * 12
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 
 # Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -127,13 +105,29 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # STATIC_URL = 'static/'
 
 # keeping just for admin interface
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates']
+        ,
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
 ]
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -171,6 +165,8 @@ LOGGING = {
         },
     },
 }
+
+# Sentry settings
 sentry_sdk.init(
     dsn=os.environ.get('SENTRY_DSN'),
     # Set traces_sample_rate to 1.0 to capture 100%
@@ -179,5 +175,5 @@ sentry_sdk.init(
     # Set profiles_sample_rate to 1.0 to profile 100%
     # of sampled transactions.
     # We recommend adjusting this value in production.
-    profiles_sample_rate=1.0,
+    profiles_sample_rate=0.1,
 )

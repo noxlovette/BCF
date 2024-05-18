@@ -61,7 +61,7 @@ function startNotificationInterval() {
 }
 
   onMount(() => {
-    console.log("mounted");
+    
     isMounted = true;
     setTimeout(startNotificationInterval, 1000000);
   });
@@ -90,16 +90,16 @@ function startNotificationInterval() {
     >
       <section id="browse" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty">
         <div class="mx-auto flex max-w-[800px] flex-col gap-2 md:gap-4 xl:max-w-full">
-          <h2 class="mb-2 w-full text-3xl font-bold text-sky-950 md:text-5xl lg:text-5xl">
+          <h2 class="mb-2 w-full text-3xl font-bold text-sky-950 dark:text-sky-400 md:text-5xl lg:text-5xl">
             Browse over 3100 ingredients.
           </h2>
-          <p class="mx-auto mt-4 max-w-3xl text-base text-sky-700 md:text-xl lg:text-xl xl:text-xl">
+          <p class="mx-auto mt-4 max-w-3xl text-base text-sky-700 dark:text-sky-200 md:text-xl lg:text-xl xl:text-xl">
             Use the power of IFRA's FIG in an unprecedented way. The whole Browse page is supercharged with the community's input and the structure of the Association.
           </p>
-          <p class="mx-auto mt-4 max-w-3xl text-base text-sky-700 md:text-xl lg:text-xl xl:text-xl">
+          <p class="mx-auto mt-4 max-w-3xl text-base text-sky-700 dark:text-sky-200 md:text-xl lg:text-xl xl:text-xl">
             Industry-level data, supported by the opinions of real perfumers.
           </p>
-          <p class="mx-auto mt-4 max-w-3xl text-base text-sky-700 md:text-xl lg:text-xl xl:text-xl">
+          <p class="mx-auto mt-4 max-w-3xl text-base text-sky-700 dark:text-sky-200 md:text-xl lg:text-xl xl:text-xl">
             This is the place where the hidden becomes apparent, and your expertise grows. <b>You contribute</b>, and you <b>benefit</b>.
           </p>
         </div>
@@ -129,16 +129,16 @@ function startNotificationInterval() {
           />
         </div>
         <div class="mx-auto flex max-w-[800px] flex-col gap-2 md:gap-4 xl:max-w-full">
-          <h2 class="mb-2 w-full text-3xl font-bold text-rose-950 md:text-5xl lg:text-5xl">
+          <h2 class="mb-2 w-full text-3xl font-bold text-rose-950 dark:text-rose-400 md:text-5xl lg:text-5xl">
             Collect hundreds of perfume compounds.
           </h2>
-          <p class="mx-auto mt-4 max-w-3xl text-base text-rose-700 md:text-xl lg:text-xl xl:text-xl">
+          <p class="mx-auto mt-4 max-w-3xl text-base text-rose-700 dark:text-rose-200 md:text-xl lg:text-xl xl:text-xl">
             Keep track of your favourite ingredients and the ones you want to try.
           </p>
-          <p class="mx-auto mt-4 max-w-3xl text-base text-rose-700 md:text-xl lg:text-xl xl:text-xl">
+          <p class="mx-auto mt-4 max-w-3xl text-base text-rose-700 dark:text-rose-200 md:text-xl lg:text-xl xl:text-xl">
             Note down ideas, associations, and inspirations. Everything from colour to availability in your lab.
           </p>
-          <p class="mx-auto mt-4 max-w-3xl text-base text-rose-700 md:text-xl lg:text-xl xl:text-xl">
+          <p class="mx-auto mt-4 max-w-3xl text-base text-rose-700 dark:text-rose-200 md:text-xl lg:text-xl xl:text-xl">
             Your collection is your world only. <b>Encrypted, it is only yours to enjoy.</b>
           </p>
         </div>
@@ -147,16 +147,16 @@ function startNotificationInterval() {
 
       <section id="browse" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty">
         <div class="mx-auto flex max-w-[800px] flex-col gap-2 md:gap-4 xl:max-w-full">
-          <h2 class="mb-2 w-full text-3xl font-bold text-lime-950 md:text-5xl lg:text-5xl">
+          <h2 class="mb-2 w-full text-3xl font-bold text-lime-950 dark:text-lime-400 md:text-5xl lg:text-5xl">
             Formulate a revolution.
           </h2>
-          <p class="mx-auto mt-4 max-w-3xl text-base text-lime-700 md:text-xl lg:text-xl xl:text-xl">
+          <p class="mx-auto mt-4 max-w-3xl text-base text-lime-700 dark:text-lime-200 md:text-xl lg:text-xl xl:text-xl">
             Manage your formulas independent of where you are. At home, in the lab, or on holiday.
           </p>
-          <p class="mx-auto mt-4 max-w-3xl text-base text-lime-700 md:text-xl lg:text-xl xl:text-xl">
+          <p class="mx-auto mt-4 max-w-3xl text-base text-lime-700 dark:text-lime-200 md:text-xl lg:text-xl xl:text-xl">
             Focus on how to make your ideas come true, and not on where to store them.
           </p>
-          <p class="mx-auto mt-4 max-w-3xl text-base text-lime-700 md:text-xl lg:text-xl xl:text-xl">
+          <p class="mx-auto mt-4 max-w-3xl text-base text-lime-700 dark:text-lime-200 md:text-xl lg:text-xl xl:text-xl">
             Make a difference. <b>Change</b> the landscape of <b> perfumery today.</b>
           </p>
         </div>

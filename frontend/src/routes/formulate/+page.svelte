@@ -41,17 +41,17 @@
     if (formulaId === activeFormulaId) {
       formulaDetail = null;  // Optionally toggle detail view off if the same button is clicked again
       activeFormulaId = null;
-      console.log("closing formula detail", formulaId);
+      
     } else {
       fetchFormulaDetail(formulaId);
       activeFormulaId = formulaId;  // Update the active formula ID
-      console.log("opening formula detail", formulaId);
+      
       console.log(activeFormulaId)
     }
   }  
   async function handleCreateFormula() {
     let data = await createFormula();
-    console.log("created formula", data);
+    
 
     notification.set("new formula created");
     formulae = await fetchFormulas({forceReload: true });
@@ -73,10 +73,10 @@
     {#if isLoading}
     <Loader />
     {:else}
-    <div id="app" class="flex flex-row rounded-lg shadow items-stretch size-5/6 m-2 mt-0 p-4 text-amber-950/90 dark:text-amber-200/60 bg-amber-600/30"
+    <div id="app" class="flex flex-row rounded-lg shadow items-stretch size-5/6 m-2 mt-0 p-4 text-amber-950/90 dark:text-amber-200/80 bg-amber-600/30"
     in:fade={{duration: 150}}
     >
-  <div id="sidebar" class="flex flex-col w-1/6 hover:w-1/5 mr-auto bg-lime-800/70 dark:bg-lime-800/20 text-amber-100/90 rounded-lg drop-shadow p-4 transition-all duration-500"
+  <div id="sidebar" class="flex flex-col w-1/6 hover:w-1/5 mr-auto bg-lime-800/70 dark:bg-lime-900/70 text-amber-100/90 rounded-lg drop-shadow p-4 transition-all duration-500"
   in:fade={{delay:150, duration: 150}}
   >
     <h2 id="formula-header" class= "text-4xl font-semibold mb-4 border-b-2 border-amber-100/20">my formulae</h2>
@@ -84,7 +84,7 @@
       {#each formulae as formula}
         <button class:active={formula.id === activeFormulaId} 
         id="formula-item" 
-        class="flex text-left flex-col w-5/6 hover:w-3/4 hover:py-4 hover:translate-x-1 active:scale-95 hover:bg-amber-50/80 hover:text-amber-800/80 dark:hover:bg-amber-800/20 dark:hover:text-amber-50/60 hover:rounded-lg hover:shadow p-2 transition-all duration-150" 
+        class="flex text-left flex-col w-5/6 hover:w-3/4 hover:py-4 hover:translate-x-1 active:scale-95 hover:bg-amber-50/80 hover:text-amber-800/80 dark:hover:bg-amber-400/30 dark:hover:text-amber-200 hover:rounded-lg hover:shadow p-2 transition-all duration-150" 
         on:click={() => viewFormula(formula.id)} 
         title={formula.description}
         
@@ -125,8 +125,8 @@
   .active {
     @apply bg-amber-50/90;
     @apply text-amber-900/90;
-    @apply dark:bg-amber-800/20;
-    @apply dark:text-amber-50/60;
+    @apply dark:bg-amber-800/40;
+    @apply dark:text-amber-100/80;
     @apply rounded-lg;
     @apply shadow;
   }

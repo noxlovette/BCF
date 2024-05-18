@@ -23,36 +23,36 @@
     let allValid = false;
 
     function toggleWarningDelete() {
-        console.log('warning delete');
+        
         deleteWarning = !deleteWarning;
     }
 
     function handleDelete() {
-        console.log('deleting user');
+        
         deleteUserProfile();
         goto('/auth/login');
     }
 
     function checkPassword(newPassword) {
-        console.log('checking pass');
+        
         validLength =(newPassword.length >= 8);
         validCase = newPassword.toUpperCase() != newPassword && newPassword.toLowerCase() != newPassword;
         validSpecial = newPassword.replaceAll(/\w/g, "").length > 0;
     }
 
     function checkUsername(username) {
-        console.log('checking username');
+        
     validUsername = username.length >= 3;  // Username must be at least 3 characters long
 }
 
 
     function checkEmail() {
-        console.log('checking email');
+        
         validEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(email);
     }
 
     function checkPasswordsMatch() {
-        console.log('checking match');
+        
     validDuplicate = newPassword === confirmPassword;
 }
     
@@ -89,7 +89,7 @@
 
     async function handleSaveChanges() {
     if (allValid) {
-        console.log('Saving changes...');
+        
         const body = JSON.stringify({ username, email, newPassword, oldPassword });
         try {
             await updateUserProfile(body);
@@ -105,7 +105,7 @@
         }
     } else {
         notification.set('Invalid input');
-        console.log('Invalid input');
+        
     }
 }
 
@@ -119,7 +119,7 @@
 
     </div>
     
-    <div id="grid" class="grid grid-cols-3 space-x-8 *:bg-stone-50/80 *:p-4 *:rounded-lg *:shadow">
+    <div id="grid" class="grid grid-cols-3 space-x-8 *:bg-stone-50/80 *:p-4 *:rounded-lg *:shadow *:dark:bg-stone-800/80">
         <div id="account settings" class="flex flex-col">
             <h2 class="font-bold mb-2">account settings</h2>
             <h3 class="font-normal">password</h3>

@@ -87,7 +87,7 @@ async function searchIngredients() {
         const response = await deleteFromCollection(ingredient);
         if (response === "Ingredient successfully removed from collection!") {
         filteredCollection = filteredCollection.filter(ingredientInside => ingredientInside.id !== ingredient.id);
-        console.log("response:", response);
+        
         notification.set(response);
         editingRowId = null;
       } else {
@@ -118,7 +118,7 @@ function isEditableField(ingredientType, fieldName) {
      * @param {{object: any;}} ingredient
      */
 function toggleEdit(ingredient) {
-    console.log("Toggling edit for ingredient:", ingredient);
+    
     isEditing = !isEditing;
     editingRowId = editingRowId === ingredient.id ? null : ingredient.id;
     editingObject = editingObject === ingredient ? null : ingredient;
@@ -127,7 +127,7 @@ function toggleEdit(ingredient) {
 async function saveEdit(ingredientToSave) {
   try {
     const response = await saveEditedIngredientCollect(ingredientToSave);
-    console.log("Response:", response);
+    
     toggleEdit(ingredientToSave);
     collection = await handleFetch(true);
 
@@ -142,7 +142,7 @@ function handleKeydown(event) {
         if (isEditing) {
             // Priority given to exiting editing mode
             event.preventDefault();
-            console.log("Escape key pressed during editing");
+            
             toggleEdit(editingObject);
             return;
         }
@@ -166,7 +166,7 @@ function handleKeydown(event) {
     // Specific contextual key handling below
     if (isEditing && event.key === "Enter") {
         event.preventDefault();
-        console.log("Enter key pressed");
+        
         saveEdit(editingObject);
         return;
     }
@@ -221,7 +221,7 @@ async function handleCreateCustomIngredient() {
   };
     try {
       const response = await createCustomIngredientCollect(newCustom);
-      console.log("Response:", response);
+      
       handleFetch(true);
       toggleModal();
     } catch (error) {
@@ -253,7 +253,7 @@ function toggleFieldVisibility(field) {
 
 
 const searchCollection = () => {
-  console.log("changed value search collection", $searchTerm);
+  
   filteredCollection = collection.filter(ingredient => {
     const commonName = ingredient.common_name || '';
     const cas = ingredient.cas || '';
@@ -268,13 +268,17 @@ const searchCollection = () => {
 // Compute the start index for slicing the array based on the current page and page size
 $: {
   startIndex = ($currentPage - 1) * $pageSize;
-  console.log('current page -1', $currentPage - 1);
-  console.log('Start index:', startIndex);
+  
+  
 }
 
 $: {
-  paginatedCollection = filteredCollection.slice(startIndex, startIndex + $pageSize);
-  console.log('Paginated collection:', paginatedCollection);
+  try {
+    paginatedCollection = filteredCollection.slice(startIndex, startIndex + $pageSize);
+  } catch (error) {
+    notification.set("Pages don't wnana be sliced. Try again.");
+  }
+  
 }
 
 
@@ -290,7 +294,7 @@ onMount( async () => {
     visibleFields.set(JSON.parse(sessionStorage.getItem('visibleFieldsCollect')) || initialVisibleFields);
     }
     
-    console.log('Current page when the page loaded:', $currentPage);
+    
 
     collection = await handleFetch();
     if (collection) {
@@ -298,7 +302,7 @@ onMount( async () => {
     }
     
     filteredCollection = collection;
-    console.log('Filtered collection:', filteredCollection);
+    
 
     currentPage.subscribe(value => sessionStorage.setItem('currentPageCollect', value.toString()));
 
@@ -309,7 +313,7 @@ onMount( async () => {
     });
 
     visibleFields.subscribe(value => {
-      console.log('VisibleFieldsCollect:', value);
+      
       sessionStorage.setItem('visibleFieldsCollect', JSON.stringify(value));
     });
   });

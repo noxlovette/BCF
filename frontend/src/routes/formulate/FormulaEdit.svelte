@@ -21,7 +21,7 @@
 
   async function handleDeleteIngredient(ingredientId) {
     let response = deleteIngredientFormulate(ingredientId);
-    console.log(response);
+    
     editedFormula.ingredients = editedFormula.ingredients.filter(
       (ingredient) => ingredient.id !== ingredientId,
     );
@@ -29,10 +29,10 @@
 
   async function saveChanges() {
     // Save the changes to the server here...
-    console.log("Saving changes");
+    
 
     let updatedIngredients = editedFormula.ingredients.map((ingredient, i) => {
-      console.log(ingredient);
+      
       let updatedIngredient = {
         id: ingredient.id,
         collection_ingredient_id: ingredient.collection_ingredient_id,
@@ -67,7 +67,7 @@
 
     let data = await saveChangesFormula(formData, editedFormula.id);
     editedFormula = null;
-    console.log("updated formula", data);
+    
 
     
     formulaDetail = data;
@@ -75,7 +75,7 @@
   }
 
   function addIngredient() {
-    console.log("Adding ingredient");
+    
     // Create a new ingredient object
     let newIngredient = {
       id: `new-${ingredientCounter}`, // Use the counter to generate a unique id

@@ -13,7 +13,7 @@
 
     try {
       const response = await fetchCentralDjangoApi(url, "POST", {});
-      console.log("Response:", response);
+      
       is_authenticated = false;
       sessionStorage.clear();
       window.location.href = "/";

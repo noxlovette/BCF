@@ -1,22 +1,36 @@
 // src/routes/DjangoAPI
-const BASE_URL = "http://localhost:8000";
+import { writable, get } from 'svelte/store';
 
+const BASE_URL = import.meta.env.VITE_API_URL || "https://api.bcfapp.app";
+const csrfToken = writable('');
 
-// the central bridge to the Django API
+export async function fetchCSRFToken() {
+  const currentToken = get(csrfToken);
+  if (!currentToken) { // Check if the CSRF token store is empty
+    const response = await fetch(`${BASE_URL}/api/get-csrf/`, {
+        method: 'GET',
+        credentials: 'include'  // Necessary to include cookies if they are accessible
+    });
+    const data = await response.json();
+    csrfToken.set(data.csrfToken);
+  }
+}
+
+// the central bridge to the backend
 export async function fetchCentralDjangoApi(
   endpoint: string,
   method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
   body: any = null,
-  credentials: RequestCredentials = "include"  // Set to include to ensure cookies are sent
+  credentials: RequestCredentials = "include" // Ensures cookies are sent
 ): Promise<any> {
-  const csrfToken = getCookie('csrftoken'); // Function to get CSRF token from cookies
+  await fetchCSRFToken(); // Ensure CSRF token is fetched and set before making the API call
+  const token = get(csrfToken); // Use the get function to access the value of the csrfToken store
 
-  const headers = {
+  const headers: HeadersInit = {
     "Content-Type": "application/json",
-    ...(csrfToken && { "X-CSRFToken": csrfToken }), // Conditionally add CSRF token to headers
+    'X-CSRFToken': token,
   };
 
-  // Make a request to Django API with CSRF token included in headers
   const options = {
     method,
     headers,
@@ -24,56 +38,35 @@ export async function fetchCentralDjangoApi(
     credentials,
   };
 
-  console.log(options);  // Add this line before fetch call to inspect the request payload
-
   const response = await fetch(endpoint, options);
 
   if (!response.ok) {
-    let errorText = await response.json();
-    throw new Error(errorText.error);
+    const errorText = await response.json();
+    throw new Error(errorText.error || 'Unknown error');
   }
 
-  // Only parse as JSON if the response has content
-  if (response.status !== 204 && response.statusText !== "No Content") {
-    const data = await response.json();
-    return data;
-  }
+  return response.json();
 }
 
-// Helper function to get a cookie by name
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.startsWith(name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
 
 
 // BROWSE PAGE
 export async function fetchIngredientsBrowse(currentPage: number, searchTerm = "", pageSize = 10, chosenDescriptors = [], { forceReload = false } = {}) {
   const descriptors = chosenDescriptors.map(descriptor => `descriptors=${encodeURIComponent(descriptor.name)}`).join('&');
 
-  console.log("Descriptors on the server:", descriptors);
+  
 
   const cacheKey = `ingredients-${currentPage}-${searchTerm}-${pageSize}-${descriptors}`;
   let data = forceReload ? null : localStorage.getItem(cacheKey);
   if (data) {
-    console.log("Data from cache:", data);
+    
     
     return JSON.parse(data);
   } else {
     try {
       const endpoint = `${BASE_URL}/browse/api/ingredients?page=${currentPage}&search=${searchTerm}&page_size=${pageSize}&${descriptors}`;
       const ingredientsData = await fetchCentralDjangoApi(endpoint);
-      console.log("Data from Django:", ingredientsData);
+      
       localStorage.setItem(cacheKey, JSON.stringify(ingredientsData));
       return ingredientsData;
     } catch (error) {
@@ -138,7 +131,7 @@ export async function fetchCollection({ forceReload = false } = {}) {
       const data = await fetchCentralDjangoApi(endpoint);
 
       if (Array.isArray(data) && data.length > 0 && data[0].hasOwnProperty('common_name')) {
-        console.log("collection data from Django:", data);
+        
         const sortedData = data.sort((a, b) => {
             // Handle null or undefined common_name values by replacing them with an empty string
             const nameA = a.common_name || "";
@@ -146,7 +139,7 @@ export async function fetchCollection({ forceReload = false } = {}) {
     
             return nameA.localeCompare(nameB);
         });
-        console.log("Sorted collection data:", sortedData);
+        
         sessionStorage.setItem(cacheKey, JSON.stringify(sortedData));
         return sortedData;
     
@@ -172,7 +165,7 @@ export async function deleteFromCollection(ingredient: any) {
       endpoint = `${BASE_URL}/collection/api/ingredient/custom/${ingredient.id}/delete/`;
   }
     const response = await fetchCentralDjangoApi(endpoint, "DELETE");
-    console.log("DELETE response from Django:", response);
+    
 
     if (response === undefined || response.success) {
       fetchCollection({ forceReload: true });
@@ -192,7 +185,7 @@ export async function createCustomIngredientCollect(body: any) {
   try {
   const endpoint = `${BASE_URL}/collection/api/ingredient/new/`;
     const response = await fetchCentralDjangoApi(endpoint, "POST", body);
-    console.log("Custom ingredient creation response from Django:", response);
+    
     fetchCollection({ forceReload: true });
     return response;
   } catch (error) {
@@ -241,7 +234,7 @@ export async function saveEditedIngredientCollect(ingredientToSave: any) {
     // Make the PUT request to the Django API
     try {
       const response = await fetchCentralDjangoApi(endpoint, "PUT", data);
-      console.log("Save edited ingredient response from Django:", response);
+      
       return response;
     } catch (error) {
       console.error("Error saving edited ingredient:", error);
@@ -253,7 +246,7 @@ export async function saveEditedIngredientCollect(ingredientToSave: any) {
   // FORMULATE PAGE
 
 export async function addFormulaAsCustomIngredient(formula:any) {
-  console.log("Adding as custom");
+  
   const data = {
     common_name: formula.name,
     use: formula.description,
@@ -319,15 +312,15 @@ export async function fetchFormulas({forceReload = false} = {}) {
   const cacheKey = `formulae`;
   let data = forceReload ? null : sessionStorage.getItem(cacheKey);
   if (data) {
-    console.log("formulae from cache:", data);
+    
     return JSON.parse(data);
   } else {
     try {
-      console.log("Fetching formulae");
+      
       const endpoint = `${BASE_URL}/formulae/api/formula/list/`;
       const data = await fetchCentralDjangoApi(endpoint);
       sessionStorage.setItem(cacheKey, JSON.stringify(data));
-      console.log(data);
+      
       return data;
     } catch (error) {
       console.error("Error fetching data from Django:", error);
@@ -343,15 +336,15 @@ export async function fetchFormula(formulaId, {forceReload = false} = {}) {
   const cacheKey = `formula-${formulaId}`;
   let data = forceReload ? null : sessionStorage.getItem(cacheKey);
   if (data) {
-    console.log("formula from cache:", data);
+    
     return JSON.parse(data);
   } else {
     try {
-      console.log("Fetching formula");
+      
       const endpoint = `${BASE_URL}/formulae/api/formula/${formulaId}/`;
       const data = await fetchCentralDjangoApi(endpoint);
       sessionStorage.setItem(cacheKey, JSON.stringify(data));
-      console.log(data);
+      
       return data;
     } catch (error) {
       console.error("Error fetching data from Django:", error);
@@ -367,7 +360,7 @@ export async function fetchFormula(formulaId, {forceReload = false} = {}) {
     try {
       const endpoint = `${BASE_URL}/api/logout/`;
       const response = await fetchCentralDjangoApi(endpoint, "POST");
-      console.log("Logout response from Django:", response);
+      
 
       return response;
     } catch (error) {
@@ -380,7 +373,7 @@ export async function fetchFormula(formulaId, {forceReload = false} = {}) {
     try {
       const endpoint = `${BASE_URL}/api/signup/`;
       const response = await fetchCentralDjangoApi(endpoint, "POST", body);
-      console.log("Signup response from Django:", response);
+      
 
       return response;
     } catch (error) {
@@ -397,7 +390,7 @@ export async function fetchFormula(formulaId, {forceReload = false} = {}) {
     if (!forceReload) {
         const cachedData = localStorage.getItem(cacheKey);
         if (cachedData) {
-            console.log("Data from cache: " + cachedData);
+            
             return JSON.parse(cachedData);
         }
     }
@@ -419,7 +412,7 @@ export async function fetchDescriptors() {
   const url = `${BASE_URL}/browse/api/descriptors/`;
   const cacheKey = "descriptors";
   if (localStorage.getItem(cacheKey)) {
-      console.log("Data from cache: " + localStorage.getItem(cacheKey));
+      
       return JSON.parse(localStorage.getItem(cacheKey));
   } else {
   try {
@@ -436,10 +429,10 @@ export async function fetchDescriptors() {
 
 export async function updateUserProfile(body: string) {
   const endpoint = `${BASE_URL}/api/profile/update/`;
-  console.log("body sent to update", body);
+  
   try {
       const response = await fetchCentralDjangoApi(endpoint, "PUT", body);
-      console.log('Changes saved successfully');
+      
       
       return response;
   } catch (error) {
@@ -454,7 +447,7 @@ export async function deleteUserProfile() {
   try {
       const response = await fetchCentralDjangoApi(endpoint, "DELETE");
       logOut();
-      console.log('Profile deleted successfully');
+      
       return response;
   } catch (error) {
       console.error("Error deleting profile:", error);

@@ -22,20 +22,20 @@
   }
 
   async function addTag(formulaId) {
-    console.log("Adding tag", formulaId);
+    
     notification.set("this doesn't work yet");
   }
 
   function editFormula(formula) {
     editing = true;
     editedFormula = formula;
-    console.log("Editing formula", editedFormula);
+    
   }
 
   async function handleDeleteFormula(formulaId) {
     formulaDetail = null;
     let data = await deleteFormula(formulaId);
-    console.log(data);
+    
     // Remove the deleted formula from the formulae array
     formulae = formulae.filter((formula) => formula.id !== formulaId);
     notification.set("formula deleted");

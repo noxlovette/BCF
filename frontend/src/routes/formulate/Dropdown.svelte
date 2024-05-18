@@ -53,7 +53,7 @@
   
     const searchDropdown = (event) => {
       searchTerm = event.target.value;
-      console.log("searching for", searchTerm);
+      
       filteredCollection = collection.filter(ingredient => {
         const commonName = ingredient.common_name || '';
         const cas = ingredient.cas || '';
@@ -76,7 +76,7 @@
         selectedIngredient.collection_ingredient_id = item.id;
         selectedIngredient.custom_collection_ingredient_id = null;
       }
-      console.log("Selected ingredient", selectedIngredient);
+      
     isDropdownVisible = false;
 
     }
@@ -87,7 +87,7 @@
 <div>
   <input
     type="text"
-    class="flex w-5/6 bg-amber-300/20 dark:bg-amber-950/30 focus:ring-amber-700/70 focus:ring-2 text-amber-700/80 rounded-lg border-none"
+    class="flex w-5/6 bg-amber-300/20 dark:bg-amber-950/30 focus:ring-amber-700/70 focus:dark:ring-amber-200/70 focus:ring-2 text-amber-700/80 dark:text-amber-200/80 rounded-lg border-none"
     bind:value={searchTerm}
     bind:this={searchInput}
     placeholder="something new"
