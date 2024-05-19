@@ -1,5 +1,0 @@
-services:
-  web:
-    image: compose.yml
-    ports:
-      - 8080
