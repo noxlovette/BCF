@@ -276,7 +276,7 @@ $: {
   try {
     paginatedCollection = filteredCollection.slice(startIndex, startIndex + $pageSize);
   } catch (error) {
-    notification.set("Pages don't wnana be sliced. Try again.");
+    notification.set("Try again.");
   }
   
 }

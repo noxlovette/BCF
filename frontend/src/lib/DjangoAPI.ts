@@ -194,35 +194,25 @@ export async function createCustomIngredientCollect(body: any) {
   }
 }
 
-export async function logIn(body) {
-  const endpoint = `${BASE_URL}/api/login/`;
-  try {
-    const response = await fetchCentralDjangoApi(endpoint, "POST", body);
 
-    return response; // This will be your user data on successful login
 
-  } catch (error) {
-    console.error("Error logging in:", error);
-    return { error: error.message }; // Structure the error in a consistent format
-  }
-}
 
 
 export async function saveEditedIngredientCollect(ingredientToSave: any) {
-    // Collect the data from the input fields
-    const data = {
-      common_name: ingredientToSave.common_name,
-      cas: ingredientToSave.cas,
-      volatility: ingredientToSave.volatility,
-      use: ingredientToSave.use,
-      colour: ingredientToSave.colour,
-      impression: ingredientToSave.impression,
-      ideas: ingredientToSave.ideas,
-      associations: ingredientToSave.associations,
-      amount: ingredientToSave.amount,
-      unit: ingredientToSave.unit,
+  // Collect the data from the input fields
+  const data = {
+    common_name: ingredientToSave.common_name,
+    cas: ingredientToSave.cas,
+    volatility: ingredientToSave.volatility,
+    use: ingredientToSave.use,
+    colour: ingredientToSave.colour,
+    impression: ingredientToSave.impression,
+    ideas: ingredientToSave.ideas,
+    associations: ingredientToSave.associations,
+    amount: ingredientToSave.amount,
+    unit: ingredientToSave.unit,
     };
-
+    
     // Define the URL for the PUT request
     let endpoint: string;
     if (ingredientToSave.type === "CollectionIngredient") {
@@ -230,7 +220,7 @@ export async function saveEditedIngredientCollect(ingredientToSave: any) {
     } else if (ingredientToSave.type === "CustomCollectionIngredient") {
       endpoint = `${BASE_URL}/collection/api/ingredient/custom/${ingredientToSave.id}/update/`;
     }
-
+    
     // Make the PUT request to the Django API
     try {
       const response = await fetchCentralDjangoApi(endpoint, "PUT", data);
@@ -241,148 +231,185 @@ export async function saveEditedIngredientCollect(ingredientToSave: any) {
       return error.message;
     }
   }
-
-
-  // FORMULATE PAGE
-
-export async function addFormulaAsCustomIngredient(formula:any) {
   
-  const data = {
-    common_name: formula.name,
-    use: formula.description,
-    formula_id: formula.id,
-    cas: 'BASE',
-    volatility: 'base',
-    amount: 0,
-    unit: 'g',
-    ideas: '',
-    impression: '',
-    associations: '',
-    colour: '',
-  };
-  let url = `${BASE_URL}/formulae/api/formula/${formula.id}/add_as_custom/`;
-
+  
+  // FORMULATE PAGE
+  
+  export async function addFormulaAsCustomIngredient(formula:any) {
+    
+    const data = {
+      common_name: formula.name,
+      use: formula.description,
+      formula_id: formula.id,
+      cas: 'BASE',
+      volatility: 'base',
+      amount: 0,
+      unit: 'g',
+      ideas: '',
+      impression: '',
+      associations: '',
+      colour: '',
+    };
+    let url = `${BASE_URL}/formulae/api/formula/${formula.id}/add_as_custom/`;
+    
     // Assuming fetchCentralDjangoApi is a function that wraps fetch and handles the response
     let response = await fetchCentralDjangoApi(url, "POST", data);
-
+    
     if (response.id) { // Check if 'id' is present in the response
       fetchCollection({ forceReload: true }); // Force reload if needed
       return "Formula added as custom ingredient";
-  } else {
+    } else {
       return "error occured. you might have already added this formula as custom ingredient.";
+    }
   }
-}
-
-export async function saveChangesFormula (formData, editedFormulaId) {
-  let url = `${BASE_URL}/formulae/api/formula/${editedFormulaId}/`;
-  let data = await fetchCentralDjangoApi(url, "PUT", formData);
-  const cacheKey = `formula-${editedFormulaId}`;
-  sessionStorage.setItem(cacheKey, JSON.stringify(data));
-  fetchFormulas();
-  return data;
-}
-
-export async function createFormula () {
-  const formData = {
-    name: "New Formula",
-    description: "Write something inspiring here!",
-    notes: "Add some notes here...",
-    solvent: "Ethanol",
-    ingredients: [],
-  };
-  let url = `${BASE_URL}/formulae/api/formula/new/`;
-  let data = await fetchCentralDjangoApi(url, "POST", formData);
-  return data;
-}
-
-export async function deleteFormula (formulaId) {
-  let url = `${BASE_URL}/formulae/api/formula/${formulaId}/delete/`;
-  let data = await fetchCentralDjangoApi(url, "DELETE");
-  fetchFormulas({ forceReload: true });
-  return data;
-}
-
-export async function deleteIngredientFormulate (ingredientId) {
-  let url = `${BASE_URL}/formulae/api/ingredient/${ingredientId}/delete/`;
-  let data = await fetchCentralDjangoApi(url, "DELETE");
-  return data;
-}
-
-export async function fetchFormulas({forceReload = false} = {}) {
-  const cacheKey = `formulae`;
-  let data = forceReload ? null : sessionStorage.getItem(cacheKey);
-  if (data) {
-    
-    return JSON.parse(data);
-  } else {
-    try {
-      
-      const endpoint = `${BASE_URL}/formulae/api/formula/list/`;
-      const data = await fetchCentralDjangoApi(endpoint);
-      sessionStorage.setItem(cacheKey, JSON.stringify(data));
-      
-      return data;
-    } catch (error) {
-      console.error("Error fetching data from Django:", error);
-      return {
-        error: "Failed to fetch formulae data",
-      };
-    
+  
+  export async function saveChangesFormula (formData, editedFormulaId) {
+    let url = `${BASE_URL}/formulae/api/formula/${editedFormulaId}/`;
+    let data = await fetchCentralDjangoApi(url, "PUT", formData);
+    const cacheKey = `formula-${editedFormulaId}`;
+    sessionStorage.setItem(cacheKey, JSON.stringify(data));
+    fetchFormulas();
+    return data;
   }
-}
-}
-
-export async function fetchFormula(formulaId, {forceReload = false} = {}) {
-  const cacheKey = `formula-${formulaId}`;
-  let data = forceReload ? null : sessionStorage.getItem(cacheKey);
-  if (data) {
-    
-    return JSON.parse(data);
-  } else {
-    try {
-      
-      const endpoint = `${BASE_URL}/formulae/api/formula/${formulaId}/`;
-      const data = await fetchCentralDjangoApi(endpoint);
-      sessionStorage.setItem(cacheKey, JSON.stringify(data));
-      
-      return data;
-    } catch (error) {
-      console.error("Error fetching data from Django:", error);
-      return {
-        error: "Failed to fetch formula data",
-      };
+  
+  export async function createFormula () {
+    const formData = {
+      name: "New Formula",
+      description: "Write something inspiring here!",
+      notes: "Add some notes here...",
+      solvent: "Ethanol",
+      ingredients: [],
+    };
+    let url = `${BASE_URL}/formulae/api/formula/new/`;
+    let data = await fetchCentralDjangoApi(url, "POST", formData);
+    return data;
   }
+  
+  export async function deleteFormula (formulaId) {
+    let url = `${BASE_URL}/formulae/api/formula/${formulaId}/delete/`;
+    let data = await fetchCentralDjangoApi(url, "DELETE");
+    fetchFormulas({ forceReload: true });
+    return data;
   }
-}
-
+  
+  export async function deleteIngredientFormulate (ingredientId) {
+    let url = `${BASE_URL}/formulae/api/ingredient/${ingredientId}/delete/`;
+    let data = await fetchCentralDjangoApi(url, "DELETE");
+    return data;
+  }
+  
+  export async function fetchFormulas({forceReload = false} = {}) {
+    const cacheKey = `formulae`;
+    let data = forceReload ? null : sessionStorage.getItem(cacheKey);
+    if (data) {
+      
+      return JSON.parse(data);
+    } else {
+      try {
+        
+        const endpoint = `${BASE_URL}/formulae/api/formula/list/`;
+        const data = await fetchCentralDjangoApi(endpoint);
+        sessionStorage.setItem(cacheKey, JSON.stringify(data));
+        
+        return data;
+      } catch (error) {
+        console.error("Error fetching data from Django:", error);
+        return {
+          error: "Failed to fetch formulae data",
+        };
+        
+      }
+    }
+  }
+  
+  export async function fetchFormula(formulaId, {forceReload = false} = {}) {
+    const cacheKey = `formula-${formulaId}`;
+    let data = forceReload ? null : sessionStorage.getItem(cacheKey);
+    if (data) {
+      
+      return JSON.parse(data);
+    } else {
+      try {
+        
+        const endpoint = `${BASE_URL}/formulae/api/formula/${formulaId}/`;
+        const data = await fetchCentralDjangoApi(endpoint);
+        sessionStorage.setItem(cacheKey, JSON.stringify(data));
+        
+        return data;
+      } catch (error) {
+        console.error("Error fetching data from Django:", error);
+        return {
+          error: "Failed to fetch formula data",
+        };
+      }
+    }
+  }
+  
   // USER PAGES
   export async function logOut() {
     try {
       const endpoint = `${BASE_URL}/api/logout/`;
       const response = await fetchCentralDjangoApi(endpoint, "POST");
       
-
+      
       return response;
     } catch (error) {
       console.error("Error logging out:", error);
       return error.message;
     }
   }
+  export async function logIn(body) {
+    const endpoint = `${BASE_URL}/api/login/`;
+    try {
+      const response = await fetchCentralDjangoApi(endpoint, "POST", body);
+  
+      return response; // This will be your user data on successful login
+  
+    } catch (error) {
+      console.error("Error logging in:", error);
+      return { error: error.message }; // Structure the error in a consistent format
+    }
+  }
   
   export async function signUp(body: any) {
+    const endpoint = `${BASE_URL}/api/signup/`;
     try {
-      const endpoint = `${BASE_URL}/api/signup/`;
       const response = await fetchCentralDjangoApi(endpoint, "POST", body);
-      
-
       return response;
     } catch (error) {
       console.error("Error signing up:", error);
-      return error.message;
+      return { error: error.message }; // Structure the error in a consistent format
     }
   }
-
-
+  
+  export async function deleteUserProfile() {
+    const endpoint = `${BASE_URL}/api/profile/delete/`;
+    try {
+      const response = await fetchCentralDjangoApi(endpoint, "DELETE");
+      logOut();
+      
+      return response;
+    } catch (error) {
+      console.error("Error deleting profile:", error);
+      throw error;
+    }
+  }
+  
+  
+  export async function updateUserProfile(body: string) {
+    const endpoint = `${BASE_URL}/api/profile/update/`;
+    
+    try {
+        const response = await fetchCentralDjangoApi(endpoint, "PUT", body);
+        
+        
+        return response;
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        throw error;
+  
+    }
+  }
   export async function listSuggestedIngredients({ forceReload = false } = {}) {
     const cacheKey = `suggested-ingredients`;
     const url = `${BASE_URL}/browse/api/suggested-ingredients/`;
@@ -390,7 +417,7 @@ export async function fetchFormula(formulaId, {forceReload = false} = {}) {
     if (!forceReload) {
         const cachedData = localStorage.getItem(cacheKey);
         if (cachedData) {
-            
+          
             return JSON.parse(cachedData);
         }
     }
@@ -425,32 +452,4 @@ export async function fetchDescriptors() {
       throw error;
   }
 }
-}
-
-export async function updateUserProfile(body: string) {
-  const endpoint = `${BASE_URL}/api/profile/update/`;
-  
-  try {
-      const response = await fetchCentralDjangoApi(endpoint, "PUT", body);
-      
-      
-      return response;
-  } catch (error) {
-      console.error("Error updating profile:", error);
-      throw error;
-
-  }
-}
-
-export async function deleteUserProfile() {
-  const endpoint = `${BASE_URL}/api/profile/delete/`;
-  try {
-      const response = await fetchCentralDjangoApi(endpoint, "DELETE");
-      logOut();
-      
-      return response;
-  } catch (error) {
-      console.error("Error deleting profile:", error);
-      throw error;
-  }
 }

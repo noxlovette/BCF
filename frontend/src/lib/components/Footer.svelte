@@ -12,7 +12,7 @@ let legalOn = false;
 </script>
 
 <footer class="relative flex flex-col items-center justify-center py-4 z-40" >
-  <div class="clear-end grid grid-cols-3 justify-center max-w-7xl text-sm font-semibold mt-4">
+  <div class="clear-end grid grid-cols-3 justify-center max-w-7xl xl:gap-8 md:gap-6 sm:gap-4 text-sm font-semibold mt-4">
 <div id = "social"
 class="flex items-center w-full justify-center"
 >
@@ -62,11 +62,11 @@ class="flex items-center w-full justify-center"
     class="flex items-center w-full justify-center"
   >
     
-    <p class="m-4">copyright&nbsp;© 2024 Danila Volkov</p>
+    <p class="m-4 md:text-center">© 2024 Danila Volkov</p>
   </div>
 
   <div id="paperwork" class="ml-auto mr-8 flex sm:mr-4 sm:text-sm md:text-md">
-    <ul class="flex items-center space-x-4 sm:space-x-2 xl:space-x-6">
+    <ul class="flex items-center sm:space-x-4 md:space-x-6 xl:space-x-8">
       <li>
         <a href="/paperwork/about" class=" hover:text-amber-400/80 transition-all"> about </a>
       </li>
@@ -79,7 +79,7 @@ class="flex items-center w-full justify-center"
   
       </li>
       {#if legalOn}
-      <div class="flex flex-col p-2 space-y-4"
+      <div class="flex flex-col p-2 space-y-2"
       in:fade
       >
       <li>

@@ -260,7 +260,7 @@ async function handleAddIngredient(ingredientId) {
       {#if showSuggestion}
       <div id = "suggestion" class="flex flex-col space-x-2 w-3/4 justify-center items-stretch p-4 m-4 bg-white/20 dark:bg-black/20 rounded-lg text-sky-900/80 dark:text-sky-200/90">
         <div class="flex flex-row items-start align-middle">
-        <h2 class="flex text-center font-black p-4 text-2xl">you are editing {suggestedIngredient.common_name}</h2>
+        <h2 class="flex text-center font-black p-4 text-2xl lg:text-xl sm:text-md">you are editing {suggestedIngredient.common_name}</h2>
         <div class="flex flex-row ml-auto space-x-4">
           <button on:click={submitSuggestion}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
@@ -274,7 +274,7 @@ async function handleAddIngredient(ingredientId) {
           </button>
         </div>
         </div>
-        <div id="suggestion grid" class="grid grid-cols-3 space-x-4 p-4 space-y-1 mb-auto">
+        <div id="suggestion grid" class="grid grid-cols-3 space-x-4 p-4 space-y-1 mb-auto sm:text-sm md:text-md lg:text-base">
         {#each Object.entries(suggestedIngredient).slice(2, -1) as [key, value]}
         
         <label class="flex items-center font-bold ml-4">{key.replace(/_/g, ' ')}
@@ -308,16 +308,18 @@ async function handleAddIngredient(ingredientId) {
             
           </button>
           {#if showTuneMenu}
-        <div class="flex flex-row w-full p-2 border border-none bg-white/20 dark:bg-black/20 space-y-2 items-center rounded-lg divide-x-2">
-          <div class="flex flex-col w-1/4 justify-center items-center">
-          <label class="flex items-center p-4">
+        <div class="flex flex-row w-full p-2 border border-none bg-white/20 dark:bg-black/20 space-y-2 items-center rounded-lg divide-x-2 lg:text-base md:text-sm sm:text-xs">
+
+            <div class="w-1/3 ">
+          <label class="flex px-2 items-center md:text-md sm:text-sm md:flex-col lg:flex-row">
             per page:
-            <input type="number" class = 'flex border-none bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg pl-2 ml-4 w-1/3' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
+            <input type="number" class = 'flex ml-2 border-none bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg w-1/2' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
           </label>
         </div>
-          <div id="visibility" class="grid grid-cols-2 ">
+        
+          <div id="visibility" class="grid lg:grid-cols-2 sm:grid-cols-1">
             {#each $visibleFields.slice(1, -1) as field}
-            <div class="flex flex-row space-x-2 ml-2">
+            <div class="flex flex-row ">
               <input class= 
               "mx-2
               size-4 rounded-full shadow border-none text-amber-600/90 focus:ring-amber-400/30 checked:bg-amber-700/70 checked:ring-amber-700/30 hover:checked:bg-amber-600/80 transition-all hover:scale-110
@@ -347,7 +349,7 @@ async function handleAddIngredient(ingredientId) {
         {:else}
           <input
             type="text"
-            class = "flex w-full p-2 shadow border-none bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+            class = "flex w-full p-2 md:text-md lg:text-base shadow border-none bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
             bind:value={$searchTerm}
             bind:this = {searchInput}
             on:keydown={handleSearch}
@@ -387,7 +389,7 @@ async function handleAddIngredient(ingredientId) {
         {:else}
         {#if !showFilterMenu}
         <button class="pl-2" on:click={() => changePage(-1)}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110 hover:-transtone-x-2 duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="xl:size-24 lg:size-20 md:size-12 sm:size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110 hover:-transtone-x-2 duration-300">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
           </svg>
           
@@ -399,12 +401,13 @@ async function handleAddIngredient(ingredientId) {
         >
 
         {#if showFilterMenu}
-      <div id="filter" class="grid grid-cols-6 gap-4 w-full p-2 border-none bg-white/20 dark:bg-black/20 items-center rounded-lg"
+      <div id="filter" class="grid xl:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-4 w-full p-2 border-none bg-white/20 dark:bg-black/20 items-center rounded-lg"
       in:fade={{duration: 150}}
       >
         {#if filteredDescriptors.length !== 0 && filteredDescriptors}
         {#each sortedDescriptors as descriptor}
-              <label title={descriptor.description}>
+        <div class="flex md:flex-col xl:flex-row">
+              <label class="md:text-md sm:text-sm lg:text-base" title={descriptor.description}>
             <input class= 
             "mx-2
             size-4 rounded-full shadow border-none text-amber-600/90 focus:ring-amber-400/30 checked:bg-amber-700/70 checked:ring-amber-700/30 hover:checked:bg-amber-600/80 transition-all hover:scale-110
@@ -416,7 +419,7 @@ async function handleAddIngredient(ingredientId) {
 
             {descriptor.name}
             </label>
-
+          </div>
 
 
 
@@ -431,7 +434,7 @@ async function handleAddIngredient(ingredientId) {
           <table class="bg-blend-screen rounded-lg shadow-lg size-full table-fixed border-collapse border-spacing-0 bg-gradient-to-br from-sky-50/90 to-sky-100/30 dark:from-sky-900/20 dark:to-sky-950/20"
           in:fade={{delay:50, duration: 150}}
           >
-            <thead class="bg-gradient-to-br from-sky-600/40 to-sky-700/40 h-10 dark:text-sky-200/80 dark:from-sky-300/10 dark:to-sky-400/10 text-xl text-sky-900/80 *:align-middle">
+            <thead class="bg-gradient-to-br from-sky-600/40 to-sky-700/40 h-10 dark:text-sky-200/80 dark:from-sky-300/10 dark:to-sky-400/10 text-xl md:text-base sm:text-sm lg:text-lg text-sky-900/80 *:align-middle">
               <tr>
                 {#each $visibleFields as header}
                   {#if header.name === 'common_name' && header.visible}
@@ -461,16 +464,16 @@ async function handleAddIngredient(ingredientId) {
             <tbody class="text-center divide-y-4 divide-double divide-amber-700/10 dark:divide-amber-400/10 border-b-6 border-sky-600/30" in:fade={{duration: 150}}>
     
               {#each data.results as ingredient}
-                <tr on:dblclick={() => handleAddIngredient(ingredient.id)} class="hover:bg-amber-400/30 dark:hover:bg-amber-700/10 divide-x-4 divide-double divide-sky-600/10 dark:divide-sky-400/10 transition-all hover:rounded duration-300">
+                <tr on:dblclick={() => handleAddIngredient(ingredient.id)} class="hover:bg-amber-400/30 sm:text-sm dark:hover:bg-amber-700/10 divide-x-4 divide-double divide-sky-600/10 dark:divide-sky-400/10 transition-all hover:rounded duration-300">
 
                   {#each $visibleFields as field}
 
                     {#if field.name === 'common_name' && field.visible}
-                      <td title = "{ingredient.other_names}" class="align-middle m-4 p-4 text-2xl tracking-tight text-ellipsis text-balance dark:bg-sky-700/10">{ingredient.common_name}</td>
+                      <td title = "{ingredient.other_names}" class="align-middle m-4 p-4 text-2xl md:text-base lg:text-xl sm:text-sm tracking-tight text-ellipsis text-balance dark:bg-sky-700/10">{ingredient.common_name}</td>
                       {:else if field.name === 'is_restricted' && field.visible}
                       <td class="align-middle m-4 p-4">{ingredient[field.name] ? "yes" : "no"}</td>
                     {:else if field.name === 'actions' && field.visible}
-                    <td class="align-middle m-4 p-4 rounded-r-lg ">
+                    <td class="align-middle m-4 p-4 rounded-r-lg">
                       <div id="icon container" class="flex align-middle justify-center h-full space-x-2">
 
                         <button on:click={() => handleAddIngredient(ingredient.id)} title="Add this ingredient to your collection">
@@ -517,7 +520,7 @@ async function handleAddIngredient(ingredientId) {
 
         {#if !showFilterMenu}
         <button class="pr-2" on:click={() => changePage(1)}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110 hover:transtone-x-2 duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="xl:size-24 lg:size-20 md:size-12 sm:size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110 hover:transtone-x-2 duration-300">
               <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
             </svg>
             

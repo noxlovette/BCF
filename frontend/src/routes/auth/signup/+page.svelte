@@ -1,7 +1,7 @@
 <script lang="ts">
     import Header from "$lib/components/Header.svelte";
     import { goto } from '$app/navigation';
-    import { fetchCentralDjangoApi } from '$lib/DjangoAPI';
+    import { signUp } from '$lib/DjangoAPI';
     import { writable } from 'svelte/store';
     import { fade } from "svelte/transition";
     import { scale } from "svelte/transition";
@@ -20,51 +20,48 @@
     let allValid = false;
     let confirmPassword = '';
 
-    function checkPassword() {
+    function checkPassword(password) {
+
         validLength =(password.length >= 8);
         validCase = password.toUpperCase() != password && password.toLowerCase() != password;
         validSpecial = password.replaceAll(/\w/g, "").length > 0;
     }
 
 
-    function checkEmail() {
+    function checkEmail(email) {
         validEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(email);
+
     }
 
     function passwordsMatch(password, confirmPassword) {
         validDuplicate = password === confirmPassword;
     }
-    
 
-    $: checkPassword();
-    $: checkEmail();
+    $: checkPassword(password);
+    $: checkEmail(email);
     $: passwordsMatch(password, confirmPassword);
-    $: allValid = validLength && validCase && validSpecial && validEmail && validDuplicate && agreeTerms;
+    $: allValid = validLength && validCase && validSpecial && validEmail && validDuplicate && agreeTerms && !!username; console.log(allValid);
 
-    // TODO TRANSFER TO CENTRAL API
-    async function createUser() {
+    async function handleSignup() {
         try {
-            const url = 'http://localhost:8000/api/signup/';
             let body = {
                 username: username,
                 email: email,
                 password: password,
             };
-            const data = await fetchCentralDjangoApi(url, 'POST', body);
-
+            const data = await signUp(body);
             if (data.error) {
                 console.error('Server responded with an error:', data.error);
-                notification.set('Login failed...');
+                notification.set(data.error);
             } else {
                 sessionStorage.setItem('username', data.username);
                 sessionStorage.setItem('is_authenticated', data.is_authenticated);
                 notification.set('Signup successful!');
-
                 goto('/collect/');
-            
             } 
         } catch (error) {
                 console.error('Failed to fetch:', error);
+                notification.set('something went wrong');
         }
     };
 </script>
@@ -82,7 +79,7 @@
             easing: quintOut
         }}>Welcome!</h1>
         
-        <form on:submit|preventDefault={createUser} class= "flex flex-col justify-center items-center w-full bg-stone-100/20 dark:bg-stone-950/20 rounded-lg shadow p-4"
+        <form on:submit|preventDefault={handleSignup} class= "flex flex-col justify-center items-center w-full bg-stone-100/20 dark:bg-stone-950/20 rounded-lg shadow p-4"
         in:fade={{
             duration: 500,
             delay: 500,
@@ -122,6 +119,6 @@
 
 <style>
     .valid {
-        background-color: rgb (101 163 13 / 0.5);
+        @apply text-lime-700/80;
     }
 </style>

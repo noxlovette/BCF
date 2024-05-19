@@ -17,6 +17,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+
 class UserSignupAPI(APIView):
     # TODO: CAPTCHA, verify email.
     """
@@ -41,16 +47,22 @@ class UserSignupAPI(APIView):
 
         # Create new user
         try:
-            user = User.objects.create_user(username=username, email=email, password=password)
-            meow = {
-                'message': 'User created successfully',
-                'username': user.username,
-                'is_authenticated': user.is_authenticated,
-                'email': user.email,
-            }
-            return Response(meow, status=status.HTTP_201_CREATED)
+            User.objects.create_user(username=username, email=email, password=password)
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                response_data = {
+                    'message': 'User created and authenticated successfully',
+                    'username': user.username,
+                    'is_authenticated': user.is_authenticated,
+                    'email': user.email,
+                }
+                return Response(response_data, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'error': 'Authentication failed'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class UserLoginAPI(APIView):
