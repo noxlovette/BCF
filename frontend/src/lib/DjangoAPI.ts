@@ -54,13 +54,9 @@ export async function fetchCentralDjangoApi(
 export async function fetchIngredientsBrowse(currentPage: number, searchTerm = "", pageSize = 10, chosenDescriptors = [], { forceReload = false } = {}) {
   const descriptors = chosenDescriptors.map(descriptor => `descriptors=${encodeURIComponent(descriptor.name)}`).join('&');
 
-  
-
   const cacheKey = `ingredients-${currentPage}-${searchTerm}-${pageSize}-${descriptors}`;
   let data = forceReload ? null : localStorage.getItem(cacheKey);
   if (data) {
-    
-    
     return JSON.parse(data);
   } else {
     try {

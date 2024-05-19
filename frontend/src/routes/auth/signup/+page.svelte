@@ -65,6 +65,9 @@
         }
     };
 </script>
+<svelte:head>
+  <title>BCF | Signup</title>
+</svelte:head>
 
 <Header currentPage="signup" />
 

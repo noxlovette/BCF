@@ -252,6 +252,9 @@ async function handleAddIngredient(ingredientId) {
 
 </script>
 <svelte:window on:keydown={handleKeydown}/>
+<svelte:head>
+  <title>BCF | Browse</title>
+</svelte:head>
 
 <div class="flex flex-col min-h-screen z-0" style="background: url('/assets/bg/bbblurry-browse.svg') no-repeat center center fixed; background-size: cover;">
   <Header currentPage="browse" notification = {notification}/>

@@ -29,7 +29,9 @@
     }
   };
 </script>
-
+<svelte:head>
+  <title>BCF | Login</title>
+</svelte:head>
 
 <Header currentPage="login" notification={notification}/>
 

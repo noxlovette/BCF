@@ -327,6 +327,9 @@ onMount( async () => {
 </script>
 
 <svelte:window on:keydown={handleKeydown}/>
+<svelte:head>
+  <title>BCF | Collect</title>
+</svelte:head>
 
 <div class="flex flex-col min-h-screen" style="background: url('/assets/bg/bbblurry-collect.svg') no-repeat center center fixed; background-size: cover;">
   <Header currentPage="collect" notification = {notification}/>

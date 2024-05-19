@@ -72,6 +72,10 @@ function startNotificationInterval() {
 
 
 </script>
+
+<svelte:head>
+  <title>BCF</title>
+</svelte:head>
 <div class="min-h-screen min-w-screen" style="background: url('/assets/bg/bbblurry-main.svg') no-repeat center center fixed; background-size: cover;">
 
   <Header 
