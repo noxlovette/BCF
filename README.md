@@ -36,7 +36,7 @@ DJANGO_SETTINGS_MODULE=main_project.settings
 DJANGO_SECRET_KEY=key
 DJANGO_DEBUG=True
 
-SENTRY_DSN=' '
+SENTRY_DSN=''
 ```
 
 You may not have to create a key pair, but not doing so will prevent 2/3 of the app from working. I suggest using [Python cryptography](https://pypi.org/project/cryptography/) for this. 
@@ -44,7 +44,7 @@ You may not have to create a key pair, but not doing so will prevent 2/3 of the 
 3. .env for the *frontend*. Docker is configured in such a way as to work with this setup.
 ```env
 VITE_API_URL=http://localhost:8000
-VITE_SENTRY_DSN=' '
+VITE_SENTRY_DSN=''
 ```
 
 

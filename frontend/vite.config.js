@@ -6,7 +6,10 @@ export default defineConfig({
   plugins: [sentrySvelteKit({
     sourceMapsUploadOptions: {
       org: "danila-volkov",
-      project: "javascript-sveltekit"
+      project: "bcf-frontend",
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      url: 'https://danila-volkov.sentry.io/',
+      cleanArtifacts: true,
     }
   }), sveltekit()],
   server: {
