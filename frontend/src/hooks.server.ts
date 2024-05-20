@@ -1,7 +1,7 @@
 import { sequence } from "@sveltejs/kit/hooks";
 import { handleErrorWithSentry, sentryHandle } from "@sentry/sveltekit";
 import * as Sentry from '@sentry/sveltekit';
-const apiEndpoint = import.meta.env.VITE_SENTRY_DSN as string || 'https://cb2fec3778ef3f394a970f72701a67f2@o4507272574468096.ingest.de.sentry.io/4507272578203728';
+const apiEndpoint = import.meta.env.VITE_SENTRY_DSN as string;
 
 Sentry.init({
   dsn: apiEndpoint,

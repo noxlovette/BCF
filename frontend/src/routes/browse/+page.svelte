@@ -259,7 +259,7 @@ async function handleAddIngredient(ingredientId) {
 <div class="flex flex-col min-h-screen z-0" style="background: url('/assets/bg/bbblurry-browse.svg') no-repeat center center fixed; background-size: cover;">
   <Header currentPage="browse" notification = {notification}/>
   <div class="mb-auto">
-    <div id = "app" class="flex flex-col items-center mt-0 lowercase font-light text-sky-900/80 dark:text-sky-200/80">
+    <div id = "app" class="flex flex-col items-center mt-0 lowercase font-light text-sky-900/80 dark:text-sky-200/80 select-text selection:bg-sky-300/40">
       {#if showSuggestion}
       <div id = "suggestion" class="flex flex-col space-x-2 w-3/4 justify-center items-stretch p-4 m-4 bg-white/20 dark:bg-black/20 rounded-lg text-sky-900/80 dark:text-sky-200/90">
         <div class="flex flex-row items-start align-middle">
@@ -296,7 +296,9 @@ async function handleAddIngredient(ingredientId) {
       <div id="tools" class="flex flex-row w-full justify-center space-x-2">
         <div id="search-bar" class="flex flex-row w-1/2 justify-between space-x-2">
           
-          <button on:click={toggleTuneMenu}>
+          <button on:click={toggleTuneMenu}
+          title="tune the table"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
             </svg>
@@ -304,7 +306,7 @@ async function handleAddIngredient(ingredientId) {
             
           </button>
 
-          <button on:click={toggleFilterMenu}>
+          <button on:click={toggleFilterMenu} title="filter by descriptors">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
             </svg>
@@ -344,8 +346,9 @@ async function handleAddIngredient(ingredientId) {
             bind:this = {searchInput}
             bind:value = {searchTermDescriptor}
             on:input = {searchDescriptors}
+
             placeholder="/ search descriptors..."
-            title="Find the descriptor that you are looking for"
+            title="find the descriptor that you are looking for"
           />
 
 
@@ -357,17 +360,19 @@ async function handleAddIngredient(ingredientId) {
             bind:this = {searchInput}
             on:keydown={handleSearch}
             placeholder="/ search ingredients..."
-            title="Find an ingredient by CAS or the multiple names that it might have"
+            title="find an ingredient by CAS or the multiple names that it might have"
           />
 
           {/if}
-          <button on:click={searchIngredients}>
+          <button on:click={searchIngredients}
+          title="search for ingredients"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
             
           </button>
-          <button on:click={reset} title="Reset the search field">
+          <button on:click={reset} title="reset everything">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
             </svg>
@@ -437,7 +442,7 @@ async function handleAddIngredient(ingredientId) {
           <table class="bg-blend-screen rounded-lg shadow-lg size-full table-fixed border-collapse border-spacing-0 bg-gradient-to-br from-sky-50/90 to-sky-100/30 dark:from-sky-900/20 dark:to-sky-950/20"
           in:fade={{delay:50, duration: 150}}
           >
-            <thead class="bg-gradient-to-br from-sky-600/40 to-sky-700/40 h-10 dark:text-sky-200/80 dark:from-sky-300/10 dark:to-sky-400/10 text-xl md:text-base sm:text-sm lg:text-lg text-sky-900/80 *:align-middle">
+            <thead class="rounded-lg bg-gradient-to-br from-sky-600/40 to-sky-700/40 h-10 dark:text-sky-200/80 dark:from-sky-300/10 dark:to-sky-400/10 text-xl md:text-base sm:text-sm lg:text-lg text-sky-900/80 *:align-middle">
               <tr>
                 {#each $visibleFields as header}
                   {#if header.name === 'common_name' && header.visible}
@@ -472,14 +477,14 @@ async function handleAddIngredient(ingredientId) {
                   {#each $visibleFields as field}
 
                     {#if field.name === 'common_name' && field.visible}
-                      <td title = "{ingredient.other_names}" class="align-middle m-4 p-4 text-2xl md:text-base lg:text-xl sm:text-sm tracking-tight text-ellipsis text-balance dark:bg-sky-700/10">{ingredient.common_name}</td>
+                      <td title = "{ingredient.other_names}" class="align-middle m-4 p-4 text-2xl md:text-base lg:text-xl sm:text-sm tracking-tight text-ellipsis text-balance dark:bg-sky-700/10 bg-sky-300/10 rounded-tl-lg">{ingredient.common_name}</td>
                       {:else if field.name === 'is_restricted' && field.visible}
                       <td class="align-middle m-4 p-4">{ingredient[field.name] ? "yes" : "no"}</td>
                     {:else if field.name === 'actions' && field.visible}
-                    <td class="align-middle m-4 p-4 rounded-r-lg">
+                    <td class="align-middle m-4 p-4 rounded-tr-lg">
                       <div id="icon container" class="flex align-middle justify-center h-full space-x-2">
 
-                        <button on:click={() => handleAddIngredient(ingredient.id)} title="Add this ingredient to your collection">
+                        <button on:click={() => handleAddIngredient(ingredient.id)} title="add this ingredient to your collection">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 active:scale-90 active:text-amber-500/90 transition-all hover:scale-110">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                           </svg>

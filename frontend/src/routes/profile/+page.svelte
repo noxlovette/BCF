@@ -77,9 +77,9 @@
     
 <div id="app" class="flex flex-row rounded-lg shadow bg-amber-400/30 dark:bg-stone-800/30 items-stretch size-5/6 p-4 xl:p-8 mx-4 xl:my-8">
     <div id="sidebar" class="dark:bg-stone-600/50 flex flex-col w-1/6 hover:w-1/5 mr-auto rounded-lg drop-shadow p-4 transition-all duration-500">
-        <h2 id="header" class="text-4xl mb-4 border-b-2 tracking-tight font-bold border-stone-400/20">{username}</h2>
+        <h2 id="header" class="xl:text-4xl lg:text-2xl md:text-xl sm:text-base mb-4 border-b-2 tracking-tight font-bold border-stone-400/20">{username}</h2>
         
-        <ul class="text-2xl flex flex-col items-start font-semibold ">
+        <ul class="text-2xl lg:text-xl md:text-lg sm:text-base flex flex-col items-start font-semibold sm:font-normal text-left">
             <button class="hover:bg-amber-400/80 dark:hover:text-stone-800/80 rounded-lg transition-all hover:translate-x-1 p-2" on:click={() => currentPage.set('settings')}>
                 settings
             </button>
@@ -100,7 +100,7 @@
             <HelpCentre />
         {:else}
         <div class="">
-            <p class="text-6xl xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem] font-bold tracking-tight">Good <span class="text-amber-400">{$greeting},</span> {username}!</p>
+            <p class="text-6xl xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem] font-bold tracking-tight lg:text-[5.5rem]">Good <span class="text-amber-400">{$greeting},</span> {username}!</p>
             <p class="font-medium text-lg xl:text-[2rem] italic text-pretty py-6">{chosenQuote}</p>
           </div>
         {/if}

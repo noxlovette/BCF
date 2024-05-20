@@ -50,6 +50,9 @@
     searchTerm.set("");
     currentPage.set(1);
     collection = await handleFetch(true);
+    editingRowId = null;
+    editingObject = null;
+    filteredCollection = collection;
     }
 
   // pagination logic, pagesize logic
@@ -85,14 +88,15 @@ async function searchIngredients() {
      */
      async function handleDeleteClick(ingredient) {
         const response = await deleteFromCollection(ingredient);
-        if (response === "Ingredient successfully removed from collection!") {
+        console.log("Handler response:", response)
+        try {
+          console.log("success deleting ingredient:", response)
         filteredCollection = filteredCollection.filter(ingredientInside => ingredientInside.id !== ingredient.id);
-        
         notification.set(response);
         editingRowId = null;
-      } else {
-        console.error("Error deleting ingredient:", response);
-        notification.set(response);
+      } catch(error) {
+        console.error("Error deleting ingredient:", error);
+        notification.set(er);
       }
 }
 
@@ -166,7 +170,6 @@ function handleKeydown(event) {
     // Specific contextual key handling below
     if (isEditing && event.key === "Enter") {
         event.preventDefault();
-        
         saveEdit(editingObject);
         return;
     }
@@ -276,7 +279,7 @@ $: {
   try {
     paginatedCollection = filteredCollection.slice(startIndex, startIndex + $pageSize);
   } catch (error) {
-    notification.set("Try again.");
+    notification.set("Pagination is sad");
   }
   
 }
@@ -341,8 +344,10 @@ onMount( async () => {
 
       <div id="search-bar" class="flex flex-row w-1/2 justify-between space-x-2">
         
-        <button on:click={toggleTuneMenu}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 active:scale-90 hover:text-green-700/90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+        <button on:click={toggleTuneMenu}
+        title="tune the table to your liking"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 active:scale-90 hover:text-green-600/90 dark:hover:text-green-600/90 transition-all hover:scale-110">
             <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
           </svg>
   
@@ -353,15 +358,15 @@ onMount( async () => {
           <div class="flex flex-row align-middle justify-start">
             <label class='flex items-center'> 
               page size:
-              <input type="number" class='flex border-none bg-white/20 dark:bg-black/20 pl-2 ml-4 w-20 focus:ring-green-700/70 focus:ring-2 rounded-lg' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
+              <input type="number" class='flex border-none bg-white/20 dark:bg-black/20 pl-2 ml-4 w-20 focus:ring-green-600/70 focus:ring-2 rounded-lg' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
             </label>
               
               </div>
               
-              <div id="visibility" class="grid grid-cols-3">
+              <div id="visibility" class="grid lg:grid-cols-2 sm:grid-cols-1">
                 {#each $visibleFields.slice(1) as field}
                 <div class="flex flex-row space-x-2 ml-2">
-                  <input class="size-4 rounded-full shadow border-none text-green-700/90 focus:ring-green-700/30 checked:bg-green-700/70 active:scale-90 checked:ring-green-700/30 hover:checked:bg-green-700/80 transition-all hover:scale-110" type="checkbox" id={field.name} 
+                  <input class="size-4 rounded-full shadow border-none text-green-600/90 focus:ring-green-600/30 checked:bg-green-600/70 active:scale-90 checked:ring-green-600/30 hover:checked:bg-green-600/80 transition-all hover:scale-110" type="checkbox" id={field.name} 
                   bind:checked={field.visible} 
                   on:click={() => toggleFieldVisibility(field)} />
                   <label for={field.name}>{field.name}</label>
@@ -372,7 +377,7 @@ onMount( async () => {
           {:else if tuneMenuVisible === false}
             <input
           type="text"
-          class = "flex w-full p-2 bg-white/20 border-none dark:bg-black/20 shadow rounded-lg focus:ring-2 focus:ring-green-700/70 focus:border-green-900/70 focus:scale-95 transition-all"
+          class = "flex w-full p-2 md:text-md lg:text-base bg-white/20 border-none dark:bg-black/20 shadow rounded-lg focus:ring-2 focus:ring-green-600/70 focus:border-green-900/70 focus:scale-95 transition-all"
           bind:value={$searchTerm}
           bind:this = {searchInput}
           on:input = {searchCollection}
@@ -381,21 +386,23 @@ onMount( async () => {
         />
           {/if}
         
-        <button on:click={searchIngredients}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+        <button on:click={searchIngredients}
+        title="search for an ingredient by name or CAS"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
           </svg>
           
         </button>
-        <button on:click={reset} title="Reset the search field">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+        <button on:click={reset} title="reset everything">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
             <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
           </svg>
           
         </button>
       </div>
       <button on:click={toggleModal} title="add a new ingredient. nobody but you will see it">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
       </button>
@@ -403,25 +410,25 @@ onMount( async () => {
     {:else if isModalVisible}
       <div id="modal" class="flex bg-white/20 border-none dark:bg-black/20 rounded-lg p-6 text-xs">
         <form id="new_ingredient" class="grid grid-cols-2 gap-1">
-          <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-none" bind:value={newCustomCommonName} placeholder="name" />
-          <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-none" bind:value={newCustomCas} placeholder="CAS" />
-          <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-none" bind:value={newCustomVolatility} placeholder="volatility" />
-          <input class="focus:ring-green-700/70 focus:ring-2 rounded-lg border-none" bind:value={newCustomUse} placeholder="use" />
+          <input class="focus:ring-green-600/70 md:text-md lg:text-base focus:ring-2 rounded-lg border-none" bind:value={newCustomCommonName} placeholder="name" />
+          <input class="focus:ring-green-600/70 md:text-md lg:text-base focus:ring-2 rounded-lg border-none" bind:value={newCustomCas} placeholder="CAS" />
+          <input class="focus:ring-green-600/70 md:text-md lg:text-base focus:ring-2 rounded-lg border-none" bind:value={newCustomVolatility} placeholder="volatility" />
+          <input class="focus:ring-green-600/70 md:text-md lg:text-base focus:ring-2 rounded-lg border-none" bind:value={newCustomUse} placeholder="use" />
         </form>
         <div class="flex flex-col space-y-2 p-2">
           <button on:click={handleCreateCustomIngredient}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
             </svg>            
           </button>
           <button on:click={cancelCreate}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
             
           </button>
           <button on:click={toggleModal}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
             </svg>
           </button>
@@ -442,15 +449,15 @@ onMount( async () => {
           <p>{collection.error}</p>
         {:else}
   {#if editingRowId !== null}
-<button class="pl-2" on:click={() => saveEdit(editingObject)}>
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+<button id="saveEdit" class="pl-2" on:click={() => saveEdit(editingObject)}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
     <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
   </svg>
 </button>
   
 {:else if filteredCollection.length !== 0}
-  <button class="pl-2"on:click={() => changePage($currentPage-1)}>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:-transtone-x-2 duration-300">
+  <button id="prevPage" class="pl-2"on:click={() => changePage($currentPage-1)}>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="xl:size-24 lg:size-20 md:size-12 sm:size-6 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:-transtone-x-2 duration-300">
       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
     </svg>
   </button>
@@ -463,7 +470,7 @@ onMount( async () => {
   <table class="shadow bg-blend-overlay size-full table-fixed text-sm border-collapse overflow-hidden bg-gradient-to-br from-rose-50/90 to-rose-100/30 dark:from-rose-900/20 dark:to-rose-950/20 rounded-lg"
   transition:fade={{delay:50, duration:150}}
   >
-  <thead class="rounded-lg bg-gradient-to-r from-rose-800/40 to-rose-800/30 text-rose-900/90 dark:text-rose-400/90 space-x-2 h-10 text-xl tracking-widest align-middle text-center">
+  <thead class="rounded-lg bg-gradient-to-r from-rose-800/40 to-rose-800/30 text-rose-900/90 dark:text-rose-400/90 space-x-2 h-10 text-xl tracking-widest align-middle text-center md:text-base sm:text-sm lg:text-lg">
     <tr>
       {#each $visibleFields as header}
         {#if header.name === "use" && header.visible}
@@ -505,16 +512,18 @@ onMount( async () => {
 
   
   {#each paginatedCollection as ingredient}
-    <tr on:dblclick={() => toggleEdit(ingredient)} class="hover:bg-green-700/10 dark:hover:bg-green-300/10 divide-x-4 divide-double divide-green-900/10 dark:divide-green-200/10 transition-all duration-300">
+    <tr on:dblclick={() => toggleEdit(ingredient)} 
+      title="double click to edit"
+      
+      class="hover:bg-green-600/10 dark:hover:bg-green-300/10 divide-x-4 divide-double divide-green-900/10 dark:divide-green-200/10 transition-all duration-300">
 
       {#each $visibleFields as field, index}
   {#if field.visible}
-    <td class="align-middle m-4 p-4 {index === 0 ? 'text-2xl tracking-tight dark:bg-rose-900/20' : ''}">
+    <td class="align-middle m-4 p-4 {index === 0 ? 'text-2xl md:text-base lg:text-xl sm:text-sm text-ellipsis text-balance tracking-tight dark:bg-rose-900/20 bg-rose-200/20' : ''}">
       {#if isEditableField(ingredient.type, field.name) && editingRowId === ingredient.id}
         <textarea
-          type="text"
           rows="3"
-          class="bg-white/20 dark:bg-black/20 text-center border-none font-light flex w-full focus:ring-green-700/70 focus:ring-2 rounded-lg"
+          class="bg-stone-50/20 dark:bg-stone-950/20 text-center border-none font-light flex w-full focus:ring-green-600/70 focus:ring-2 rounded-lg"
           bind:value={ingredient[field.name]}
           placeholder="{field.name}"
           
@@ -524,7 +533,7 @@ onMount( async () => {
       {:else}
         <div id="icon container" class="flex align-middle justify-center">
           {@html ingredient[field.name] || `
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
             </svg>`
           }
@@ -543,10 +552,12 @@ onMount( async () => {
   {#if filteredCollection.length === 0}
   <div class="flex justify-center items-center w-full m-20 text-2xl tracking-widest font-light text-center">
     <p class="flex items-center justify-center gap-2.5"> <!-- Added gap for spacing between text and SVG -->
-        no ingredients found
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 16.318A4.486 4.486 0 0 0 12.016 15a4.486 4.486 0 0 0-3.198 1.318M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
-        </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+      </svg>
+      
+        no ingredients found. 
+        try adding more on the <a href="/browse" class= "text-sky-400">browse</a> page!
     </p>
 </div>
 
@@ -557,7 +568,7 @@ onMount( async () => {
 
   {#if editingRowId !== null}
 <button on:click={() => handleDeleteClick(editingObject)} class="pl-2">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
     <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
   </svg>
   
@@ -566,10 +577,10 @@ onMount( async () => {
 </button>
 
   {:else if filteredCollection.length !== 0}
-  <button class="pr-2" 
+  <button id="nextPage"class="pr-2" 
   
   on:click={() => changePage($currentPage+1)}>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-700/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:transtone-x-2 duration-300">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="xl:size-24 lg:size-20 md:size-12 sm:size-6 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:transtone-x-2 duration-300">
       <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
     </svg>
 

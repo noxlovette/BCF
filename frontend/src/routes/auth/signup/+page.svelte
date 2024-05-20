@@ -6,6 +6,8 @@
     import { fade } from "svelte/transition";
     import { scale } from "svelte/transition";
   import { quintOut } from "svelte/easing";
+import { onMount } from 'svelte';
+  
 
     let notification = writable();
     let username = '';
@@ -40,7 +42,12 @@
     $: checkPassword(password);
     $: checkEmail(email);
     $: passwordsMatch(password, confirmPassword);
-    $: allValid = validLength && validCase && validSpecial && validEmail && validDuplicate && agreeTerms && !!username; console.log(allValid);
+    $: allValid = validLength && validCase && validSpecial && validEmail && validDuplicate && agreeTerms && !!username;
+
+    onMount(() => {
+    // Check localStorage only once when the component is mounted
+    agreeTerms = sessionStorage.getItem('terms') === 'true';
+  });
 
     async function handleSignup() {
         try {
@@ -64,6 +71,7 @@
                 notification.set('something went wrong');
         }
     };
+
 </script>
 <svelte:head>
   <title>BCF | Signup</title>
@@ -110,8 +118,12 @@
                     <span class:valid={validDuplicate} class="rounded-lg p-1">match</span>
             </div>
             <div id = 'paperwork' class="flex flex-row items-center justify-between *:m-2 m-4">
-                <a href="/paperwork/terms-of-service" class="dark:hover:text-amber-300/90 hover:text-amber-900/90 ">I agree to the terms of use </a>
-                <input type="checkbox" bind:checked={agreeTerms} class="size-4 rounded-full shadow border-none text-amber-700/90 focus:ring-amber-700/30 checked:bg-amber-700/70 active:scale-90 checked:ring-amber-700/30 hover:checked:bg-amber-700/80 transition-all hover:scale-110" />            
+                <a href="/paperwork/terms-of-service" 
+                
+                on:click={() => sessionStorage.setItem('terms', 'true')}
+                
+                class="dark:hover:text-amber-300/90 hover:text-amber-900/90 ">I agree to the terms of use </a>
+                <input type="checkbox" bind:checked={agreeTerms} class="size-4 ring-2 ring-stone-300/50 rounded-full shadow border-none text-amber-700/90 focus:ring-amber-700/30 checked:bg-amber-700/70 active:scale-90 checked:ring-amber-700/30 hover:checked:bg-amber-700/80 transition-all hover:scale-110" />            
             </div>
             <button type="submit" class="p-6 disabled:text-stone-400/70 hover:text-amber-400/60" disabled={!allValid}>create account</button>
         </form>

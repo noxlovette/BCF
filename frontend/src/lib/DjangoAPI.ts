@@ -4,12 +4,12 @@ import { writable, get } from 'svelte/store';
 const BASE_URL = import.meta.env.VITE_API_URL || "https://api.bcfapp.app";
 const csrfToken = writable('');
 
-export async function fetchCSRFToken() {
+export async function fetchCSRFToken(forceFetch = false) {
   const currentToken = get(csrfToken);
-  if (!currentToken) { // Check if the CSRF token store is empty
+  if (!currentToken || forceFetch) { // Fetch a new CSRF token if none exists or if forceFetch is true
     const response = await fetch(`${BASE_URL}/api/get-csrf/`, {
-        method: 'GET',
-        credentials: 'include'  // Necessary to include cookies if they are accessible
+      method: 'GET',
+      credentials: 'include'  // Necessary to include cookies if they are accessible
     });
     const data = await response.json();
     csrfToken.set(data.csrfToken);
@@ -43,9 +43,11 @@ export async function fetchCentralDjangoApi(
   if (!response.ok) {
     const errorText = await response.json();
     throw new Error(errorText.error || 'Unknown error');
-  }
-
+  } else if (response.status === 204) {
+    return response;
+  } else {
   return response.json();
+}
 }
 
 
@@ -160,19 +162,13 @@ export async function deleteFromCollection(ingredient: any) {
   } else if (ingredient.type === "CustomCollectionIngredient") {
       endpoint = `${BASE_URL}/collection/api/ingredient/custom/${ingredient.id}/delete/`;
   }
-    const response = await fetchCentralDjangoApi(endpoint, "DELETE");
+    await fetchCentralDjangoApi(endpoint, "DELETE");
+    fetchCollection({ forceReload: true });
+    return "Ingredient successfully removed from collection!";
     
-
-    if (response === undefined || response.success) {
-      fetchCollection({ forceReload: true });
-      return "Ingredient successfully removed from collection!";
-    } else {
-      console.error(response.error);
-      return response.error;
-    }
   } catch (error) {
-    console.error("Error deleting ingredient from collection:", error);
-    return error.message;
+    console.error("Error deleting ingredient from collection API:", error);
+    throw error;
   }
 }
 
@@ -346,8 +342,9 @@ export async function saveEditedIngredientCollect(ingredientToSave: any) {
     try {
       const endpoint = `${BASE_URL}/api/logout/`;
       const response = await fetchCentralDjangoApi(endpoint, "POST");
+      csrfToken.set('');
       
-      
+
       return response;
     } catch (error) {
       console.error("Error logging out:", error);
@@ -358,6 +355,8 @@ export async function saveEditedIngredientCollect(ingredientToSave: any) {
     const endpoint = `${BASE_URL}/api/login/`;
     try {
       const response = await fetchCentralDjangoApi(endpoint, "POST", body);
+
+      await fetchCSRFToken(true); // Fetch a new CSRF token after logging in
   
       return response; // This will be your user data on successful login
   
@@ -371,6 +370,7 @@ export async function saveEditedIngredientCollect(ingredientToSave: any) {
     const endpoint = `${BASE_URL}/api/signup/`;
     try {
       const response = await fetchCentralDjangoApi(endpoint, "POST", body);
+      await fetchCSRFToken(true); // Fetch a new CSRF token after signing up
       return response;
     } catch (error) {
       console.error("Error signing up:", error);

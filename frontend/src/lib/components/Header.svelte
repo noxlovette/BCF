@@ -2,7 +2,6 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { writable } from "svelte/store";
-  import {page} from "$app/stores";
   import { fetchCentralDjangoApi } from "$lib/DjangoAPI";
 
   let is_authenticated = false;
@@ -78,18 +77,22 @@ function updateNotification(newNotification) {
 
 $: {
   updateNotification($notification);
+  
 }
 
   onMount(() => {
     is_authenticated = sessionStorage.getItem("is_authenticated") === "true";
-    username = sessionStorage.getItem("username") || "";
+    username = sessionStorage.getItem("username") || "stranger";
   });
+  
+  
 
 </script>
 
-<header class="relative flex flex-col items-center justify-center py-4 z-40">
+
+<header class="relative flex flex-col items-center justify-center py-4 z-40" role="banner" on:mouseenter={toggleDropdown}>
   <div class="flex w-full max-w-7xl items-center justify-center px-4">
-    <a href="/" class="size-20 flex-none z-15" on:mouseenter={toggleDropdown}>
+    <a href="/" class="size-20 flex-none z-15">
       <img
         id="logo"
         class="size-20 z-50"
@@ -123,14 +126,14 @@ $: {
         </a>
           
       
-            <a href="/profile" title="your profile" class="hover:text-amber-400 transition-all" >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <a id="profile" href="/profile" aria-label={username} title="{username}'s profile" class="hover:text-amber-400 transition-all" >
+              <svg   xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
               </svg>
               
               
             </a>
-            <button on:click={logout} title="log out" class="hover:text-amber-400 transition-all" >
+            <button id="logout" on:click={logout} title="log out" class="hover:text-amber-400 transition-all" >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
               </svg>   

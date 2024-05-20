@@ -5,6 +5,7 @@
   import Header from "$lib/components/Header.svelte";
   import { writable } from "svelte/store";
    import Footer from "$lib/components/Footer.svelte";
+   import {goto} from "$app/navigation";
 
   const bigText = `Want to create your own <span class="text-amber-300"> perfume? </span>We've got you covered<span class="text-amber-300">.</span>`
 
@@ -76,7 +77,7 @@ function startNotificationInterval() {
 <svelte:head>
   <title>BCF</title>
 </svelte:head>
-<div class="min-h-screen min-w-screen" style="background: url('/assets/bg/bbblurry-main.svg') no-repeat center center fixed; background-size: cover;">
+<div class="min-h-screen w-screen" style="background: url('/assets/bg/bbblurry-main.svg') no-repeat center center fixed; background-size: cover;">
 
   <Header 
     currentPage="BCF" 
@@ -92,7 +93,9 @@ function startNotificationInterval() {
     <div id="blabla" class="py-6 sm:py-4 md:py-6 lg:py-7 xl:py-6 2xl:py-14"
     in:fade={{duration: 500, delay: 1500}}
     >
-      <section id="browse" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty">
+    <a href="/browse">
+      <section id="browse" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty"      
+      >
         <div class="mx-auto flex max-w-[800px] flex-col gap-2 xl:max-w-full text-center xl:text-right md:text-lg lg:text-xl xl:text-2xl">
           <h2 class="mb-2 w-full text-3xl font-bold text-sky-950 dark:text-sky-400 md:text-3xl lg:text-4xl">
             Browse over 3100 ingredients.
@@ -119,7 +122,9 @@ function startNotificationInterval() {
           />
         </div>
       </section>
+    </a>
 
+    <a href="/collect">
       <section id="collect" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty">
         <div class="min-h-[300px] md:min-h-[400px]"> 
           <img
@@ -148,7 +153,8 @@ function startNotificationInterval() {
         </div>
         
       </section>
-
+    </a>
+    <a href="/formulate">
       <section id="formulate" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty">
         <div class="mx-auto flex max-w-[800px] flex-col gap-2 xl:max-w-full text-center xl:text-right md:text-lg lg:text-xl xl:text-2xl">
           <h2 class="mb-2 w-full text-3xl font-bold text-lime-950 dark:text-lime-400 md:text-3xl lg:text-4xl">
@@ -176,6 +182,7 @@ function startNotificationInterval() {
           />
         </div>
       </section>
+    </a>
 
     </div>
     <div class="lg:px-8 lg:py-8">
