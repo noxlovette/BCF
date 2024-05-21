@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import {addSuggestionBrowse, fetchDescriptors, addToCollectionBrowse, fetchIngredientsBrowse} from "$lib/DjangoAPI";
-
+  import {tick} from "svelte";
   import { writable } from "svelte/store";
   import {blur, fade} from "svelte/transition";
   import Header from "$lib/components/Header.svelte";
@@ -87,9 +87,19 @@ interface Ingredient {
   $: {
     sortedDescriptors = sortDescriptors(filteredDescriptors);
     if (chosenDescriptors.length > 0) {
+      notification.set(`filtering by ${chosenDescriptors.map(descriptor => descriptor.name).join(', ')}`);
       
       fetchWithDescriptors();
 
+    }
+  }
+
+  let filterMenu;
+  function handleClickOutside(event) {
+    if (filterMenu && !filterMenu.contains(event.target)) {
+      console.log("clicked outside")
+      document.removeEventListener('click', handleClickOutside);
+      showFilterMenu = false;
     }
   }
 
@@ -130,6 +140,8 @@ async function fetchWithDescriptors() {
   async function reset() {
     searchTerm.set("");
     currentPage.set(1);
+    chosenDescriptors = [];
+    notification.set("resetting everything...");
     goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
     data = await load();
   }
@@ -190,6 +202,7 @@ async function submitSuggestion() {
   }
 
   function handleDescriptorChange() {
+
     
     }
   
@@ -205,7 +218,7 @@ async function submitSuggestion() {
     if ($currentPage + increment >= 1 && $currentPage + increment <= (data as { total_pages: number }).total_pages) {
       
       currentPage.update((value) => value + increment);
-      notification.set(`you are on page ${$currentPage}`);
+      notification.set(`you are on page ${$currentPage}/${(data as { total_pages: number }).total_pages}`);
       goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
       data = await load();
     }
@@ -219,12 +232,21 @@ async function updatePageSize() {
     
     data = await load(); // Wait for the URL to be updated before loading new data
 }
+
 function toggleTuneMenu() {
   showTuneMenu = !showTuneMenu;
 }
 
-function toggleFilterMenu() {
+async function toggleFilterMenu() {
   showFilterMenu = !showFilterMenu;
+  await tick();
+  if (showFilterMenu) {
+    setTimeout(() => {
+      document.addEventListener('click', handleClickOutside)}, 100);
+    } else {
+      document.removeEventListener('click', handleClickOutside);
+    }
+
   showTuneMenu = false;
 }
 
@@ -295,6 +317,15 @@ async function handleAddIngredient(ingredientId) {
       {:else}
       <div id="tools" class="flex flex-row w-full justify-center space-x-2">
         <div id="search-bar" class="flex flex-row w-1/2 justify-between space-x-2">
+          {#if !showFilterMenu && $currentPage > 1}
+        <button id="prevPage" class="pl-2" on:click={() => changePage(-1)}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110 hover:-transtone-x-2 duration-300">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+          </svg>
+          
+          
+        </button>
+        {/if}
           
           <button on:click={toggleTuneMenu}
           title="tune the table"
@@ -312,9 +343,10 @@ async function handleAddIngredient(ingredientId) {
             </svg>
             
           </button>
-          {#if showTuneMenu}
-        <div class="flex flex-row w-full p-2 border border-none bg-white/20 dark:bg-black/20 space-y-2 items-center rounded-lg divide-x-2 lg:text-base md:text-sm sm:text-xs">
 
+          <!-- Tune menu -->
+          {#if showTuneMenu}
+        <div id="tune menu" class="flex flex-row w-full p-2 border border-none bg-white/20 dark:bg-black/20 space-y-2 items-center rounded-lg divide-x-2 lg:text-base md:text-sm sm:text-xs">
             <div class="w-1/3 ">
           <label class="flex px-2 items-center md:text-md sm:text-sm md:flex-col lg:flex-row">
             per page:
@@ -324,9 +356,9 @@ async function handleAddIngredient(ingredientId) {
         
           <div id="visibility" class="grid lg:grid-cols-2 sm:grid-cols-1">
             {#each $visibleFields.slice(1, -1) as field}
-            <div class="flex flex-row ">
+            <div class="flex flex-row items-center">
               <input class= 
-              "mx-2
+              "mx-4 my-2
               size-4 rounded-full shadow border-none text-amber-600/90 focus:ring-amber-400/30 checked:bg-amber-700/70 checked:ring-amber-700/30 hover:checked:bg-amber-600/80 transition-all hover:scale-110
               
               " 
@@ -337,6 +369,8 @@ async function handleAddIngredient(ingredientId) {
               </div>
             {/each}
           </div>
+          
+          <!-- Filter menu -->
         </div>
         {:else if showFilterMenu}
           <input
@@ -353,6 +387,7 @@ async function handleAddIngredient(ingredientId) {
 
 
         {:else}
+        
           <input
             type="text"
             class = "flex w-full p-2 md:text-md lg:text-base shadow border-none bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
@@ -378,6 +413,15 @@ async function handleAddIngredient(ingredientId) {
             </svg>
             
           </button>
+          {#if !showFilterMenu && $currentPage < data.total_pages}
+        <button class="pr-2" id="nextPage" on:click={() => changePage(1)}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110 hover:transtone-x-2 duration-300">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+            
+            
+          </button>
+        {/if}
         </div>
         
       </div>
@@ -395,15 +439,6 @@ async function handleAddIngredient(ingredientId) {
           <p class="text-2xl">hm. try a different search?</p>
           
         {:else}
-        {#if !showFilterMenu}
-        <button class="pl-2" on:click={() => changePage(-1)}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="xl:size-24 lg:size-20 md:size-12 sm:size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110 hover:-transtone-x-2 duration-300">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-          </svg>
-          
-          
-        </button>
-        {/if}
         <div id="table bg" class="shadow bg-gradient-to-br from-sky-300/10 to-sky-500/10 rounded-lg p-4 mt-4 background-element"
         in:blur={{duration: 150}}
         >
@@ -411,6 +446,7 @@ async function handleAddIngredient(ingredientId) {
         {#if showFilterMenu}
       <div id="filter" class="grid xl:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-4 w-full p-2 border-none bg-white/20 dark:bg-black/20 items-center rounded-lg"
       in:fade={{duration: 150}}
+      bind:this={filterMenu}
       >
         {#if filteredDescriptors.length !== 0 && filteredDescriptors}
         {#each sortedDescriptors as descriptor}
@@ -421,15 +457,13 @@ async function handleAddIngredient(ingredientId) {
             size-4 rounded-full shadow border-none text-amber-600/90 focus:ring-amber-400/30 checked:bg-amber-700/70 checked:ring-amber-700/30 hover:checked:bg-amber-600/80 transition-all hover:scale-110
             
             " 
-            
+  
             type="checkbox" id={descriptor.name} bind:group={chosenDescriptors} value={descriptor}
             on:change={() => { handleDescriptorChange();  }} />
 
             {descriptor.name}
             </label>
           </div>
-
-
 
           {/each}
           {:else}
@@ -442,11 +476,11 @@ async function handleAddIngredient(ingredientId) {
           <table class="bg-blend-screen rounded-lg shadow-lg size-full table-fixed border-collapse border-spacing-0 bg-gradient-to-br from-sky-50/90 to-sky-100/30 dark:from-sky-900/20 dark:to-sky-950/20"
           in:fade={{delay:50, duration: 150}}
           >
-            <thead class="rounded-lg bg-gradient-to-br from-sky-600/40 to-sky-700/40 h-10 dark:text-sky-200/80 dark:from-sky-300/10 dark:to-sky-400/10 text-xl md:text-base sm:text-sm lg:text-lg text-sky-900/80 *:align-middle">
-              <tr>
+            <thead class="rounded-lg bg-gradient-to-br from-sky-600/40 to-sky-700/40 h-10 dark:text-sky-200/80 dark:from-sky-300/10 dark:to-sky-400/10 text-xl md:text-base sm:text-sm lg:text-lg text-sky-900/80">
+              <tr class="first:rounded-tl-lg first:font-black last:rounded-tr-lg align-middle">
                 {#each $visibleFields as header}
                   {#if header.name === 'common_name' && header.visible}
-                    <th class="w-1/4 rounded-tl-lg ">ingredient</th>
+                    <th class="w-1/4">ingredient</th>
                   {:else if header.name === 'cas' && header.visible}
                   <th class="max-w-fit">CAS</th>
                   {:else if header.name === 'use' && header.visible}
@@ -454,13 +488,11 @@ async function handleAddIngredient(ingredientId) {
                   {:else if header.name === 'similar_ingredients' && header.visible}
                   <th>similar</th>
                   {:else if header.name === 'actions' && header.visible}
-                  <th class="max-w-fit rounded-tr-lg">
+                  <th class="max-w-fit">
                     <div id="icon container" class="flex justify-center">
-
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
                       </svg>
-
                     </div>
                   </th>
                   {:else if header.visible}
@@ -472,16 +504,16 @@ async function handleAddIngredient(ingredientId) {
             <tbody class="text-center divide-y-4 divide-double divide-amber-700/10 dark:divide-amber-400/10 border-b-6 border-sky-600/30" in:fade={{duration: 150}}>
     
               {#each data.results as ingredient}
-                <tr on:dblclick={() => handleAddIngredient(ingredient.id)} class="hover:bg-amber-400/30 sm:text-sm dark:hover:bg-amber-700/10 divide-x-4 divide-double divide-sky-600/10 dark:divide-sky-400/10 transition-all hover:rounded duration-300">
+                <tr on:dblclick={() => handleAddIngredient(ingredient.id)} class="hover:text-sky-600 first:rounded-tl-lg last:rounded-tr-lg sm:text-sm odd:bg-stone-50 even:bg-stone-100 dark:odd:bg-stone-950 dark:even:bg-stone-900 dark:hover:bg-amber-700/10 divide-x-4 divide-double divide-sky-600/10 dark:divide-sky-400/10 transition-all hover:rounded duration-300">
 
                   {#each $visibleFields as field}
 
                     {#if field.name === 'common_name' && field.visible}
-                      <td title = "{ingredient.other_names}" class="align-middle m-4 p-4 text-2xl md:text-base lg:text-xl sm:text-sm tracking-tight text-ellipsis text-balance dark:bg-sky-700/10 bg-sky-300/10 rounded-tl-lg">{ingredient.common_name}</td>
+                      <td title = "{ingredient.other_names}" class="align-middle m-4 p-4 tracking-tight font-extrabold text-ellipsis text-balance dark:bg-sky-700/10 bg-sky-300/10 ">{ingredient.common_name}</td>
                       {:else if field.name === 'is_restricted' && field.visible}
                       <td class="align-middle m-4 p-4">{ingredient[field.name] ? "yes" : "no"}</td>
                     {:else if field.name === 'actions' && field.visible}
-                    <td class="align-middle m-4 p-4 rounded-tr-lg">
+                    <td class="align-middle m-4 p-4 ">
                       <div id="icon container" class="flex align-middle justify-center h-full space-x-2">
 
                         <button on:click={() => handleAddIngredient(ingredient.id)} title="add this ingredient to your collection">
@@ -506,8 +538,9 @@ async function handleAddIngredient(ingredientId) {
                       <td class="align-middle m-4 p-4">
                       <div id="icon container" class="flex align-middle justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
                         </svg>
+                        
                       </div>
                     </td>
                       {:else}
@@ -525,29 +558,9 @@ async function handleAddIngredient(ingredientId) {
           </table>
 {/if}
         </div>
-
-        {#if !showFilterMenu}
-        <button class="pr-2" on:click={() => changePage(1)}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="xl:size-24 lg:size-20 md:size-12 sm:size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110 hover:transtone-x-2 duration-300">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-            
-            
-          </button>
         {/if}
-        {/if}
-        
       </div>
-      
     </div>
-  
   </div>
-
   <Footer />
 </div>
-
-
-
-<style>
-
-</style>

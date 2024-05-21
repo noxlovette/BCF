@@ -90,9 +90,9 @@ $: {
 </script>
 
 
-<header class="relative flex flex-col items-center justify-center py-4 z-40" role="banner" on:mouseenter={toggleDropdown}>
+<header class="relative flex flex-col items-center justify-center py-4 z-40">
   <div class="flex w-full max-w-7xl items-center justify-center px-4">
-    <a href="/" class="size-20 flex-none z-15">
+    <a href="/" class="size-20 flex-none z-15" on:mouseenter={toggleDropdown}>
       <img
         id="logo"
         class="size-20 z-50"
@@ -103,7 +103,7 @@ $: {
     <div class="flex-col size-full justify-center ml-2">
     <div id="wider-part" class="flex flex-grow h-2/3 border-b-2 border-stone-400/10 dark:border-stone-100/10">
       {#if currentPage}
-          <p class="m-2 text-3xl font-light tracking-tighter">{currentPage}</p>
+          <p on:mouseenter={toggleDropdown} class="m-2 text-3xl font-light tracking-tighter">{currentPage}</p>
           
         {/if}
 
@@ -144,13 +144,14 @@ $: {
           {/if}
         </div>
     </div>
-    <div id="narrower-part" class="ml-2 flex flex-shrink h-1/3">
-      <nav id="navbar" class="flex flex-row">
+    <div id="narrower-part" class="ml-2 flex flex-shrink h-1/3" role="banner" >
+      <nav id="navbar" class="flex flex-row" on:mouseenter={toggleDropdown}>
             <!-- Permanent placeholder or minimal content -->
             
           {#if isDropdownOpen}
             <div
-              transition:fade={{ delay: 250, duration: 500 }}
+              in:fade={{ duration: 500 }}
+              out:fade={{ duration: 200 }}
               on:mouseleave={resetCountdown}
               role="button"
               tabindex="0"

@@ -248,8 +248,6 @@ function cancelCreate() {
 
 // field visibility logic
 function toggleFieldVisibility(field) {
-
-
   field.visible = !field.visible;
   visibleFields.update(fields => [...fields]); 
 }
@@ -271,15 +269,16 @@ const searchCollection = () => {
 // Compute the start index for slicing the array based on the current page and page size
 $: {
   startIndex = ($currentPage - 1) * $pageSize;
-  
-  
 }
+
+let totalPages:number;
 
 $: {
   try {
     paginatedCollection = filteredCollection.slice(startIndex, startIndex + $pageSize);
+    totalPages = Math.ceil(filteredCollection.length / $pageSize);
   } catch (error) {
-    notification.set("Pagination is sad");
+    notification.set("hm");
   }
   
 }
@@ -342,7 +341,15 @@ onMount( async () => {
   <div id="tools" class="flex flex-row w-full justify-center space-x-2">
     {#if isModalVisible === false}
 
+
       <div id="search-bar" class="flex flex-row w-1/2 justify-between space-x-2">
+        {#if $currentPage > 1}
+  <button id="prevPage" class="pl-2"on:click={() => changePage($currentPage-1)}>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:-transtone-x-2 duration-300">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+    </svg>
+  </button>
+  {/if}
         
         <button on:click={toggleTuneMenu}
         title="tune the table to your liking"
@@ -354,19 +361,19 @@ onMount( async () => {
           
         </button>
         {#if tuneMenuVisible}
-        <div id="tune-menu" class="flex w-full p-2 border-none bg-white/20 dark:bg-black/20 space-y-2 top-10 justify-start align-middle text-sm rounded-lg">
-          <div class="flex flex-row align-middle justify-start">
-            <label class='flex items-center'> 
-              page size:
-              <input type="number" class='flex border-none bg-white/20 dark:bg-black/20 pl-2 ml-4 w-20 focus:ring-green-600/70 focus:ring-2 rounded-lg' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
+        <div id="tune-menu" class="flex flex-row w-full p-2 border border-none bg-white/20 dark:bg-black/20 space-y-2 items-center rounded-lg divide-x-2 lg:text-base md:text-sm sm:text-xs">
+          <div class="w-1/3">
+            <label class='flex px-2 items-center md:text-md sm:text-sm md:flex-col lg:flex-row'> 
+              per page:
+              <input type="number" class='flex border-none bg-white/20 dark:bg-black/20 ml-2 w-1/2 focus:ring-green-600/70 focus:ring-2 rounded-lg' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
             </label>
               
               </div>
               
               <div id="visibility" class="grid lg:grid-cols-2 sm:grid-cols-1">
                 {#each $visibleFields.slice(1) as field}
-                <div class="flex flex-row space-x-2 ml-2">
-                  <input class="size-4 rounded-full shadow border-none text-green-600/90 focus:ring-green-600/30 checked:bg-green-600/70 active:scale-90 checked:ring-green-600/30 hover:checked:bg-green-600/80 transition-all hover:scale-110" type="checkbox" id={field.name} 
+                <div class="flex flex-row items-center">
+                  <input class=" mx-4 my-2 size-4 rounded-full shadow border-none text-green-600/90 focus:ring-green-600/30 checked:bg-green-600/70 active:scale-90 checked:ring-green-600/30 hover:checked:bg-green-600/80 transition-all hover:scale-110" type="checkbox" id={field.name} 
                   bind:checked={field.visible} 
                   on:click={() => toggleFieldVisibility(field)} />
                   <label for={field.name}>{field.name}</label>
@@ -406,6 +413,14 @@ onMount( async () => {
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
       </button>
+      {#if filteredCollection.length !== 0 && totalPages > $currentPage}
+  <button id="nextPage"class="pr-2" 
+  on:click={() => changePage($currentPage+1)}>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:transtone-x-2 duration-300">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+    </svg>
+  </button>
+  {/if}
       
     {:else if isModalVisible}
       <div id="modal" class="flex bg-white/20 border-none dark:bg-black/20 rounded-lg p-6 text-xs">
@@ -455,12 +470,7 @@ onMount( async () => {
   </svg>
 </button>
   
-{:else if filteredCollection.length !== 0}
-  <button id="prevPage" class="pl-2"on:click={() => changePage($currentPage-1)}>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="xl:size-24 lg:size-20 md:size-12 sm:size-6 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:-transtone-x-2 duration-300">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-    </svg>
-  </button>
+
   {/if}
     
   <div id="table bg" class="shadow rounded-lg p-4 mt-4 flex items-center flex-col bg-gradient-to-br from-rose-300/10 to-rose-500/10"
@@ -505,21 +515,17 @@ onMount( async () => {
   
 
 
-  <tbody class="text-center divide-y-4 divide-double divide-rose-900/30 dark:divide-rose-200/20 rounded-lg">
-    
-      
-          
-
+  <tbody class="text-center divide-y-4 divide-double divide-rose-900/30 dark:divide-rose-200/20 rounded-lg ">
   
   {#each paginatedCollection as ingredient}
     <tr on:dblclick={() => toggleEdit(ingredient)} 
       title="double click to edit"
       
-      class="hover:bg-green-600/10 dark:hover:bg-green-300/10 divide-x-4 divide-double divide-green-900/10 dark:divide-green-200/10 transition-all duration-300">
+      class="hover:text-rose-700 odd:bg-stone-50 even:bg-stone-100 dark:odd:bg-stone-950 dark:even:bg-stone-900 divide-x-4 divide-double divide-green-900/10 dark:divide-green-200/10 transition-all duration-300">
 
       {#each $visibleFields as field, index}
   {#if field.visible}
-    <td class="align-middle m-4 p-4 {index === 0 ? 'text-2xl md:text-base lg:text-xl sm:text-sm text-ellipsis text-balance tracking-tight dark:bg-rose-900/20 bg-rose-200/20' : ''}">
+    <td class="align-middle m-4 p-4 {index === 0 ? 'tracking-tight font-extrabold text-ellipsis text-balance dark:bg-rose-900/20 bg-rose-200/20' : ''}">
       {#if isEditableField(ingredient.type, field.name) && editingRowId === ingredient.id}
         <textarea
           rows="3"
@@ -532,10 +538,11 @@ onMount( async () => {
           {ingredient[field.name]} {ingredient.unit}
       {:else}
         <div id="icon container" class="flex align-middle justify-center">
-          {@html ingredient[field.name] || `
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-            </svg>`
+          {@html ingredient[field.name] || ` 
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672ZM12 2.25V4.5m5.834.166-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243-1.59-1.59" />
+</svg>x2
+`
           }
         </div>
       {/if}
@@ -550,7 +557,7 @@ onMount( async () => {
 
   </table>
   {#if filteredCollection.length === 0}
-  <div class="flex justify-center items-center w-full m-20 text-2xl tracking-widest font-light text-center">
+  <div class="flex justify-center items-center w-full m-20 text-2xl text-center">
     <p class="flex items-center justify-center gap-2.5"> <!-- Added gap for spacing between text and SVG -->
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
@@ -568,24 +575,10 @@ onMount( async () => {
 
   {#if editingRowId !== null}
 <button on:click={() => handleDeleteClick(editingObject)} class="pl-2">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24 hover:text-red-600/90 active:scale-90 dark:hover:text-red-600/90 transition-all hover:scale-110">
     <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
   </svg>
-  
-  
-  
 </button>
-
-  {:else if filteredCollection.length !== 0}
-  <button id="nextPage"class="pr-2" 
-  
-  on:click={() => changePage($currentPage+1)}>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="xl:size-24 lg:size-20 md:size-12 sm:size-6 hover:text-green-600/90 active:scale-90 dark:hover:text-green-600/90 transition-all hover:scale-110 hover:transtone-x-2 duration-300">
-      <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-    </svg>
-
-
-  </button>
     {/if}
     
   {/if}

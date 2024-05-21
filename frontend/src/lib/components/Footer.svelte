@@ -31,7 +31,7 @@ class="flex items-center w-full justify-center"
     </li>
     <li>
       <a
-        href="patreon.com/BCF_app"
+        href="https://patreon.com/BCF_app"
         class=""
       >
       <svg width="18" height="18" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg" class="hover:text-amber-400 transition-all hover:scale-110 active:scale-90">
@@ -43,7 +43,7 @@ class="flex items-center w-full justify-center"
     </li>
     <li>
       <a
-        href="https://github.com/noxlovette"
+        href="https://github.com/noxlovette/BCF"
         class=""
       >
 
@@ -65,32 +65,31 @@ class="flex items-center w-full justify-center"
     <p class="md:text-center m-4">© 2024 Danila Volkov</p>
   </div>
 
-  <div id="paperwork" class="ml-auto flex sm:text-sm md:text-md m-2 w-full">
+  <div id="paperwork" class="ml-auto flex sm:text-sm md:text-md m-2 w-full relative">
     <ul class="flex items-center *:mx-4 sm:*:mx-2">
-      <li>
-        <a href="/paperwork/about" class=" hover:text-amber-400/80 transition-all"> about </a>
-      </li>
-      <li>
-        <a href="/paperwork/contact-us" class=" hover:text-amber-400/80 transition-all"> contact us </a>
-      </li>
-      <li>
-        <button on:click={toggleLegal} class=" hover:text-amber-400/80 transition-all"> legal 
-        </button>
-  
-      </li>
-      {#if legalOn}
-      <div class="flex flex-col p-2 space-y-2"
-      in:fade
-      >
-      <li>
-        <a href="/paperwork/privacy-policy" class=" hover:text-amber-400/80 transition-all"> privacy policy </a>
-      </li>
-      <li>
-        <a href="/paperwork/terms-of-service" class=" hover:text-amber-400/80 transition-all"> terms of use </a>
-      </li>
-    </div>
-      {/if}
+        <li>
+            <a href="/paperwork/about" class="hover:text-amber-400/80 transition-all"> about </a>
+        </li>
+        <li>
+            <a href="/paperwork/contact-us" class="hover:text-amber-400/80 transition-all"> contact us </a>
+        </li>
+        <li class="relative">
+            <button on:click={toggleLegal} class="hover:text-amber-400/80 transition-all"> legal </button>
+            {#if legalOn}
+                <div class="absolute right-0 bottom-full mb-2 flex flex-col p-2 space-y-2 bg-stone-50 dark:bg-stone-800 shadow-lg rounded-lg"
+                     in:fade>
+                    <li>
+                        <a href="/paperwork/privacy-policy" class="hover:text-amber-400/80 transition-all"> privacy policy </a>
+                    </li>
+                    <li>
+                        <a href="/paperwork/terms-of-service" class="hover:text-amber-400/80 transition-all"> terms of use </a>
+                    </li>
+                </div>
+            {/if}
+        </li>
     </ul>
-  </div>
+</div>
+
+
 </div>
 </footer>

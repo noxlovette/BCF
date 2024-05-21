@@ -93,13 +93,15 @@ function startNotificationInterval() {
     <div id="blabla" class="py-6 sm:py-4 md:py-6 lg:py-7 xl:py-6 2xl:py-14"
     in:fade={{duration: 500, delay: 1500}}
     >
-    <a href="/browse">
+    
       <section id="browse" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty"      
       >
         <div class="mx-auto flex max-w-[800px] flex-col gap-2 xl:max-w-full text-center xl:text-right md:text-lg lg:text-xl xl:text-2xl">
+          <a href="/browse">
           <h2 class="mb-2 w-full text-3xl font-bold text-sky-950 dark:text-sky-400 md:text-3xl lg:text-4xl">
             Browse over 3100 ingredients.
           </h2>
+        </a>
           <p class="mx-auto max-w-3xl text-sky-800 dark:text-sky-200">
             Use the power of IFRA's FIG in an unprecedented way. The whole Browse page is supercharged with the community's input and the structure of the Association.
           </p>
@@ -122,9 +124,8 @@ function startNotificationInterval() {
           />
         </div>
       </section>
-    </a>
 
-    <a href="/collect">
+    
       <section id="collect" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty">
         <div class="min-h-[300px] md:min-h-[400px]"> 
           <img
@@ -138,9 +139,11 @@ function startNotificationInterval() {
           />
         </div>
         <div class="mx-auto flex max-w-[800px] flex-col gap-2 xl:max-w-full text-center xl:text-left md:text-lg lg:text-xl xl:text-2xl">
+          <a href="/collect">
           <h2 class="mb-2 w-full text-3xl font-bold text-rose-950 dark:text-rose-400 md:text-3xl lg:text-4xl">
             Collect hundreds of perfume compounds.
           </h2>
+        </a>
           <p class="mx-auto max-w-3xl text-rose-800 dark:text-rose-200 ">
             Keep track of your favourite ingredients and the ones you want to try.
           </p>
@@ -153,13 +156,15 @@ function startNotificationInterval() {
         </div>
         
       </section>
-    </a>
-    <a href="/formulate">
+
+
       <section id="formulate" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty">
         <div class="mx-auto flex max-w-[800px] flex-col gap-2 xl:max-w-full text-center xl:text-right md:text-lg lg:text-xl xl:text-2xl">
+          <a href="/formulate">
           <h2 class="mb-2 w-full text-3xl font-bold text-lime-950 dark:text-lime-400 md:text-3xl lg:text-4xl">
             Formulate a revolution.
           </h2>
+        </a>
           <p class="mx-auto max-w-3xl text-lime-800 dark:text-lime-200">
             Manage your formulas independent of where you are. At home, in the lab, or on holiday.
           </p>
@@ -182,7 +187,7 @@ function startNotificationInterval() {
           />
         </div>
       </section>
-    </a>
+
 
     </div>
     <div class="lg:px-8 lg:py-8">
@@ -194,13 +199,15 @@ function startNotificationInterval() {
         
     <div
     id="buttons"
-    class="text-center text-6xl xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem] font-bold tracking-tight text-pretty" 
+    class="text-center flex flex-col text-6xl xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem] font-bold tracking-tight text-pretty" 
     style="width: 100%;" 
     in:fade={{duration: 500, delay: 2500}}>
+    <div class="flex xl:flex-row flex-col">
     <a href="/browse" class="button hover:text-sky-300/80 transition-all px-6 py-3">browse</a>
     <a href="/collect" class="button hover:text-pink-400/80 transition-all px-6 py-3">collect</a>
     <a href="/formulate" class="button hover:text-lime-500/80 transition-all px-6 py-3">formulate</a>
-    <a href="/auth/signup" class="button text-amber-400/80 hover:text-amber-600/80 transition-all px-6 py-3">sign up</a>
+  </div>
+    <a href="/auth/signup" class="button text-amber-400/80 hover:text-amber-600/80 transition-all px-6 py-3 ">sign up</a>
   </div>
 </div>
 </div>
