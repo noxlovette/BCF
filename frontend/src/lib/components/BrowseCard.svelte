@@ -8,25 +8,43 @@ import { addToCollectionBrowse } from "$lib/DjangoAPI";
     export let notification = writable("");
     export let ingredient: any = {};
     export let chosenIngredient:any = null;
+    let buttonError = false;
+    let buttonSuccess = false;
 
     onMount(async () => {
         is_authenticated = sessionStorage.getItem("is_authenticated");
     });
 
 async function handleAddIngredient(ingredientId:number) {
-    console.log(is_authenticated);
+
   if (is_authenticated !== null) {
     try {
       const response = await addToCollectionBrowse(ingredientId);
+        if (response === "ingredient is already in collection") {
+            buttonError = true;
+            notification.set("Ingredient already in collection");
+            return;
+        }
+    buttonSuccess = true;
       notification.set(response);
     } catch (error) {
+        buttonError = true;
       console.error("Failed to add ingredient to collection");
       notification.set("Failed to add ingredient to collection");
 }
   } else {
-    notification.set("you need to be logged in to add ingredients to your collection");
+    buttonError = true;
+    notification.set("You need to be logged in to add ingredients to your collection");
   }
 }
+
+$: if (buttonSuccess || buttonError) {
+    setTimeout(() => {
+      buttonSuccess = false;
+      buttonError = false;
+    }, 100);
+  }
+
 </script>
 
 
@@ -50,7 +68,7 @@ tabindex="0"
            <h2 class="opacity-60 group-hover:text-sky-200/60 justify-start lowercase">{ingredient.descriptors}</h2>
         </div>
         <div id="bottom-right" class="flex flex-1 flex-col ml-auto mt-auto items-end">
-            <button class="items-baseline invisible group-hover:visible hove rounded-full hover:bg-sky-50 hover:text-sky-700 p-2" on:mousedown={() => handleAddIngredient(ingredient.id)} on:mousedown|stopPropagation>
+            <button class="items-baseline invisible group-hover:visible rounded-full hover:transition-all hover:bg-sky-50 hover:text-sky-700 p-2 {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}" on:mousedown={() => handleAddIngredient(ingredient.id)} on:mousedown|stopPropagation>
                 <Add />
             </button>
         </div>

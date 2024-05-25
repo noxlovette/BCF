@@ -20,11 +20,13 @@
   export let pageSize = writable();
   export let searchTerm = writable("");
   export let overlay:boolean = false;
+  let suggestedIngredient = null;
   let chosenIngredient:any = null;
   let chosenDescriptors = [];
   let showFilterMenu = false;
   let searchInput;
-  
+  let showSuggestion = false;
+
   interface Field {
   name: string;
   visible: boolean;
@@ -135,7 +137,7 @@ async function fetchWithDescriptors() {
       notification.set(`Searching for ${$searchTerm}...`);
     }
     goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
-    suggestedIngredient = null;
+
     data = await load();
   }
 
@@ -191,6 +193,8 @@ async function toggleFilterMenu() {
 
 function toggleOverlay() {
     chosenIngredient = null;
+    showSuggestion = false;
+    suggestedIngredient = null;
   }
 
 
@@ -203,13 +207,13 @@ function toggleOverlay() {
 <div class="flex flex-col min-h-screen z-0" style="background: url('/assets/bg/bbblurry-browse.svg') no-repeat center center fixed; background-size: cover;">
   <button 
     id="overlay" 
-    class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-20 backdrop-blur z-50 transition-all bg-blend-darken" 
+    class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-20 backdrop-blur z-30 transition-all bg-blend-darken" 
     class:hidden={!chosenIngredient} 
     on:mousedown={toggleOverlay}
     aria-label="Toggle Overlay"
   >
   <div >
-  <BrowseCardExpanded ingredient={chosenIngredient} bind:notification />
+  <BrowseCardExpanded ingredient={chosenIngredient} bind:notification bind:showSuggestion bind:suggestedIngredient />
   </div>
 </button>
   <Header currentPage="browse" notification = {notification}/>
@@ -260,7 +264,10 @@ function toggleOverlay() {
           <input type="number" class='w-1/3 group-hover:shadow border-none focus:ring-amber-400/70 focus:ring-2 rounded-lg' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
         </label>
 
-        <div id="pagination" class="flex group justify-center items-center w-[100px] rounded-full bg-sky-700 text-sky-50 p-2 shadow">
+        
+        <div id="pagination" class="flex group justify-center items-center w-[100px] rounded-full bg-sky-700 text-sky-50 p-2 shadow {showFilterMenu || ($currentPage <= 1 && $currentPage >= data.total_pages) ? 'invisible' : 'visible'}"
+
+        >
           {#if !showFilterMenu && $currentPage > 1}
           <button id="prevPage" on:mousedown={() => changePage(-1)} class="">
               <ArrowLeftIcon />
