@@ -13,7 +13,7 @@
   <meta property="og:image" content="https://bcfapp.app/assets/meta/dalle-cover-main-logo.webp">
   <meta property="og:type" content="website">
 
-  <!-- Twitter Card meta tags (optional) -->
+  <!-- Twitter Card meta tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="BCF">
   <meta name="twitter:description" content="BCF. Browse perfume compounds, collect them, and formulate your next favourite fragrance.">

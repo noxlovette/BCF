@@ -1,17 +1,29 @@
 <script lang="ts">
+import Add from '$lib/components/svg/Add.svelte';
+import Suggestion from '$lib/components/svg/Suggestion.svelte';
     export let ingredient: any = {};
+    export let isExpanded = true;
     </script>
 
-<div id="card-big" class="p-8 rounded-lg shadow-md bg-white min-h-[400px] min-w-[600px] transition-all border-sky-950">
+<div id="card-big" class="absolute translate-x-[600px] top-0 p-8 rounded-lg shadow-lg bg-white min-h-[400px] min-w-[600px] transition-all border-sky-950 z-40"
+on:click={() => isExpanded = !isExpanded}
+role="button"
+tabindex="0"
+on:keydown={(event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+        isExpanded = !isExpanded;
+    }
+}}
+>
     <div id="top-part" class="flex flex-row items-baseline border-b">
         <div id="top-left" class="flex flex-col items-start border-r w-2/3 pr-4 py-2">
-            <h1 class="text-4xl tracking-tighter font-bold truncate text-sky-800 mr-8">{ingredient.common_name}</h1>
-            <h2 class="text-sm opacity-60 ">{ingredient.descriptors}</h2>
+            <h1 class="text-4xl tracking-tighter font-bold truncate text-sky-800 mr-8 mb-2">{ingredient.common_name}</h1>
+            <h2 class="text-sm opacity-60 lowercase">{ingredient.descriptors}</h2>
         </div>
         <div id="top-right" class="flex flex-1 flex-col items-start pl-4 py-2">
-            <h2 class="text-2xl opacity-60 min-w-fit ">{ingredient.cas}</h2>
+            <h2 class="text-2xl opacity-60 min-w-fit mb-2">{ingredient.cas}</h2>
             {#if ingredient.volalitliy}
-            <h2 class="text-sm opacity-60 ">{ingredient.volatility}</h2>
+            <h2 class="text-sm opacity-60">{ingredient.volatility}</h2>
             {:else}
             <h2 class="text-sm opacity-60 ">volatile</h2>
             {/if}
@@ -20,11 +32,11 @@
     <div id="bottom-part" class="flex flex-row">
 
     <div id="bottom-left" class="flex flex-col border-r w-2/3">
-    <p class="text-clip mr-8 my-4">
+    <p class="text-clip mr-8 mt-8 normal-case">
         {#if ingredient.use}  
         {ingredient.use}
         {:else}
-        know how to use this? Submit a suggestion!
+        Do you know how to use this ingredient? Submit a suggestion!
         {/if}
     </p>
 <div class="flex flex-col items-start mt-[200px]">
@@ -32,17 +44,18 @@
         similar ingredients
     </h3>
     <p class="">
-        {#if ingredient.similar_ingredients !== "" && ingredient.similar_ingredients !== "none"}
-        {ingredient.similar_ingredients}
-        {:else}
-        none
-        {/if}
+        {#if Array.isArray(ingredient.similar_ingredients) && ingredient.similar_ingredients.length > 0}
+    {ingredient.similar_ingredients}
+{:else}
+    none for now
+{/if}
+
     </p>
 </div>
 </div>
 
-<div id="bottom-right" class="flex flex-1 p-4">
-    <ul class="space-y-8">
+<div id="bottom-right" class="flex flex-1 flex-col p-4 normal-case">
+    <ul class="space-y-8 mt-4">
         <li class="flex flex-col items-start">
             <h3 class="text-sm opacity-60">
                 origin
@@ -67,10 +80,18 @@
     </h3>
 
     <p>
+        {#if Array.isArray(ingredient.contributors) && ingredient.contributors.length > 0}
         {ingredient.contributors}
+        {:else}
+        IFRA, Danila Volkov
+        {/if}
     </p>
 </li>
     </ul>
+    <div class="flex flex-row space-x-2 mt-[45px]">
+        <Add />
+        <Suggestion />
+    </div>
 </div>  
 </div>
 

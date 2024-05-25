@@ -57,7 +57,7 @@ export async function fetchIngredientsBrowse(currentPage: number, searchTerm = "
   const descriptors = chosenDescriptors.map(descriptor => `descriptors=${encodeURIComponent(descriptor.name)}`).join('&');
 
   const cacheKey = `ingredients-${currentPage}-${searchTerm}-${pageSize}-${descriptors}`;
-  let data = forceReload ? null : localStorage.getItem(cacheKey);
+  let data = forceReload ? null : sessionStorage.getItem(cacheKey);
   if (data) {
     return JSON.parse(data);
   } else {
@@ -65,7 +65,7 @@ export async function fetchIngredientsBrowse(currentPage: number, searchTerm = "
       const endpoint = `${BASE_URL}/browse/api/ingredients?page=${currentPage}&search=${searchTerm}&page_size=${pageSize}&${descriptors}`;
       const ingredientsData = await fetchCentralDjangoApi(endpoint);
       
-      localStorage.setItem(cacheKey, JSON.stringify(ingredientsData));
+      sessionStorage.setItem(cacheKey, JSON.stringify(ingredientsData));
       return ingredientsData;
     } catch (error) {
       console.error("Error fetching data from Django:", error);
@@ -411,7 +411,7 @@ export async function saveEditedIngredientCollect(ingredientToSave: any) {
     const url = `${BASE_URL}/browse/api/suggested-ingredients/`;
 
     if (!forceReload) {
-        const cachedData = localStorage.getItem(cacheKey);
+        const cachedData = sessionStorage.getItem(cacheKey);
         if (cachedData) {
           
             return JSON.parse(cachedData);
@@ -420,7 +420,7 @@ export async function saveEditedIngredientCollect(ingredientToSave: any) {
 
     try {
         const data = await fetchCentralDjangoApi(url, "GET");
-        localStorage.setItem(cacheKey, JSON.stringify(data));
+        sessionStorage.setItem(cacheKey, JSON.stringify(data));
         return data;
     } catch (error) {
         console.error("Failed to load ingredients: ", error.message);

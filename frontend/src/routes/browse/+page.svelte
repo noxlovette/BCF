@@ -8,11 +8,17 @@
   import Header from "$lib/components/Header.svelte";
   import Footer from "$lib/components/Footer.svelte";
   import Loader from "$lib/components/Loader.svelte";
+  import BrowseCard from "$lib/components/BrowseCard.svelte";
+  import ArrowLeftIcon from "./ArrowLeftIcon.svelte";
+    import ArrowRightIcon from "./ArrowRightIcon.svelte";
+    import ResetIcon from "./ResetIcon.svelte";
+    import BrowseCardExpanded from "$lib/components/BrowseCardExpanded.svelte";
+
 
   export let data: any = null;
   export let currentPage = writable();
   export let pageSize = writable();
-  export let searchTerm = writable();
+  export let searchTerm = writable("");
   let chosenDescriptors = [];
   let showSuggestion = false;
   let showFilterMenu = false;
@@ -27,23 +33,6 @@
 interface Ingredient {
   [key: string]: string; // Index signature for dynamic properties
 }
-
-  let initialVisibleFields: Field[] = [
-  { name: "common_name", visible: true },
-  { name: "cas", visible: false },
-  { name: "volatility", visible: false },
-  { name: "ingredient_type", visible: false},
-  { name: "use", visible: false },
-  { name: "descriptors", visible: true },
-  { name: "origin", visible: false},
-  { name: "constituents", visible: false},
-  { name: "similar_ingredients", visible: false},
-  { name: "is_restricted", visible: false },
-  { name: "contributors", visible: false},
-  { name: "actions", visible: true },
-];
-
-  const visibleFields = writable<Field[]>(initialVisibleFields);
   
   let showTuneMenu = false;
   let isLoading = true;
@@ -59,7 +48,6 @@ interface Ingredient {
     currentPage.set((parseInt(sessionStorage.getItem('currentPage')) || 1));
     pageSize.set((parseInt(localStorage.getItem('pageSize')) || 10));
     searchTerm.set((sessionStorage.getItem('searchTerm') || ""));
-    visibleFields.set(loadFieldPreference());
     
     
     data = await load();
@@ -70,14 +58,8 @@ interface Ingredient {
     filteredDescriptors = descriptors;
 
     currentPage.subscribe(value => sessionStorage.setItem('currentPage', String(value)));
-
     pageSize.subscribe(value => localStorage.setItem('pageSize', String(value)));
-
     searchTerm.subscribe(value => sessionStorage.setItem('searchTerm', String(value)));
-
-    visibleFields.subscribe(fields => {
-    localStorage.setItem('visibleFields', JSON.stringify(fields));
-  });
   });
 
   function sortDescriptors(descriptors) {
@@ -198,15 +180,8 @@ async function submitSuggestion() {
       searchInput.blur();
       searchIngredients();
     } 
-
   }
 
-  function handleDescriptorChange() {
-
-    
-    }
-  
-    
 
   const searchDescriptors = () => {
     return filteredDescriptors = descriptors.filter(descriptor => descriptor.name.toLowerCase().includes(searchTermDescriptor.toLowerCase()));
@@ -255,11 +230,6 @@ function loadFieldPreference() {
     return storedFields ? JSON.parse(storedFields) : initialVisibleFields;
   }
 
-//! might not work as expected
-  function toggleFieldVisibility(field) {
-  field.visible = !field.visible;
-  visibleFields.update(fields => [...fields]); 
-}
 
 
 async function handleAddIngredient(ingredientId) {
@@ -281,154 +251,70 @@ async function handleAddIngredient(ingredientId) {
 <div class="flex flex-col min-h-screen z-0" style="background: url('/assets/bg/bbblurry-browse.svg') no-repeat center center fixed; background-size: cover;">
   <Header currentPage="browse" notification = {notification}/>
   <div class="mb-auto">
-    <div id = "app" class="flex flex-col items-center mt-0 lowercase font-light text-sky-900/80 dark:text-sky-200/80 select-text selection:bg-sky-300/40">
-      {#if showSuggestion}
-      <div id = "suggestion" class="flex flex-col space-x-2 w-3/4 justify-center items-stretch p-4 m-4 bg-white/20 dark:bg-black/20 rounded-lg text-sky-900/80 dark:text-sky-200/90">
-        <div class="flex flex-row items-start align-middle">
-        <h2 class="flex text-center font-black p-4 text-2xl lg:text-xl sm:text-md">you are editing {suggestedIngredient.common_name}</h2>
-        <div class="flex flex-row ml-auto space-x-4">
-          <button on:click={submitSuggestion}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-            </svg>
-          </button>
-          <button on:click={toggleSuggestion}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>          
-          </button>
-        </div>
-        </div>
-        <div id="suggestion grid" class="grid grid-cols-3 space-x-4 p-4 space-y-1 mb-auto sm:text-sm md:text-md lg:text-base">
-        {#each Object.entries(suggestedIngredient).slice(2, -1) as [key, value]}
-        
-        <label class="flex items-center font-bold ml-4">{key.replace(/_/g, ' ')}
-          <textarea class="flex ml-auto font-light border-none bg-white/20 dark:bg-black/20 rounded-lg focus:ring focus:ring-amber-400/70 focus:border-amber-400/70" placeholder={value} bind:value={suggestedIngredient[key]}/>
-        </label>
 
-        {/each}
-        <label class="flex items-center font-bold ml-4 border-none rounded-lg focus:ring focus:ring-amber-400/70 focus:border-amber-400/70">message
-          <textarea class="flex ml-auto font-light border-none bg-white/20 dark:bg-black/20 rounded-lg focus:ring focus:ring-amber-400/70 focus:border-amber-400/70" bind:value={message}/>
-        </label>
-        
-      </div>
-        
-      </div>
-      {:else}
-      <div id="tools" class="flex flex-row w-full justify-center space-x-2">
-        <div id="search-bar" class="flex flex-row w-1/2 justify-between space-x-2">
-          {#if !showFilterMenu && $currentPage > 1}
-        <button id="prevPage" class="pl-2" on:click={() => changePage(-1)}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110 hover:-transtone-x-2 duration-300">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-          </svg>
-          
-          
-        </button>
-        {/if}
-          
-          <button on:click={toggleTuneMenu}
-          title="tune the table"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-            </svg>
-            
-            
-          </button>
-
-          <button on:click={toggleFilterMenu} title="filter by descriptors">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
-            </svg>
-            
-          </button>
-
-          <!-- Tune menu -->
-          {#if showTuneMenu}
-        <div id="tune menu" class="flex flex-row w-full p-2 border border-none bg-white/20 dark:bg-black/20 space-y-2 items-center rounded-lg divide-x-2 lg:text-base md:text-sm sm:text-xs">
-            <div class="w-1/3 ">
-          <label class="flex px-2 items-center md:text-md sm:text-sm md:flex-col lg:flex-row">
-            per page:
-            <input type="number" class = 'flex ml-2 border-none bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg w-1/2' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
-          </label>
-        </div>
-        
-          <div id="visibility" class="grid lg:grid-cols-2 sm:grid-cols-1">
-            {#each $visibleFields.slice(1, -1) as field}
-            <div class="flex flex-row items-center">
-              <input class= 
-              "mx-4 my-2
-              size-4 rounded-full shadow border-none text-amber-600/90 focus:ring-amber-400/30 checked:bg-amber-700/70 checked:ring-amber-700/30 hover:checked:bg-amber-600/80 transition-all hover:scale-110
-              
-              " 
-              
-              
-              type="checkbox" id={field.name} bind:checked={field.visible} on:click={() => toggleFieldVisibility(field)} />
-              <label for={field.name}>{field.name.replace(/_/g, ' ')}</label>
-              </div>
-            {/each}
-          </div>
-          
-          <!-- Filter menu -->
-        </div>
-        {:else if showFilterMenu}
-          <input
-            type="text"
-            class = "flex w-full p-2 shadow border-none bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
-
-            bind:this = {searchInput}
-            bind:value = {searchTermDescriptor}
-            on:input = {searchDescriptors}
-
-            placeholder="/ search descriptors..."
-            title="find the descriptor that you are looking for"
-          />
-
-
-        {:else}
-        
-          <input
-            type="text"
-            class = "flex w-full p-2 md:text-md lg:text-base shadow border-none bg-white/20 dark:bg-black/20 focus:ring-amber-400/70 focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
-            bind:value={$searchTerm}
-            bind:this = {searchInput}
-            on:keydown={handleSearch}
-            placeholder="/ search ingredients..."
-            title="find an ingredient by CAS or the multiple names that it might have"
-          />
-
+    <div id = "app" class="flex flex-col items-center lowercase select-text selection:bg-sky-300/40 my-8">
+      <form id="search-bar" class="justify-center max-w-5xl flex w-full px-12 space-x-4 items-center group">
+        <button on:click={toggleFilterMenu} title="filter by descriptors" class="rounded-lg p-2 text-center bg-sky-700 text-sky-50 hover:text-stone-800 hover:bg-white transition-all shadow hover:shadow-lg">
+          {#if showFilterMenu}
+            ingredients
+          {:else}
+            descriptors
           {/if}
-          <button on:click={searchIngredients}
-          title="search for ingredients"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-            </svg>
+        </button>
+          {#if showFilterMenu}
+        <input
+          type="text"
+          class = "w-[600px] shadow border-none bg-white dark:bg-black focus:ring-amber-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+
+          bind:this = {searchInput}
+          bind:value = {searchTermDescriptor}
+          on:input = {searchDescriptors}
+
+          placeholder="/ search descriptors..."
+          title="find the descriptor that you are looking for"
+        />
+
+          {:else}
+      
+        <input
+          type="text"
+          class = "w-[600px] shadow border-none bg-white dark:bg-black focus:ring-sky-700/60 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+          bind:value={$searchTerm}
+          bind:this = {searchInput}
+          on:keydown={handleSearch}
+          placeholder="/ search ingredients..."
+          title="find an ingredient by CAS or the multiple names that it might have"
+        />
+          {/if}
             
+        <button on:click={reset} title="reset everything" class="rounded-full bg-sky-700 text-sky-50 p-2 shadow">
+          <ResetIcon />
+        </button>
+
+        <label class="items-center md:text-md sm:text-sm mr-auto opacity-60 hover:opacity-100 transition-opacity group">
+          per page:
+          <input type="number" class='w-1/3 group-hover:shadow border-none focus:ring-amber-400/70 focus:ring-2 rounded-lg' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
+        </label>
+
+        <div id="pagination" class="flex group justify-center items-center w-[100px] rounded-full bg-sky-700 text-sky-50 p-2 shadow">
+          {#if !showFilterMenu && $currentPage > 1}
+          <button id="prevPage" on:click={() => changePage(-1)} class="">
+              <ArrowLeftIcon />
           </button>
-          <button on:click={reset} title="reset everything">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-            </svg>
-            
-          </button>
+          {/if}
           {#if !showFilterMenu && $currentPage < data.total_pages}
-        <button class="pr-2" id="nextPage" on:click={() => changePage(1)}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110 hover:transtone-x-2 duration-300">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-            
-            
+          <button id="nextPage" on:click={() => changePage(1)} class="">
+              <ArrowRightIcon />
           </button>
-        {/if}
-        </div>
-        
+          {/if}
       </div>
-      {/if}
+      
+      </form>
     
-      <div id="table-wrapper" class="flex flex-row ml-8 mr-8 mt-0 p-2 overflow-x-auto overflow-y-auto items-center xl:font-medium font-normal">
-        
+
+
+
+          <div id="table-wrapper" class="relative flex flex-row mx-8 overflow-x-auto overflow-y-auto items-center xl:font-medium font-normal">
         {#if isLoading || data === null}
           <!-- If isLoading is true, display a loading message -->
           <Loader />
@@ -439,7 +325,7 @@ async function handleAddIngredient(ingredientId) {
           <p class="text-2xl">hm. try a different search?</p>
           
         {:else}
-        <div id="table bg" class="shadow bg-gradient-to-br from-sky-300/10 to-sky-500/10 rounded-lg p-4 mt-4 background-element"
+        <div id="table bg" class="rounded-lg p-8"
         in:blur={{duration: 150}}
         >
 
@@ -457,10 +343,8 @@ async function handleAddIngredient(ingredientId) {
             size-4 rounded-full shadow border-none text-amber-600/90 focus:ring-amber-400/30 checked:bg-amber-700/70 checked:ring-amber-700/30 hover:checked:bg-amber-600/80 transition-all hover:scale-110
             
             " 
-  
             type="checkbox" id={descriptor.name} bind:group={chosenDescriptors} value={descriptor}
             on:change={() => { handleDescriptorChange();  }} />
-
             {descriptor.name}
             </label>
           </div>
@@ -472,95 +356,19 @@ async function handleAddIngredient(ingredientId) {
       </div>
 
 {:else}
-          
-          <table class="bg-blend-screen rounded-lg shadow-lg size-full table-fixed border-collapse border-spacing-0 bg-gradient-to-br from-sky-50/90 to-sky-100/30 dark:from-sky-900/20 dark:to-sky-950/20"
-          in:fade={{delay:50, duration: 150}}
-          >
-            <thead class="rounded-lg bg-gradient-to-br from-sky-600/40 to-sky-700/40 h-10 dark:text-sky-200/80 dark:from-sky-300/10 dark:to-sky-400/10 text-xl md:text-base sm:text-sm lg:text-lg text-sky-900/80">
-              <tr class="first:rounded-tl-lg first:font-black last:rounded-tr-lg align-middle">
-                {#each $visibleFields as header}
-                  {#if header.name === 'common_name' && header.visible}
-                    <th class="w-1/4">ingredient</th>
-                  {:else if header.name === 'cas' && header.visible}
-                  <th class="max-w-fit">CAS</th>
-                  {:else if header.name === 'use' && header.visible}
-                  <th class="w-1/4">use</th>
-                  {:else if header.name === 'similar_ingredients' && header.visible}
-                  <th>similar</th>
-                  {:else if header.name === 'actions' && header.visible}
-                  <th class="max-w-fit">
-                    <div id="icon container" class="flex justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
-                      </svg>
-                    </div>
-                  </th>
-                  {:else if header.visible}
-                  <th class="max-w-fit">{header.name.replace(/_/g, ' ')}</th>
-                {/if}
-              {/each}
-              </tr>
-            </thead>
-            <tbody class="text-center divide-y-4 divide-double divide-amber-700/10 dark:divide-amber-400/10 border-b-6 border-sky-600/30" in:fade={{duration: 150}}>
-    
-              {#each data.results as ingredient}
-                <tr on:dblclick={() => handleAddIngredient(ingredient.id)} class="hover:text-sky-600 first:rounded-tl-lg last:rounded-tr-lg sm:text-sm odd:bg-stone-50 even:bg-stone-100 dark:odd:bg-stone-950 dark:even:bg-stone-900 dark:hover:bg-amber-700/10 divide-x-4 divide-double divide-sky-600/10 dark:divide-sky-400/10 transition-all hover:rounded duration-300">
+<div id="card-holder" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+          {#each data.results as ingredient}
+          {#if ingredient}
+          <BrowseCard {ingredient} />
+          {/if}
+          {/each}
+      </div>
 
-                  {#each $visibleFields as field}
-
-                    {#if field.name === 'common_name' && field.visible}
-                      <td title = "{ingredient.other_names}" class="align-middle m-4 p-4 tracking-tight font-extrabold text-ellipsis text-balance dark:bg-sky-700/10 bg-sky-300/10 ">{ingredient.common_name}</td>
-                      {:else if field.name === 'is_restricted' && field.visible}
-                      <td class="align-middle m-4 p-4">{ingredient[field.name] ? "yes" : "no"}</td>
-                    {:else if field.name === 'actions' && field.visible}
-                    <td class="align-middle m-4 p-4 ">
-                      <div id="icon container" class="flex align-middle justify-center h-full space-x-2">
-
-                        <button on:click={() => handleAddIngredient(ingredient.id)} title="add this ingredient to your collection">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 active:scale-90 active:text-amber-500/90 transition-all hover:scale-110">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                          </svg>
-                          
-                        </button>
-                        <button on:click = {() => toggleSuggestion(ingredient)} title="want to contribute?">
-  
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                          </svg>
-  
-  
-                        </button>
-  
-                      </div>
-                      </td>
-                      {:else if field.visible}
-                      {#if ingredient[field.name] === null || ingredient[field.name] === ""}
-                      <td class="align-middle m-4 p-4">
-                      <div id="icon container" class="flex align-middle justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 hover:text-amber-400/90 active:scale-90 transition-all hover:scale-110">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
-                        </svg>
-                        
-                      </div>
-                    </td>
-                      {:else}
-                      <td class="align-middle m-4 p-4 text-pretty">{ingredient[field.name]}</td>
-                      {/if}
-                    {/if}
-                  
-                  {/each}
-                
-
-
-                </tr>
-              {/each}
-            </tbody>
-          </table>
 {/if}
         </div>
         {/if}
+        </div>
       </div>
     </div>
-  </div>
   <Footer />
 </div>

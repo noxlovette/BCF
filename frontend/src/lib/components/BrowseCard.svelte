@@ -1,8 +1,11 @@
 <script lang="ts">
+import BrowseCardExpanded from "./BrowseCardExpanded.svelte";
+
     export let ingredient: any = {};
     let isExpanded = false;
 </script>
 
+{#if !isExpanded}
 <div id="card-small" class="p-8 rounded-lg shadow-md bg-white min-h-[160px] transition-all group hover:scale-105 hover:text-sky-50 hover:bg-sky-800 hover:shadow-lg"
 on:click={() => isExpanded = !isExpanded}
 role="button"
@@ -28,3 +31,6 @@ on:keydown={(event) => {
     <h2 class="mt-[56px] opacity-60 group-hover:text-sky-200/60">{ingredient.descriptors}</h2>
 </div>
 </div>
+{:else}
+<BrowseCardExpanded {ingredient} bind:isExpanded />
+{/if}
