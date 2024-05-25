@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import {addSuggestionBrowse, fetchDescriptors, addToCollectionBrowse, fetchIngredientsBrowse} from "$lib/DjangoAPI";
+  import {fetchDescriptors, fetchIngredientsBrowse} from "$lib/DjangoAPI";
   import {tick} from "svelte";
   import { writable } from "svelte/store";
   import {blur, fade} from "svelte/transition";
@@ -19,10 +19,10 @@
   export let currentPage = writable();
   export let pageSize = writable();
   export let searchTerm = writable("");
+  export let overlay:boolean = false;
+  let chosenIngredient:any = null;
   let chosenDescriptors = [];
-  let showSuggestion = false;
   let showFilterMenu = false;
-  let suggestedIngredient: Ingredient = null;
   let searchInput;
   
   interface Field {
@@ -40,7 +40,6 @@ interface Ingredient {
   let descriptors = []
   let searchTermDescriptor = "";
   let filteredDescriptors = [];
-  let is_authenticated = null;
   let sortedDescriptors = [];
 
   onMount(async () => {
@@ -48,11 +47,9 @@ interface Ingredient {
     currentPage.set((parseInt(sessionStorage.getItem('currentPage')) || 1));
     pageSize.set((parseInt(localStorage.getItem('pageSize')) || 10));
     searchTerm.set((sessionStorage.getItem('searchTerm') || ""));
-    
-    
     data = await load();
     isLoading = false;
-    is_authenticated = sessionStorage.getItem("is_authenticated");
+    
     
     descriptors = await fetchDescriptors();
     filteredDescriptors = descriptors;
@@ -128,37 +125,7 @@ async function fetchWithDescriptors() {
     data = await load();
   }
 
-function toggleSuggestion(ingredient) {
-  if (is_authenticated === null) {
-    notification.set("you need to be logged in to suggest changes");
-    return;
-  } else {
-    showSuggestion = !showSuggestion;
-    notification.set("time to tell the world what you know!");
-    suggestedIngredient = suggestedIngredient === ingredient ? null : ingredient;
-  }
-}
-let message = null;
-async function submitSuggestion() {
-  let body = { 
-  message: message,
-  ingredient: suggestedIngredient.id,
-  common_name: suggestedIngredient.common_name,
-  cas: suggestedIngredient.cas,
-  volatility: suggestedIngredient.volatility,
-  ingredient_type: suggestedIngredient.ingredient_type,
-  use: suggestedIngredient.use,
-  origin: suggestedIngredient.origin,
-  constituents: suggestedIngredient.constituents ? JSON.stringify(suggestedIngredient.constituents) : null,
-  similar_ingredients: suggestedIngredient.similar_ingredients ? JSON.stringify(suggestedIngredient.similar_ingredients) : null,
-  is_restricted: suggestedIngredient.is_restricted,
-};
-  const response = await addSuggestionBrowse(body);
-  showSuggestion = false;
-  message = null;
-  
-  notification.set(response);
-}
+
 
   async function searchIngredients() {
     currentPage.set(1);
@@ -182,14 +149,12 @@ async function submitSuggestion() {
     } 
   }
 
-
   const searchDescriptors = () => {
     return filteredDescriptors = descriptors.filter(descriptor => descriptor.name.toLowerCase().includes(searchTermDescriptor.toLowerCase()));
   }
   
 
   async function changePage(increment) {
-    
     if ($currentPage + increment >= 1 && $currentPage + increment <= (data as { total_pages: number }).total_pages) {
       
       currentPage.update((value) => value + increment);
@@ -221,25 +186,12 @@ async function toggleFilterMenu() {
     } else {
       document.removeEventListener('click', handleClickOutside);
     }
-
   showTuneMenu = false;
 }
 
-function loadFieldPreference() {
-    const storedFields = localStorage.getItem('visibleFields');
-    return storedFields ? JSON.parse(storedFields) : initialVisibleFields;
+function toggleOverlay() {
+    chosenIngredient = null;
   }
-
-
-
-async function handleAddIngredient(ingredientId) {
-  if (is_authenticated !== null) {
-    const response = await addToCollectionBrowse(ingredientId);
-    notification.set(response);
-  } else {
-    notification.set("you need to be logged in to add ingredients to your collection");
-  }
-}
 
 
 </script>
@@ -249,12 +201,24 @@ async function handleAddIngredient(ingredientId) {
 </svelte:head>
 
 <div class="flex flex-col min-h-screen z-0" style="background: url('/assets/bg/bbblurry-browse.svg') no-repeat center center fixed; background-size: cover;">
+  <button 
+    id="overlay" 
+    class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-20 backdrop-blur z-50 transition-all bg-blend-darken" 
+    class:hidden={!chosenIngredient} 
+    on:mousedown={toggleOverlay}
+    aria-label="Toggle Overlay"
+  >
+  <div >
+  <BrowseCardExpanded ingredient={chosenIngredient} bind:notification />
+  </div>
+</button>
   <Header currentPage="browse" notification = {notification}/>
   <div class="mb-auto">
 
-    <div id = "app" class="flex flex-col items-center lowercase select-text selection:bg-sky-300/40 my-8">
+    <div id = "app" class="flex flex-col items-center lowercase my-8">
       <form id="search-bar" class="justify-center max-w-5xl flex w-full px-12 space-x-4 items-center group">
-        <button on:click={toggleFilterMenu} title="filter by descriptors" class="rounded-lg p-2 text-center bg-sky-700 text-sky-50 hover:text-stone-800 hover:bg-white transition-all shadow hover:shadow-lg">
+       
+        <button on:mousedown={toggleFilterMenu} title="filter by descriptors" class="rounded-lg p-2 text-center bg-sky-700 text-sky-50 hover:text-stone-800 hover:bg-white transition-all shadow hover:shadow-lg">
           {#if showFilterMenu}
             ingredients
           {:else}
@@ -287,7 +251,7 @@ async function handleAddIngredient(ingredientId) {
         />
           {/if}
             
-        <button on:click={reset} title="reset everything" class="rounded-full bg-sky-700 text-sky-50 p-2 shadow">
+        <button on:mousedown={reset} title="reset everything" class="rounded-full bg-sky-700 text-sky-50 p-2 shadow">
           <ResetIcon />
         </button>
 
@@ -298,12 +262,12 @@ async function handleAddIngredient(ingredientId) {
 
         <div id="pagination" class="flex group justify-center items-center w-[100px] rounded-full bg-sky-700 text-sky-50 p-2 shadow">
           {#if !showFilterMenu && $currentPage > 1}
-          <button id="prevPage" on:click={() => changePage(-1)} class="">
+          <button id="prevPage" on:mousedown={() => changePage(-1)} class="">
               <ArrowLeftIcon />
           </button>
           {/if}
           {#if !showFilterMenu && $currentPage < data.total_pages}
-          <button id="nextPage" on:click={() => changePage(1)} class="">
+          <button id="nextPage" on:mousedown={() => changePage(1)} class="">
               <ArrowRightIcon />
           </button>
           {/if}
@@ -314,7 +278,8 @@ async function handleAddIngredient(ingredientId) {
 
 
 
-          <div id="table-wrapper" class="relative flex flex-row mx-8 overflow-x-auto overflow-y-auto items-center xl:font-medium font-normal">
+          <div id="table-wrapper" class="relative flex flex-row mx-8 overflow-x-auto overflow-y-auto items-center xl:font-medium font-normal select-text selection:bg-sky-300/40
+          ">
         {#if isLoading || data === null}
           <!-- If isLoading is true, display a loading message -->
           <Loader />
@@ -340,11 +305,8 @@ async function handleAddIngredient(ingredientId) {
               <label class="md:text-md sm:text-sm lg:text-base" title={descriptor.description}>
             <input class= 
             "mx-2
-            size-4 rounded-full shadow border-none text-amber-600/90 focus:ring-amber-400/30 checked:bg-amber-700/70 checked:ring-amber-700/30 hover:checked:bg-amber-600/80 transition-all hover:scale-110
-            
-            " 
-            type="checkbox" id={descriptor.name} bind:group={chosenDescriptors} value={descriptor}
-            on:change={() => { handleDescriptorChange();  }} />
+            size-4 rounded-full shadow border-none text-amber-600/90 focus:ring-amber-400/30 checked:bg-amber-700/70 checked:ring-amber-700/30 hover:checked:bg-amber-600/80 transition-all hover:scale-110" 
+            type="checkbox" id={descriptor.name} bind:group={chosenDescriptors} value={descriptor}/>
             {descriptor.name}
             </label>
           </div>
@@ -359,7 +321,7 @@ async function handleAddIngredient(ingredientId) {
 <div id="card-holder" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {#each data.results as ingredient}
           {#if ingredient}
-          <BrowseCard {ingredient} />
+          <BrowseCard {ingredient} bind:chosenIngredient bind:notification />
           {/if}
           {/each}
       </div>

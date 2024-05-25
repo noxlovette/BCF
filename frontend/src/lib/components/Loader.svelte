@@ -27,7 +27,7 @@ let quotes = [
 
 </script>
 
-<div class="mx-auto max-w-[800px] xl:max-w-7xl">
+<div class="mx-auto max-w-[800px] xl:max-w-7xl cursor-wait">
 <div class="size-full flex flex-col items-center">
 <div id="spinner" class="flex size-24 border-8 m-10 border-amber-400 border-dotted rounded-full animate-spin" />
 <p class="text-2xl font-bold text-center text-pretty normal-case">{chosenQuote}</p>

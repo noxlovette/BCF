@@ -1,22 +1,60 @@
 <script lang="ts">
 import Add from '$lib/components/svg/Add.svelte';
 import Suggestion from '$lib/components/svg/Suggestion.svelte';
-    export let ingredient: any = {};
-    export let isExpanded = true;
+import { writable } from 'svelte/store';
+
+export let ingredient: any = {};
+export let notification = writable("");
+export let is_authenticated = false;
+let showSuggestion = false;
+let suggestedIngredient = null;
+
+
+function toggleSuggestion(ingredient) {
+  if (is_authenticated === null) {
+    notification.set("you need to be logged in to suggest changes");
+    return;
+  } else {
+    showSuggestion = !showSuggestion;
+    notification.set("time to tell the world what you know!");
+    suggestedIngredient = suggestedIngredient === ingredient ? null : ingredient;
+  }
+}
+let message = null;
+async function submitSuggestion() {
+  let body = { 
+  message: message,
+  ingredient: suggestedIngredient.id,
+  common_name: suggestedIngredient.common_name,
+  cas: suggestedIngredient.cas,
+  volatility: suggestedIngredient.volatility,
+  ingredient_type: suggestedIngredient.ingredient_type,
+  use: suggestedIngredient.use,
+  origin: suggestedIngredient.origin,
+  constituents: suggestedIngredient.constituents ? JSON.stringify(suggestedIngredient.constituents) : null,
+  similar_ingredients: suggestedIngredient.similar_ingredients ? JSON.stringify(suggestedIngredient.similar_ingredients) : null,
+  is_restricted: suggestedIngredient.is_restricted,
+};
+  const response = await addSuggestionBrowse(body);
+  showSuggestion = false;
+  message = null;
+}
+
+
+
+
+
+
+
+
     </script>
 
-<div id="card-big" class="absolute translate-x-[600px] top-0 p-8 rounded-lg shadow-lg bg-white min-h-[400px] min-w-[600px] transition-all border-sky-950 z-40"
-on:click={() => isExpanded = !isExpanded}
-role="button"
-tabindex="0"
-on:keydown={(event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-        isExpanded = !isExpanded;
-    }
-}}
->
+{#if ingredient !== null}
+<button id="card-big" class="p-8 rounded-lg shadow-lg bg-white min-h-[400px] min-w-[600px] transition-all border-sky-950 z-50 text-left cursor-default select-text selection:bg-sky-300/40" 
+
+on:mousedown|stopPropagation>
     <div id="top-part" class="flex flex-row items-baseline border-b">
-        <div id="top-left" class="flex flex-col items-start border-r w-2/3 pr-4 py-2">
+        <div id="top-left" class="flex flex-col items-start border-r w-2/3 pr-4 py-2 truncate">
             <h1 class="text-4xl tracking-tighter font-bold truncate text-sky-800 mr-8 mb-2">{ingredient.common_name}</h1>
             <h2 class="text-sm opacity-60 lowercase">{ingredient.descriptors}</h2>
         </div>
@@ -32,7 +70,7 @@ on:keydown={(event) => {
     <div id="bottom-part" class="flex flex-row">
 
     <div id="bottom-left" class="flex flex-col border-r w-2/3">
-    <p class="text-clip mr-8 mt-8 normal-case">
+    <p class="mr-8 mt-8 normal-case">
         {#if ingredient.use}  
         {ingredient.use}
         {:else}
@@ -89,11 +127,14 @@ on:keydown={(event) => {
 </li>
     </ul>
     <div class="flex flex-row space-x-2 mt-[45px]">
+        <button>
         <Add />
+    </button>
+    <button>
         <Suggestion />
+    </button>
     </div>
 </div>  
 </div>
-
-
-</div>
+</button>
+{/if}

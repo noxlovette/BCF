@@ -114,8 +114,8 @@
 <div class="flex flex-col">
     <div id="mini-header" class="flex flex-row">
         <h1 class= "text-4xl mb-4 ">settings</h1>
-        <button class="ml-4 disabled:text-stone-400/70 hover:text-amber-400/60" disabled={!allValid} on:click = {handleSaveChanges}>apply changes</button>
-        <button class="ml-4 disabled:text-stone-400/70 hover:text-amber-400/60" disabled={!allValid} on:click = {revertChanges}>revert changes</button>
+        <button class="ml-4 disabled:text-stone-400/70 hover:text-amber-400/60" disabled={!allValid} on:mousedown = {handleSaveChanges}>apply changes</button>
+        <button class="ml-4 disabled:text-stone-400/70 hover:text-amber-400/60" disabled={!allValid} on:mousedown = {revertChanges}>revert changes</button>
 
     </div>
     
@@ -163,12 +163,12 @@
         {#if deleteWarning}
         <div class="bg-lime-600/10 rounded-lg p-2 flex flex-col items-center *:transition-all">
             <h3 class="font-normal m-4">all i am offering is the truth</h3>
-            <button class="bg-sky-400/30 rounded-md p-2 w-full hover:bg-sky-400/80 active:scale-95" on:click={handleDelete}>the story ends</button>
-            <button class="bg-rose-400/30 rounded-md p-2 w-full hover:bg-rose-400/80 active:scale-95" on:click={toggleWarningDelete}>stay in wonderland</button>
+            <button class="bg-sky-400/30 rounded-md p-2 w-full hover:bg-sky-400/80 active:scale-95" on:mousedown={handleDelete}>the story ends</button>
+            <button class="bg-rose-400/30 rounded-md p-2 w-full hover:bg-rose-400/80 active:scale-95" on:mousedown={toggleWarningDelete}>stay in wonderland</button>
 
         </div>
         {:else}
-        <button class="bg-sky-400/40 rounded-lg p-2 transition-all hover:bg-sky-400/80" on:click={toggleWarningDelete}>erase me</button>
+        <button class="bg-sky-400/40 rounded-lg p-2 transition-all hover:bg-sky-400/80" on:mousedown={toggleWarningDelete}>erase me</button>
         {/if}
         </div>
     

@@ -111,7 +111,7 @@
     <div id="controls" class="pt-4">
       <button tabindex="-1" class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110"
       title="save changes"
-      on:click={saveChanges}>
+      on:mousedown={saveChanges}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-950/60 dark:hover:text-amber-400/60">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         </svg>
@@ -119,7 +119,7 @@
       <button tabindex="-1" class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110"
 
       title="cancel changes"
-        on:click={() => {
+        on:mousedown={() => {
           editing = false;
           editedFormula = null;
         }}>
@@ -150,7 +150,7 @@
         {#each editedFormula.ingredients as ingredient, i (ingredient.id)}
         <tr class="">
           <td class="align-middle">
-            <button tabindex="-1" class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110" on:click={() => handleDeleteIngredient(ingredient.id)}
+            <button tabindex="-1" class=" hover:text-lime-800/70 dark:hover:text-lime-300/60 transition-all hover:scale-110" on:mousedown={() => handleDeleteIngredient(ingredient.id)}
               ><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:text-amber-300/60">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
               </svg>
@@ -161,7 +161,7 @@
             {#if activeEditId === ingredient.id}
             <Dropdown bind:selectedIngredient={ingredient} searchTerm={ingredient.ingredient}/>
           {:else}
-            <button tabindex="-1" on:click={() => toggleEdit(ingredient.id)}>{ingredient.ingredient}</button>
+            <button tabindex="-1" on:mousedown={() => toggleEdit(ingredient.id)}>{ingredient.ingredient}</button>
           {/if}
           </td>
 
@@ -180,7 +180,7 @@
         
       {/if}
       <td>
-        <button tabindex="-1" on:click={addIngredient}>
+        <button tabindex="-1" on:mousedown={addIngredient}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>

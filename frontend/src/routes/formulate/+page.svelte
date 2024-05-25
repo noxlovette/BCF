@@ -88,7 +88,7 @@
         <button class:active={formula.id === activeFormulaId} 
         id="formula-item" 
         class="flex text-left flex-col w-5/6 hover:translate-x-1 active:scale-95 hover:bg-amber-50/80 hover:text-amber-800/80 dark:hover:bg-amber-400/30 dark:hover:text-amber-200 hover:rounded-lg hover:shadow p-2 transition-all duration-150" 
-        on:click={() => viewFormula(formula.id)} 
+        on:mousedown={() => viewFormula(formula.id)} 
         title={formula.description}
         
         >
@@ -100,12 +100,12 @@
       <button id="formula-item"
       
       
-      class="flex flex-col text-2xl hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:click={handleCreateFormula}>make it your first</button>
+      class="flex flex-col text-2xl hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:mousedown={handleCreateFormula}>make it your first</button>
         {:else}
         
       <button id="formula-item"
       title="create new formula"
-      class="flex w-full hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-4 transition-all hover:scale-105 active-scale-90 duration-500 border-dashed border" on:click={handleCreateFormula}>
+      class="flex w-full hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-4 transition-all hover:scale-105 active-scale-90 duration-500 border-dashed border" on:mousedown={handleCreateFormula}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         </svg>

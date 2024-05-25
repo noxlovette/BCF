@@ -103,7 +103,7 @@
       {#each filteredCollection as item (item.common_name)}
         <button
           class="dropdown-item hover:bg-lime-800/60 rounded-lg hover:text-amber-100/90 dark:hover:text-amber-50/80 w-full font-light text-sm transition-all duration-150"
-          on:click={() => selectItem(item)}
+          on:mousedown={() => selectItem(item)}
         >{item.common_name}</button>
       {/each}
     {/if}

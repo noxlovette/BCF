@@ -5,6 +5,6 @@
   export let id = "";
 </script>
 
-<button class="btn btn-primary {className}" on:click={onClick} data-id={id}>
+<button class="btn btn-primary {className}" on:mousedown={onClick} data-id={id}>
   {textContent}
 </button>

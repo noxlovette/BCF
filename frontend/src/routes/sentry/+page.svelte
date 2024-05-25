@@ -1,6 +1,6 @@
 <button
   type="button"
-  on:click={() => {
+  on:mousedown={() => {
     console.log('Error thrown');
     throw new Error('Sentry Frontend Error');
     

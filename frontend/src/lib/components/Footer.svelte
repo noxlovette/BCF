@@ -74,7 +74,7 @@ class="flex items-center w-full justify-center"
             <a href="/paperwork/contact-us" class="hover:text-amber-400/80 transition-all"> contact us </a>
         </li>
         <li class="relative">
-            <button on:click={toggleLegal} class="hover:text-amber-400/80 transition-all"> legal </button>
+            <button on:mousedown={toggleLegal} class="hover:text-amber-400/80 transition-all"> legal </button>
             {#if legalOn}
                 <div class="absolute right-0 bottom-full mb-2 flex flex-col p-2 space-y-2 bg-stone-50 dark:bg-stone-800 shadow-lg rounded-lg"
                      in:fade>

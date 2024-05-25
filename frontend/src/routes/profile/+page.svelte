@@ -80,13 +80,13 @@
         <h2 id="header" class="xl:text-4xl lg:text-2xl md:text-xl sm:text-base mb-4 border-b-2 tracking-tight font-bold border-stone-400/20">{username}</h2>
         
         <ul class="text-2xl lg:text-xl md:text-lg sm:text-base flex flex-col items-start font-semibold sm:font-normal text-left">
-            <button class="hover:bg-amber-400/80 dark:hover:text-stone-800/80 rounded-lg transition-all hover:translate-x-1 p-2" on:click={() => currentPage.set('settings')}>
+            <button class="hover:bg-amber-400/80 dark:hover:text-stone-800/80 rounded-lg transition-all hover:translate-x-1 p-2" on:mousedown={() => currentPage.set('settings')}>
                 settings
             </button>
-            <button class="hover:bg-amber-400/80 dark:hover:text-stone-800/80 rounded-lg transition-all hover:translate-x-1 p-2" on:click={() => currentPage.set('contributions')}>
+            <button class="hover:bg-amber-400/80 dark:hover:text-stone-800/80 rounded-lg transition-all hover:translate-x-1 p-2" on:mousedown={() => currentPage.set('contributions')}>
                 contributions
             </button>
-            <button class="hover:bg-amber-400/80 dark:hover:text-stone-800/80 rounded-lg transition-all hover:translate-x-1 p-2" on:click={() => currentPage.set('help')}>
+            <button class="hover:bg-amber-400/80 dark:hover:text-stone-800/80 rounded-lg transition-all hover:translate-x-1 p-2" on:mousedown={() => currentPage.set('help')}>
                 help centre
             </button>
         </ul>

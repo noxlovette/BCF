@@ -1,36 +1,58 @@
 <script lang="ts">
-import BrowseCardExpanded from "./BrowseCardExpanded.svelte";
+import Add from "./svg/Add.svelte";
+import {onMount } from "svelte";
+import { writable } from "svelte/store";
+import { addToCollectionBrowse } from "$lib/DjangoAPI";
 
+    let is_authenticated = null;
+    export let notification = writable("");
     export let ingredient: any = {};
-    let isExpanded = false;
+    export let chosenIngredient:any = null;
+
+    onMount(async () => {
+        is_authenticated = sessionStorage.getItem("is_authenticated");
+    });
+
+async function handleAddIngredient(ingredientId:number) {
+    console.log(is_authenticated);
+  if (is_authenticated !== null) {
+    try {
+      const response = await addToCollectionBrowse(ingredientId);
+      notification.set(response);
+    } catch (error) {
+      console.error("Failed to add ingredient to collection");
+      notification.set("Failed to add ingredient to collection");
+}
+  } else {
+    notification.set("you need to be logged in to add ingredients to your collection");
+  }
+}
 </script>
 
-{#if !isExpanded}
-<div id="card-small" class="p-8 rounded-lg shadow-md bg-white min-h-[160px] transition-all group hover:scale-105 hover:text-sky-50 hover:bg-sky-800 hover:shadow-lg"
-on:click={() => isExpanded = !isExpanded}
-role="button"
+
+<button id="card-small" class="p-8 rounded-lg shadow-md bg-white min-h-[160px] transition-all group hover:scale-105 hover:text-sky-50 hover:bg-sky-800 hover:shadow-lg text-left"
+on:mousedown={() => chosenIngredient = ingredient}
 tabindex="0"
-on:keydown={(event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-        isExpanded = !isExpanded;
-    }
-}}
 >
     <div id="top-part" class="flex flex-row items-baseline">
-        <h1 class="text-3xl tracking-tighter font-bold truncate text-sky-800 mr-8 group-hover:text-sky-50">{ingredient.common_name}</h1>
-        <h2 class="ml-auto text-clip opacity-60 min-w-fit group-hover:text-sky-200/60">{ingredient.cas}</h2>
+        <h1 id="top-left" class="text-3xl tracking-tighter font-bold truncate text-sky-800 mr-8 group-hover:text-sky-50">{ingredient.common_name}</h1>
+        <h2 id="top-right" class="ml-auto text-clip opacity-60 min-w-fit group-hover:text-sky-200/60">{ingredient.cas}</h2>
     </div>
-    <div id="left-side" class="w-5/6 mt-4">
-    <p class="text-clip mr-8">
-        {#if ingredient.use}    
-        {ingredient.use}
-        {:else}
-        know how to use this? Submit a suggestion!
-        {/if}
-    </p>
-    <h2 class="mt-[56px] opacity-60 group-hover:text-sky-200/60">{ingredient.descriptors}</h2>
-</div>
-</div>
-{:else}
-<BrowseCardExpanded {ingredient} bind:isExpanded />
-{/if}
+    <div id="bottom-part" class="flex flex-row mt-4">
+        <div id="bottom-left" class="flex flex-col w-2/3 mr-auto">
+            <p class="text-clip mr-8 text-left normal-case h-[100px]">
+                {#if ingredient.use}    
+                    {ingredient.use}
+                {:else}
+                    Know how to use this? Submit a suggestion!
+                {/if}
+            </p>
+           <h2 class="opacity-60 group-hover:text-sky-200/60 justify-start lowercase">{ingredient.descriptors}</h2>
+        </div>
+        <div id="bottom-right" class="flex flex-1 flex-col ml-auto mt-auto items-end">
+            <button class="items-baseline invisible group-hover:visible hove rounded-full hover:bg-sky-50 hover:text-sky-700 p-2" on:mousedown={() => handleAddIngredient(ingredient.id)} on:mousedown|stopPropagation>
+                <Add />
+            </button>
+        </div>
+    </div>
+</button>

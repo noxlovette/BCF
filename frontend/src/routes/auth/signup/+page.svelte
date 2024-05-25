@@ -120,7 +120,7 @@ import { onMount } from 'svelte';
             <div id = 'paperwork' class="flex flex-row items-center justify-between *:m-2 m-4">
                 <a href="/paperwork/terms-of-service" 
                 
-                on:click={() => sessionStorage.setItem('terms', 'true')}
+                on:mousedown={() => sessionStorage.setItem('terms', 'true')}
                 
                 class="dark:hover:text-amber-300/90 hover:text-amber-900/90 ">I agree to the terms of use </a>
                 <input type="checkbox" bind:checked={agreeTerms} class="size-4 ring-2 ring-stone-300/50 rounded-full shadow border-none text-amber-700/90 focus:ring-amber-700/30 checked:bg-amber-700/70 active:scale-90 checked:ring-amber-700/30 hover:checked:bg-amber-700/80 transition-all hover:scale-110" />            
