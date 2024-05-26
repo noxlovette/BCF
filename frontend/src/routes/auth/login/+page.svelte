@@ -39,33 +39,24 @@
   
   
     <div class="mx-auto max-w-[800px] xl:max-w-7xl">
-      <div id = "authentification" class="flex flex-col items-center m-10">
-    
-    <h1 class="text-center text-6xl xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem] font-bold tracking-tight text-pretty"
-    in:scale={{
-      duration: 500,
-      opacity: 0.5,
-      delay: 0,
-      easing: quintOut}}
-    >Welcome back!</h1>
+      <div id = "authentification" class="flex flex-col items-center m-10 p-10">
+        
+
     <form on:submit|preventDefault={handleSubmit} 
     
-    class= "flex flex-col justify-center items-center w-full bg-stone-50/20 dark:bg-stone-950/20 rounded-lg shadow p-4"
+    
+    class= "flex flex-col h-[475px] w-[300px] justify-start items-start bg-white dark:bg-stone-950 rounded-lg shadow p-8"
     in:fade={{
-      duration: 500,
-      delay: 500,
-      easing: quintOut}}
-    >
-      <div id= "username" class="flex flex-col items-center justify-between">      
-          <input id="username-field" type="text" class='flex  bg-stone-50/20 dark:bg-stone-950/20 p-2 w-full m-4 shadow focus:ring-amber-700/70 border-none focus:ring-2 rounded-lg' placeholder = "username" bind:value={username} required />
-      </div>
-      <div id= "password" class="flex flex-col items-center justify-between">
-        <input id="password-field" type="password" class='flex  bg-stone-50/20 dark:bg-stone-950/20 p-2 w-full m-4 shadow focus:ring-amber-700/70 border-none focus:ring-2 rounded-lg' placeholder = "password" bind:value={password} required /> 
-      </div>
-      <button type="submit" class="flex m-2 hover:text-amber-400 transition-all hover:scale-110 active:scale-90">
-          log in
+      duration: 100,
+      easing: quintOut}}>
+      <h1 class="text-6xl mb-8 border-b-2 font-bold tracking-tighter">sign in<span class="text-amber-300">.</span></h1>
+
+        <input id="username-field" type="text" class='w-full p-2 my-4 bg-stone-50 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder = "username" bind:value={username} required />
+        <input id="password-field" type="password" class='w-full p-2 my-2 bg-stone-50 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder = "password" bind:value={password} required /> 
+      <button type="submit" class="text-4xl font-bold tracking-tighter hover:text-amber-400 transition-all active:scale-90">
+          go
       </button>
-      <a href="/auth/signup" class= "p-2 text-xs hover:text-amber-400 transition-all hover:scale-110 active:scale-90"> don't have an account?</a>
+      <a href="/auth/signup" class= "flex text-sm mt-auto opacity-60 hover:text-amber-400 hover:opacity-100 transition-all"> don't have an account?</a>
       
       
     </form>
