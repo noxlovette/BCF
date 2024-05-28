@@ -8,11 +8,12 @@
   import Header from "$lib/components/Header.svelte";
   import Footer from "$lib/components/Footer.svelte";
   import Loader from "$lib/components/Loader.svelte";
+  import BrowseCardExpanded from "$lib/components/BrowseCardExpanded.svelte";
   import BrowseCard from "$lib/components/BrowseCard.svelte";
-  import ArrowLeftIcon from "./ArrowLeftIcon.svelte";
-    import ArrowRightIcon from "./ArrowRightIcon.svelte";
-    import ResetIcon from "./ResetIcon.svelte";
-    import BrowseCardExpanded from "$lib/components/BrowseCardExpanded.svelte";
+
+  import ArrowLeftIcon from "$lib/icons/ArrowLeftIcon.svelte";
+  import ArrowRightIcon from "$lib/icons/ArrowRightIcon.svelte";
+  import ResetIcon from "$lib/icons/ResetIcon.svelte";
 
 
   export let data: any = null;
@@ -158,7 +159,6 @@ async function fetchWithDescriptors() {
 
   async function changePage(increment) {
     if ($currentPage + increment >= 1 && $currentPage + increment <= (data as { total_pages: number }).total_pages) {
-      
       currentPage.update((value) => value + increment);
       notification.set(`you are on page ${$currentPage}/${(data as { total_pages: number }).total_pages}`);
       goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
@@ -204,7 +204,7 @@ function toggleOverlay() {
   <title>BCF | Browse</title>
 </svelte:head>
 
-<div class="flex flex-col min-h-screen z-0" style="background: url('/assets/bg/bbblurry-browse.svg') no-repeat center center fixed; background-size: cover;">
+<div class="flex flex-col min-h-screen z-0" style="">
   <button 
     id="overlay" 
     class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-20 backdrop-blur z-30 transition-all bg-blend-darken" 
@@ -222,7 +222,7 @@ function toggleOverlay() {
     <div id = "app" class="flex flex-col items-center lowercase my-8">
       <form id="search-bar" class="justify-center max-w-5xl flex w-full px-12 space-x-4 items-center group">
        
-        <button on:mousedown={toggleFilterMenu} title="filter by descriptors" class="rounded-lg p-2 text-center bg-sky-700 text-sky-50 hover:text-stone-800 hover:bg-white transition-all shadow hover:shadow-lg">
+        <button on:mousedown={toggleFilterMenu} title="filter by descriptors" class="rounded-lg border border-sky-700 p-2 text-center bg-sky-700 text-sky-50 active:shadow-none hover:text-stone-800 hover:bg-white transition-all shadow hover:shadow-lg">
           {#if showFilterMenu}
             ingredients
           {:else}
@@ -232,7 +232,7 @@ function toggleOverlay() {
           {#if showFilterMenu}
         <input
           type="text"
-          class = "w-[600px] shadow border-none bg-white dark:bg-black focus:ring-amber-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+          class = "w-[600px] shadow border-none bg-white dark:bg-black focus:ring-sky-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
 
           bind:this = {searchInput}
           bind:value = {searchTermDescriptor}
@@ -255,26 +255,26 @@ function toggleOverlay() {
         />
           {/if}
             
-        <button on:mousedown={reset} title="reset everything" class="rounded-full bg-sky-700 text-sky-50 p-2 shadow">
+        <button on:mousedown={reset} title="reset everything" class="rounded-full hover:shadow-lg active:shadow-none bg-sky-700 border-sky-700 border hover:bg-white hover:text-sky-700 text-sky-50 p-2 shadow">
           <ResetIcon />
         </button>
 
         <label class="items-center md:text-md sm:text-sm mr-auto opacity-60 hover:opacity-100 transition-opacity group">
           per page:
-          <input type="number" class='w-1/3 group-hover:shadow border-none focus:ring-amber-400/70 focus:ring-2 rounded-lg' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
+          <input type="number" class='w-1/3 group-hover:shadow border-none focus:ring-sky-400/70 focus:ring-2 rounded-lg' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
         </label>
 
         
-        <div id="pagination" class="flex group justify-center items-center w-[100px] rounded-full bg-sky-700 text-sky-50 p-2 shadow {showFilterMenu || ($currentPage <= 1 && $currentPage >= data.total_pages) ? 'invisible' : 'visible'}"
+        <div id="pagination" class="flex hover:text-sky-700 justify-center items-center w-[100px] rounded-full active:shadow-none hover:bg-white border border-sky-700 bg-sky-700 text-sky-50 p-2 shadow {showFilterMenu || ($currentPage <= 1 && $currentPage >= data.total_pages) ? 'invisible' : 'visible'}"
 
         >
           {#if !showFilterMenu && $currentPage > 1}
-          <button id="prevPage" on:mousedown={() => changePage(-1)} class="">
+          <button id="prevPage" on:mousedown={() => changePage(-1)} class="active:scale-90 transition-all hover:-translate-x-2">
               <ArrowLeftIcon />
           </button>
           {/if}
           {#if !showFilterMenu && $currentPage < data.total_pages}
-          <button id="nextPage" on:mousedown={() => changePage(1)} class="">
+          <button id="nextPage" on:mousedown={() => changePage(1)} class="active:scale-90 transition-all hover:translate-x-2">
               <ArrowRightIcon />
           </button>
           {/if}
@@ -297,7 +297,7 @@ function toggleOverlay() {
           <p class="text-2xl">hm. try a different search?</p>
           
         {:else}
-        <div id="table bg" class="rounded-lg p-8"
+        <div id="wrapper" class="rounded-lg p-8"
         in:blur={{duration: 150}}
         >
 
@@ -312,7 +312,7 @@ function toggleOverlay() {
               <label class="md:text-md sm:text-sm lg:text-base" title={descriptor.description}>
             <input class= 
             "mx-2
-            size-4 rounded-full shadow border-none text-amber-600/90 focus:ring-amber-400/30 checked:bg-amber-700/70 checked:ring-amber-700/30 hover:checked:bg-amber-600/80 transition-all hover:scale-110" 
+            size-4 rounded-full shadow border-none text-sky-600/90 focus:ring-sky-400/30 checked:bg-sky-700/70 checked:ring-sky-700/30 hover:checked:bg-sky-600/80 transition-all hover:scale-110" 
             type="checkbox" id={descriptor.name} bind:group={chosenDescriptors} value={descriptor}/>
             {descriptor.name}
             </label>

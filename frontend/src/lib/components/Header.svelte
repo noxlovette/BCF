@@ -109,7 +109,7 @@ $: {
 
         {#if $notification}
           <div class="ml-auto mr-10 content-center font-normal lowercase z-50"
-          out:fade={{duration: 150}}       
+          out:fade={{duration: 150}}
           >
             <p class = "">
               {$notification}
@@ -140,7 +140,7 @@ $: {
             </button>
           {:else}
             <a href="/auth/login" class=" hover:text-amber-300 transition-all" >login</a>
-            <a href="/auth/signup" class=" hover:bg-stone-50 hover:text-amber-700 transition-all rounded-lg shadow bg-amber-300 text-stone-900 p-2" >sign up</a>
+            <a href="/auth/signup" class=" hover:bg-stone-50 hover:text-amber-300 transition-all rounded-lg shadow bg-amber-300 text-stone-900 p-2" >sign up</a>
           {/if}
         </div>
     </div>
@@ -158,17 +158,17 @@ $: {
               class="z-10"
             >
               <ul class= "flex space-x-5">
-                <li class="hover:text-sky-300/80 transition-all">
+                <li class="hover:text-sky-700 transition-all">
                   <a href="/browse"
                   >
                     browse
                   </a>
                 </li>
-                <li class=" hover:text-pink-400/80 transition-all">
+                <li class=" hover:text-pink-700 transition-all">
                   <a href="/collect" 
                   >collect</a>
                 </li>
-                <li class=" hover:text-lime-500/80 transition-all">
+                <li class=" hover:text-lime-700 transition-all">
                   <a href="/formulate" 
                   >formulate</a>
                 </li>

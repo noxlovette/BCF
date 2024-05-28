@@ -4,9 +4,8 @@ import Suggestion from '$lib/components/svg/Suggestion.svelte';
 import { addSuggestionBrowse, addToCollectionBrowse } from '$lib/DjangoAPI';
 import { writable } from 'svelte/store';
 import { onMount } from 'svelte';
-    import CancelButton from '../../routes/browse/CancelButton.svelte';
-    import SaveButton from '../../routes/browse/SaveButton.svelte';
-    import Button from './Button.svelte';
+    import CancelButton from '$lib/icons/CancelButton.svelte';
+    import SaveButton from '$lib/icons/SaveButton.svelte';
 
 export let ingredient: any = {};
 export let notification = writable("");

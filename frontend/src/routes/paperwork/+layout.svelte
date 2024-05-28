@@ -10,7 +10,7 @@
     <svelte:head>
   <title>BCF | Paperwork</title>
 </svelte:head>
-    <div class="flex flex-col min-h-screen" style="background: url('/assets/bg/bbblurry-paperwork.svg') no-repeat center center fixed; background-size: cover;">
+    <div class="flex flex-col min-h-screen" >
     <Header currentPage="paperwork" notification = {notification} />
     <div class="mb-auto">
         <slot></slot>

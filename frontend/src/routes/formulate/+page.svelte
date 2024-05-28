@@ -70,7 +70,7 @@
   <title>BCF | Formulate</title>
 </svelte:head>
 
-<div class=" flex flex-col min-h-screen" style="background: url('/assets/bg/bbblurry-formulate.svg') no-repeat center center fixed; background-size: cover;">
+<div class=" flex flex-col min-h-screen">
   <Header currentPage="formulate" notification = {notification}/>
   <div class="mb-auto flex justify-center items-center">
     {#if isLoading}

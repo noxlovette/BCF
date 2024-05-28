@@ -12,18 +12,18 @@ class CollectionIngredientSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
 
-    amount = serializers.IntegerField()
+    amount = serializers.IntegerField(required=False)
     unit = serializers.CharField()
     date_added = DateTimeSerializer(read_only=True)
 
-    impression = serializers.CharField(allow_null=True, allow_blank=True, source='_impression')
-    ideas = serializers.CharField(allow_null=True, allow_blank=True, source='_ideas')
-    associations = serializers.CharField(allow_null=True, allow_blank=True, source='_associations')
-    colour = serializers.CharField(allow_null=True, allow_blank=True, source='_colour')
+    impression = serializers.CharField(allow_null=True, allow_blank=True, source='_impression', required=False)
+    ideas = serializers.CharField(allow_null=True, allow_blank=True, source='_ideas', required=False)
+    associations = serializers.CharField(allow_null=True, allow_blank=True, source='_associations', required=False)
+    colour = serializers.CharField(allow_null=True, allow_blank=True, source='_colour', required=False)
     common_name = serializers.CharField(source='_common_name')
-    cas = serializers.CharField(source='_cas', allow_null=True, allow_blank=True)
-    volatility = serializers.CharField(source='_volatility', allow_null=True, allow_blank=True)
-    use = serializers.CharField(source='_use', allow_null=True, allow_blank=True)
+    cas = serializers.CharField(source='_cas', allow_null=True, allow_blank=True, required=False)
+    volatility = serializers.CharField(source='_volatility', allow_null=True, allow_blank=True, required=False)
+    use = serializers.CharField(source='_use', allow_null=True, allow_blank=True, required=False)
 
     class Meta:
         fields = ['type', 'id', 'common_name', 'cas', 'volatility', 'use', 'date_added', 'colour', 'impression',

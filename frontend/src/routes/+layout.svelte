@@ -34,7 +34,7 @@
 </svelte:head>
 
 
-<div class="text-stone-800/80 bg-stone-50 dark:text-stone-100/80 dark:bg-stone-900 antialiased min-h-screen w-screen">
+<div class="text-stone-800 dark:text-stone-100 dark:bg-stone-900 antialiased min-h-screen w-screen bg-orange-50/40">
   <slot />
 </div>
 

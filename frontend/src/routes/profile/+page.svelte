@@ -71,7 +71,7 @@
 <svelte:head>
   <title>BCF | Profile</title>
 </svelte:head>
-<div class="flex flex-col min-h-screen z-0" style="background: url('/assets/bg/bbblurry-auth.svg') no-repeat center center fixed; background-size: cover;">
+<div class="flex flex-col min-h-screen z-0">
     <Header currentPage="profile" notification={notification}/>
     <div class="mb-auto flex justify-center items-center">
     

@@ -68,7 +68,9 @@ tabindex="0"
            <h2 class="opacity-60 group-hover:text-sky-200/60 justify-start lowercase">{ingredient.descriptors}</h2>
         </div>
         <div id="bottom-right" class="flex flex-1 flex-col ml-auto mt-auto items-end">
-            <button class="items-baseline invisible group-hover:visible rounded-full hover:transition-all hover:bg-sky-50 hover:text-sky-700 p-2 {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}" on:mousedown={() => handleAddIngredient(ingredient.id)} on:mousedown|stopPropagation>
+            <button class="items-baseline invisible group-hover:visible rounded-full hover:transition-all hover:bg-sky-50 hover:text-sky-700 p-2 
+            {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}" 
+            on:mousedown={() => handleAddIngredient(ingredient.id)} on:mousedown|stopPropagation>
                 <Add />
             </button>
         </div>

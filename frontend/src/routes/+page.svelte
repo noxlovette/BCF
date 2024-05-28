@@ -77,114 +77,82 @@ function startNotificationInterval() {
 <svelte:head>
   <title>BCF</title>
 </svelte:head>
-<div class="min-h-screen w-screen" style="background: url('/assets/bg/bbblurry-main.svg') no-repeat center center fixed; background-size: cover;">
+<div class="min-h-screen w-screen" style="">
 
   <Header 
     currentPage="BCF" 
     notification={notification}  
   />
   <div class="mb-auto">
-    <div class="py-12 sm:py-8 md:py-12 lg:py-14 xl:py-12 2xl:py-28">
+    <div class="flex flex-col py-12 sm:py-8 md:py-12 2xl:py-28 justify-center items-center">
 
 
     <BigText text = {bigText} />
     
     
-    <div id="blabla" class="py-6 sm:py-4 md:py-6 lg:py-7 xl:py-6 2xl:py-14"
-    in:fade={{duration: 500, delay: 1500}}
+    <div id="blabla" class="flex flex-col justify-center items-center my-8 py-4 md:py-8 2xl:py-16 max-w-md sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl"
+    in:fade={{duration: 300, delay: 300}}
     >
+    <section id="browse" class="mx-auto aspect-[16/9] w-full h-[600px] rounded-lg grid grid-cols-1 bg-cover bg-center justify-center items-center gap-8 px-4 py-8 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:gap-x-12 md:py-16 lg:py-24 text-pretty" 
+    style="background-image: url('/assets/img/dalle-browse-4.webp')">
+    <div class="hidden lg:block lg:col-span-1">
+      <!-- Empty on large screens to maintain grid layout -->
+    </div>
+    <div class="flex flex-col justify-center items-center text-center lg:text-left backdrop-blur-lg bg-white/70 p-8 lg:p-12 rounded-lg hover:bg-white hover:shadow-lg transition-all group">
+      <a href="/browse" class="z-10">
+        <h2 class="text-3xl font-bold group-hover:text-sky-700 group-hover:dark:text-sky-400 md:text-3xl lg:text-4xl mb-4">
+          Browse over 3100 ingredients.
+        </h2>
+      </a>
+      <p class="group-hover:text-sky-800 group-hover:dark:text-sky-200 md:text-lg lg:text-xl xl:text-2xl max-w-2xl">
+        Use the power of IFRA's FIG in an unprecedented way. Industry-level data, supported by the opinions of real perfumers.
+        This is the place where the hidden becomes apparent, and your expertise grows. <b>You contribute</b>, and you <b>benefit</b>.
+      </p>
+    </div>
+      
+    </section>
     
-      <section id="browse" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty"      
-      >
-        <div class="mx-auto flex max-w-[800px] flex-col gap-2 xl:max-w-full text-center xl:text-right md:text-lg lg:text-xl xl:text-2xl">
-          <a href="/browse">
-          <h2 class="mb-2 w-full text-3xl font-bold text-sky-950 dark:text-sky-400 md:text-3xl lg:text-4xl">
-            Browse over 3100 ingredients.
-          </h2>
-        </a>
-          <p class="mx-auto max-w-3xl text-sky-800 dark:text-sky-200">
-            Use the power of IFRA's FIG in an unprecedented way. The whole Browse page is supercharged with the community's input and the structure of the Association.
-          </p>
-          <p class="mx-auto max-w-3xl text-sky-800 dark:text-sky-200">
-            Industry-level data, supported by the opinions of real perfumers.
-          </p>
-          <p class="mx-auto max-w-3xl text-sky-800 dark:text-sky-200">
-            This is the place where the hidden becomes apparent, and your expertise grows. <b>You contribute</b>, and you <b>benefit</b>.
-          </p>
-        </div>
-        <div class="min-h-[300px] md:min-h-[400px]"> 
-          <img
-            src="/assets/img/dalle-browse-4.webp"
-            alt="A collection of ingredients"
-            class="w-full h-full object-cover rounded-lg shadow-lg"
-            in:fade={{
-              duration: 500,
-              delay: 1000
-            }}
-          />
-        </div>
-      </section>
 
     
-      <section id="collect" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty">
-        <div class="min-h-[300px] md:min-h-[400px]"> 
-          <img
-            src="/assets/img/dalle-collect-1.webp"
-            alt="A collection of ingredients"
-            class="w-full h-full object-cover rounded-lg shadow-lg"
-            in:fade={{
-              duration: 500,
-              delay: 1500
-            }}
-          />
-        </div>
-        <div class="mx-auto flex max-w-[800px] flex-col gap-2 xl:max-w-full text-center xl:text-left md:text-lg lg:text-xl xl:text-2xl">
+    <section id="browse" class="mx-auto aspect-[16/9] my-12 w-full h-[600px] rounded-lg grid grid-cols-1 bg-cover bg-center items-center gap-8 px-4 py-8 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:gap-x-12 md:py-16 lg:py-24 text-pretty" 
+    style="background-image: url('/assets/img/dalle-collect-1.webp')">
+        
+    <div class="flex flex-col justify-center items-center text-center lg:text-right backdrop-blur-lg bg-white/70 p-8 lg:p-12 rounded-lg group hover:bg-white hover:shadow-lg transition-all group">
           <a href="/collect">
-          <h2 class="mb-2 w-full text-3xl font-bold text-rose-950 dark:text-rose-400 md:text-3xl lg:text-4xl">
-            Collect hundreds of perfume compounds.
+          <h2 class="text-3xl font-bold group-hover:text-rose-700 group-hover:dark:text-rose-400 md:text-3xl lg:text-4xl mb-4">
+            Collect hundreds of compounds.
           </h2>
         </a>
-          <p class="mx-auto max-w-3xl text-rose-800 dark:text-rose-200 ">
+          <p class="md:text-lg lg:text-xl xl:text-2xl max-w-2xl group-hover:text-rose-800 group-hover:dark:text-rose-200 ">
             Keep track of your favourite ingredients and the ones you want to try.
-          </p>
-          <p class="mx-auto max-w-3xl text-rose-800 dark:text-rose-200 ">
             Note down ideas, associations, and inspirations. Everything from colour to availability in your lab.
-          </p>
-          <p class="mx-auto max-w-3xl text-rose-800 dark:text-rose-200 ">
             Your collection is your world only. <b>Encrypted, it is only yours to enjoy.</b>
           </p>
+        </div>
+        <div class="hidden lg:block lg:col-span-1">
+          <!-- Empty on large screens to maintain grid layout -->
         </div>
         
       </section>
 
 
-      <section id="formulate" class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-12 sm:px-6 lg:grid lg:gap-x-8 lg:px-8 xl:grid-cols-2 xl:gap-x-12 py-8 md:py-16 lg:py-24 text-pretty">
-        <div class="mx-auto flex max-w-[800px] flex-col gap-2 xl:max-w-full text-center xl:text-right md:text-lg lg:text-xl xl:text-2xl">
+      <section id="formulate" class="mx-auto aspect-[16/9] my-12 w-full h-[600px] rounded-lg grid grid-cols-1 bg-cover bg-center items-center gap-8 px-4 py-8 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:gap-x-12 md:py-16 lg:py-24 text-pretty" 
+    style="background-image: url('/assets/img/dalle-formulate-1.webp')">
+    
+    <div class="flex flex-col justify-center items-center text-center lg:text-right backdrop-blur-lg bg-white/70 p-8 lg:p-12 rounded-lg hover:bg-white hover:shadow-lg transition-all group">
           <a href="/formulate">
-          <h2 class="mb-2 w-full text-3xl font-bold text-lime-950 dark:text-lime-400 md:text-3xl lg:text-4xl">
+          <h2 class="mb-4 w-full text-3xl font-bold group-hover:text-lime-700 group-hover:dark:text-lime-400 md:text-3xl lg:text-4xl">
             Formulate a revolution.
           </h2>
         </a>
-          <p class="mx-auto max-w-3xl text-lime-800 dark:text-lime-200">
+          <p class="md:text-lg lg:text-xl xl:text-2xl max-w-2xl group-hover:text-lime-800 group-hover:dark:text-lime-200">
             Manage your formulas independent of where you are. At home, in the lab, or on holiday.
-          </p>
-          <p class="mx-auto max-w-3xl text-lime-800 dark:text-lime-200">
             Focus on how to make your ideas come true, and not on where to store them.
-          </p>
-          <p class="mx-auto max-w-3xl text-lime-800 dark:text-lime-200">
             Make a difference. <b>Change</b> the landscape of <b> perfumery today.</b>
           </p>
         </div>
-        <div class="min-h-[300px] md:min-h-[400px]"> 
-          <img
-            src="/assets/img/dalle-formulate-1.webp"
-            alt="A collection of ingredients"
-            class="w-full h-full object-cover rounded-lg shadow-lg"
-            in:fade={{
-              duration: 500,
-              delay: 1500
-            }}
-          />
+        <div class="hidden lg:block lg:col-span-1">
+          <!-- Empty on large screens to maintain grid layout -->
         </div>
       </section>
 
