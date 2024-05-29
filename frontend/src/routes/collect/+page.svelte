@@ -184,7 +184,7 @@ onMount( async () => {
 <div class="flex flex-col min-h-screen z-0" style="">
   <button 
     id="overlay" 
-    class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-20 backdrop-blur z-30 transition-all bg-blend-darken" 
+    class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-stone-900 bg-opacity-20 backdrop-blur z-30 transition-all bg-blend-darken" 
     class:hidden={!chosenIngredient} 
     on:mousedown={toggleOverlay}
     aria-label="Toggle Overlay"
@@ -196,16 +196,18 @@ onMount( async () => {
 
 
   <Header currentPage="collect" notification = {notification}/>
+
+
   <div class="mb-auto">
-    <div id = "app" class="flex flex-col items-center lowercase my-8">
+    <div id = "app" class="flex flex-col items-center lowercase my-8 caret-rose-700">
       <form id="search-bar" class="justify-center max-w-5xl flex w-full px-12 space-x-4 items-center group">
-        <button class="rounded-full bg-rose-700 text-rose-50 p-2 shadow active:shadow-none hover:bg-white border border-rose-700 hover:shadow-lg hover:text-rose-700 transition-all"
+        <button class="rounded-full bg-rose-700 text-rose-50 p-2 shadow active:shadow-none hover:bg-white dark:hover:bg-stone-800 border border-rose-700 hover:shadow-lg hover:text-rose-700 transition-all"
         on:mousedown={feedCustomIngredient}>
         <AddCrossIcon />
         </button>
         <input
           type="text"
-          class = "w-[600px] shadow border-none bg-white dark:bg-black focus:ring-rose-700/60 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+          class = "w-[600px] shadow border-none bg-white dark:bg-stone-800 focus:ring-rose-700/60 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
           bind:value={$searchTerm}
           bind:this={searchInput}
           on:input={handleSearchCollection}
@@ -213,17 +215,17 @@ onMount( async () => {
           title="find an ingredient by CAS or the multiple names that it might have"
         />
             
-        <button on:mousedown={reset} title="reset everything" class="rounded-full bg-rose-700 text-rose-50 p-2 shadow active:shadow-none hover:bg-white border border-rose-700 hover:shadow-lg hover:text-rose-700 transition-all">
+        <button on:mousedown={reset} title="reset everything" class="rounded-full bg-rose-700 text-rose-50 p-2 shadow active:shadow-none hover:bg-white dark:hover:bg-stone-800 border border-rose-700 hover:shadow-lg hover:text-rose-700 transition-all">
           <ResetIcon />
         </button>
 
         <label class="items-center md:text-md sm:text-sm mr-auto opacity-60 hover:opacity-100 transition-opacity group">
           per page:
-          <input type="number" class='w-1/3 group-hover:shadow border-none focus:ring-rose-400/70 focus:ring-2 rounded-lg' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
+          <input type="number" class='w-1/3 group-hover:shadow border-none focus:ring-rose-400/70 focus:ring-2 rounded-lg dark:bg-stone-800' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
         </label>
 
         
-        <div id="pagination" class="flex group active:shadow-none hover:bg-white border border-rose-700 hover:shadow-lg hover:text-rose-700 transition-all justify-center items-center w-[100px] rounded-full bg-rose-700 text-rose-50 p-2 shadow {($currentPage <= 1 && $currentPage >= totalPages) ? 'invisible' : 'visible'}"
+        <div id="pagination" class="flex group active:shadow-none hover:bg-white dark:hover:bg-stone-800 border border-rose-700 hover:shadow-lg hover:text-rose-700 transition-all justify-center items-center w-[100px] rounded-full bg-rose-700 text-rose-50 p-2 shadow {($currentPage <= 1 && $currentPage >= totalPages) ? 'invisible' : 'visible'}"
 
         >
           {#if $currentPage > 1}
@@ -244,7 +246,7 @@ onMount( async () => {
 {#if isLoading || collection === null}
 <Loader />
 {:else if filteredCollection.length === 0}
-<p class="text-2xl">hm. try a different search?</p>
+<p class="text-5xl mt-12">hm. try a different search?</p>
   {:else}
   
   <div id="wrapper" class="rounded-lg p-8"
@@ -265,6 +267,7 @@ onMount( async () => {
   </div>
 
 </div>
-<Footer />
 </div>
+<Footer />
+
 </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
-import Add from '$lib/components/svg/Add.svelte';
-import Suggestion from '$lib/components/svg/Suggestion.svelte';
+import Add from '$lib/icons/Add.svelte';
+import Suggestion from '$lib/icons/Suggestion.svelte';
 import { addSuggestionBrowse, addToCollectionBrowse } from '$lib/DjangoAPI';
 import { writable } from 'svelte/store';
 import { onMount } from 'svelte';
@@ -103,7 +103,7 @@ $: if (buttonSuccess || buttonError) {
     </script>
 
 {#if ingredient !== null}
-<button id="card-big" class="flex flex-col p-8 rounded-lg shadow-lg bg-white h-[275] w-[475px] md:h-[475px] md:w-[768px] transition-all border-sky-950 z-50 text-left cursor-default select-text selection:bg-sky-300/40 caret-sky-700" 
+<button id="card-big" class="flex flex-col p-8 rounded-lg shadow-lg bg-white dark:bg-zinc-800 h-[275] w-[475px] md:h-[475px] md:w-[768px] transition-all border-sky-950 z-50 text-left cursor-default select-text selection:bg-sky-300/40 caret-sky-700" 
 
 on:mousedown|stopPropagation>
     <div id="top-part" class="flex flex-row items-baseline border-b w-full">
@@ -112,14 +112,14 @@ on:mousedown|stopPropagation>
                 {#if !showSuggestion}
                     {ingredient.common_name}
                 {:else}
-                    <input type="text" class="w-full p-0 text-4xl tracking-tighter font-bold text-sky-800 focus:ring-0 border-none ring-0" bind:value={suggestedIngredient.common_name} placeholder="names" />
+                    <input type="text" class="w-full p-0 text-4xl tracking-tighter font-bold text-sky-800 focus:ring-0 border-none ring-0  dark:bg-zinc-800" bind:value={suggestedIngredient.common_name} placeholder="names" />
                 {/if}
                 </h1>
             <h2 class="text-sm opacity-60 lowercase w-full">
                 {#if !showSuggestion}
                     {ingredient.descriptors}
                 {:else}
-                    <textarea class="w-full p-0 text-sm focus:ring-0 border-none ring-0" bind:value={suggestedIngredient.other_names} placeholder="other names" />
+                    <textarea class="w-full p-0 text-sm focus:ring-0 border-none ring-0  dark:bg-zinc-800" bind:value={suggestedIngredient.other_names} placeholder="other names" />
                 {/if}
             </h2>
         </div>
@@ -133,7 +133,7 @@ on:mousedown|stopPropagation>
                         volatile
                 {/if}
                 {:else}
-                    <input type="text" class="w-full p-0 text-sm focus:ring-0 border-none ring-0" bind:value={suggestedIngredient.volalitliy} placeholder="volalitliy" />
+                    <input type="text" class="w-full p-0 text-sm focus:ring-0 border-none ring-0 dark:bg-zinc-800" bind:value={suggestedIngredient.volalitliy} placeholder="volalitliy" />
                 {/if}
             </h2>
         </div>
@@ -149,7 +149,7 @@ on:mousedown|stopPropagation>
         Do you know how to use this ingredient? Submit a suggestion!
         {/if}
         {:else}
-            <textarea class="w-full p-0 focus:ring-0 border-none ring-0" bind:value={suggestedIngredient.use} placeholder="how to use this ingredient?" />
+            <textarea class="w-full p-0 focus:ring-0 border-none ring-0 dark:bg-zinc-800" bind:value={suggestedIngredient.use} placeholder="how to use this ingredient?" />
         {/if}
     </p>
     <div class="flex flex-col items-start mt-auto">
@@ -164,7 +164,7 @@ on:mousedown|stopPropagation>
             none for now
         {/if}
         {:else}
-            <textarea class="w-full p-0 focus:ring-0 border-none ring-0" bind:value={suggestedIngredient.similar_ingredients} placeholder="similar ingredients" />
+            <textarea class="w-full p-0 focus:ring-0 border-none ring-0 dark:bg-zinc-800" bind:value={suggestedIngredient.similar_ingredients} placeholder="similar ingredients" />
         {/if}
     </p>
 </div>
@@ -184,7 +184,7 @@ on:mousedown|stopPropagation>
                 unknown
             {/if}
         {:else}
-            <input type="text" class="w-full p-0 text-sm focus:ring-0 border-none ring-0" bind:value={suggestedIngredient.origin} placeholder="origin" />
+            <input type="text" class="w-full p-0 text-sm focus:ring-0 border-none ring-0 dark:bg-zinc-800" bind:value={suggestedIngredient.origin} placeholder="origin" />
         {/if}
     </p>
 
@@ -203,7 +203,7 @@ on:mousedown|stopPropagation>
         not restricted
         {/if}
         {:else}
-        <input type="text" class="w-full p-0 text-sm focus:ring-0 border-none ring-0" bind:value={suggestedIngredient.is_restricted} placeholder="restricted?" />
+        <input type="text" class="w-full p-0 text-sm focus:ring-0 border-none ring-0 dark:bg-zinc-800" bind:value={suggestedIngredient.is_restricted} placeholder="restricted?" />
         {/if}
     </p>
 </li>

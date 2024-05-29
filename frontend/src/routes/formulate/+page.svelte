@@ -7,6 +7,7 @@
   import Footer from "$lib/components/Footer.svelte";
   import Loader from "$lib/components/Loader.svelte";
   import FormulaDetail from "./FormulaDetail.svelte";
+    import AddCrossIcon from "$lib/icons/AddCrossIcon.svelte";
   
   // main functionality
   let formulae = null;
@@ -76,44 +77,40 @@
     {#if isLoading}
     <Loader />
     {:else}
-    <div id="app" class="flex flex-row rounded-lg shadow items-stretch size-5/6 h-[600px] p-8 m-12 text-amber-950/90 dark:text-amber-200/80 bg-amber-600/30"
+    <div id="app" class="flex flex-row rounded-lg items-stretch w-[1200px] h-[600px] my-12 text-lime-950  caret-lime-700 select-text selection:bg-lime-300"
     in:fade={{duration: 150}}
     >
-  <div id="sidebar" class="flex flex-col w-1/5 mr-auto bg-lime-800/70 dark:bg-lime-900/70 text-amber-100/90 rounded-lg drop-shadow p-8 transition-all duration-500"
+
+
+  <div id="sidebar" class="flex flex-col rounded-lg transition-all text-lime-50 w-[180px]"
   in:fade={{delay:150, duration: 150}}
   >
-    <h2 id="formula-header" class= "xl:text-4xl lg:text-2xl md:text-base font-semibold mb-8 border-b-2 border-amber-100/20">my formulae</h2>
-    <ul id="formulate-list" class= "divide-y-8 divide-amber-100/20 items-start flex flex-col">
+    <ul id="formulate-list" class= "items-start flex flex-col space-y-2">
       {#each formulae as formula}
         <button class:active={formula.id === activeFormulaId} 
         id="formula-item" 
-        class="flex text-left flex-col w-5/6 hover:translate-x-1 active:scale-95 hover:bg-amber-50/80 hover:text-amber-800/80 dark:hover:bg-amber-400/30 dark:hover:text-amber-200 hover:rounded-lg hover:shadow p-2 transition-all duration-150" 
+        class="flex text-left w-full group bg-lime-700 flex-col active:scale-95 hover:bg-lime-50 hover:text-lime-950 dark:hover:bg-lime-400 dark:hover:text-lime-200 rounded-lg hover:shadow p-2 transition-all" 
         on:mousedown={() => viewFormula(formula.id)} 
         title={formula.description}
         
         >
-          <p id="formula-name" class="font-semiboldtext-lg">{formula.name}</p>
-          <p id="formula-edit-time" class="font-bold text-sm">{formula.updated}</p>
+          <p id="formula-name" class="font-bold text-lg w-full truncate">{formula.name}</p>
+          <p id="formula-edit-time" class="text-sm invisible group-hover:visible">{formula.updated}</p>
         </button>
       {/each}
       {#if formulae.length === 0}
       <button id="formula-item"
-      
-      
-      class="flex flex-col text-2xl hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:mousedown={handleCreateFormula}>make it your first</button>
+      class="flex flex-col text-2xl hover:bg-lime-600 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:mousedown={handleCreateFormula}>make it your first</button>
         {:else}
-        
       <button id="formula-item"
       title="create new formula"
-      class="flex w-full hover:bg-amber-600/30 hover:rounded-lg hover:shadow p-4 transition-all hover:scale-105 active-scale-90 duration-500 border-dashed border" on:mousedown={handleCreateFormula}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-        </svg>
+      class="flex rounded-full hover:bg-lime-700  p-2 items-center mt-auto text-lime-950 hover:text-lime-50 w-fit transition-all active-scale-90" on:mousedown={handleCreateFormula}>
+        <AddCrossIcon />
       </button>
       {/if}
     </ul>
   </div>
-  <div id="main-content" class="flex flex-row items-center justify-center flex-1 p-8 bg-amber-50/80 dark:bg-amber-800/10 rounded-lg shadow ml-4">
+  <div id="main-content" class="flex flex-row items-center justify-center flex-1 bg-white dark:bg-stone-800 rounded-lg shadow-md ml-8">
     {#if formulaDetail}
     <FormulaDetail bind:formulae bind:formulaDetail bind:notification />
     {:else}
@@ -131,11 +128,9 @@
 
 <style>
   .active {
-    @apply bg-amber-50/90;
-    @apply text-amber-900/90;
-    @apply dark:bg-amber-800/40;
-    @apply dark:text-amber-100/80;
-    @apply rounded-lg;
-    @apply shadow;
+    @apply bg-lime-600;
+    @apply dark:bg-lime-800/40;
+    @apply dark:text-lime-100/80;
+    @apply shadow-inner;
   }
 </style>

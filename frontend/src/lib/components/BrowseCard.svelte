@@ -1,5 +1,5 @@
 <script lang="ts">
-import Add from "./svg/Add.svelte";
+import Add from "../icons/Add.svelte";
 import {onMount } from "svelte";
 import { writable } from "svelte/store";
 import { addToCollectionBrowse } from "$lib/DjangoAPI";
@@ -48,7 +48,7 @@ $: if (buttonSuccess || buttonError) {
 </script>
 
 
-<button id="card-small" class="p-8 rounded-lg shadow-md bg-white min-h-[160px] transition-all group hover:scale-105 hover:text-sky-50 hover:bg-sky-800 hover:shadow-lg text-left"
+<button id="card-small" class="p-8 rounded-lg shadow-md bg-white dark:bg-zinc-800 min-h-[160px] transition-all group hover:scale-105 hover:text-sky-50 hover:bg-sky-800 hover:shadow-lg text-left"
 on:mousedown={() => chosenIngredient = ingredient}
 tabindex="0"
 >

@@ -1,5 +1,5 @@
 <script lang="ts">
-import Suggestion from '$lib/components/svg/Suggestion.svelte';
+import Suggestion from '$lib/icons/Suggestion.svelte';
 import { writable } from 'svelte/store';
 import CancelButton from '$lib/icons/CancelButton.svelte';
 import SaveButton from '$lib/icons/SaveButton.svelte';
@@ -92,7 +92,7 @@ async function handleCreateCustomIngredient(newCustom) {
     </script>
 
 {#if ingredient !== null}
-<button id="card-big" class="flex flex-col p-8 rounded-lg shadow-lg bg-white h-[275] w-[475px] md:h-[475px] md:w-[768px] transition-all border-rose-950 z-50 text-left cursor-default select-text selection:bg-rose-300/40 caret-rose-700" 
+<button id="card-big" class="flex flex-col p-8  rounded-lg shadow-lg bg-white dark:bg-stone-800 h-[275] w-[475px] md:h-[475px] md:w-[768px] transition-all border-rose-950 z-50 text-left cursor-default select-text selection:bg-rose-300/40 caret-rose-700" 
 
 on:mousedown|stopPropagation>
     <div id="top-part" class="flex flex-row items-baseline border-b w-full">
@@ -101,7 +101,7 @@ on:mousedown|stopPropagation>
                 {#if !editedIngredient || editedIngredient.type === "CollectionIngredient"}
                     {ingredient.common_name}
                 {:else}
-                    <input type="text" class="w-full p-0 text-4xl tracking-tighter font-bold text-rose-800 focus:ring-0 border-none ring-0" bind:value={editedIngredient.common_name} placeholder="name" />
+                    <input type="text" class="w-full p-0 text-4xl tracking-tighter font-bold text-rose-800 focus:ring-0 border-none ring-0 dark:bg-stone-800" bind:value={editedIngredient.common_name} placeholder="name" />
                 {/if}
                 </h1>
             <h2 class="text-sm opacity-60 lowercase w-full">
@@ -112,7 +112,7 @@ on:mousedown|stopPropagation>
             {#if !editedIngredient || editedIngredient.type === "CollectionIngredient"}
             <h2 class="text-2xl opacity-60 min-w-fit mb-2">{ingredient.cas}</h2>
             {:else}
-            <input type="text" class="w-full p-0 text-2xl opacity-60 focus:ring-0 border-none ring-0" bind:value={editedIngredient.cas} placeholder="cas" />
+            <input type="text" class="w-full p-0 text-2xl opacity-60 focus:ring-0 border-none ring-0 dark:bg-stone-800" bind:value={editedIngredient.cas} placeholder="cas" />
             {/if}
             <h2 class="text-sm opacity-60">
                 {#if !editedIngredient || editedIngredient.type === "CollectionIngredient"}
@@ -122,7 +122,7 @@ on:mousedown|stopPropagation>
                         volatile
                 {/if}
                 {:else}
-                    <input type="text" class="w-full p-0 text-sm focus:ring-0 border-none ring-0" bind:value={editedIngredient.volalitliy} placeholder="volalitliy" />
+                    <input type="text" class="w-full p-0 text-sm focus:ring-0 border-none ring-0 dark:bg-stone-800" bind:value={editedIngredient.volalitliy} placeholder="volalitliy" />
                 {/if}
             </h2>
         </div>
@@ -142,7 +142,7 @@ on:mousedown|stopPropagation>
         Do you know how to use this ingredient? Submit a suggestion on the <a href="/browse" class="hover:underline"> browse page! </a>
         {/if}
         {:else}
-            <textarea class="w-full p-0 focus:ring-0 border-none ring-0" bind:value={editedIngredient.use} placeholder="how to use this ingredient?" />
+            <textarea class="w-full p-0 focus:ring-0 border-none ring-0 dark:bg-stone-800" bind:value={editedIngredient.use} placeholder="how to use this ingredient?" />
         {/if}
     </p>
     <h3 class="text-sm mr-8 mt-8 opacity-60">
@@ -157,7 +157,7 @@ on:mousedown|stopPropagation>
         Time to record your impression!
         {/if}
         {:else}
-            <textarea class="w-full p-0 focus:ring-0 border-none ring-0" bind:value={editedIngredient.impression} placeholder="what do you think about it?" />
+            <textarea class="w-full p-0 focus:ring-0 border-none ring-0 dark:bg-stone-800" bind:value={editedIngredient.impression} placeholder="what do you think about it?" />
         {/if}
     </p>
     <div class="flex flex-col items-start mt-auto">
@@ -172,7 +172,7 @@ on:mousedown|stopPropagation>
             none for now
         {/if}
         {:else}
-            <textarea class="w-full p-0 focus:ring-0 border-none ring-0" bind:value={editedIngredient.associations} placeholder="makes me think of..." />
+            <textarea class="w-full p-0 focus:ring-0 border-none ring-0 dark:bg-stone-800" bind:value={editedIngredient.associations} placeholder="makes me think of..." />
         {/if}
     </p>
 </div>
@@ -192,7 +192,7 @@ on:mousedown|stopPropagation>
                 0
             {/if}
         {:else}
-            <input type="number" class="w-full p-0 text-sm focus:ring-0 border-none ring-0" bind:value={editedIngredient.amount} placeholder="amount" />
+            <input type="number" class="w-full p-0 text-sm focus:ring-0 border-none ring-0 dark:bg-stone-800" bind:value={editedIngredient.amount} placeholder="amount" />
         {/if}
     </p>
 
@@ -211,7 +211,7 @@ on:mousedown|stopPropagation>
         colour
         {/if}
         {:else}
-        <input type="text" class="w-full p-0 text-sm focus:ring-0 border-none ring-0" bind:value={editedIngredient.colour} placeholder="colour" />
+        <input type="text" class="w-full p-0 text-sm focus:ring-0 border-none ring-0 dark:bg-stone-800" bind:value={editedIngredient.colour} placeholder="colour" />
         {/if}
     </p>
 </li>
@@ -227,7 +227,7 @@ on:mousedown|stopPropagation>
             ideas
         {/if}
         {:else}
-        <input type="text" class="w-full p-0 text-sm focus:ring-0 border-none ring-0" bind:value={editedIngredient.ideas} placeholder="ideas" />
+        <input type="text" class="w-full p-0 text-sm focus:ring-0 border-none ring-0 dark:bg-stone-800" bind:value={editedIngredient.ideas} placeholder="ideas" />
         {/if}
     </p>
 </li>
