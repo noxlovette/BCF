@@ -107,21 +107,21 @@
 <div id="description-etc" class="flex flex-col w-[220px] mr-auto h-full space-y-4 bg-lime-600 text-lime-50 dark:bg-lime-800 rounded-lg shadow p-4 z-20">
     <div>
       <h3 class="text-sm">description </h3>
-      <textarea class="w-full p-0 focus:ring-0 border-none ring-0 bg-lime-600 rounded-lg" bind:value={editedFormula.description} />
+      <textarea class="w-full p-0 focus:ring-0 border-none ring-0 bg-lime-600 dark:bg-lime-800 rounded-lg" bind:value={editedFormula.description} />
     </div>  
       <div>
         <h3 class="text-sm">notes </h3>
-        <textarea class="w-full p-0 focus:ring-0 border-none ring-0 bg-lime-600 rounded-lg" bind:value={editedFormula.notes} />
+        <textarea class="w-full p-0 focus:ring-0 border-none ring-0 bg-lime-600 dark:bg-lime-800 rounded-lg" bind:value={editedFormula.notes} />
       </div>
       <div class="flex-grow"></div> <!-- This div will take up the remaining space -->
       
     <div id="controls" class="pt-4 *:hover:p-2 *:rounded-full mt-auto">
-      <button tabindex="-1" class="hover:p-2 hover:bg-white hover:text-lime-950 rounded-full  dark:hover:text-lime-300 transition-all hover:scale-110"
+      <button tabindex="-1" class="hover:text-lime-800 hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-lime-50 transition-all hover:scale-110"
       title="save changes"
       on:mousedown={saveChanges}>
         <OkIcon />
       </button>
-      <button tabindex="-1" class="hover:p-2 hover:bg-white hover:text-lime-950 rounded-full  dark:hover:text-lime-300 transition-all hover:scale-110"
+      <button tabindex="-1" class="hover:text-lime-800 hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-lime-50 transition-all hover:scale-110"
 
       title="cancel changes"
         on:mousedown={() => {
@@ -137,7 +137,7 @@
     </div>
   </div>
   <div id="table-wrapper" class="flex flex-col items-start justify-start p-4 ml-4 size-full z-10 scroll-m-2 overflow-y-auto">
-  <input class="text-6xl p-0 tracking-tighter dark:bg-lime-800 focus:ring-0 ring-0 border-none" bind:value={editedFormula.name} />
+  <input class="text-6xl p-0 tracking-tighter dark:bg-neutral-800 focus:ring-0 ring-0 border-none" bind:value={editedFormula.name} />
   <table id="formula-ingredient-table" class="table-fixed lowercase text-left w-full m-2 pl-2">
     <thead>
       <tr class="">
@@ -153,7 +153,7 @@
         {#each editedFormula.ingredients as ingredient, i (ingredient.id)}
         <tr class="">
           <td class="align-middle">
-            <button tabindex="-1" class="p-1 hover:bg-lime-700 hover:text-lime-50 rounded-full  dark:hover:text-lime-300 transition-all hover:scale-110" on:mousedown={() => handleDeleteIngredient(ingredient.id)}
+            <button tabindex="-1" class="p-1 hover:bg-lime-700 hover:text-lime-50 rounded-full  dark:hover:text-lime-300 transition-all hover:scale-110 dark:hover:text-lime-950" on:mousedown={() => handleDeleteIngredient(ingredient.id)}
               >
               <CrossIcon />
               </button
@@ -170,10 +170,10 @@
             <td class="cursor-not-allowed">{ingredient.volatility}</td> <!-- unchangeable -->
 
             <td>
-              <input type="number" bind:value={ingredient.amount} class="flex w-2/3 p-1 dark:bg-lime-800 focus:ring-0 text-lime-700 rounded-lg border-none"/>
+              <input type="number" bind:value={ingredient.amount} class="flex w-2/3 p-1 dark:bg-neutral-800 focus:ring-0 text-lime-700 rounded-lg border-none"/>
             </td>
             <td>
-              <input type="number" bind:value={ingredient.percentage} class="flex w-2/3 p-1 dark:bg-lime-800 focus:ring-0 text-lime-700 rounded-lg border-none"/>
+              <input type="number" bind:value={ingredient.percentage} class="flex w-2/3 p-1 dark:bg-neutral-800 focus:ring-0 text-lime-700 rounded-lg border-none"/>
             </td>
 
           
@@ -182,7 +182,7 @@
         
       {/if}
       <td colspan="5" class="align-middle">
-        <button tabindex="-1" class="p-2 my-2 mx-auto hover:bg-lime-700 rounded-full hover:text-lime-50 dark:hover:text-lime-300 transition-all hover:scale-110" on:mousedown={addIngredient}>
+        <button tabindex="-1" class="p-2 my-2 mx-auto hover:bg-lime-700 rounded-full hover:text-lime-50 dark:hover:text-lime-950 transition-all hover:scale-110" on:mousedown={addIngredient}>
           <AddCrossIcon />
         </button>
       </td>
@@ -191,7 +191,7 @@
           <td></td>
           <td>
             <input type="text" bind:value={editedFormula.solvent} placeholder="solvent" 
-            class="flex w-2/3 dark:bg-lime-800 focus:ring-0 text-lime-700 rounded-lg border-none"/>
+            class="flex w-2/3 dark:bg-neutral-800 focus:ring-0 text-lime-700 rounded-lg border-none"/>
           </td>
           <td>solvent</td>
           <td class="{solventValue < 0 ? 'text-red-700' : ''}">{solventValue}</td>

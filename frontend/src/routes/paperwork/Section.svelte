@@ -8,7 +8,7 @@ export let sectionBigText = 'big text in section.svelte'
       <h2 class="mx-auto mb-2 w-full text-3xl font-bold md:text-5xl lg:text-5xl">
         {@html sectionBigText}
       </h2>
-      <p class="mx-auto mt-4 max-w-3xl text-stone-700/80 md:text-xl lg:text-xl xl:text-xl">
+      <p class="mx-auto mt-4 max-w-3xl md:text-xl lg:text-xl xl:text-xl">
         {@html sectionSmallText}
       </p>
   </section>

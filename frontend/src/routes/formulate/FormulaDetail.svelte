@@ -89,7 +89,7 @@
     <FormulaEdit {formulaDetail} {editedFormula} bind:editing bind:solventValue/>
 {:else}
 
-<div id="description-etc" class="flex flex-col mr-auto w-[220px] h-full space-y-4 bg-gradient-to-br from-lime-600 to-lime-600/80 text-lime-50 dark:bg-lime-800 rounded-lg shadow p-4 z-20">
+<div id="description-etc" class="flex flex-col mr-auto w-[220px] h-full space-y-4 bg-gradient-to-br from-lime-600 to-lime-600/80 dark:from-lime-800 dark:to-lime-800/80 text-lime-50 dark:bg-lime-800 rounded-lg shadow p-4 z-20">
   <div>
       <h3 class="text-sm">description</h3>
       <p>{formulaDetail.description}</p>
@@ -100,13 +100,13 @@
   </div>
   <div class="flex-grow"></div> <!-- This div will take up the remaining space -->
   <div id="controls" class="flex *:hover:p-2 *:rounded-full mt-auto">
-      <button class="hover:text-lime-800 hover:bg-white dark:hover:text-lime-300 transition-all hover:scale-110" on:mousedown={() => editFormula(formulaDetail)} title="edit the formula">
+      <button class="hover:text-lime-800 hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-lime-50 transition-all hover:scale-110" on:mousedown={() => editFormula(formulaDetail)} title="edit the formula">
           <Suggestion />
       </button>
-      <button class="hover:text-lime-800 hover:bg-white dark:hover:text-lime-300 transition-all hover:scale-110" on:mousedown={() => handleDeleteFormula(formulaDetail.id)} title="delete the formula">
+      <button class="hover:text-lime-800 hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-lime-50 transition-all hover:scale-110" on:mousedown={() => handleDeleteFormula(formulaDetail.id)} title="delete the formula">
           <DeleteIcon />
       </button>
-      <button class="hover:text-lime-700 hover:bg-white dark:hover:text-lime-300 transition-all hover:scale-110" on:mousedown={() => handleAddAsCustom(formulaDetail)} title="add the formula to collection as ingredient">
+      <button class="hover:text-lime-700 hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-lime-50 transition-all hover:scale-110" on:mousedown={() => handleAddAsCustom(formulaDetail)} title="add the formula to collection as ingredient">
           <PuzzleIcon />
       </button>
   </div>
@@ -118,20 +118,20 @@
     <thead>
       <tr class="2">
         <th class="w-1/12">#</th>
-        <th class="w-1/3 cursor-pointer hover:text-lime-700/90 active:translate-y-1 transition-all" on:mousedown={() => handleSort('ingredient')}>
+        <th class="w-1/3 cursor-pointer hover:text-lime-700 active:translate-y-1 transition-all" on:mousedown={() => handleSort('ingredient')}>
           <div class="flex items-center">
             Ingredient 
             <ArrowsIcon />
           </div>
         </th>
         
-      <th class="w-1/6 cursor-pointer hover:text-lime-700/90 active:translate-y-1 transition-all" on:mousedown={() => handleSort('volatility')}> 
+      <th class="w-1/6 cursor-pointer hover:text-lime-700 active:translate-y-1 transition-all" on:mousedown={() => handleSort('volatility')}> 
         <div class="flex items-center">
         Volatility 
         <ArrowsIcon />
       </div>
       </th>
-      <th class="w-1/6 cursor-pointer hover:text-lime-700/90 active:translate-y-1 transition-all" on:mousedown={() => handleSort('amount')}> 
+      <th class="w-1/6 cursor-pointer hover:text-lime-700 active:translate-y-1 transition-all" on:mousedown={() => handleSort('amount')}> 
         <div class="flex items-center">
         Amount 
         <ArrowsIcon />
@@ -154,7 +154,7 @@
         <td class="">x</td>
         <td class="">{formulaDetail.solvent}</td>
         <td class="">solvent</td>
-        <td class="{solventValue < 0 ? 'text-red-700/80 dark:text-red-500/80' : ''}">{solventValue}</td>
+        <td class="{solventValue < 0 ? 'text-red-700' : ''}">{solventValue}</td>
         <td class="">100</td>
       </tr>
     </tbody>

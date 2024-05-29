@@ -98,7 +98,7 @@ function startNotificationInterval() {
     <div class="hidden lg:block lg:col-span-1">
       <!-- Empty on large screens to maintain grid layout -->
     </div>
-    <div class="flex flex-col justify-center items-center text-center lg:text-left backdrop-blur-lg bg-white/70 p-8 lg:p-12 rounded-lg hover:bg-white hover:shadow-lg transition-all group">
+    <div class="flex flex-col justify-center items-center text-center lg:text-left backdrop-blur-lg bg-white/70 dark:bg-stone-900/70 p-8 lg:p-12 rounded-lg hover:bg-white dark:hover:bg-gray-800 hover:shadow-lg transition-all group">
       <a href="/browse" class="z-10">
         <h2 class="text-3xl font-bold group-hover:text-sky-700 group-hover:dark:text-sky-400 md:text-3xl lg:text-4xl mb-4">
           Browse over 3100 ingredients.
@@ -117,7 +117,7 @@ function startNotificationInterval() {
     <section id="browse" class="mx-auto aspect-[16/9] my-12 w-full h-[600px] rounded-lg grid grid-cols-1 bg-cover bg-center items-center gap-8 px-4 py-8 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:gap-x-12 md:py-16 lg:py-24 text-pretty" 
     style="background-image: url('/assets/img/dalle-collect-1.webp')">
         
-    <div class="flex flex-col justify-center items-center text-center lg:text-right backdrop-blur-lg bg-white/70 p-8 lg:p-12 rounded-lg group hover:bg-white hover:shadow-lg transition-all group">
+    <div class="flex flex-col justify-center items-center text-center lg:text-right backdrop-blur-lg bg-white/70 dark:bg-stone-900/70 p-8 lg:p-12 rounded-lg group hover:bg-white dark:hover:bg-stone-800 hover:shadow-lg transition-all group">
           <a href="/collect">
           <h2 class="text-3xl font-bold group-hover:text-rose-700 group-hover:dark:text-rose-400 md:text-3xl lg:text-4xl mb-4">
             Collect hundreds of compounds.
@@ -139,7 +139,7 @@ function startNotificationInterval() {
       <section id="formulate" class="mx-auto aspect-[16/9] my-12 w-full h-[600px] rounded-lg grid grid-cols-1 bg-cover bg-center items-center gap-8 px-4 py-8 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:gap-x-12 md:py-16 lg:py-24 text-pretty" 
     style="background-image: url('/assets/img/dalle-formulate-1.webp')">
     
-    <div class="flex flex-col justify-center items-center text-center lg:text-right backdrop-blur-lg bg-white/70 p-8 lg:p-12 rounded-lg hover:bg-white hover:shadow-lg transition-all group">
+    <div class="flex flex-col justify-center items-center text-center lg:text-right backdrop-blur-lg bg-white/70 dark:bg-stone-900/70 p-8 lg:p-12 rounded-lg hover:bg-white dark:hover:bg-neutral-800 hover:shadow-lg transition-all group">
           <a href="/formulate">
           <h2 class="mb-4 w-full text-3xl font-bold group-hover:text-lime-700 group-hover:dark:text-lime-400 md:text-3xl lg:text-4xl">
             Formulate a revolution.

@@ -3,10 +3,11 @@
     import { writable } from "svelte/store";
     import Settings from './Settings.svelte';
     import Contributions from './Contributions.svelte';
-    import HelpCentre from './HelpCentre.svelte';
+
     import { goto } from "$app/navigation";
     import Header from "$lib/components/Header.svelte";
     import Footer from "$lib/components/Footer.svelte";
+    import Quote from "./Quote.svelte";
     
     
     let username = "";
@@ -75,33 +76,31 @@
     <Header currentPage="profile" notification={notification}/>
     <div class="mb-auto flex justify-center items-center">
     
-<div id="app" class="flex flex-row rounded-lg shadow bg-amber-400/30 dark:bg-stone-800/30 items-stretch size-5/6 p-4 xl:p-8 mx-4 xl:my-8">
-    <div id="sidebar" class="dark:bg-stone-600/50 flex flex-col w-1/6 hover:w-1/5 mr-auto rounded-lg drop-shadow p-4 transition-all duration-500">
-        <h2 id="header" class="xl:text-4xl lg:text-2xl md:text-xl sm:text-base mb-4 border-b-2 tracking-tight font-bold border-stone-400/20">{username}</h2>
-        
-        <ul class="text-2xl lg:text-xl md:text-lg sm:text-base flex flex-col items-start font-semibold sm:font-normal text-left">
-            <button class="hover:bg-amber-400/80 dark:hover:text-stone-800/80 rounded-lg transition-all hover:translate-x-1 p-2" on:mousedown={() => currentPage.set('settings')}>
+<div id="app" class="flex flex-row p-4 xl:p-8 mx-4 xl:my-8 w-[1200px]">
+    <div id="sidebar" class="dark:bg-stone-800 mr-auto rounded-lg drop-shadow p-4 transition-all text-left justify-start">
+        <h2 id="header" class="mb-4 border-b-2 tracking-tight border-stone-400 p-2">{username}</h2>
+        <ul class="flex flex-col items-start justify-start *:font-bold">
+            <button class="hover:bg-amber-400 dark:hover:text-stone-800 rounded-lg transition-all hover:translate-x-1 p-2" on:mousedown={() => currentPage.set('settings')}>
                 settings
             </button>
-            <button class="hover:bg-amber-400/80 dark:hover:text-stone-800/80 rounded-lg transition-all hover:translate-x-1 p-2" on:mousedown={() => currentPage.set('contributions')}>
+            <button class="hover:bg-amber-400 dark:hover:text-stone-800 rounded-lg transition-all hover:translate-x-1 p-2" on:mousedown={() => currentPage.set('contributions')}>
                 contributions
-            </button>
-            <button class="hover:bg-amber-400/80 dark:hover:text-stone-800/80 rounded-lg transition-all hover:translate-x-1 p-2" on:mousedown={() => currentPage.set('help')}>
-                help centre
             </button>
         </ul>
     </div>
-    <div id="main-content" class="dark:bg-stone-700/20 bg-stone-100/80 flex flex-row items-start flex-1 p-4 rounded-lg shadow ml-4">
+    <div id="main-content" class="dark:bg-stone-700 bg-stone-200 flex flex-row items-center justify-start flex-1 p-8 rounded-lg shadow ml-4 ">
         {#if $currentPage === 'settings'}
             <Settings bind:notification {email} {username} />
         {:else if $currentPage === 'contributions'}
             <Contributions />
-        {:else if $currentPage === 'help'}
-            <HelpCentre />
-        {:else}
-        <div class="">
-            <p class="text-6xl xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem] font-bold tracking-tight lg:text-[5.5rem]">Good <span class="text-amber-400">{$greeting},</span> {username}!</p>
-            <p class="font-medium text-lg xl:text-[2rem] italic text-pretty py-6">{chosenQuote}</p>
+            {:else}
+        <div class="m-4 bg-white dark:bg-stone-800 p-4 rounded-lg shadow">
+            <p class="text-xl tracking-tight font-bold">Good <span class="text-amber-400">{$greeting},</span> {username}!</p>
+            <div id="aussage" class="flex flex-row mt-8">
+<span class="dark:text-white"><Quote /></span>
+            <p class="italic text-pretty py-8">{chosenQuote}</p>
+            <span class="rotate-180"><Quote /></span>
+        </div>
           </div>
         {/if}
     </div>

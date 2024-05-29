@@ -48,7 +48,7 @@ $: if (buttonSuccess || buttonError) {
 </script>
 
 
-<button id="card-small" class="p-8 rounded-lg shadow-md bg-white dark:bg-zinc-800 min-h-[160px] transition-all group hover:scale-105 hover:text-sky-50 hover:bg-sky-800 hover:shadow-lg text-left"
+<button id="card-small" class="p-8 rounded-lg shadow-md bg-white dark:bg-gray-800 min-h-[160px] transition-all group hover:scale-105 hover:text-sky-50 hover:bg-sky-800 hover:shadow-lg text-left"
 on:mousedown={() => chosenIngredient = ingredient}
 tabindex="0"
 >

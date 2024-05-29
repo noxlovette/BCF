@@ -199,7 +199,7 @@ function toggleOverlay() {
 
 
 </script>
-<svelte:window class="dark:text-zinc-100" on:keydown={handleKeydown}/>
+<svelte:window class="dark:text-gray-100" on:keydown={handleKeydown}/>
 <svelte:head>
   <title>BCF | Browse</title>
 </svelte:head>
@@ -207,7 +207,7 @@ function toggleOverlay() {
 <div class="flex flex-col min-h-screen z-0" style="">
   <button 
     id="overlay" 
-    class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-zinc-900 bg-opacity-20 backdrop-blur z-30 transition-all bg-blend-darken" 
+    class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-20 backdrop-blur z-30 transition-all bg-blend-darken" 
     class:hidden={!chosenIngredient} 
     on:mousedown={toggleOverlay}
     aria-label="Toggle Overlay"
@@ -222,7 +222,7 @@ function toggleOverlay() {
     <div id = "app" class="flex flex-col items-center lowercase my-8 caret-sky-700">
       <form id="search-bar" class="justify-center max-w-5xl flex w-full px-12 space-x-4 items-center group">
        
-        <button on:mousedown={toggleFilterMenu} title="filter by descriptors" class="rounded-lg border border-sky-700 p-2 text-center bg-sky-700 text-sky-50 active:shadow-none hover:text-zinc-50  hover:bg-white dark:hover:bg-zinc-800 transition-all shadow hover:shadow-lg">
+        <button on:mousedown={toggleFilterMenu} title="filter by descriptors" class="rounded-lg border border-sky-700 p-2 text-center bg-sky-700 text-sky-50 active:shadow-none hover:text-gray-50  hover:bg-white dark:hover:bg-gray-800 transition-all shadow hover:shadow-lg">
           {#if showFilterMenu}
             ingredients
           {:else}
@@ -232,7 +232,7 @@ function toggleOverlay() {
           {#if showFilterMenu}
         <input
           type="text"
-          class = "w-[600px] shadow border-none bg-white dark:bg-zinc-800 focus:ring-sky-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+          class = "w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
 
           bind:this = {searchInput}
           bind:value = {searchTermDescriptor}
@@ -246,7 +246,7 @@ function toggleOverlay() {
       
         <input
           type="text"
-          class = "w-[600px] shadow border-none bg-white dark:bg-zinc-800 focus:ring-sky-700/60 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+          class = "w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-700/60 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
           bind:value={$searchTerm}
           bind:this = {searchInput}
           on:keydown={handleSearch}
@@ -255,17 +255,17 @@ function toggleOverlay() {
         />
           {/if}
             
-        <button on:mousedown={reset} title="reset everything" class="rounded-full hover:shadow-lg active:shadow-none bg-sky-700 border-sky-700 border dark:hover:text-zinc-50 hover:bg-white dark:hover:bg-zinc-800 hover:text-sky-700 text-sky-50 p-2 shadow">
+        <button on:mousedown={reset} title="reset everything" class="rounded-full hover:shadow-lg active:shadow-none bg-sky-700 border-sky-700 border dark:hover:text-gray-50 hover:bg-white dark:hover:bg-gray-800 hover:text-sky-700 text-sky-50 p-2 shadow">
           <ResetIcon />
         </button>
 
         <label class="items-center md:text-md sm:text-sm mr-auto opacity-60 hover:opacity-100 transition-opacity group">
           per page:
-          <input type="number" class='w-1/3 group-hover:shadow border-none focus:ring-sky-400/70 focus:ring-2 rounded-lg dark:bg-zinc-800' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
+          <input type="number" class='w-1/3 group-hover:shadow border-none focus:ring-sky-400/70 focus:ring-2 rounded-lg dark:bg-gray-800' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
         </label>
 
         
-        <div id="pagination" class="flex hover:text-sky-700 justify-center items-center w-[100px] rounded-full active:shadow-none dark:hover:text-zinc-50 hover:bg-white dark:hover:bg-zinc-800 border border-sky-700 bg-sky-700 text-sky-50 p-2 shadow {showFilterMenu || ($currentPage <= 1 && $currentPage >= data.total_pages) ? 'invisible' : 'visible'}"
+        <div id="pagination" class="flex hover:text-sky-700 justify-center items-center w-[100px] rounded-full active:shadow-none dark:hover:text-gray-50 hover:bg-white dark:hover:bg-gray-800 border border-sky-700 bg-sky-700 text-sky-50 p-2 shadow {showFilterMenu || ($currentPage <= 1 && $currentPage >= data.total_pages) ? 'invisible' : 'visible'}"
 
         >
           {#if !showFilterMenu && $currentPage > 1}
@@ -302,7 +302,7 @@ function toggleOverlay() {
         >
 
         {#if showFilterMenu}
-      <div id="filter" class="grid xl:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-4 w-full p-2 border-none bg-white/20 dark:bg-zinc-900/20 items-center rounded-lg"
+      <div id="filter" class="grid xl:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-4 w-full p-2 border-none bg-white/20 dark:bg-gray-900/20 items-center rounded-lg"
       in:fade={{duration: 150}}
       bind:this={filterMenu}
       >

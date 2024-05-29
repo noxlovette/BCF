@@ -77,7 +77,7 @@
     {#if isLoading}
     <Loader />
     {:else}
-    <div id="app" class="flex flex-row rounded-lg items-stretch w-[1200px] h-[600px] my-12 text-lime-950  caret-lime-700 select-text selection:bg-lime-300"
+    <div id="app" class="flex flex-row rounded-lg items-stretch w-[1200px] h-[600px] my-12 text-lime-950 dark:text-lime-50 caret-lime-700 select-text selection:bg-lime-300"
     in:fade={{duration: 150}}
     >
 
@@ -89,7 +89,7 @@
       {#each formulae as formula}
         <button class:active={formula.id === activeFormulaId} 
         id="formula-item" 
-        class="flex text-left w-full group bg-lime-700 flex-col active:scale-95 hover:bg-lime-50 hover:text-lime-950 dark:hover:bg-lime-400 dark:hover:text-lime-200 rounded-lg hover:shadow p-2 transition-all" 
+        class="flex text-left w-full group bg-lime-700 dark:bg-lime-800 flex-col active:scale-95 hover:bg-lime-50 hover:text-lime-950 dark:hover:bg-lime-950 dark:hover:text-lime-50 rounded-lg hover:shadow p-4 transition-all" 
         on:mousedown={() => viewFormula(formula.id)} 
         title={formula.description}
         
@@ -98,9 +98,6 @@
           <p id="formula-edit-time" class="text-sm invisible group-hover:visible">{formula.updated}</p>
         </button>
       {/each}
-      <button id="formula-item"
-      class="flex flex-col text-2xl hover:bg-lime-600 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:mousedown={handleCreateFormula}>make it your first</button>
-
       
     </ul>
     <button id="formula-item"
@@ -110,7 +107,7 @@
       </button>
   </div>
   
-  <div id="main-content" class="flex flex-row items-center justify-center flex-1 bg-white dark:bg-stone-800 rounded-lg shadow-md ml-8">
+  <div id="main-content" class="flex flex-row items-center justify-center flex-1 bg-white dark:bg-neutral-800 rounded-lg shadow-md ml-8">
     {#if formulaDetail}
     <FormulaDetail bind:formulae bind:formulaDetail bind:notification />
     {:else}
