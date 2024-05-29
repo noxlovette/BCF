@@ -2,20 +2,16 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { writable } from "svelte/store";
-  import { fetchCentralDjangoApi } from "$lib/DjangoAPI";
+  import { logOut } from "$lib/DjangoAPI";
     import InformationIcon from "$lib/icons/InformationIcon.svelte";
 
   let is_authenticated = false;
   let username = "";
 
   async function logout() {
-    const url = "http://localhost:8000/api/logout/";
 
     try {
-      const response = await fetchCentralDjangoApi(url, "POST", {});
-      
-      is_authenticated = false;
-      sessionStorage.clear();
+      const response = await logOut();
       window.location.href = "/";
       notification.set("Logged out successfully");
 
