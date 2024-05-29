@@ -92,11 +92,11 @@ async function handleCreateCustomIngredient(newCustom) {
     </script>
 
 {#if ingredient !== null}
-<button id="card-big" class="flex flex-col p-8  rounded-lg shadow-lg bg-white dark:bg-stone-800 h-[275] w-[475px] md:h-[475px] md:w-[768px] transition-all border-rose-950 z-50 text-left cursor-default select-text selection:bg-rose-300/40 caret-rose-700" 
+<button id="card-big" class="flex flex-col p-8  rounded-lg shadow-lg bg-white dark:bg-stone-800 h-[600px] w-[360px] sm:w-[475px] md:h-[475px] md:w-[768px] transition-all border-rose-950 z-50 text-left cursor-default select-text selection:bg-rose-300/40 caret-rose-700" 
 
 on:mousedown|stopPropagation>
     <div id="top-part" class="flex flex-row items-baseline border-b w-full">
-        <div id="top-left" class="flex flex-col items-start border-r w-2/3 pr-4 pb-2">
+        <div id="top-left" class="flex flex-col items-start border-0 sm:border-r w-2/3 pr-4 pb-2">
             <h1 class="flex w-full text-4xl tracking-tighter font-bold text-rose-800 mr-8 mb-2">
                 {#if !editedIngredient || editedIngredient.type === "CollectionIngredient"}
                     {ingredient.common_name}
@@ -104,17 +104,17 @@ on:mousedown|stopPropagation>
                     <input type="text" class="w-full p-0 text-4xl tracking-tighter font-bold text-rose-800 focus:ring-0 border-none ring-0 dark:bg-stone-800" bind:value={editedIngredient.common_name} placeholder="name" />
                 {/if}
                 </h1>
-            <h2 class="text-sm opacity-60 lowercase w-full">
+            <h2 class="text-sm opacity-60 lowercase w-full hidden sm:block">
                 added {ingredient.date_added}
             </h2>
         </div>
-        <div id="top-right" class="flex flex-1 flex-col items-start pl-4">
+        <div id="top-right" class="sm:flex flex-1 flex-col items-start pl-4 hidden">
             {#if !editedIngredient || editedIngredient.type === "CollectionIngredient"}
             <h2 class="text-2xl opacity-60 min-w-fit mb-2">{ingredient.cas}</h2>
             {:else}
             <input type="text" class="w-full p-0 text-2xl opacity-60 focus:ring-0 border-none ring-0 dark:bg-stone-800" bind:value={editedIngredient.cas} placeholder="cas" />
             {/if}
-            <h2 class="text-sm opacity-60">
+            <h2 class="text-sm opacity-60 hidden md:block">
                 {#if !editedIngredient || editedIngredient.type === "CollectionIngredient"}
                     {#if ingredient.volalitliy}
                         {ingredient.volatility}

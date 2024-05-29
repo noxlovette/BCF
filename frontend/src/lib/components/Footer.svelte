@@ -11,7 +11,7 @@ let legalOn = false;
 
 </script>
 
-<footer class="relative flex flex-col items-center justify-center py-2 z-40 opacity-80" >
+<footer class="relative flex flex-col items-center justify-center py-2 z-10 opacity-80" >
   <div class="clear-end grid md:grid-cols-3 sm:grid-cols-1 xs:grid-cols-1 justify-center max-w-7xl xl:gap-8 md:gap-6 sm:gap-4 text-sm font-semibold mt-4">
 <div id = "social"
 class="flex items-center w-full justify-center"

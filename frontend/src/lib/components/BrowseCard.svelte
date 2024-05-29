@@ -58,8 +58,8 @@ tabindex="0"
     </div>
     <div id="bottom-part" class="flex flex-row mt-4">
         <div id="bottom-left" class="flex flex-col w-2/3 mr-auto">
-            <p class="text-clip mr-8 text-left normal-case h-[100px]">
-                {#if ingredient.use}    
+            <p class="truncate mr-8 text-left normal-case h-[100px]">
+                {#if ingredient.use}
                     {ingredient.use}
                 {:else}
                     Know how to use this? Submit a suggestion!

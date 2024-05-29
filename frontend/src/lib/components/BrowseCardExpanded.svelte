@@ -103,11 +103,11 @@ $: if (buttonSuccess || buttonError) {
     </script>
 
 {#if ingredient !== null}
-<button id="card-big" class="flex flex-col p-8 rounded-lg shadow-lg bg-white dark:bg-gray-800 h-[275] w-[475px] md:h-[475px] md:w-[768px] transition-all border-sky-950 z-50 text-left cursor-default select-text selection:bg-sky-300/40 caret-sky-700" 
+<button id="card-big" class="flex flex-col p-8 rounded-lg shadow-lg bg-white dark:bg-gray-800 h-[600px] w-[360px] sm:w-[475px] md:h-[475px] md:w-[768px] transition-all border-sky-950 z-50 text-left cursor-default select-text selection:bg-sky-300/40 caret-sky-700" 
 
 on:mousedown|stopPropagation>
     <div id="top-part" class="flex flex-row items-baseline border-b w-full">
-        <div id="top-left" class="flex flex-col items-start border-r w-2/3 pr-4 pb-2">
+        <div id="top-left" class="flex flex-col items-start border-0 sm:border-r w-2/3 pr-4 pb-2">
             <h1 class="flex w-full text-4xl tracking-tighter font-bold text-sky-800 mr-8 mb-2">
                 {#if !showSuggestion}
                     {ingredient.common_name}
@@ -123,7 +123,7 @@ on:mousedown|stopPropagation>
                 {/if}
             </h2>
         </div>
-        <div id="top-right" class="flex flex-1 flex-col items-start pl-4">
+        <div id="top-right" class="hidden sm:flex flex-1 flex-col items-start pl-4">
             <h2 class="text-2xl opacity-60 min-w-fit mb-2">{ingredient.cas}</h2>
             <h2 class="text-sm opacity-60">
                 {#if !showSuggestion}
@@ -207,7 +207,7 @@ on:mousedown|stopPropagation>
         {/if}
     </p>
 </li>
-<li class="flex flex-col items-start">
+<li class="sm:flex flex-col items-start hidden">
     <h3 class="text-sm opacity-60">
         contributors
     </h3>
@@ -232,7 +232,7 @@ on:mousedown|stopPropagation>
         >
         <Add />
     </button>
-    <button class='hover:bg-sky-700 hover:text-sky-50 group-hover:p-2 rounded-full transition-all {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}' title="suggest a change"
+    <button class='hover:bg-sky-700  hover:text-sky-50 group-hover:p-2 rounded-full transition-all {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}' title="suggest a change"
     on:mousedown={() => toggleSuggestion(ingredient)}>
         <Suggestion />
     </button>
