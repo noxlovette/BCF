@@ -93,7 +93,7 @@ function startNotificationInterval() {
     <div id="blabla" class="flex flex-col justify-center items-center my-8 py-4 md:py-8 2xl:py-16 max-w-md sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl"
     in:fade={{duration: 300, delay: 300}}
     >
-    <section id="browse" class="mx-auto aspect-[16/9] w-full h-[600px] rounded-lg grid grid-cols-1 bg-cover bg-center justify-center items-center gap-8 px-4 py-8 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:gap-x-12 md:py-16 lg:py-24 text-pretty" 
+    <section id="browse" class="mx-auto aspect-[16/9] w-[325px] sm:w-[425px] md:w-full h-[600px] rounded-lg grid grid-cols-1 bg-cover bg-center justify-center items-center gap-8 px-4 py-8 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:gap-x-12 md:py-16 lg:py-24 text-pretty" 
     style="background-image: url('/assets/img/dalle-browse-4.webp')">
     <div class="hidden lg:block lg:col-span-1">
       <!-- Empty on large screens to maintain grid layout -->
@@ -114,7 +114,7 @@ function startNotificationInterval() {
     
 
     
-    <section id="browse" class="mx-auto aspect-[16/9] my-12 w-full h-[600px] rounded-lg grid grid-cols-1 bg-cover bg-center items-center gap-8 px-4 py-8 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:gap-x-12 md:py-16 lg:py-24 text-pretty" 
+    <section id="browse" class="mx-auto aspect-[16/9] my-12 w-[325px] sm:w-[425px] md:w-full h-[600px] rounded-lg grid grid-cols-1 bg-cover bg-center items-center gap-8 px-4 py-8 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:gap-x-12 md:py-16 lg:py-24 text-pretty" 
     style="background-image: url('/assets/img/dalle-collect-1.webp')">
         
     <div class="flex flex-col justify-center items-center text-center lg:text-right backdrop-blur-lg bg-white/70 dark:bg-stone-900/70 p-8 lg:p-12 rounded-lg group hover:bg-white dark:hover:bg-stone-800 hover:shadow-lg transition-all group">
@@ -136,7 +136,7 @@ function startNotificationInterval() {
       </section>
 
 
-      <section id="formulate" class="mx-auto aspect-[16/9] my-12 w-full h-[600px] rounded-lg grid grid-cols-1 bg-cover bg-center items-center gap-8 px-4 py-8 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:gap-x-12 md:py-16 lg:py-24 text-pretty" 
+      <section id="formulate" class="mx-auto aspect-[16/9] my-12 w-[325px] sm:w-[425px] md:w-full h-[600px] rounded-lg grid grid-cols-1 bg-cover bg-center items-center gap-8 px-4 py-8 pb-12 sm:px-6 lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:gap-x-12 md:py-16 lg:py-24 text-pretty" 
     style="background-image: url('/assets/img/dalle-formulate-1.webp')">
     
     <div class="flex flex-col justify-center items-center text-center lg:text-right backdrop-blur-lg bg-white/70 dark:bg-stone-900/70 p-8 lg:p-12 rounded-lg hover:bg-white dark:hover:bg-neutral-800 hover:shadow-lg transition-all group">

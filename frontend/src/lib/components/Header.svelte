@@ -93,26 +93,26 @@ $: {
 
 <header class="relative flex flex-col items-center justify-center py-4 z-20 group ">
   <div class="flex w-full max-w-7xl items-center justify-center px-4 ">
-    <a href="/" class="size-20 flex-none z-15 transition-all" on:mouseenter={toggleDropdown}>
+    <a href="/" class="size-16 md:size-20 flex-none z-15 transition-all items-center justify-center" on:mouseenter={toggleDropdown}>
       <img
         id="logo"
-        class="size-20 z-50"
+        class="size-16 md:size-20 z-50"
         src="/assets/img/bcf_logo_dark.png"
         alt="Go to home page"
       />
     </a>
     <div class="flex-col size-full justify-center ml-2">
-    <div id="wider-part" class="flex flex-grow h-2/3 border-b border-stone-400/50 dark:border-stone-100">
+    <div id="wider-part" class="flex flex-grow h-2/3 border-b border-stone-400/50 dark:border-stone-100/50">
       {#if currentPage}
           <p on:mouseenter={toggleDropdown} class="m-2 text-3xl font-light tracking-tighter ">{currentPage}</p>
           
         {/if}
 
         {#if $notification}
-          <div class="ml-auto mr-10 content-center font-normal lowercase z-50"
+          <div class="mx-auto content-center font-normal lowercase z-50"
           out:fade={{duration: 150}}
           >
-            <p class = "">
+            <p class = "text-xs sm:text-sm md:text-base">
               {$notification}
             </p>
           </div>
@@ -144,7 +144,7 @@ $: {
         </div>
     </div>
     <div id="narrower-part" class="ml-2 flex flex-shrink h-1/3 transition-all" role="banner" >
-      <nav id="navbar" class="flex flex-row" on:mouseenter={toggleDropdown}>
+      <nav id="navbar" class="flex flex-row mt-2" on:mouseenter={toggleDropdown}>
             <!-- Permanent placeholder or minimal content -->
             
           {#if isDropdownOpen}

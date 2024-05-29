@@ -73,16 +73,19 @@
 
 <div class=" flex flex-col min-h-screen">
   <Header currentPage="formulate" notification = {notification}/>
-  <div class="mb-auto flex justify-center items-center">
+  <div class="mb-auto flex flex-grow justify-center items-center">
+    <div class="flex md:hidden items-center justify-center h-full">
+      <h1 class="text-xl font-bold">this page is desktop only :(</h1>
+    </div>
     {#if isLoading}
     <Loader />
     {:else}
-    <div id="app" class="flex flex-row rounded-lg items-stretch w-[1200px] h-[600px] my-12 text-lime-950 dark:text-lime-50 caret-lime-700 select-text selection:bg-lime-300"
+    <div id="app" class="rounded-lg items-stretch hidden md:flex md:flex-row md:w-[720px] overflow-x-auto lg:w-[960px] xl:w-[1200px] h-[550px] my-12 text-lime-950 dark:text-lime-50 caret-lime-700 select-text selection:bg-lime-300"
     in:fade={{duration: 150}}
     >
 
 
-  <div id="sidebar" class="flex flex-col rounded-lg transition-all text-lime-50 w-[180px]"
+  <div id="sidebar" class="flex flex-col rounded-lg transition-all text-lime-50 md:w-[120px] xl:w-[180px]"
   in:fade={{delay:150, duration: 150}}
   >
     <ul id="formulate-list" class= "items-start flex flex-col space-y-2 overflow-y-scroll">

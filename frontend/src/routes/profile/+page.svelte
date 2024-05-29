@@ -76,8 +76,8 @@
     <Header currentPage="profile" notification={notification}/>
     <div class="mb-auto flex justify-center items-center">
     
-<div id="app" class="flex flex-row p-4 xl:p-8 mx-4 xl:my-8 w-[1200px]">
-    <div id="sidebar" class="dark:bg-stone-800 mr-auto rounded-lg drop-shadow p-4 transition-all text-left justify-start">
+<div id="app" class="flex flex-col md:flex-row p-4 xl:p-8 md:mx-4 xl:my-8 w-[400px] md:w-[720px] lg:w-[960px] xl:w-[1200px]">
+    <div id="sidebar" class="dark:bg-stone-800 rounded-lg drop-shadow p-4 transition-all text-left justify-start flex flex-col mb-4 md:mb-0">
         <h2 id="header" class="mb-4 border-b-2 tracking-tight border-stone-400 p-2">{username}</h2>
         <ul class="flex flex-col items-start justify-start *:font-bold">
             <button class="hover:bg-amber-400 dark:hover:text-stone-800 rounded-lg transition-all hover:translate-x-1 p-2" on:mousedown={() => currentPage.set('settings')}>
@@ -88,7 +88,7 @@
             </button>
         </ul>
     </div>
-    <div id="main-content" class="dark:bg-stone-700 bg-stone-200 flex flex-row items-center justify-start flex-1 p-8 rounded-lg shadow ml-4 ">
+    <div id="main-content" class="dark:bg-stone-700 bg-stone-200 flex flex-row items-center justify-start flex-1 p-8 rounded-lg shadow md:ml-4">
         {#if $currentPage === 'settings'}
             <Settings bind:notification {email} {username} />
         {:else if $currentPage === 'contributions'}

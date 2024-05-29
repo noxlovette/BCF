@@ -119,7 +119,7 @@
 
     </div>
     
-    <div id="grid" class="grid grid-cols-3 space-x-8 *:bg-white *:p-4 *:rounded-lg *:shadow *:dark:bg-stone-800/80">
+    <div id="grid" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-8 *:bg-white *:p-4 *:w-full *:rounded-lg *:shadow *:dark:bg-stone-800/80">
         <div id="account settings" class="flex flex-col">
             <h2 class="font-bold mb-8">account settings</h2>
             <h3 class="text-sm opacity-60">password</h3>

@@ -229,7 +229,7 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
   <div class="mb-auto">
 
     <div id = "app" class="flex flex-col items-center lowercase my-8 caret-sky-700">
-      <form id="search-bar" class="justify-center max-w-5xl flex w-full px-12 space-x-4 items-center group">
+      <form id="search-bar" class="justify-center max-w-5xl flex w-full flex-col sm:flex-row px-12 space-x-0 space-y-4 sm:space-y-0 sm:space-x-4 items-center group">
        
         <button on:mousedown={toggleFilterMenu} title="filter by descriptors" class="rounded-lg border border-sky-700 p-2 text-center bg-sky-700 text-sky-50 active:shadow-none hover:text-gray-50  hover:bg-white dark:hover:bg-gray-800 transition-all shadow hover:shadow-lg">
           {#if showFilterMenu}
@@ -241,7 +241,7 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
           {#if showFilterMenu}
         <input
           type="text"
-          class = "w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+          class = "w-[325px] md:w-[400px] lg:w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
 
           bind:this = {searchInput}
           bind:value = {searchTermDescriptor}
@@ -255,7 +255,7 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
       
         <input
           type="text"
-          class = "w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-700/60 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+          class = "w-[400px] lg:w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-700/60 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
           bind:value={$searchTerm}
           bind:this = {searchInput}
           on:keydown={handleSearch}
@@ -264,11 +264,11 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
         />
           {/if}
             
-        <button on:mousedown={reset} title="reset everything" class="rounded-full hover:shadow-lg active:shadow-none bg-sky-700 border-sky-700 border dark:hover:text-gray-50 hover:bg-white dark:hover:bg-gray-800 hover:text-sky-700 text-sky-50 p-2 shadow">
+        <button on:mousedown={reset} title="reset everything" class="rounded-full hover:shadow-lg hidden md:block active:shadow-none bg-sky-700 border-sky-700 border dark:hover:text-gray-50 hover:bg-white dark:hover:bg-gray-800 hover:text-sky-700 text-sky-50 p-2 shadow">
           <ResetIcon />
         </button>
 
-        <label class="items-center md:text-md sm:text-sm mr-auto opacity-60 hover:opacity-100 transition-opacity group">
+        <label class="md:text-md sm:text-sm mr-auto opacity-60 hover:opacity-100 transition-opacity group hidden lg:block">
           per page:
           <input type="number" class='w-1/3 group-hover:shadow border-none focus:ring-sky-400/70 focus:ring-2 rounded-lg dark:bg-gray-800' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
         </label>

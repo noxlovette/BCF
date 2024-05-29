@@ -104,7 +104,7 @@
 </script>
 
 
-<div id="description-etc" class="flex flex-col w-[220px] mr-auto h-full space-y-4 bg-lime-600 text-lime-50 dark:bg-lime-800 rounded-lg shadow p-4 z-20">
+<div id="description-etc" class="flex flex-col w-[175px] lg:w-[220px] mr-auto h-full space-y-4 bg-lime-600 text-lime-50 dark:bg-lime-800 rounded-lg shadow p-4 z-20">
     <div>
       <h3 class="text-sm">description </h3>
       <textarea class="w-full p-0 focus:ring-0 border-none ring-0 bg-lime-600 dark:bg-lime-800 rounded-lg" bind:value={editedFormula.description} />
@@ -115,7 +115,7 @@
       </div>
       <div class="flex-grow"></div> <!-- This div will take up the remaining space -->
       
-    <div id="controls" class="pt-4 *:hover:p-2 *:rounded-full mt-auto">
+    <div id="controls" class="pt-4 *:hover:p-1 lg:*:hover:p-2  *:rounded-full mt-auto">
       <button tabindex="-1" class="hover:text-lime-800 hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-lime-50 transition-all hover:scale-110"
       title="save changes"
       on:mousedown={saveChanges}>
@@ -153,7 +153,7 @@
         {#each editedFormula.ingredients as ingredient, i (ingredient.id)}
         <tr class="">
           <td class="align-middle">
-            <button tabindex="-1" class="p-1 hover:bg-lime-700 hover:text-lime-50 rounded-full  dark:hover:text-lime-300 transition-all hover:scale-110 dark:hover:text-lime-950" on:mousedown={() => handleDeleteIngredient(ingredient.id)}
+            <button tabindex="-1" class="p-1 hover:bg-lime-700 hover:text-lime-50 rounded-full transition-all hover:scale-110 dark:hover:text-lime-950" on:mousedown={() => handleDeleteIngredient(ingredient.id)}
               >
               <CrossIcon />
               </button

@@ -215,11 +215,11 @@ onMount( async () => {
           title="find an ingredient by CAS or the multiple names that it might have"
         />
             
-        <button on:mousedown={reset} title="reset everything" class="rounded-full bg-rose-700 text-rose-50 p-2 shadow active:shadow-none hover:bg-white dark:hover:bg-stone-800 border border-rose-700 hover:shadow-lg hover:text-rose-700 transition-all">
+        <button on:mousedown={reset} title="reset everything" class="rounded-full bg-rose-700 text-rose-50 p-2 shadow hidden sm:block active:shadow-none hover:bg-white dark:hover:bg-stone-800 border border-rose-700 hover:shadow-lg hover:text-rose-700 transition-all">
           <ResetIcon />
         </button>
 
-        <label class="items-center md:text-md sm:text-sm mr-auto opacity-60 hover:opacity-100 transition-opacity group">
+        <label class="items-center md:text-md sm:text-sm mr-auto opacity-60 hover:opacity-100 transition-opacity group hidden lg:block">
           per page:
           <input type="number" class='w-1/3 group-hover:shadow border-none focus:ring-rose-400/70 focus:ring-2 rounded-lg dark:bg-stone-800' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
         </label>

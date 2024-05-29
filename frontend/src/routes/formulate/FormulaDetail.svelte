@@ -89,7 +89,7 @@
     <FormulaEdit {formulaDetail} {editedFormula} bind:editing bind:solventValue/>
 {:else}
 
-<div id="description-etc" class="flex flex-col mr-auto w-[220px] h-full space-y-4 bg-gradient-to-br from-lime-600 to-lime-600/80 dark:from-lime-800 dark:to-lime-800/80 text-lime-50 dark:bg-lime-800 rounded-lg shadow p-4 z-20">
+<div id="description-etc" class="flex flex-col mr-auto w-[175px] lg:w-[220px] h-full space-y-4 bg-gradient-to-br from-lime-600 to-lime-600/80 dark:from-lime-800 dark:to-lime-800/80 text-lime-50 dark:bg-lime-800 rounded-lg shadow p-4 z-20">
   <div>
       <h3 class="text-sm">description</h3>
       <p>{formulaDetail.description}</p>
@@ -99,7 +99,7 @@
       <p>{formulaDetail.notes}</p>
   </div>
   <div class="flex-grow"></div> <!-- This div will take up the remaining space -->
-  <div id="controls" class="flex *:hover:p-2 *:rounded-full mt-auto">
+  <div id="controls" class="flex *:hover:p-1 lg:*:hover:p-2 *:rounded-full mt-auto">
       <button class="hover:text-lime-800 hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-lime-50 transition-all hover:scale-110" on:mousedown={() => editFormula(formulaDetail)} title="edit the formula">
           <Suggestion />
       </button>
@@ -125,7 +125,7 @@
           </div>
         </th>
         
-      <th class="w-1/6 cursor-pointer hover:text-lime-700 active:translate-y-1 transition-all" on:mousedown={() => handleSort('volatility')}> 
+      <th class="w-1/6 cursor-pointer  hidden lg:table-cell hover:text-lime-700 active:translate-y-1 transition-all" on:mousedown={() => handleSort('volatility')}> 
         <div class="flex items-center">
         Volatility 
         <ArrowsIcon />
@@ -145,7 +145,7 @@
         <tr class="">
           <td class="p-1">{i + 1}</td>
           <td>{ingredient.ingredient}</td>
-          <td>{ingredient.volatility}</td>
+          <td class="hidden lg:table-cell">{ingredient.volatility}</td>
           <td>{ingredient.amount}</td>
           <td>{ingredient.percentage}</td>
         </tr>
@@ -153,7 +153,7 @@
       <tr id="functional" class="border-t border-lime-950/20 dark:border-lime-100/10">
         <td class="">x</td>
         <td class="">{formulaDetail.solvent}</td>
-        <td class="">solvent</td>
+        <td class="hidden lg:table-cell">solvent</td>
         <td class="{solventValue < 0 ? 'text-red-700' : ''}">{solventValue}</td>
         <td class="">100</td>
       </tr>
