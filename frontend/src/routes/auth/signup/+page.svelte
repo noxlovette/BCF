@@ -90,29 +90,29 @@ import { onMount } from 'svelte';
         >
         <h1 class="text-6xl font-bold tracking-tighter border-b-2">sign up<span class="text-amber-300">.</span></h1>
 
-                <input type="text" class='w-full my-2 mt-8 bg-stone-50 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder="username" required bind:value={username}/>
+                <input type="text" class='w-full my-2 mt-8 bg-stone-50 dark:bg-stone-800 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder="username" required bind:value={username}/>
 
             <div id  = 'handle email' class="flex justify-center items-center mb-4">
-                    <input type="email" class='w-[225] my-2 mr-auto bg-stone-50 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder="email" bind:value={email}/>
-                    <span class:valid={validEmail} class="text-left rounded-lg ml-4 p-2 h-[40px] w-[96px] text-stone-900/60 shadow-inner bg-stone-50">valid</span>
+                    <input type="email" class='w-[225] my-2 mr-auto bg-stone-50 dark:bg-stone-800 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder="email" bind:value={email}/>
+                    <span class:valid={validEmail} class="text-left rounded-lg ml-4 p-2 h-[40px] w-[96px] text-stone-900/60 dark:text-stone-50/60 shadow-inner bg-stone-50 dark:bg-stone-800">valid</span>
             </div>
             <div id = 'handle pass' class="w-full flex justify-center items-center">
-                    <input type="password" class='w-[225] my-2 mr-auto bg-stone-50 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder="password" bind:value={password}/>
-                    <span class:valid={validCase} class="normal-case mx-4 text-stone-900/60 rounded-lg p-2 size-[40px] shadow-inner bg-stone-50"> aZ </span>
-                    <span class:valid={validLength} class="text-baseline text-stone-900/60 rounded-lg p-2 size-[40px] shadow-inner bg-stone-50"> 8+ </span>
+                    <input type="password" class='w-[225] my-2 mr-auto bg-stone-50 dark:bg-stone-800 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder="password" bind:value={password}/>
+                    <span class:valid={validCase} class="normal-case mx-4 text-stone-900/60 dark:text-stone-50/60 rounded-lg p-2 size-[40px] shadow-inner bg-stone-50 dark:bg-stone-800"> aZ </span>
+                    <span class:valid={validLength} class="text-baseline text-stone-900/60 dark:text-stone-50/60 rounded-lg p-2 size-[40px] shadow-inner bg-stone-50 dark:bg-stone-800"> 8+ </span>
             </div>
             <div class="flex justify-center items-center" id = 'handle 2nd pass'>
-                    <input type="password" class='w-[225] my-2 mr-auto bg-stone-50 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder="repeat" bind:value={confirmPassword}/>
-                    <span class:valid={validDuplicate} class="text-center  text-stone-900/60 rounded-lg mx-4 p-2 size-[40px] shadow-inner bg-stone-50 rotate-90">||</span>
-                    <span class:valid={validSpecial} class="text-center text-stone-900/60 rounded-lg p-2 size-[40px] shadow-inner bg-stone-50">&~</span>
+                    <input type="password" class='w-[225] my-2 mr-auto bg-stone-50 dark:bg-stone-800 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder="repeat" bind:value={confirmPassword}/>
+                    <span class:valid={validDuplicate} class="text-center  text-stone-900/60 dark:text-stone-50/60 rounded-lg mx-4 p-2 size-[40px] shadow-inner bg-stone-50 dark:bg-stone-800 rotate-90">||</span>
+                    <span class:valid={validSpecial} class="text-center text-stone-900/60 dark:text-stone-50/60 rounded-lg p-2 size-[40px] shadow-inner bg-stone-50 dark:bg-stone-800">&~</span>
             </div>
             <div id = 'paperwork' class="flex flex-row items-center justify-between space-x-4 my-4">
                 <a href="/paperwork/terms-of-service" 
                 
                 on:mousedown={() => sessionStorage.setItem('terms', 'true')}
                 
-                class="hover:text-amber-300 text-stone-900/80">agree to the terms</a>
-                <input type="checkbox" bind:checked={agreeTerms} class="size-4 bg-stone-50 ring-2 ring-stone-300/50 rounded-lg shadow-inline border-none text-lime-500 focus:ring-lime-700 checked:bg-lime-500 active:scale-90 checked:ring-amber-300 hover:checked:bg-amber-300 transition-all hover:scale-110" />            
+                class="hover:text-amber-300 text-stone-900/80 dark:text-stone-50/80">agree to the terms</a>
+                <input type="checkbox" bind:checked={agreeTerms} class="size-4 bg-stone-50 dark:bg-stone-800 ring-2 ring-stone-300/50 rounded-lg shadow-inline border-none text-lime-500 focus:ring-lime-700 checked:bg-lime-500 active:scale-90 checked:ring-amber-300 hover:checked:bg-amber-300 transition-all hover:scale-110" />            
             </div>
             <button type="submit" class="text-5xl font-bold tracking-tighter active:scale-90 disabled:text-stone-400/70 hover:text-amber-300" disabled={!allValid}>go</button>
             <a href="/auth/login" class= "flex text-sm mt-auto opacity-60 hover:text-amber-300 hover:opacity-100 transition-all">have an account? sign in</a>

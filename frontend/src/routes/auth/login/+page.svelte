@@ -51,8 +51,8 @@
       easing: quintOut}}>
       <h1 class="text-6xl mb-8 border-b-2 font-bold tracking-tighter">sign in<span class="text-amber-300">.</span></h1>
 
-        <input id="username-field" type="text" class='w-full p-2 my-4 bg-stone-50 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder = "username" bind:value={username} required />
-        <input id="password-field" type="password" class='w-full p-2 my-2 bg-stone-50 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder = "password" bind:value={password} required /> 
+        <input id="username-field" type="text" class='w-full p-2 my-4 bg-stone-50 dark:bg-stone-800 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder = "username" bind:value={username} required />
+        <input id="password-field" type="password" class='w-full p-2 my-2 bg-stone-50 dark:bg-stone-800 shadow-inner focus:ring-amber-300 border-none focus:ring-2 rounded-lg' placeholder = "password" bind:value={password} required /> 
       <button type="submit" class="text-4xl font-bold tracking-tighter hover:text-amber-400 transition-all active:scale-90">
           go
       </button>

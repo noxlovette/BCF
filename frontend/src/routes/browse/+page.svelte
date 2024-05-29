@@ -241,7 +241,7 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
           {#if showFilterMenu}
         <input
           type="text"
-          class = "w-[325px] md:w-[400px] lg:w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+          class = "w-[325px] md:w-[250px] lg:w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
 
           bind:this = {searchInput}
           bind:value = {searchTermDescriptor}
@@ -255,7 +255,7 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
       
         <input
           type="text"
-          class = "w-[400px] lg:w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-700/60 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+          class = "w-[250px] lg:w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-700/60 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
           bind:value={$searchTerm}
           bind:this = {searchInput}
           on:keydown={handleSearch}

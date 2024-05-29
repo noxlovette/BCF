@@ -342,9 +342,9 @@ export async function saveEditedIngredientCollect(ingredientToSave: any) {
     try {
       const endpoint = `${BASE_URL}/api/logout/`;
       const response = await fetchCentralDjangoApi(endpoint, "POST");
+      
       sessionStorage.clear();
       csrfToken.set('');
-    
       return response;
     } catch (error) {
       console.error("Error logging out:", error);
