@@ -197,11 +197,20 @@ function toggleOverlay() {
     suggestedIngredient = null;
   }
 
+const description = "Browse perfume compounds. IFRA FIG.";
+const ogTitle = "BCF | Browse";
+const ogUrl = "https://bcfapp.app/browse";
+const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
 
 </script>
 <svelte:window class="dark:text-gray-100" on:keydown={handleKeydown}/>
 <svelte:head>
   <title>BCF | Browse</title>
+  <meta name="description" content={description}>
+  <meta property="og:title" content={ogTitle}>
+  <meta property="og:description" content={description}>
+  <meta property="og:image" content={imageUrl}>
+  <meta property="og:url" content={ogUrl}>
 </svelte:head>
 
 <div class="flex flex-col min-h-screen z-0" style="">

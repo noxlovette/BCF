@@ -1,23 +1,25 @@
 <script>
   import "../app.css";
+  let description = "BCF. Browse perfume compounds, collect them, and formulate your next favourite fragrance.";
+  let keywords = "perfume, formulation, fragrance, BCF, perfumers, browse, collect, formulate, ingredient, linalool, essential oil, absolute";
+  let robots = "index, follow";
+  let ogTitle = "BCF";
+  let ogDescription = "BCF. Browse perfume compounds, collect them, and formulate your next favourite fragrance.";
+  let ogUrl = "https://bcfapp.app";
+  let ogImage = "https://bcfapp.app/assets/meta/dalle-cover-main.webp";
+  let ogType = "website";
+
 </script>
 <svelte:head>
-  <meta name="description" content="BCF. Browse perfume compounds, collect them, and formulate your next favourite fragrance.">
-  <meta name="keywords" content="perfume, formulation, fragrance, BCF, perfumers, browse, collect, formulate, ingredient, linalool, essential oil, absolute">
-  <meta name="robots" content="index, follow">
+  <meta name="description" content={description}>
+  <meta name="keywords" content={keywords}>
+  <meta name="robots" content={robots}>
 
-
-  <meta property="og:title" content="BCF">
-  <meta property="og:description" content="BCF. Browse perfume compounds, collect them, and formulate your next favourite fragrance.">
-  <meta property="og:url" content="https://bcfapp.app">
-  <meta property="og:image" content="https://bcfapp.app/assets/meta/dalle-cover-main-logo.webp">
-  <meta property="og:type" content="website">
-
-  <!-- Twitter Card meta tags -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="BCF">
-  <meta name="twitter:description" content="BCF. Browse perfume compounds, collect them, and formulate your next favourite fragrance.">
-  <meta name="twitter:image" content="https://bcfapp.app/assets/meta/dalle-cover-main-logo.webp">
+  <meta property="og:title" content={ogTitle}>
+  <meta property="og:description" content={ogDescription}>
+  <meta property="og:url" content={ogUrl}>
+  <meta property="og:image" content={ogImage}>
+  <meta property="og:type" content={ogType}>
 
 
   <script type="application/ld+json">
