@@ -87,7 +87,7 @@
 <div class="relative">
   <input
     type="text"
-    class="flex w-5/6 dark:bg-lime-800 p-0 focus:ring-0 text-lime-700 rounded-lg border-none"
+    class="flex w-5/6 dark:bg-lime-800 p-1 focus:ring-0 text-lime-700 rounded-lg border-none"
     bind:value={searchTerm}
     bind:this={searchInput}
     placeholder="something new"

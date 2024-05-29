@@ -85,7 +85,7 @@
   <div id="sidebar" class="flex flex-col rounded-lg transition-all text-lime-50 w-[180px]"
   in:fade={{delay:150, duration: 150}}
   >
-    <ul id="formulate-list" class= "items-start flex flex-col space-y-2">
+    <ul id="formulate-list" class= "items-start flex flex-col space-y-2 overflow-y-scroll">
       {#each formulae as formula}
         <button class:active={formula.id === activeFormulaId} 
         id="formula-item" 
@@ -98,18 +98,18 @@
           <p id="formula-edit-time" class="text-sm invisible group-hover:visible">{formula.updated}</p>
         </button>
       {/each}
-      {#if formulae.length === 0}
       <button id="formula-item"
       class="flex flex-col text-2xl hover:bg-lime-600 hover:rounded-lg hover:shadow p-2 transition-all hover:translate-x-1 duration-150" on:mousedown={handleCreateFormula}>make it your first</button>
-        {:else}
-      <button id="formula-item"
+
+      
+    </ul>
+    <button id="formula-item"
       title="create new formula"
       class="flex rounded-full hover:bg-lime-700  p-2 items-center mt-auto text-lime-950 hover:text-lime-50 w-fit transition-all active-scale-90" on:mousedown={handleCreateFormula}>
         <AddCrossIcon />
       </button>
-      {/if}
-    </ul>
   </div>
+  
   <div id="main-content" class="flex flex-row items-center justify-center flex-1 bg-white dark:bg-stone-800 rounded-lg shadow-md ml-8">
     {#if formulaDetail}
     <FormulaDetail bind:formulae bind:formulaDetail bind:notification />

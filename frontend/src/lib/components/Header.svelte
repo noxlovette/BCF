@@ -118,9 +118,9 @@ $: {
           </div>
         {/if}
 
-        <div id="user" class="flex flex-row ml-auto mt-auto mb-auto space-x-4  items-center justify-center">
+        <div id="user" class="flex flex-row ml-auto mt-auto mb-auto space-x-4 items-center justify-center">
           {#if is_authenticated}
-          <a href="https://t.me/noxlovette" title="learn to use BCF" class=" hover:text-amber-300 transition-all">
+          <a href="https://docs.bcfapp.app" title="learn to use BCF" class=" hover:text-amber-300 transition-all">
           <InformationIcon />
         </a>
           

@@ -90,27 +90,28 @@
 {:else}
 
 <div id="description-etc" class="flex flex-col mr-auto w-[220px] h-full space-y-4 bg-gradient-to-br from-lime-600 to-lime-600/80 text-lime-50 dark:bg-lime-800 rounded-lg shadow p-4 z-20">
-    <div>
-      <h3 class="text-sm">description </h3>
-      <p class="">{formulaDetail.description}</p>
-    </div>
-      <div class="pt-4">
-        <h3 class="text-sm">notes </h3>
-      <p class="">{formulaDetail.notes}</p>
-    </div>
-      <div id = "controls" class="pt-4 *:hover:p-2 *:rounded-full">
-        <button class=" hover:text-lime-800 hover:bg-white dark:hover:text-lime-300 transition-all hover:scale-110" on:mousedown={() => editFormula(formulaDetail)} title="edit the formula">
-          <Suggestion />
-          </button>
-          <button class=" hover:text-lime-800 hover:bg-white dark:hover:text-lime-300 transition-all hover:scale-110" on:mousedown={() => handleDeleteFormula(formulaDetail.id)} title="delete the formula">
-            <DeleteIcon />
-          </button>
-          <button class=" hover:text-lime-700 hover:bg-white dark:hover:text-lime-300 transition-all hover:scale-110" on:mousedown={() => handleAddAsCustom(formulaDetail)} title="add the formula to collection as ingredient">
-            <PuzzleIcon />
-          </button>
-          
-    </div>
+  <div>
+      <h3 class="text-sm">description</h3>
+      <p>{formulaDetail.description}</p>
   </div>
+  <div class="pt-4">
+      <h3 class="text-sm">notes</h3>
+      <p>{formulaDetail.notes}</p>
+  </div>
+  <div class="flex-grow"></div> <!-- This div will take up the remaining space -->
+  <div id="controls" class="flex *:hover:p-2 *:rounded-full mt-auto">
+      <button class="hover:text-lime-800 hover:bg-white dark:hover:text-lime-300 transition-all hover:scale-110" on:mousedown={() => editFormula(formulaDetail)} title="edit the formula">
+          <Suggestion />
+      </button>
+      <button class="hover:text-lime-800 hover:bg-white dark:hover:text-lime-300 transition-all hover:scale-110" on:mousedown={() => handleDeleteFormula(formulaDetail.id)} title="delete the formula">
+          <DeleteIcon />
+      </button>
+      <button class="hover:text-lime-700 hover:bg-white dark:hover:text-lime-300 transition-all hover:scale-110" on:mousedown={() => handleAddAsCustom(formulaDetail)} title="add the formula to collection as ingredient">
+          <PuzzleIcon />
+      </button>
+  </div>
+</div>
+
   <div id="table-wrapper" class="flex flex-col items-start justify-start p-4 ml-4 size-full z-10 overflow-y-auto">
   <h2 class="text-6xl tracking-tighter mb-4">{formulaDetail.name}</h2>
   <table id="formula-ingredient-table" class="table-fixed lowercase text-left w-full">
@@ -142,7 +143,7 @@
     <tbody class="rounded-lg">
       {#each formulaDetail.ingredients as ingredient, i (ingredient.id)}
         <tr class="">
-          <td>{i + 1}</td>
+          <td class="p-1">{i + 1}</td>
           <td>{ingredient.ingredient}</td>
           <td>{ingredient.volatility}</td>
           <td>{ingredient.amount}</td>
