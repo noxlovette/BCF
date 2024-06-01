@@ -1,15 +1,12 @@
 <script lang="ts">
 import Add from "../icons/Add.svelte";
 import {onMount } from "svelte";
-import { writable } from "svelte/store";
+import { notification } from '$lib/stores/notificationStore';
 import { addToCollectionBrowse } from "$lib/DjangoAPI";
 
     let is_authenticated = null;
-    export let notification = writable("");
     export let ingredient: any = {};
     export let chosenIngredient:any = null;
-    let buttonError = false;
-    let buttonSuccess = false;
 
     onMount(async () => {
         is_authenticated = sessionStorage.getItem("is_authenticated");
@@ -21,29 +18,17 @@ async function handleAddIngredient(ingredientId:number) {
     try {
       const response = await addToCollectionBrowse(ingredientId);
         if (response === "ingredient is already in collection") {
-            buttonError = true;
-            notification.set("Ingredient already in collection");
+            notification.set({message : "Ingredient already in collection", type : "error"});
             return;
         }
-    buttonSuccess = true;
-      notification.set(response);
+      notification.set({message: response, type: "success"});
     } catch (error) {
-        buttonError = true;
-      console.error("Failed to add ingredient to collection");
-      notification.set("Failed to add ingredient to collection");
+      notification.set({message:"Failed to add ingredient to collection", type:"error"});
 }
   } else {
-    buttonError = true;
-    notification.set("You need to be logged in to add ingredients to your collection");
+    notification.set({message: "You need to be logged in to add ingredients to your collection", type: "error"});
   }
 }
-
-$: if (buttonSuccess || buttonError) {
-    setTimeout(() => {
-      buttonSuccess = false;
-      buttonError = false;
-    }, 100);
-  }
 
 </script>
 
@@ -68,8 +53,7 @@ tabindex="0"
            <h2 class="opacity-60 group-hover:text-sky-200/60 justify-start lowercase">{ingredient.descriptors}</h2>
         </div>
         <div id="bottom-right" class="flex flex-1 flex-col ml-auto mt-auto items-end">
-            <button class="items-baseline invisible group-hover:visible rounded-full hover:transition-all hover:bg-sky-50 hover:text-sky-700 p-2 
-            {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}" 
+            <button class="items-baseline invisible group-hover:visible rounded-full hover:transition-all hover:bg-sky-50 hover:text-sky-700 p-2 "
             on:mousedown={() => handleAddIngredient(ingredient.id)} on:mousedown|stopPropagation>
                 <Add />
             </button>

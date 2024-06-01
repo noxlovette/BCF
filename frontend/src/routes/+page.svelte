@@ -2,75 +2,14 @@
   import { onMount } from "svelte";
   import BigText from "$lib/components/BigText.svelte";
   import { fade } from "svelte/transition";
-  import Header from "$lib/components/Header.svelte";
-  import { writable } from "svelte/store";
-   import Footer from "$lib/components/Footer.svelte";
-   import {goto} from "$app/navigation";
 
   const bigText = `Want to create your own <span class="text-amber-300"> perfume? </span>We've got you covered<span class="text-amber-300">.</span>`
-
-  let notification = writable("");
-  let randomPhrase = writable("");
-
   let isMounted = false;
-  
-
-  const funnyPhrases = [
-  "Why was the math book sad? Because it had too many problems.",
-  "Why couldn't the bicycle stand up by itself? It was two-tired.",
-  "I told my wife she was drawing her eyebrows too high. She looked surprised.",
-  "Why don't scientists trust atoms? Because they make up everything!",
-  "What did the ocean say to the shore? Nothing, it just waved.",
-  "Why did the scarecrow win an award? Because he was outstanding in his field.",
-  "Why did the tomato turn red? Because it saw the salad dressing!",
-  "How does a penguin build its house? Igloos it together.",
-  "What do computers like to eat? Chips!",
-  "Why did the golfer bring two pairs of pants? In case he got a hole in one.",
-  "Why did the coffee file a police report? It got mugged.",
-
-
-
-  // Add more funny phrases as needed
-];
-
-
-    /**
-     * @param {string | any[]} array
-     */
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-
-
-function updateNotification() {
-  shuffleArray(funnyPhrases);
-  randomPhrase.set(funnyPhrases[0]); // Get the first phrase from the shuffled array
-  notification.set($randomPhrase); // Update the notification value
-}
-
-    /**
-     * @type {number | undefined}
-     */
-let notificationInterval;
-
-function startNotificationInterval() {
-  notificationInterval = setInterval(updateNotification, 7000); // Update every 5 seconds
-}
 
   onMount(() => {
     
     isMounted = true;
-    setTimeout(startNotificationInterval, 1000000);
   });
-
-  
-
-
-
 
 </script>
 
@@ -78,15 +17,7 @@ function startNotificationInterval() {
   <title>BCF</title>
 </svelte:head>
 <div class="min-h-screen w-screen" style="">
-
-  <Header 
-    currentPage="BCF" 
-    notification={notification}  
-  />
-  <div class="mb-auto">
     <div class="flex flex-col py-12 sm:py-8 md:py-12 2xl:py-28 justify-center items-center">
-
-
     <BigText text = {bigText} />
     
     
@@ -171,11 +102,11 @@ function startNotificationInterval() {
     style="width: 100%;" 
     in:fade={{duration: 500, delay: 2500}}>
     <div class="flex xl:flex-row flex-col">
-    <a href="/browse" class="button hover:text-sky-300/80 transition-all px-6 py-3">browse</a>
-    <a href="/collect" class="button hover:text-pink-400/80 transition-all px-6 py-3">collect</a>
-    <a href="/formulate" class="button hover:text-lime-500/80 transition-all px-6 py-3">formulate</a>
+    <a href="/browse" class="button hover:text-sky-700 transition-all px-6 py-3">browse</a>
+    <a href="/collect" class="button hover:text-pink-700 transition-all px-6 py-3">collect</a>
+    <a href="/formulate" class="button hover:text-lime-700 transition-all px-6 py-3">formulate</a>
   </div>
-    <a href="/auth/signup" class="button text-amber-400/80 hover:text-amber-600/80 transition-all px-6 py-3 ">sign up</a>
+    <a href="/auth/signup" class="button text-amber-300 hover:text-current transition-all px-6 py-3 ">sign up</a>
   </div>
 </div>
 </div>
@@ -185,8 +116,6 @@ function startNotificationInterval() {
 
 </div>
 </div>
-</div>
-  <Footer />
 </div>
 
 

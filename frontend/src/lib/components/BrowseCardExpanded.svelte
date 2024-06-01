@@ -2,21 +2,16 @@
 import Add from '$lib/icons/Add.svelte';
 import Suggestion from '$lib/icons/Suggestion.svelte';
 import { addSuggestionBrowse, addToCollectionBrowse } from '$lib/DjangoAPI';
-import { writable } from 'svelte/store';
 import { onMount } from 'svelte';
-    import CancelButton from '$lib/icons/CancelButton.svelte';
-    import SaveButton from '$lib/icons/SaveButton.svelte';
-
+import CancelButton from '$lib/icons/CancelButton.svelte';
+import SaveButton from '$lib/icons/SaveButton.svelte';
 export let ingredient: any = {};
-export let notification = writable("");
 let is_authenticated = null;
 export let showSuggestion = false;
 export let suggestedIngredient = null;
-
-let buttonError = false;
-let buttonSuccess = false;
-
 let message = null;
+
+import { notification } from '$lib/stores/notificationStore';
 
 onMount(async () => {
         is_authenticated = sessionStorage.getItem("is_authenticated");
@@ -24,12 +19,11 @@ onMount(async () => {
 
 function toggleSuggestion(ingredient) {
   if (is_authenticated === null) {
-    notification.set("you need to be logged in to suggest changes");
-    buttonError = true;
+    notification.set({message:"you need to be logged in to suggest changes", type:"error"});
     return;
   } else {
     showSuggestion = !showSuggestion;
-    notification.set("time to tell the world what you know!");
+    notification.set({message:"time to tell the world what you know!", type:"success"});
     suggestedIngredient = suggestedIngredient === ingredient ? null : ingredient;
   }
 }
@@ -40,21 +34,20 @@ if (is_authenticated !== null) {
   try {
     const response = await addToCollectionBrowse(ingredientId);
     if (response === "ingredient is already in collection") {
-      notification.set("Ingredient already in collection");
-      buttonError = true;
+      notification.set({message:"Ingredient already in collection", type:"error"});
+
       return;
     }
-    buttonSuccess = true;
+
     notification.set(response);
   } catch (error) {
-    buttonError = true;
     console.error("Failed to add ingredient to collection");
-    notification.set("Failed to add ingredient to collection");
+    notification.set({message:"Failed to add ingredient to collection", type:"error"});
 }
 } else {
-    buttonError = true;
-    console.log(buttonError, buttonSuccess)
-  notification.set("You need to be logged in to add ingredients to your collection");
+
+
+  notification.set({message: "You need to be logged in to add ingredients to your collection", type: "error"});
 }
 }
 
@@ -76,29 +69,19 @@ if (is_authenticated !== null) {
   is_restricted: suggestedIngredient.is_restricted,
 };
   const response = await addSuggestionBrowse(body);
-  buttonSuccess = true;
-  notification.set("Thank you for making BCF better!");
+
+  notification.set({message:"Thank you for making BCF better!", type:"success"});
     showSuggestion = false;
   suggestedIngredient = null;
   message = null;
     } catch (error) {
-        buttonError = true;
-        console.error("Failed to submit suggestion");
-        notification.set("Failed to submit suggestion");
+        notification.set({message:"Failed to submit suggestion", type:"error"});
     }
 } else {
-    buttonError = true;
-    console.log(buttonError, buttonSuccess);
-    notification.set("You need to be logged in to suggest changes");
+
+    notification.set({message:"You need to be logged in to suggest changes", type:"error"});
     }    
 }
-
-$: if (buttonSuccess || buttonError) {
-    setTimeout(() => {
-      buttonSuccess = false;
-      buttonError = false;
-    }, 100);
-  }
 
     </script>
 
@@ -226,22 +209,22 @@ on:mousedown|stopPropagation>
     </ul>
     <div class="flex flex-row space-x-2 mt-auto group opacity-60 hover:opacity-100 transition-all">
         {#if !showSuggestion}
-        <button class='hover:bg-sky-700 hover:text-sky-50 group-hover:p-2 rounded-full transition-all {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''} ' title="add the ingredient to your collection
+        <button class='hover:bg-sky-700 hover:text-sky-50 group-hover:p-2 rounded-full transition-all  ' title="add the ingredient to your collection
         "
         on:mousedown={() => handleAddIngredient(ingredient.id)}
         >
         <Add />
     </button>
-    <button class='hover:bg-sky-700  hover:text-sky-50 group-hover:p-2 rounded-full transition-all {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}' title="suggest a change"
+    <button class='hover:bg-sky-700  hover:text-sky-50 group-hover:p-2 rounded-full transition-all  title="suggest a change"'
     on:mousedown={() => toggleSuggestion(ingredient)}>
         <Suggestion />
     </button>
     {:else}
-    <button class='hover:bg-sky-700 hover:text-sky-50 group-hover:p-2 rounded-full transition-all {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}' title="submit your suggestion"
+    <button class='hover:bg-sky-700 hover:text-sky-50 group-hover:p-2 rounded-full transition-all  title="submit your suggestion"'
     on:mousedown={() => submitSuggestion()}>
         <SaveButton />
     </button>
-    <button class='hover:bg-sky-700 hover:text-sky-50 group-hover:p-2 rounded-full transition-all {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}' title="cancel your suggestion"
+    <button class='hover:bg-sky-700 hover:text-sky-50 group-hover:p-2 rounded-full transition-all  title="cancel your suggestion"'
     on:mousedown={() => toggleSuggestion(ingredient)}>
         <CancelButton />
     </button>

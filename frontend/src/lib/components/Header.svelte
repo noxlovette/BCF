@@ -4,44 +4,27 @@
   import { writable } from "svelte/store";
   import { logOut } from "$lib/DjangoAPI";
     import InformationIcon from "$lib/icons/InformationIcon.svelte";
+    import {page} from '$app/stores';
+    import { goto } from "$app/navigation";
 
-  let is_authenticated = false;
+  const is_authenticated = writable(false);
   let username = "";
 
   async function logout() {
-
+    if (!is_authenticated) return;
     try {
       const response = await logOut();
-      window.location.href = "/";
-      notification.set("Logged out successfully");
-
+      goto("/");
     } catch (error) {
       console.error("Failed to log out");
-      notification.set("Failed to log out")
     }
   }
-
-
   let isDropdownOpen = false;
-  export { is_authenticated, username, isDropdownOpen, toggleDropdown, resetCountdown, closeDropdown };
-  /**
-     * @type {string}
-     */
-   export let currentPage;
-   export let notification = writable("");
-
-  /**
-     * @type {number | undefined}
-     */
   let countdownTimer; // Variable to store the timer ID
-  let notificationTimeout; // Variable to store the notification timeout ID
-  
-   
   function toggleDropdown() {
     isDropdownOpen = true;
     resetCountdown();
   }
-
   // Function to start the countdown timer
   function startCountdown() {
     countdownTimer = setTimeout(closeDropdown, 3000);
@@ -58,30 +41,29 @@
     isDropdownOpen = false;
   }
 
-  /**
- * @param {string} newNotification
- */
-function updateNotification(newNotification) {
-  clearTimeout(notificationTimeout); // Clear any existing timeout
-
-  notification.set(newNotification);
-
-  // Set a new timeout to clear the notification after 3 seconds
-  notificationTimeout = setTimeout(() => {
-    notification.set('');
-  }, 3000);
-}
-
-$: {
-  updateNotification($notification);
-  
-}
-
-  onMount(() => {
-    is_authenticated = sessionStorage.getItem("is_authenticated") === "true";
+// Function to update the authentication state and username from sessionStorage
+function updateAuthState() {
+    const authState = sessionStorage.getItem("is_authenticated") === "true";
+    is_authenticated.set(authState);
     username = sessionStorage.getItem("username") || "stranger";
+  }
+
+   // Initialize and subscribe to page changes
+   onMount(() => {
+    updateAuthState();
+
+    // Subscribe to page changes
+    const unsubscribe = page.subscribe(() => {
+      updateAuthState();
+    });
+
+    // Cleanup subscription on component unmount
+    return () => {
+      unsubscribe();
+    };
   });
-  
+  $: currentPath = $page.url.pathname;
+  $: currentPage = currentPath.split("/")[1] || 'BCF';
   
 
 </script>
@@ -104,18 +86,8 @@ $: {
           
         {/if}
 
-        {#if $notification}
-          <div class="mx-auto content-center font-normal lowercase z-50"
-          out:fade={{duration: 150}}
-          >
-            <p class = "text-xs sm:text-sm md:text-base">
-              {$notification}
-            </p>
-          </div>
-        {/if}
-
         <div id="user" class="flex flex-row ml-auto mt-auto mb-auto space-x-4 items-center justify-center">
-          {#if is_authenticated}
+          {#if $is_authenticated}
           <a href="https://docs.bcfapp.app" title="learn to use BCF" class=" hover:text-amber-300 transition-all">
           <InformationIcon />
         </a>

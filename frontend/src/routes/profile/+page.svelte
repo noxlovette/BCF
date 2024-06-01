@@ -8,6 +8,7 @@
     import Header from "$lib/components/Header.svelte";
     import Footer from "$lib/components/Footer.svelte";
     import Quote from "./Quote.svelte";
+    import { notification } from '$lib/stores/notificationStore';
     
     
     let username = "";
@@ -15,7 +16,6 @@
     let currentPage = writable('');
     let is_authenticated = false;
     let greeting = writable("");
-    export let notification = writable('');
 
     onMount(async () => {
         is_authenticated = Boolean(sessionStorage.getItem('is_authenticated'));
@@ -72,9 +72,7 @@
 <svelte:head>
   <title>BCF | Profile</title>
 </svelte:head>
-<div class="flex flex-col min-h-screen z-0">
-    <Header currentPage="profile" notification={notification}/>
-    <div class="mb-auto flex justify-center items-center">
+
     
 <div id="app" class="flex flex-col md:flex-row p-4 xl:p-8 md:mx-4 xl:my-8 w-[400px] md:w-[720px] lg:w-[960px] xl:w-[1200px]">
     <div id="sidebar" class="dark:bg-stone-800 rounded-lg drop-shadow p-4 transition-all text-left justify-start flex flex-col mb-4 md:mb-0">
@@ -90,7 +88,7 @@
     </div>
     <div id="main-content" class="dark:bg-stone-700 bg-stone-200 flex flex-row items-center justify-start flex-1 p-8 rounded-lg shadow md:ml-4">
         {#if $currentPage === 'settings'}
-            <Settings bind:notification {email} {username} />
+            <Settings {email} {username} />
         {:else if $currentPage === 'contributions'}
             <Contributions />
             {:else}
@@ -104,7 +102,4 @@
           </div>
         {/if}
     </div>
-</div>
-</div>
-<Footer/>
 </div>

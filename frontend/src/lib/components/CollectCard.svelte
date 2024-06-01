@@ -1,18 +1,14 @@
 <script lang="ts">
-    import DeleteIcon from "$lib/icons/DeleteIcon.svelte";
+import DeleteIcon from "$lib/icons/DeleteIcon.svelte";
 import { deleteFromCollection } from "$lib/DjangoAPI";
 import {onMount } from "svelte";
-import { writable } from "svelte/store";
+import { notification } from '$lib/stores/notificationStore';
 
 
     let is_authenticated = null;
-    export let notification = writable("");
     export let ingredient: any = {};
     export let chosenIngredient:any = null;
     export let filteredCollection = [];
-
-    let buttonError = false;
-    let buttonSuccess = false;
 
     onMount(async () => {
         is_authenticated = sessionStorage.getItem("is_authenticated");
@@ -26,21 +22,14 @@ import { writable } from "svelte/store";
         const response = await deleteFromCollection(ingredient);
 
         try {
-          console.log("success deleting ingredient:", response)
         filteredCollection = filteredCollection.filter(ingredientInside => ingredientInside.id !== ingredient.id);
-        notification.set(response);
+        notification.set({message:response, type:"success"});
       } catch(error) {
 
-        notification.set(error);
+        notification.set({message: error, type: "error"});
       }
 }
 
-$: if (buttonSuccess || buttonError) {
-    setTimeout(() => {
-      buttonSuccess = false;
-      buttonError = false;
-    }, 100);
-  }
 
 </script>
 
@@ -72,7 +61,7 @@ tabindex="0"
           </h2>
         </div>
         <div id="bottom-right" class="flex flex-1 flex-col ml-auto mt-auto items-end">
-            <button class="items-baseline invisible group-hover:visible rounded-full hover:transition-all hover:bg-rose-50 hover:text-rose-700 p-2 {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}" 
+            <button class="items-baseline invisible group-hover:visible rounded-full hover:transition-all hover:bg-rose-50 hover:text-rose-700 p-2 " 
             on:mousedown={() => handleDeleteClick(ingredient)} on:mousedown|stopPropagation>
                 <DeleteIcon />
             </button>

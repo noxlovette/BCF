@@ -1,19 +1,24 @@
 <script lang="ts">
+    import { updated } from "$app/stores";
 
-    import {saveChangesFormula, deleteIngredientFormulate } from "$lib/DjangoAPI";
+export let formulae = null;
+
+
+    import {saveChangesFormula, deleteIngredientFormulate, fetchFormulas } from "$lib/DjangoAPI";
     import AddCrossIcon from "$lib/icons/AddCrossIcon.svelte";
     import CancelButton from "$lib/icons/CancelButton.svelte";
     import CrossIcon from "$lib/icons/CrossIcon.svelte";
-    import DeleteIcon from "$lib/icons/DeleteIcon.svelte";
+
     import OkIcon from "$lib/icons/OkIcon.svelte";
-    import SaveButton from "$lib/icons/SaveButton.svelte";
+    import { notification } from "$lib/stores/notificationStore";
+
     import Dropdown from "./Dropdown.svelte";
     export let editedFormula = null;
     export let formulaDetail = null;
     export let editing = true;
     export let solventValue = 0;
     let activeEditId = null;
-    let ingredientCounter = 0;
+    export let ingredientCounter = 0;
 
     $: if (editedFormula&& editedFormula.ingredients) {
         let totalAmount = editedFormula.ingredients.reduce((acc, ingredient) => acc + ingredient.amount, 0);
@@ -33,11 +38,11 @@
     );
   }
 
+  let updatedIngredients = [];
+
   async function saveChanges() {
     // Save the changes to the server here...
-    
-
-    let updatedIngredients = editedFormula.ingredients.map((ingredient, i) => {
+    updatedIngredients = editedFormula.ingredients.map((ingredient, i) => {
       
       let updatedIngredient = {
         id: ingredient.id,
@@ -68,15 +73,14 @@
       solvent: editedFormula.solvent,
     };
     editing = false;
-    
-
+    console.log(editedFormula)
     let data = await saveChangesFormula(formData, editedFormula.id);
-    editedFormula = null;
-    
-
-    
+    console.log(data)
     formulaDetail = data;
-    
+    editedFormula = data;
+    console.log(editedFormula)
+    notification.set({ message: "Changes saved", type: "success" })
+    formulae = await fetchFormulas({forceReload: true });  
   }
 
   function addIngredient() {
@@ -132,8 +136,6 @@
         
         </button
       >
-      
-      
     </div>
   </div>
   <div id="table-wrapper" class="flex flex-col items-start justify-start p-4 ml-4 size-full z-10 scroll-m-2 overflow-y-auto">

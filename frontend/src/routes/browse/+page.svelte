@@ -5,12 +5,11 @@
   import {tick} from "svelte";
   import { writable } from "svelte/store";
   import {blur, fade} from "svelte/transition";
-  import Header from "$lib/components/Header.svelte";
-  import Footer from "$lib/components/Footer.svelte";
+  
   import Loader from "$lib/components/Loader.svelte";
   import BrowseCardExpanded from "$lib/components/BrowseCardExpanded.svelte";
   import BrowseCard from "$lib/components/BrowseCard.svelte";
-
+  import { notification } from '$lib/stores/notificationStore';
   import ArrowLeftIcon from "$lib/icons/ArrowLeftIcon.svelte";
   import ArrowRightIcon from "$lib/icons/ArrowRightIcon.svelte";
   import ResetIcon from "$lib/icons/ResetIcon.svelte";
@@ -39,16 +38,16 @@ interface Ingredient {
   
   let showTuneMenu = false;
   let isLoading = true;
-  let notification = writable("");
   let descriptors = []
   let searchTermDescriptor = "";
   let filteredDescriptors = [];
   let sortedDescriptors = [];
 
+
   onMount(async () => {
     // Set currentPage and searchTerm based on the initial props
     currentPage.set((parseInt(sessionStorage.getItem('currentPage')) || 1));
-    pageSize.set((parseInt(localStorage.getItem('pageSize')) || 10));
+    pageSize.set((parseInt(localStorage.getItem('pageSize')) || 9));
     searchTerm.set((sessionStorage.getItem('searchTerm') || ""));
     data = await load();
     isLoading = false;
@@ -69,8 +68,8 @@ interface Ingredient {
   $: {
     sortedDescriptors = sortDescriptors(filteredDescriptors);
     if (chosenDescriptors.length > 0) {
-      notification.set(`filtering by ${chosenDescriptors.map(descriptor => descriptor.name).join(', ')}`);
-      
+      let descriptorNames = chosenDescriptors.map(descriptor => descriptor.name);
+      notification.set({message:descriptorNames.join(", "), type:"info"});
       fetchWithDescriptors();
 
     }
@@ -100,11 +99,11 @@ async function fetchWithDescriptors() {
         } else {
             searchInput.focus();  // Otherwise, set the focus on the searchInput
         }
-    } else if (event.key === 'ArrowLeft') {
-        event.preventDefault();
+    } else if (event.key === 'ArrowLeft' && document.activeElement !== searchInput) {
+      event.preventDefault();
         changePage(- 1);
-    } else if (event.key === 'ArrowRight') {
-        event.preventDefault();
+    } else if (event.key === 'ArrowRight' && document.activeElement !== searchInput) {
+      event.preventDefault();
         changePage(+ 1);
     } else if (event.key === 'ArrowUp') {
         event.preventDefault();
@@ -123,7 +122,7 @@ async function fetchWithDescriptors() {
     searchTerm.set("");
     currentPage.set(1);
     chosenDescriptors = [];
-    notification.set("resetting everything...");
+    notification.set({message:"resetting everything...", type:"info"});
     goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
     data = await load();
   }
@@ -133,9 +132,9 @@ async function fetchWithDescriptors() {
   async function searchIngredients() {
     currentPage.set(1);
     if ($searchTerm === "") {
-      notification.set("")
+      notification.set({message:"Showing all ingredients", type:"info"})
     } else {
-      notification.set(`Searching for ${$searchTerm}...`);
+      notification.set({message:`Searching for ${$searchTerm}...`, type:"info"});
     }
     goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
 
@@ -160,23 +159,19 @@ async function fetchWithDescriptors() {
   async function changePage(increment) {
     if ($currentPage + increment >= 1 && $currentPage + increment <= (data as { total_pages: number }).total_pages) {
       currentPage.update((value) => value + increment);
-      notification.set(`you are on page ${$currentPage}/${(data as { total_pages: number }).total_pages}`);
+      const message = `you are on page ${$currentPage}/${(data as { total_pages: number }).total_pages}`
+      notification.set({message:message, type:"info"});
       goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
       data = await load();
     }
     else {
-      notification.set(`there is nothing to seek there`);
+      notification.set({message:`there is nothing to seek there`, type:"error"});
   }
 }
 
 async function updatePageSize() {
     goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
-    
     data = await load(); // Wait for the URL to be updated before loading new data
-}
-
-function toggleTuneMenu() {
-  showTuneMenu = !showTuneMenu;
 }
 
 async function toggleFilterMenu() {
@@ -213,7 +208,6 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
   <meta property="og:url" content={ogUrl}>
 </svelte:head>
 
-<div class="flex flex-col min-h-screen z-0" style="">
   <button 
     id="overlay" 
     class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-20 backdrop-blur z-30 transition-all bg-blend-darken" 
@@ -222,16 +216,15 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
     aria-label="Toggle Overlay"
   >
   <div >
-  <BrowseCardExpanded ingredient={chosenIngredient} bind:notification bind:showSuggestion bind:suggestedIngredient />
+  <BrowseCardExpanded ingredient={chosenIngredient} bind:showSuggestion bind:suggestedIngredient />
   </div>
 </button>
-  <Header currentPage="browse" notification = {notification}/>
-  <div class="mb-auto">
+
 
     <div id = "app" class="flex flex-col items-center lowercase my-8 caret-sky-700">
       <form id="search-bar" class="justify-center max-w-5xl flex w-full flex-col sm:flex-row px-12 space-x-0 space-y-4 sm:space-y-0 sm:space-x-4 items-center group">
        
-        <button on:mousedown={toggleFilterMenu} title="filter by descriptors" class="rounded-lg border border-sky-700 p-2 text-center bg-sky-700 text-sky-50 active:shadow-none hover:text-gray-50  hover:bg-white dark:hover:bg-gray-800 transition-all shadow hover:shadow-lg">
+        <button on:mousedown={toggleFilterMenu} title="filter by descriptors" class="rounded-lg border border-sky-700 p-2 text-center bg-sky-700 hover:text-sky-700 text-sky-50 active:shadow-none dark:hover:text-gray-50  hover:bg-white dark:hover:bg-gray-800 transition-all shadow hover:shadow-lg">
           {#if showFilterMenu}
             ingredients
           {:else}
@@ -241,7 +234,7 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
           {#if showFilterMenu}
         <input
           type="text"
-          class = "w-[325px] md:w-[250px] lg:w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+          class = "w-[250px] lg:w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
 
           bind:this = {searchInput}
           bind:value = {searchTermDescriptor}
@@ -294,7 +287,7 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
 
 
 
-          <div id="table-wrapper" class="flex flex-row mx-8 overflow-x-auto overflow-y-auto items-center xl:font-medium font-normal select-text selection:bg-sky-300/40
+          <div id="table-wrapper" class="flex flex-row mx-8 items-center xl:font-medium font-normal select-text selection:bg-sky-300/40
           ">
         {#if isLoading || data === null}
           <!-- If isLoading is true, display a loading message -->
@@ -337,7 +330,7 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
 <div id="card-holder" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {#each data.results as ingredient}
           {#if ingredient}
-          <BrowseCard {ingredient} bind:chosenIngredient bind:notification />
+          <BrowseCard {ingredient} bind:chosenIngredient />
           {/if}
           {/each}
       </div>
@@ -347,6 +340,3 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
         {/if}
         </div>
       </div>
-    </div>
-  <Footer />
-</div>

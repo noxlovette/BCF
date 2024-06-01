@@ -7,9 +7,7 @@
     import { scale } from "svelte/transition";
   import { quintOut } from "svelte/easing";
 import { onMount } from 'svelte';
-  
-
-    let notification = writable();
+import {notification} from '$lib/stores/notificationStore';
     let username = '';
     let email = '';
     let password = '';
@@ -63,12 +61,12 @@ import { onMount } from 'svelte';
             } else {
                 sessionStorage.setItem('username', data.username);
                 sessionStorage.setItem('is_authenticated', data.is_authenticated);
-                notification.set('Signup successful!');
+                notification.set({message:'Signup successful!', type:'success'});
                 goto('/collect/');
             } 
         } catch (error) {
                 console.error('Failed to fetch:', error);
-                notification.set('something went wrong');
+                notification.set({message:'Something went wrong', type:'error'});
         }
     };
 
@@ -77,9 +75,7 @@ import { onMount } from 'svelte';
   <title>BCF | Signup</title>
 </svelte:head>
 
-<Header currentPage="signup" />
 
-<main class = "">
     <div class="mx-auto max-w-[800px] xl:max-w-7xl">
     <div id = "authentification" class="flex flex-col items-center justify-center m-10">
         <form on:submit|preventDefault={handleSignup} class= "flex flex-col w-[380px] h-[600px] justify-start items-start bg-white dark:bg-stone-950 rounded-lg shadow p-8"
@@ -119,8 +115,6 @@ import { onMount } from 'svelte';
         </form>
     </div>
     </div>
-
-</main>
 
 <style>
     .valid {

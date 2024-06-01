@@ -1,9 +1,8 @@
 <script lang="ts">
     import {updateUserProfile, deleteUserProfile} from '$lib/DjangoAPI';
-    import {writable} from 'svelte/store';
-    import { goto } from '$app/navigation';
 
-    export let notification = writable('');
+    import { goto } from '$app/navigation';
+    import { notification } from '$lib/stores/notificationStore';
 
     export let username;
     export let email;
@@ -83,7 +82,7 @@
         confirmPassword = '';
         email = '';
         username = '';
-        notification.set('Changes reverted');
+        notification.set({message:'Changes reverted', type:'info'});
     }
 
 
@@ -98,13 +97,12 @@
             confirmPassword = '';
             email = '';
             username = '';
-            notification.set('Changes saved successfully');
+            notification.set({message:'Changes saved successfully', type:'success'});
         } catch (error) {
-            console.error('Error saving changes:', error);
-            notification.set(error);
+            notification.set({message:error, type:'error'});
         }
     } else {
-        notification.set('Invalid input');
+        notification.set({message:'Invalid input', type:'error'});
         
     }
 }
@@ -198,11 +196,7 @@
 <input type='radio' class="focus:ring-0 active:ring-0 hover:ring-0 active:bg-amber-300  checked:bg-amber-400 hover:checked:bg-amber-500 text-amber-400 bg-none border-none ring-amber-50 active:svale-90 transition-all" name='email' value='off' id='email-off'>
 <label for='email-off'>off</label>
 </div>
-
-
     </div>
-    
-
 
 </div>
 

@@ -1,10 +1,7 @@
 <script lang="ts">
-  import { onDestroy, onMount } from "svelte";
-  import { fetchCollection, createCustomIngredientCollect } from "$lib/DjangoAPI";
-  import Header from "$lib/components/Header.svelte";
-  import { fade } from "svelte/transition";
+  import { fetchCollection } from "$lib/DjangoAPI";
+  import { onMount } from "svelte";
   import { writable } from "svelte/store";
-  import Footer from "$lib/components/Footer.svelte";
   import { goto } from '$app/navigation';
   import {blur} from 'svelte/transition';
   import Loader from "$lib/components/Loader.svelte";
@@ -13,17 +10,17 @@
   import ResetIcon from "$lib/icons/ResetIcon.svelte";
   import CollectCardExpanded from "$lib/components/CollectCardExpanded.svelte";
   import CollectCard from "$lib/components/CollectCard.svelte";
-    import OkIcon from "$lib/icons/OkIcon.svelte";
+  import { notification } from '$lib/stores/notificationStore';
     import AddCrossIcon from "$lib/icons/AddCrossIcon.svelte";
+
 
 
   export let collection = [];
 
-  let pageSize = writable(10);
+  let pageSize = writable(9);
   let currentPage = writable(1);
   let searchTerm = writable("");
   let searchInput:any = null;
-  let notification = writable("");
   let isLoading = true;
   let editedIngredient = null;
   let filteredCollection = [];
@@ -52,19 +49,19 @@ async function updatePageSize() {
 async function changePage(increment) {
     if ($currentPage + increment >= 1 && $currentPage + increment <= totalPages) {
       currentPage.update((value) => value + increment);
-      notification.set(`you are on page ${$currentPage}`);
+      notification.set({message:`you are on page ${$currentPage}`, type:"info"});
     }
     else {
-      notification.set(`there is nothing to seek there`);
+      notification.set({message:`there is nothing to seek there`, type:"error"});
   }
 }
 
 async function handleSearch() {
     currentPage.set(1);
     if ($searchTerm === "") {
-      notification.set("")
+      notification.set({message:"Showing everything", type:"info"})
     } else {
-      notification.set(`Searching for ${$searchTerm}...`);
+      notification.set({message:`Searching for ${$searchTerm}...`, type:"info"});
     }
     goto(`/collect?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
   }
@@ -91,7 +88,7 @@ $: {
     paginatedCollection = filteredCollection.slice(startIndex, startIndex + $pageSize);
     totalPages = Math.ceil(filteredCollection.length / $pageSize);
   } catch (error) {
-    notification.set("hm");
+    console.log(error);
   }
 }
 
@@ -110,9 +107,9 @@ function feedCustomIngredient() {
 onMount( async () => {
     let is_authenticated = sessionStorage.getItem("is_authenticated");
     if (is_authenticated === "false" || is_authenticated === null) {
-      window.location.href = "/auth/login";
+      notification.set({message:"Please log in to access this page", type:"error"})
+      goto("/auth/login");
     } else {
-      // This block should only execute if we're certain window is defined.
     currentPage.set((parseInt(sessionStorage.getItem('currentPageCollect')) || 1));
     pageSize.set((parseInt(localStorage.getItem('pageSizeCollect')) || 10));
     searchTerm.set((sessionStorage.getItem('searchTermCollect') || ""));
@@ -173,15 +170,25 @@ onMount( async () => {
 }
   }
 
+  const description = "Collect perfume ingredients. Leave comments, manage your laboratory.";
+const ogTitle = "BCF | Collect";
+const ogUrl = "https://bcfapp.app/collect";
+const imageUrl = "https://bcfapp.app/assets/img/dalle-collect-1.webp";
+
 </script>
 
 <svelte:window on:keydown={handleKeydown}/>
 
 <svelte:head>
   <title>BCF | Collect</title>
+  <meta name="description" content={description}>
+  <meta property="og:title" content={ogTitle}>
+  <meta property="og:description" content={description}>
+  <meta property="og:image" content={imageUrl}>
+  <meta property="og:url" content={ogUrl}>
 </svelte:head>
 
-<div class="flex flex-col min-h-screen z-0" style="">
+
   <button 
     id="overlay" 
     class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-stone-900 bg-opacity-20 backdrop-blur z-30 transition-all bg-blend-darken" 
@@ -190,24 +197,19 @@ onMount( async () => {
     aria-label="Toggle Overlay"
   >
   <div >
-  <CollectCardExpanded ingredient={chosenIngredient} bind:notification bind:filteredCollection bind:collection bind:editedIngredient bind:chosenIngredient />
+  <CollectCardExpanded ingredient={chosenIngredient} bind:filteredCollection bind:collection bind:editedIngredient bind:chosenIngredient />
   </div>
 </button>
 
-
-  <Header currentPage="collect" notification = {notification}/>
-
-
-  <div class="mb-auto">
     <div id = "app" class="flex flex-col items-center lowercase my-8 caret-rose-700">
-      <form id="search-bar" class="justify-center max-w-5xl flex w-full px-12 space-x-4 items-center group">
+      <form id="search-bar" class="justify-center flex-col sm:flex-row max-w-5xl lg:max-w-5xl flex w-full sm:px-12 space-x-0 space-y-4 sm:space-y-0 sm:space-x-4 items-center group">
         <button class="rounded-full bg-rose-700 text-rose-50 p-2 shadow active:shadow-none hover:bg-white dark:hover:bg-stone-800 border border-rose-700 hover:shadow-lg hover:text-rose-700 transition-all"
         on:mousedown={feedCustomIngredient}>
         <AddCrossIcon />
         </button>
         <input
           type="text"
-          class = "w-[600px] shadow border-none bg-white dark:bg-stone-800 focus:ring-rose-700/60 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
+          class = "w-[250px] md:w-[325px] lg:w-[600px] shadow border-none bg-white dark:bg-stone-800 focus:ring-rose-700/60 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
           bind:value={$searchTerm}
           bind:this={searchInput}
           on:input={handleSearchCollection}
@@ -257,7 +259,7 @@ onMount( async () => {
   <div id="card-holder" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
     {#each paginatedCollection as ingredient}
     {#if ingredient}
-      <CollectCard ingredient={ingredient} bind:chosenIngredient bind:notification bind:filteredCollection />
+      <CollectCard ingredient={ingredient} bind:chosenIngredient bind:filteredCollection />
     {/if}
     {/each}
   </div>
@@ -265,9 +267,5 @@ onMount( async () => {
   </div>
   {/if}
   </div>
-
-</div>
-</div>
-<Footer />
 
 </div>

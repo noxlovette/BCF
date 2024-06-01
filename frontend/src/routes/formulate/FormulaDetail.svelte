@@ -6,14 +6,14 @@
     import DeleteIcon from "$lib/icons/DeleteIcon.svelte";
     import PuzzleIcon from "$lib/icons/PuzzleIcon.svelte";
     import ArrowsIcon from "$lib/icons/ArrowsIcon.svelte";
-
+    import { notification } from '$lib/stores/notificationStore';
 
     export let formulaDetail;
     export let formulae;
-    export let notification = writable('');
     let solventValue = 0;
     let editing = false;
     let editedFormula = null;
+    let ingredientCounter = 0;
 
     $: if (formulaDetail && formulaDetail.ingredients) {
         let totalAmount = formulaDetail.ingredients.reduce((acc, ingredient) => acc + ingredient.amount, 0);
@@ -22,7 +22,7 @@
 
   async function handleAddAsCustom (formulaDetail) {
     const response = await addFormulaAsCustomIngredient(formulaDetail);
-    notification.set(response)
+    notification.set({message:response, type:"success"});
   }
 
 
@@ -38,7 +38,7 @@
     
     // Remove the deleted formula from the formulae array
     formulae = formulae.filter((formula) => formula.id !== formulaId);
-    notification.set("formula deleted");
+    notification.set({message:"formula deleted", type:"success"});
   }
 
   let sortColumn = writable('ingredient'); // Default sort column
@@ -63,10 +63,14 @@
     "heart/base": 5, "base/heart": 6, null: 7
   };
   sorted.sort((a, b) => {
-    const orderA = order[a.volatility] !== undefined ? order[a.volatility] : 8; // default value if not found
-    const orderB = order[b.volatility] !== undefined ? order[b.volatility] : 8; // default value if not found
-    return $sortOrder === 'asc' ? orderA - orderB : orderB - orderA;
-  });
+  const volatilityA = a.volatility ? a.volatility.toLowerCase() : null;
+  const volatilityB = b.volatility ? b.volatility.toLowerCase() : null;
+
+  const orderA = order[volatilityA] !== undefined ? order[volatilityA] : 8; // default value if not found
+  const orderB = order[volatilityB] !== undefined ? order[volatilityB] : 8; // default value if not found
+
+  return $sortOrder === 'asc' ? orderA - orderB : orderB - orderA;
+});
   break;
     }
     formulaDetail.ingredients = sorted;
@@ -86,7 +90,7 @@
 </script>
 
 {#if editing}
-    <FormulaEdit {formulaDetail} {editedFormula} bind:editing bind:solventValue/>
+    <FormulaEdit {editedFormula} bind:formulaDetail bind:editing bind:solventValue bind:formulae bind:ingredientCounter/>
 {:else}
 
 <div id="description-etc" class="flex flex-col mr-auto w-[175px] lg:w-[220px] h-full space-y-4 bg-gradient-to-br from-lime-600 to-lime-600/80 dark:from-lime-800 dark:to-lime-800/80 text-lime-50 dark:bg-lime-800 rounded-lg shadow p-4 z-20">

@@ -1,22 +1,17 @@
 <script lang="ts">
 import Suggestion from '$lib/icons/Suggestion.svelte';
-import { writable } from 'svelte/store';
 import CancelButton from '$lib/icons/CancelButton.svelte';
-import SaveButton from '$lib/icons/SaveButton.svelte';
 import { deleteFromCollection, saveEditedIngredientCollect, createCustomIngredientCollect, fetchCollection } from '$lib/DjangoAPI';
 import DeleteIcon from '$lib/icons/DeleteIcon.svelte';
 import OkIcon from '$lib/icons/OkIcon.svelte';
+import { notification } from '$lib/stores/notificationStore';
 
 
 export let filteredCollection = [];
 export let chosenIngredient:any = null;
 export let ingredient: any = {};
-export let notification = writable("");
 export let collection = [];
 export let editedIngredient = null;
-
-let buttonError = false;
-let buttonSuccess = false;
 
 async function handleFetch(forceReload = false) {
     const data = await fetchCollection({ forceReload: forceReload });
@@ -29,27 +24,14 @@ async function handleFetch(forceReload = false) {
      */
      async function handleDeleteClick(ingredient) {
         const response = await deleteFromCollection(ingredient);
-        console.log("Handler response:", response)
         try {
-        console.log("success deleting ingredient:", response)
         filteredCollection = filteredCollection.filter(ingredientInside => ingredientInside.id !== ingredient.id);
         chosenIngredient = null;
-        notification.set(response);
+        notification.set({message: response, type: "success"});
       } catch(error) {
-        console.error("Error deleting ingredient:", error);
-        notification.set(error);
+        notification.set({message:error, type:"error"});
       }
 }
-
-$: if (buttonSuccess || buttonError) {
-    setTimeout(() => {
-      buttonSuccess = false;
-      buttonError = false;
-    }, 100);
-  }
-    async function submitSuggestion() {
-        console.log("submitting suggestion")
-    }
 
      /**
      * @param {{object: any;}} ingredient
@@ -68,11 +50,9 @@ async function saveEdit(ingredientToSave) {
     const response = await saveEditedIngredientCollect(ingredientToSave);
     toggleEdit(ingredientToSave);
     collection = await handleFetch(true);
-    buttonSuccess = true;
-    notification.set("Saved edit");
+    notification.set({message:"Saved edit", type:"success"});
   } catch (error) {
-    buttonError = true;
-    notification.set("Something went wrong");
+    notification.set({message:"Something went wrong", type:"error"});
   }
 }
 
@@ -80,12 +60,10 @@ async function handleCreateCustomIngredient(newCustom) {
     newCustom.unit = 'g';
     try {
         const response = await createCustomIngredientCollect(newCustom);
-        notification.set("Ingredient created");
+        notification.set({message:"Ingredient created", type:"success"});
         collection = await handleFetch(true);
-        buttonSuccess = true;
     } catch (error) {
-        notification.set("Something went wrong");
-        console.error("Error creating custom ingredient:", error);
+        notification.set({message:"Something went wrong", type:"error"});
     }
   }
 
@@ -234,18 +212,18 @@ on:mousedown|stopPropagation>
     </ul>
     <div class="flex flex-row space-x-2 mt-auto group opacity-60 hover:opacity-100 transition-all">
         {#if !editedIngredient}
-        <button class='hover:bg-rose-700 hover:text-rose-50 group-hover:p-2 rounded-full transition-all {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''} ' title="add the ingredient to your collection
+        <button class='hover:bg-rose-700 hover:text-rose-50 group-hover:p-2 rounded-full transition-all  ' title="add the ingredient to your collection
         "
         on:mousedown={() => handleDeleteClick(ingredient)}
         >
         <DeleteIcon />
     </button>
-    <button class='hover:bg-rose-700 hover:text-rose-50 group-hover:p-2 rounded-full transition-all {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}' title="suggest a change"
+    <button class='hover:bg-rose-700 hover:text-rose-50 group-hover:p-2 rounded-full transition-all ' title="suggest a change"
     on:mousedown={() => toggleEdit(ingredient)}>
         <Suggestion />
     </button>
     {:else}
-    <button class='hover:bg-rose-700 hover:text-rose-50 group-hover:p-2 rounded-full transition-all {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}' title="submit your suggestion"
+    <button class='hover:bg-rose-700 hover:text-rose-50 group-hover:p-2 rounded-full transition-all ' title="submit your suggestion"
     on:mousedown={() => 
     
     
@@ -253,7 +231,7 @@ on:mousedown|stopPropagation>
         <OkIcon />
     </button>
     {#if editedIngredient.id !== null}
-    <button class='hover:bg-rose-700 hover:text-rose-50 group-hover:p-2 rounded-full transition-all {buttonError ? 'hover:bg-rose-500' : buttonSuccess ? 'hover:bg-lime-500' : ''}' title="cancel your suggestion"
+    <button class='hover:bg-rose-700 hover:text-rose-50 group-hover:p-2 rounded-full transition-all ' title="cancel your suggestion"
     on:mousedown={() => toggleEdit(ingredient)}>
         <CancelButton />
     </button>

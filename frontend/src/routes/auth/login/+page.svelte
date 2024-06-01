@@ -1,30 +1,29 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { logIn } from "$lib/DjangoAPI";
-  import {scale, fade } from "svelte/transition";
+  import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import { fetchCollection } from "$lib/DjangoAPI";
-  import Header from "$lib/components/Header.svelte";
-  import { writable } from "svelte/store";
+
+
+  import { notification } from '$lib/stores/notificationStore';
 
   let username = "";
   let password = "";
-  let notification = writable("");
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // prevent form from submitting the traditional way
     const body = { username, password };
     const data = await logIn(body);
     if (data.error) {
-      console.error("Server responded with an error:", data.error);
-      notification.set(data.error);
+      notification.set({message:data.error, type:'error'});
     } else {
       // Process success scenario
       await fetchCollection();
       sessionStorage.setItem("username", data.username);
       sessionStorage.setItem("is_authenticated", 'true');
       sessionStorage.setItem('email', data.email);
-      notification.set("Login successful!");
+      notification.set({message:"Welcome back!", type:'success'});
       goto("/collect/");
     }
   };
@@ -33,9 +32,6 @@
   <title>BCF | Login</title>
 </svelte:head>
 
-<Header currentPage="login" notification={notification}/>
-
-<main class="">
   
   
     <div class="mx-auto max-w-[800px] xl:max-w-7xl">
@@ -63,5 +59,4 @@
 
   </div>
 </div>
-  
-</main>
+

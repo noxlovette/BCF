@@ -260,7 +260,6 @@ export async function saveEditedIngredientCollect(ingredientToSave: any) {
     let data = await fetchCentralDjangoApi(url, "PUT", formData);
     const cacheKey = `formula-${editedFormulaId}`;
     sessionStorage.setItem(cacheKey, JSON.stringify(data));
-    fetchFormulas();
     return data;
   }
   
@@ -348,7 +347,7 @@ export async function saveEditedIngredientCollect(ingredientToSave: any) {
       return response;
     } catch (error) {
       console.error("Error logging out:", error);
-      return error.message;
+      throw new error.message;
     }
   }
   export async function logIn(body) {

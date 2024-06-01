@@ -57,7 +57,6 @@
       filteredCollection = collection.filter(ingredient => {
         const commonName = ingredient.common_name || '';
         const cas = ingredient.cas || '';
-        console.log(commonName, cas)
         return commonName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             cas.toLowerCase().includes(searchTerm.toLowerCase());
     });
@@ -87,7 +86,7 @@
 <div class="relative">
   <input
     type="text"
-    class="flex w-5/6 dark:bg-lime-800 p-1 focus:ring-0 text-lime-700 rounded-lg border-none"
+    class="flex w-5/6 dark:bg-stone-800 p-1 focus:ring-0 text-lime-700 dark:text-stone-50 rounded-lg border-none"
     bind:value={searchTerm}
     bind:this={searchInput}
     placeholder="something new"
@@ -97,7 +96,7 @@
   />
   {#if isDropdownVisible && filteredCollection.length !== 0 && filteredCollection.length < 5}
   <ul
-    class="absolute w-5/6 bg-lime-600 rounded-lg shadow-lg p-2 text-lime-50 z-10 mt-1"
+    class="absolute w-5/6 bg-lime-600 rounded-lg shadow-lg p-2 text-lime-50 z-10 mt-1 space-y-2"
   >
     {#each filteredCollection as item (item.common_name)}
       <button
