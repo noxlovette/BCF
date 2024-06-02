@@ -5,11 +5,6 @@ import Footer from "$lib/components/Footer.svelte";
 
 
 <div class="flex flex-col min-h-screen transition-opacity">
-<div class="mb-auto">
 
     <slot></slot>
-
-
-</div>
-<Footer />
 </div>

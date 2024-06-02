@@ -1,10 +1,7 @@
 <script lang="ts">
-    import Header from "$lib/components/Header.svelte";
     import { goto } from '$app/navigation';
     import { signUp } from '$lib/DjangoAPI';
-    import { writable } from 'svelte/store';
     import { fade } from "svelte/transition";
-    import { scale } from "svelte/transition";
   import { quintOut } from "svelte/easing";
 import { onMount } from 'svelte';
 import {notification} from '$lib/stores/notificationStore';

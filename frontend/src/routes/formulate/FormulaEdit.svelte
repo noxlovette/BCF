@@ -73,12 +73,12 @@ export let formulae = null;
       solvent: editedFormula.solvent,
     };
     editing = false;
-    console.log(editedFormula)
+
     let data = await saveChangesFormula(formData, editedFormula.id);
-    console.log(data)
+
     formulaDetail = data;
     editedFormula = data;
-    console.log(editedFormula)
+
     notification.set({ message: "Changes saved", type: "success" })
     formulae = await fetchFormulas({forceReload: true });  
   }
