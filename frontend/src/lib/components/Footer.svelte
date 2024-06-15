@@ -71,7 +71,7 @@ class="flex items-center w-full justify-center"
             <a href="/paperwork/about" class="hover:text-amber-300 transition-all"> about </a>
         </li>
         <li>
-            <a href="/paperwork/contact-us" class="hover:text-amber-300 transition-all"> contact us </a>
+            <a href="/paperwork/contact-us" class="hover:text-amber-300 transition-all"> contact me </a>
         </li>
         <li class="relative">
             <button on:mousedown={toggleLegal} class="hover:text-amber-300 transition-all"> legal </button>

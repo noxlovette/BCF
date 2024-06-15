@@ -77,7 +77,7 @@ interface Ingredient {
 
   let filterMenu;
   function handleClickOutside(event) {
-    if (filterMenu && !filterMenu.contains(event.target)) {
+    if (filterMenu && !filterMenu.contains(event.target) && !searchInput.contains(event.target)) {
       console.log("clicked outside")
       document.removeEventListener('click', handleClickOutside);
       showFilterMenu = false;
@@ -231,14 +231,15 @@ const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
             descriptors
           {/if}
         </button>
-          {#if showFilterMenu}
+
+        {#if showFilterMenu}
+
         <input
           type="text"
           class = "w-[250px] lg:w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
-
-          bind:this = {searchInput}
-          bind:value = {searchTermDescriptor}
-          on:input = {searchDescriptors}
+          bind:value={searchTermDescriptor}
+          bind:this={searchInput}
+          on:keydown={searchDescriptors}
 
           placeholder="/ search descriptors..."
           title="find the descriptor that you are looking for"

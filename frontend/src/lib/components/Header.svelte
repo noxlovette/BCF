@@ -69,7 +69,7 @@ function updateAuthState() {
 </script>
 
 
-<header class="relative flex flex-col items-center justify-center py-4 z-20 group ">
+<header class="relative flex flex-col items-center justify-center py-4 z-20 group">
   <div class="flex w-full max-w-7xl items-center justify-center px-4 ">
     <a href="/" class="size-16 md:size-20 flex-none z-15 transition-all items-center justify-center" on:mouseenter={toggleDropdown}>
       <img
@@ -107,7 +107,7 @@ function updateAuthState() {
             </button>
           {:else}
             <a href="/auth/login" class=" hover:text-amber-300 transition-all" >login</a>
-            <a href="/auth/signup" class=" hover:bg-stone-50 hover:text-amber-300 transition-all rounded-lg shadow bg-amber-300 text-stone-900 p-2" >sign up</a>
+            <a href="/auth/signup" class=" hover:bg-stone-50 dark:hover:bg-stone-700 hover:text-amber-300 transition-all rounded-lg shadow bg-amber-300 text-stone-900 p-2" >sign up</a>
           {/if}
         </div>
     </div>

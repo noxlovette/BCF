@@ -3,57 +3,37 @@
 </script>
 
 <div class= "lowercase">
-<BigText text="Contact Us<span class='text-amber-300'>.</span>"/>
+<BigText text="Contact Me<span class='text-amber-300'>.</span>"/>
 </div>
 
-<div class="mx-auto max-w-4xl flex flex-col space-y-4 xl:space-y-8 items-center justify-between px-4 pb-12 sm:px-6 md:py-16 lg:py-24">
-    <div class="flex w-[600px] items-center  py-4 px-10">
-        <a href="https://t.me/noxlovette">
-        <svg width="128" height="128" viewBox="0 0 1000 1000" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="transition-all hover:scale-110 active:scale-90">
-            <defs>
-                <linearGradient x1="50%" y1="0%" x2="50%" y2="99.2583404%" id="linearGradient-1">
-                    <stop stop-color="#2AABEE" offset="0%"></stop>
-                    <stop stop-color="#229ED9" offset="100%"></stop>
-                </linearGradient>
-            </defs>
-            <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <circle id="Oval" fill="url(#linearGradient-1)" cx="500" cy="500" r="500"></circle>
-                <path d="M226.328419,494.722069 C372.088573,431.216685 469.284839,389.350049 517.917216,369.122161 C656.772535,311.36743 685.625481,301.334815 704.431427,301.003532 C708.567621,300.93067 717.815839,301.955743 723.806446,306.816707 C728.864797,310.92121 730.256552,316.46581 730.922551,320.357329 C731.588551,324.248848 732.417879,333.113828 731.758626,340.040666 C724.234007,419.102486 691.675104,610.964674 675.110982,699.515267 C668.10208,736.984342 654.301336,749.547532 640.940618,750.777006 C611.904684,753.448938 589.856115,731.588035 561.733393,713.153237 C517.726886,684.306416 492.866009,666.349181 450.150074,638.200013 C400.78442,605.66878 432.786119,587.789048 460.919462,558.568563 C468.282091,550.921423 596.21508,434.556479 598.691227,424.000355 C599.00091,422.680135 599.288312,417.758981 596.36474,415.160431 C593.441168,412.561881 589.126229,413.450484 586.012448,414.157198 C581.598758,415.158943 511.297793,461.625274 375.109553,553.556189 C355.154858,567.258623 337.080515,573.934908 320.886524,573.585046 C303.033948,573.199351 268.692754,563.490928 243.163606,555.192408 C211.851067,545.013936 186.964484,539.632504 189.131547,522.346309 C190.260287,513.342589 202.659244,504.134509 226.328419,494.722069 Z" id="Path-3" fill="#FFFFFF"></path>
-            </g>
-        </svg>
-    </a>
-        <div class="ml-4 lg:ml-8 xl:ml-12">
-            <h2 class="text-3xl font-bold text-pretty">Telegram</h2>
-            <p class="text-pretty">Send feedback, swear, say what you want. I can take it all. Quick response, fast results.</p>
+<div class="mx-auto max-w-4xl flex flex-col space-y-4 xl:space-y-8 items-center justify-between py-6 lg:mt-4">
+    <div class="flex w-[350px] lg:w-[400px] items-center group">
+        <a href="https://t.me/noxlovette" class="flex flex-row items-center justify-between">
+        <div class="lg:ml-8 xl:ml-12">
+            <h2 class="text-3xl font-bold text-pretty group-hover:text-amber-400 transition-all">Telegram</h2>
+            <p class="text-pretty group-hover:text-stone-800 dark:group-hover:text-stone-300 transition-all">Send feedback, swear, say what you want. I can take it all. Quick response, fast results.</p>
         </div>
+    </a>
     
     </div>
-    <div class="flex w-[600px] items-center  py-4 px-10">
-        <a href="mailto:noxlovette@proton.me">
-        <svg width="128" height="128" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hover:text-amber-400 transition-all hover:scale-110 active:scale-90">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
-          </svg>
-        </a>
-        <div class="ml-4 lg:ml-8 xl:ml-12">
-            <h2 class="text-3xl font-bold text-pretty">Email</h2>
-            <p class="text-pretty">Not as quick... not as good... but if you're old-school, sure, be my guest.</p>
+    <div class="flex w-[350px] lg:w-[400px] items-center group">
+        <a href="mailto:noxlovette@proton.me" class="flex flex-row items-center justify-between">
+        
+        <div class="lg:ml-8 xl:ml-12">
+            <h2 class="text-3xl font-bold text-pretty group-hover:text-amber-400 transition-all">Email</h2>
+            <p class="text-pretty group-hover:text-stone-800 dark:group-hover:text-stone-300 transition-all">Not as quick... not as good... but if you're old-school, sure, be my guest.</p>
         </div>
+    </a>
     </div>
-    <div class="flex w-[600px] items-center  py-4 px-10">
+    <div class="flex w-[350px] lg:w-[400px] items-center group">
         <a
         href="https://github.com/noxlovette"
-        class=""
+        class="flex flex-row items-center"
       >
-        <svg width="128" height="128" viewBox="0 0 98 96" fill="none" xmlns="http://www.w3.org/2000/svg" class="hover:text-amber-400 transition-all hover:scale-110 active:scale-90">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"/>
-        </svg>
-        
-
-      </a>
-          
-        <div class="ml-4 lg:ml-8 xl:ml-12">
-            <h2 class="text-3xl font-bold text-pretty">GitHub</h2>
-            <p class="text-pretty">To talk about the code, documentation, and the license, as well as unit-testing...</p>
+        <div class="lg:ml-8 xl:ml-12">
+            <h2 class="text-3xl font-bold text-pretty group-hover:text-amber-400 transition-all">GitHub</h2>
+            <p class="text-pretty group-hover:text-stone-800 dark:group-hover:text-stone-300 transition-all">To talk about the code, documentation, and the license, as well as unit-testing...</p>
         </div>
+    </a>
     </div>
 </div>
