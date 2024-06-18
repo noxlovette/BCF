@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('collection', '0001_initial'),
+        ("collection", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='usercollectioning',
-            name='amount',
-            field=models.IntegerField(default=0, verbose_name='Amount'),
+            model_name="usercollectioning",
+            name="amount",
+            field=models.IntegerField(default=0, verbose_name="Amount"),
         ),
         migrations.AlterField(
-            model_name='usercollectioning',
-            name='unit',
-            field=models.CharField(default='g', max_length=50, verbose_name='Unit'),
+            model_name="usercollectioning",
+            name="unit",
+            field=models.CharField(default="g", max_length=50, verbose_name="Unit"),
         ),
     ]

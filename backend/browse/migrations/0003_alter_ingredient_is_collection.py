@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('browse', '0002_alter_ingredient_cas_alter_ingredient_colour_and_more'),
+        ("browse", "0002_alter_ingredient_cas_alter_ingredient_colour_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='ingredient',
-            name='is_collection',
-            field=models.BooleanField(default=False, null=True, verbose_name='In Collection'),
+            model_name="ingredient",
+            name="is_collection",
+            field=models.BooleanField(
+                default=False, null=True, verbose_name="In Collection"
+            ),
         ),
     ]

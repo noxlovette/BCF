@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('browse', '0007_remove_ingredient_strip_ingredient_ifra_and_more'),
+        ("browse", "0007_remove_ingredient_strip_ingredient_ifra_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='ingredient',
-            name='origin',
-            field=models.TextField(blank=True, null=True, verbose_name='Origin'),
+            model_name="ingredient",
+            name="origin",
+            field=models.TextField(blank=True, null=True, verbose_name="Origin"),
         ),
     ]

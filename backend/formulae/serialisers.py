@@ -16,7 +16,9 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(allow_null=True)  # Add this line
     collection_ingredient_id = serializers.IntegerField(required=False, allow_null=True)
-    custom_collection_ingredient_id = serializers.IntegerField(required=False, allow_null=True)
+    custom_collection_ingredient_id = serializers.IntegerField(
+        required=False, allow_null=True
+    )
     ingredient = serializers.SerializerMethodField()
     cas = serializers.SerializerMethodField()
     volatility = serializers.SerializerMethodField()
@@ -26,14 +28,26 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
 
     def prepare_for_serialization(self, obj):
         if obj.custom_collection_ingredient:
-            obj.custom_collection_ingredient._common_name = decrypt_field(
-                obj.custom_collection_ingredient.encrypted_common_name) if obj.custom_collection_ingredient.encrypted_common_name else None
-            obj.custom_collection_ingredient._cas = decrypt_field(
-                obj.custom_collection_ingredient.encrypted_cas) if obj.custom_collection_ingredient.encrypted_cas else None
-            obj.custom_collection_ingredient._use = decrypt_field(
-                obj.custom_collection_ingredient.encrypted_use) if obj.custom_collection_ingredient.encrypted_use else None
-            obj.custom_collection_ingredient._volatility = decrypt_field(
-                obj.custom_collection_ingredient.encrypted_volatility) if obj.custom_collection_ingredient.encrypted_volatility else None
+            obj.custom_collection_ingredient._common_name = (
+                decrypt_field(obj.custom_collection_ingredient.encrypted_common_name)
+                if obj.custom_collection_ingredient.encrypted_common_name
+                else None
+            )
+            obj.custom_collection_ingredient._cas = (
+                decrypt_field(obj.custom_collection_ingredient.encrypted_cas)
+                if obj.custom_collection_ingredient.encrypted_cas
+                else None
+            )
+            obj.custom_collection_ingredient._use = (
+                decrypt_field(obj.custom_collection_ingredient.encrypted_use)
+                if obj.custom_collection_ingredient.encrypted_use
+                else None
+            )
+            obj.custom_collection_ingredient._volatility = (
+                decrypt_field(obj.custom_collection_ingredient.encrypted_volatility)
+                if obj.custom_collection_ingredient.encrypted_volatility
+                else None
+            )
 
     def get_ingredient(self, obj):
         """
@@ -92,9 +106,19 @@ class FormulaIngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FormulaIngredient
-        fields = ['collection_ingredient_id', 'custom_collection_ingredient_id', 'id', 'ingredient', 'cas',
-                  'volatility', 'use',
-                  'amount', 'unit', 'collection_ingredient_type', 'percentage']
+        fields = [
+            "collection_ingredient_id",
+            "custom_collection_ingredient_id",
+            "id",
+            "ingredient",
+            "cas",
+            "volatility",
+            "use",
+            "amount",
+            "unit",
+            "collection_ingredient_type",
+            "percentage",
+        ]
 
 
 class FormulaSerializer(serializers.ModelSerializer):
@@ -104,12 +128,15 @@ class FormulaSerializer(serializers.ModelSerializer):
     the funniest thing happens when the update is triggered, because the formula might be supplied with more ingredients,
     so we have to iterate over the list received from the request and check if the ingredient is already in the formula...
     """
+
     ingredients = FormulaIngredientSerializer(many=True)
-    created = DateTimeSerializer(source='created_at', read_only=True)
-    updated = DateTimeSerializer(source='updated_at', read_only=True)
-    name = serializers.CharField(source='_name')
-    description = serializers.CharField(source='_description', allow_null=True, allow_blank=True)
-    notes = serializers.CharField(source='_notes', allow_null=True, allow_blank=True)
+    created = DateTimeSerializer(source="created_at", read_only=True)
+    updated = DateTimeSerializer(source="updated_at", read_only=True)
+    name = serializers.CharField(source="_name")
+    description = serializers.CharField(
+        source="_description", allow_null=True, allow_blank=True
+    )
+    notes = serializers.CharField(source="_notes", allow_null=True, allow_blank=True)
     solvent = serializers.CharField(allow_null=True, allow_blank=True)
 
     def update(self, instance, validated_data):
@@ -119,63 +146,74 @@ class FormulaSerializer(serializers.ModelSerializer):
         method is used to update the existing FormulaIngredients and create new ones if they are not found.
         """
         # Update existing Formula fields
-        instance._name = validated_data.pop('_name', instance._name)
-        instance._description = validated_data.pop('_description', instance._description)
-        instance._notes = validated_data.pop('_notes', instance._notes)
-        instance.solvent = validated_data.get('solvent', instance.solvent)
+        instance._name = validated_data.pop("_name", instance._name)
+        instance._description = validated_data.pop(
+            "_description", instance._description
+        )
+        instance._notes = validated_data.pop("_notes", instance._notes)
+        instance.solvent = validated_data.get("solvent", instance.solvent)
 
         # guarantee some degree of consistency
         instance.save()
 
         # Update existing FormulaIngredient instances or create new ones. four scenarios are possible:
-        ingredients_data = validated_data.pop('ingredients', [])
+        ingredients_data = validated_data.pop("ingredients", [])
         for ingredient_data in ingredients_data:
-            formula_ingredient_id = ingredient_data.get('id')
-            amount = ingredient_data.get('amount')
-            percentage = ingredient_data.get('percentage')
+            formula_ingredient_id = ingredient_data.get("id")
+            amount = ingredient_data.get("amount")
+            percentage = ingredient_data.get("percentage")
 
-            if ingredient_id := ingredient_data.get('collection_ingredient_id'):
+            if ingredient_id := ingredient_data.get("collection_ingredient_id"):
                 if formula_ingredient_id is None:
                     # Create a new FormulaIngredient instance
                     FormulaIngredient.objects.create(
                         amount=amount,
-                        collection_ingredient=RegularCollectionIngredient.objects.get(id=ingredient_id),
+                        collection_ingredient=RegularCollectionIngredient.objects.get(
+                            id=ingredient_id
+                        ),
                         formula=instance,
-                        percentage=percentage
+                        percentage=percentage,
                     )
                 else:
                     # Update an existing FormulaIngredient instance
                     FormulaIngredient.objects.update_or_create(
                         id=formula_ingredient_id,
                         defaults={
-                            'amount': amount,
-                            'collection_ingredient': RegularCollectionIngredient.objects.get(id=ingredient_id),
-                            'custom_collection_ingredient': None,  # Clear the custom_collection_ingredient
-                            'formula': instance,
-                            'percentage': percentage
-                        }
+                            "amount": amount,
+                            "collection_ingredient": RegularCollectionIngredient.objects.get(
+                                id=ingredient_id
+                            ),
+                            "custom_collection_ingredient": None,  # Clear the custom_collection_ingredient
+                            "formula": instance,
+                            "percentage": percentage,
+                        },
                     )
-            elif ingredient_id := ingredient_data.get('custom_collection_ingredient_id'):
+            elif ingredient_id := ingredient_data.get(
+                "custom_collection_ingredient_id"
+            ):
                 if formula_ingredient_id is None:
                     # Create a new FormulaIngredient instance
                     FormulaIngredient.objects.create(
                         amount=amount,
-                        custom_collection_ingredient=CustomCollectionIngredient.objects.get(id=ingredient_id),
+                        custom_collection_ingredient=CustomCollectionIngredient.objects.get(
+                            id=ingredient_id
+                        ),
                         formula=instance,
-                        percentage=percentage
+                        percentage=percentage,
                     )
                 else:
                     # Update an existing FormulaIngredient instance
                     FormulaIngredient.objects.update_or_create(
                         id=formula_ingredient_id,
                         defaults={
-                            'amount': amount,
-                            'custom_collection_ingredient': CustomCollectionIngredient.objects.get(id=ingredient_id),
-                            'collection_ingredient': None,  # Clear the collection_ingredient
-                            'formula': instance,
-                            'percentage': percentage
-
-                        }
+                            "amount": amount,
+                            "custom_collection_ingredient": CustomCollectionIngredient.objects.get(
+                                id=ingredient_id
+                            ),
+                            "collection_ingredient": None,  # Clear the collection_ingredient
+                            "formula": instance,
+                            "percentage": percentage,
+                        },
                     )
             else:
                 print("Invalid ingredient type.")
@@ -189,11 +227,11 @@ class FormulaSerializer(serializers.ModelSerializer):
         as flexible as possible. possibly, the users will want to customise their template for new formulas –
         this code will make that possible. It is flexible
         """
-        ingredients_data = validated_data.pop('ingredients', [])
+        ingredients_data = validated_data.pop("ingredients", [])
 
-        name = validated_data.pop('_name', None)
-        description = validated_data.pop('_description', None)
-        notes = validated_data.pop('_notes', None)
+        name = validated_data.pop("_name", None)
+        description = validated_data.pop("_description", None)
+        notes = validated_data.pop("_notes", None)
         instance = Formula.objects.create(**validated_data)
 
         instance._name = name
@@ -208,5 +246,15 @@ class FormulaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Formula
-        fields = ['updated', 'created', 'id', 'name', 'description', 'ingredients', 'notes', 'created_at', 'solvent']
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        fields = [
+            "updated",
+            "created",
+            "id",
+            "name",
+            "description",
+            "ingredients",
+            "notes",
+            "created_at",
+            "solvent",
+        ]
+        read_only_fields = ["id", "created_at", "updated_at"]

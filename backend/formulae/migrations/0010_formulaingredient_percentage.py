@@ -7,13 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('formulae', '0009_formula_custom_ingredient'),
+        ("formulae", "0009_formula_custom_ingredient"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='formulaingredient',
-            name='percentage',
-            field=models.FloatField(default=100, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(100)], verbose_name='Percentage'),
+            model_name="formulaingredient",
+            name="percentage",
+            field=models.FloatField(
+                default=100,
+                validators=[
+                    django.core.validators.MinValueValidator(0),
+                    django.core.validators.MaxValueValidator(100),
+                ],
+                verbose_name="Percentage",
+            ),
         ),
     ]

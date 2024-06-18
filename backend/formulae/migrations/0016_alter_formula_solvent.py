@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('formulae', '0015_formula_solvent'),
+        ("formulae", "0015_formula_solvent"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='formula',
-            name='solvent',
-            field=models.CharField(blank=True, default='Ethanol', max_length=100, null=True),
+            model_name="formula",
+            name="solvent",
+            field=models.CharField(
+                blank=True, default="Ethanol", max_length=100, null=True
+            ),
         ),
     ]

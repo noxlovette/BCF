@@ -1,10 +1,8 @@
-<script>  
+<script>
 </script>
-    
-    <svelte:head>
+
+<svelte:head>
   <title>BCF | Paperwork</title>
 </svelte:head>
 
-        <slot></slot>
-    
-    
+<slot></slot>

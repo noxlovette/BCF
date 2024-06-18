@@ -6,20 +6,23 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('browse', '0014_remove_ingredient_family'),
+        ("browse", "0014_remove_ingredient_family"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='Family',
-            new_name='Descriptor',
+            old_name="Family",
+            new_name="Descriptor",
         ),
         migrations.AlterModelOptions(
-            name='descriptor',
-            options={'verbose_name': 'Descriptor', 'verbose_name_plural': 'Descriptors'},
+            name="descriptor",
+            options={
+                "verbose_name": "Descriptor",
+                "verbose_name_plural": "Descriptors",
+            },
         ),
         migrations.AlterModelTable(
-            name='descriptor',
-            table='descriptors',
+            name="descriptor",
+            table="descriptors",
         ),
     ]

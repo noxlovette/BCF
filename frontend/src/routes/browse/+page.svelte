@@ -1,64 +1,67 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import {fetchDescriptors, fetchIngredientsBrowse} from "$lib/DjangoAPI";
-  import {tick} from "svelte";
+  import { fetchDescriptors, fetchIngredientsBrowse } from "$lib/DjangoAPI";
+  import { tick } from "svelte";
   import { writable } from "svelte/store";
-  import {blur, fade} from "svelte/transition";
-  
+  import { blur, fade } from "svelte/transition";
+
   import Loader from "$lib/components/Loader.svelte";
   import BrowseCardExpanded from "$lib/components/BrowseCardExpanded.svelte";
   import BrowseCard from "$lib/components/BrowseCard.svelte";
-  import { notification } from '$lib/stores/notificationStore';
+  import { notification } from "$lib/stores/notificationStore";
   import ArrowLeftIcon from "$lib/icons/ArrowLeftIcon.svelte";
   import ArrowRightIcon from "$lib/icons/ArrowRightIcon.svelte";
   import ResetIcon from "$lib/icons/ResetIcon.svelte";
-
 
   export let data: any = null;
   export let currentPage = writable();
   export let pageSize = writable();
   export let searchTerm = writable("");
-  export let overlay:boolean = false;
+  export let overlay: boolean = false;
   let suggestedIngredient = null;
-  let chosenIngredient:any = null;
+  let chosenIngredient: any = null;
   let chosenDescriptors = [];
   let showFilterMenu = false;
   let searchInput;
   let showSuggestion = false;
 
   interface Field {
-  name: string;
-  visible: boolean;
-}
+    name: string;
+    visible: boolean;
+  }
 
-interface Ingredient {
-  [key: string]: string; // Index signature for dynamic properties
-}
-  
+  interface Ingredient {
+    [key: string]: string; // Index signature for dynamic properties
+  }
+
   let showTuneMenu = false;
   let isLoading = true;
-  let descriptors = []
+  let descriptors = [];
   let searchTermDescriptor = "";
   let filteredDescriptors = [];
   let sortedDescriptors = [];
 
-
   onMount(async () => {
     // Set currentPage and searchTerm based on the initial props
-    currentPage.set((parseInt(sessionStorage.getItem('currentPage')) || 1));
-    pageSize.set((parseInt(localStorage.getItem('pageSize')) || 9));
-    searchTerm.set((sessionStorage.getItem('searchTerm') || ""));
+    currentPage.set(parseInt(sessionStorage.getItem("currentPage")) || 1);
+    pageSize.set(parseInt(localStorage.getItem("pageSize")) || 9);
+    searchTerm.set(sessionStorage.getItem("searchTerm") || "");
     data = await load();
     isLoading = false;
-    
-    
+
     descriptors = await fetchDescriptors();
     filteredDescriptors = descriptors;
 
-    currentPage.subscribe(value => sessionStorage.setItem('currentPage', String(value)));
-    pageSize.subscribe(value => localStorage.setItem('pageSize', String(value)));
-    searchTerm.subscribe(value => sessionStorage.setItem('searchTerm', String(value)));
+    currentPage.subscribe((value) =>
+      sessionStorage.setItem("currentPage", String(value)),
+    );
+    pageSize.subscribe((value) =>
+      localStorage.setItem("pageSize", String(value)),
+    );
+    searchTerm.subscribe((value) =>
+      sessionStorage.setItem("searchTerm", String(value)),
+    );
   });
 
   function sortDescriptors(descriptors) {
@@ -68,276 +71,340 @@ interface Ingredient {
   $: {
     sortedDescriptors = sortDescriptors(filteredDescriptors);
     if (chosenDescriptors.length > 0) {
-      let descriptorNames = chosenDescriptors.map(descriptor => descriptor.name);
-      notification.set({message:descriptorNames.join(", "), type:"info"});
+      let descriptorNames = chosenDescriptors.map(
+        (descriptor) => descriptor.name,
+      );
+      notification.set({ message: descriptorNames.join(", "), type: "info" });
       fetchWithDescriptors();
-
     }
   }
 
   let filterMenu;
   function handleClickOutside(event) {
-    if (filterMenu && !filterMenu.contains(event.target) && !searchInput.contains(event.target)) {
-      console.log("clicked outside")
-      document.removeEventListener('click', handleClickOutside);
+    if (
+      filterMenu &&
+      !filterMenu.contains(event.target) &&
+      !searchInput.contains(event.target)
+    ) {
+      console.log("clicked outside");
+      document.removeEventListener("click", handleClickOutside);
       showFilterMenu = false;
     }
   }
 
-async function fetchWithDescriptors() {
-  currentPage.set(1);
-  data = await load()
-}
+  async function fetchWithDescriptors() {
+    currentPage.set(1);
+    data = await load();
+  }
 
   function handleKeydown(event) {
-    if (event.key === '/') {
-        event.preventDefault();  // Prevents the default action associated with the '/' key
+    if (event.key === "/") {
+      event.preventDefault(); // Prevents the default action associated with the '/' key
 
-        // Toggle focus
-        if (document.activeElement === searchInput) {
-            searchInput.blur();  // If the searchInput is already focused, unfocus it
-        } else {
-            searchInput.focus();  // Otherwise, set the focus on the searchInput
-        }
-    } else if (event.key === 'ArrowLeft' && document.activeElement !== searchInput) {
+      // Toggle focus
+      if (document.activeElement === searchInput) {
+        searchInput.blur(); // If the searchInput is already focused, unfocus it
+      } else {
+        searchInput.focus(); // Otherwise, set the focus on the searchInput
+      }
+    } else if (
+      event.key === "ArrowLeft" &&
+      document.activeElement !== searchInput
+    ) {
       event.preventDefault();
-        changePage(- 1);
-    } else if (event.key === 'ArrowRight' && document.activeElement !== searchInput) {
+      changePage(-1);
+    } else if (
+      event.key === "ArrowRight" &&
+      document.activeElement !== searchInput
+    ) {
       event.preventDefault();
-        changePage(+ 1);
-    } else if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        changePage(- 1);
-    } else if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        changePage(+ 1);
-}
+      changePage(+1);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      changePage(-1);
+    } else if (event.key === "ArrowDown") {
+      event.preventDefault();
+      changePage(+1);
+    }
   }
 
   async function load() {
-    return await fetchIngredientsBrowse(Number($currentPage), String($searchTerm), Number($pageSize), chosenDescriptors);
+    return await fetchIngredientsBrowse(
+      Number($currentPage),
+      String($searchTerm),
+      Number($pageSize),
+      chosenDescriptors,
+    );
   }
 
   async function reset() {
     searchTerm.set("");
     currentPage.set(1);
     chosenDescriptors = [];
-    notification.set({message:"resetting everything...", type:"info"});
-    goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
+    notification.set({ message: "resetting everything...", type: "info" });
+    goto(
+      `/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`,
+    );
     data = await load();
   }
-
-
 
   async function searchIngredients() {
     currentPage.set(1);
     if ($searchTerm === "") {
-      notification.set({message:"Showing all ingredients", type:"info"})
+      notification.set({ message: "Showing all ingredients", type: "info" });
     } else {
-      notification.set({message:`Searching for ${$searchTerm}...`, type:"info"});
+      notification.set({
+        message: `Searching for ${$searchTerm}...`,
+        type: "info",
+      });
     }
-    goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
+    goto(
+      `/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`,
+    );
 
     data = await load();
   }
 
   function handleSearch(event) {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       searchIngredients();
-    } else if (event.key === 'Escape') {
+    } else if (event.key === "Escape") {
       searchTerm.set("");
       searchInput.blur();
       searchIngredients();
-    } 
+    }
   }
 
   const searchDescriptors = () => {
-    return filteredDescriptors = descriptors.filter(descriptor => descriptor.name.toLowerCase().includes(searchTermDescriptor.toLowerCase()));
-  }
-  
+    return (filteredDescriptors = descriptors.filter((descriptor) =>
+      descriptor.name
+        .toLowerCase()
+        .includes(searchTermDescriptor.toLowerCase()),
+    ));
+  };
 
   async function changePage(increment) {
-    if ($currentPage + increment >= 1 && $currentPage + increment <= (data as { total_pages: number }).total_pages) {
+    if (
+      $currentPage + increment >= 1 &&
+      $currentPage + increment <= (data as { total_pages: number }).total_pages
+    ) {
       currentPage.update((value) => value + increment);
-      const message = `you are on page ${$currentPage}/${(data as { total_pages: number }).total_pages}`
-      notification.set({message:message, type:"info"});
-      goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
+      const message = `you are on page ${$currentPage}/${(data as { total_pages: number }).total_pages}`;
+      notification.set({ message: message, type: "info" });
+      goto(
+        `/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`,
+      );
       data = await load();
-    }
-    else {
-      notification.set({message:`there is nothing to seek there`, type:"error"});
-  }
-}
-
-async function updatePageSize() {
-    goto(`/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`);
-    data = await load(); // Wait for the URL to be updated before loading new data
-}
-
-async function toggleFilterMenu() {
-  showFilterMenu = !showFilterMenu;
-  await tick();
-  if (showFilterMenu) {
-    setTimeout(() => {
-      document.addEventListener('click', handleClickOutside)}, 100);
     } else {
-      document.removeEventListener('click', handleClickOutside);
+      notification.set({
+        message: `there is nothing to seek there`,
+        type: "error",
+      });
     }
-  showTuneMenu = false;
-}
+  }
 
-function toggleOverlay() {
+  async function updatePageSize() {
+    goto(
+      `/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`,
+    );
+    data = await load(); // Wait for the URL to be updated before loading new data
+  }
+
+  async function toggleFilterMenu() {
+    showFilterMenu = !showFilterMenu;
+    await tick();
+    if (showFilterMenu) {
+      setTimeout(() => {
+        document.addEventListener("click", handleClickOutside);
+      }, 100);
+    } else {
+      document.removeEventListener("click", handleClickOutside);
+    }
+    showTuneMenu = false;
+  }
+
+  function toggleOverlay() {
     chosenIngredient = null;
     showSuggestion = false;
     suggestedIngredient = null;
   }
 
-const description = "Browse perfume compounds. IFRA FIG.";
-const ogTitle = "BCF | Browse";
-const ogUrl = "https://bcfapp.app/browse";
-const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
-
+  const description = "Browse perfume compounds. IFRA FIG.";
+  const ogTitle = "BCF | Browse";
+  const ogUrl = "https://bcfapp.app/browse";
+  const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
 </script>
-<svelte:window class="dark:text-gray-100" on:keydown={handleKeydown}/>
+
+<svelte:window class="dark:text-gray-100" on:keydown={handleKeydown} />
 <svelte:head>
   <title>BCF | Browse</title>
-  <meta name="description" content={description}>
-  <meta property="og:title" content={ogTitle}>
-  <meta property="og:description" content={description}>
-  <meta property="og:image" content={imageUrl}>
-  <meta property="og:url" content={ogUrl}>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={ogTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={imageUrl} />
+  <meta property="og:url" content={ogUrl} />
 </svelte:head>
 
-  <button 
-    id="overlay" 
-    class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-20 backdrop-blur z-30 transition-all bg-blend-darken" 
-    class:hidden={!chosenIngredient} 
-    on:mousedown={toggleOverlay}
-    aria-label="Toggle Overlay"
-  >
-  <div >
-  <BrowseCardExpanded ingredient={chosenIngredient} bind:showSuggestion bind:suggestedIngredient />
+<button
+  id="overlay"
+  class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-20 bg-blend-darken backdrop-blur transition-all"
+  class:hidden={!chosenIngredient}
+  on:mousedown={toggleOverlay}
+  aria-label="Toggle Overlay"
+>
+  <div>
+    <BrowseCardExpanded
+      ingredient={chosenIngredient}
+      bind:showSuggestion
+      bind:suggestedIngredient
+    />
   </div>
 </button>
 
+<div id="app" class="my-8 flex flex-col items-center lowercase caret-sky-700">
+  <form
+    id="search-bar"
+    class="group flex w-full max-w-5xl flex-col items-center justify-center space-x-0 space-y-4 px-12 sm:flex-row sm:space-x-4 sm:space-y-0"
+  >
+    <button
+      on:mousedown={toggleFilterMenu}
+      title="filter by descriptors"
+      class="rounded-lg border border-sky-700 bg-sky-700 p-2 text-center text-sky-50 shadow transition-all hover:bg-white hover:text-sky-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
+    >
+      {#if showFilterMenu}
+        ingredients
+      {:else}
+        descriptors
+      {/if}
+    </button>
 
-    <div id = "app" class="flex flex-col items-center lowercase my-8 caret-sky-700">
-      <form id="search-bar" class="justify-center max-w-5xl flex w-full flex-col sm:flex-row px-12 space-x-0 space-y-4 sm:space-y-0 sm:space-x-4 items-center group">
-       
-        <button on:mousedown={toggleFilterMenu} title="filter by descriptors" class="rounded-lg border border-sky-700 p-2 text-center bg-sky-700 hover:text-sky-700 text-sky-50 active:shadow-none dark:hover:text-gray-50  hover:bg-white dark:hover:bg-gray-800 transition-all shadow hover:shadow-lg">
-          {#if showFilterMenu}
-            ingredients
-          {:else}
-            descriptors
-          {/if}
-        </button>
+    {#if showFilterMenu}
+      <input
+        type="text"
+        class="w-[250px] rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-sky-400/70 active:scale-90 lg:w-[600px] dark:bg-gray-800"
+        bind:value={searchTermDescriptor}
+        bind:this={searchInput}
+        on:keydown={searchDescriptors}
+        placeholder="/ search descriptors..."
+        title="find the descriptor that you are looking for"
+      />
+    {:else}
+      <input
+        type="text"
+        class="w-[250px] rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-sky-700/60 active:scale-90 lg:w-[600px] dark:bg-gray-800"
+        bind:value={$searchTerm}
+        bind:this={searchInput}
+        on:keydown={handleSearch}
+        placeholder="/ search ingredients..."
+        title="find an ingredient by CAS or the multiple names that it might have"
+      />
+    {/if}
 
-        {#if showFilterMenu}
+    <button
+      on:mousedown={reset}
+      title="reset everything"
+      class="hidden rounded-full border border-sky-700 bg-sky-700 p-2 text-sky-50 shadow hover:bg-white hover:text-sky-700 hover:shadow-lg active:shadow-none md:block dark:hover:bg-gray-800 dark:hover:text-gray-50"
+    >
+      <ResetIcon />
+    </button>
 
-        <input
-          type="text"
-          class = "w-[250px] lg:w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-400/70 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
-          bind:value={searchTermDescriptor}
-          bind:this={searchInput}
-          on:keydown={searchDescriptors}
+    <label
+      class="md:text-md group mr-auto hidden opacity-60 transition-opacity hover:opacity-100 sm:text-sm lg:block"
+    >
+      per page:
+      <input
+        type="number"
+        class="w-1/3 rounded-lg border-none focus:ring-2 focus:ring-sky-400/70 group-hover:shadow dark:bg-gray-800"
+        min="1"
+        bind:value={$pageSize}
+        on:change={updatePageSize}
+      />
+    </label>
 
-          placeholder="/ search descriptors..."
-          title="find the descriptor that you are looking for"
-        />
-
-          {:else}
-      
-        <input
-          type="text"
-          class = "w-[250px] lg:w-[600px] shadow border-none bg-white dark:bg-gray-800 focus:ring-sky-700/60 hover:shadow-lg focus:ring-2 rounded-lg focus:scale-95 active:scale-90 transition-all"
-          bind:value={$searchTerm}
-          bind:this = {searchInput}
-          on:keydown={handleSearch}
-          placeholder="/ search ingredients..."
-          title="find an ingredient by CAS or the multiple names that it might have"
-        />
-          {/if}
-            
-        <button on:mousedown={reset} title="reset everything" class="rounded-full hover:shadow-lg hidden md:block active:shadow-none bg-sky-700 border-sky-700 border dark:hover:text-gray-50 hover:bg-white dark:hover:bg-gray-800 hover:text-sky-700 text-sky-50 p-2 shadow">
-          <ResetIcon />
-        </button>
-
-        <label class="md:text-md sm:text-sm mr-auto opacity-60 hover:opacity-100 transition-opacity group hidden lg:block">
-          per page:
-          <input type="number" class='w-1/3 group-hover:shadow border-none focus:ring-sky-400/70 focus:ring-2 rounded-lg dark:bg-gray-800' min="1" bind:value={$pageSize} on:change={updatePageSize}/>
-        </label>
-
-        
-        <div id="pagination" class="flex hover:text-sky-700 justify-center items-center w-[100px] rounded-full active:shadow-none dark:hover:text-gray-50 hover:bg-white dark:hover:bg-gray-800 border border-sky-700 bg-sky-700 text-sky-50 p-2 shadow {showFilterMenu || ($currentPage <= 1 && $currentPage >= data.total_pages) ? 'invisible' : 'visible'}"
-
+    <div
+      id="pagination"
+      class="flex w-[100px] items-center justify-center rounded-full border border-sky-700 bg-sky-700 p-2 text-sky-50 shadow hover:bg-white hover:text-sky-700 active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50 {showFilterMenu ||
+      ($currentPage <= 1 && $currentPage >= data.total_pages)
+        ? 'invisible'
+        : 'visible'}"
+    >
+      {#if !showFilterMenu && $currentPage > 1}
+        <button
+          id="prevPage"
+          on:mousedown={() => changePage(-1)}
+          class="transition-all hover:-translate-x-2 active:scale-90"
         >
-          {#if !showFilterMenu && $currentPage > 1}
-          <button id="prevPage" on:mousedown={() => changePage(-1)} class="active:scale-90 transition-all hover:-translate-x-2">
-              <ArrowLeftIcon />
-          </button>
-          {/if}
-          {#if !showFilterMenu && $currentPage < data.total_pages}
-          <button id="nextPage" on:mousedown={() => changePage(1)} class="active:scale-90 transition-all hover:translate-x-2">
-              <ArrowRightIcon />
-          </button>
-          {/if}
-      </div>
-      
-      </form>
-    
-
-
-
-          <div id="table-wrapper" class="flex flex-row mx-8 items-center xl:font-medium font-normal select-text selection:bg-sky-300/40
-          ">
-        {#if isLoading || data === null}
-          <!-- If isLoading is true, display a loading message -->
-          <Loader />
-    
-          
-          {:else if data.results.length === 0}
-          <!-- If there are no results, display a message -->
-          <p class="text-5xl mt-12">hm. try a different search?</p>
-          
-        {:else}
-        <div id="wrapper" class="rounded-lg p-8"
-        in:blur={{duration: 150}}
+          <ArrowLeftIcon />
+        </button>
+      {/if}
+      {#if !showFilterMenu && $currentPage < data.total_pages}
+        <button
+          id="nextPage"
+          on:mousedown={() => changePage(1)}
+          class="transition-all hover:translate-x-2 active:scale-90"
         >
+          <ArrowRightIcon />
+        </button>
+      {/if}
+    </div>
+  </form>
 
+  <div
+    id="table-wrapper"
+    class="mx-8 flex select-text flex-row items-center font-normal selection:bg-sky-300/40 xl:font-medium
+          "
+  >
+    {#if isLoading || data === null}
+      <!-- If isLoading is true, display a loading message -->
+      <Loader />
+    {:else if data.results.length === 0}
+      <!-- If there are no results, display a message -->
+      <p class="mt-12 text-5xl">hm. try a different search?</p>
+    {:else}
+      <div id="wrapper" class="rounded-lg p-8" in:blur={{ duration: 150 }}>
         {#if showFilterMenu}
-      <div id="filter" class="grid xl:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-4 w-full p-2 border-none bg-white/20 dark:bg-gray-900/20 items-center rounded-lg"
-      in:fade={{duration: 150}}
-      bind:this={filterMenu}
-      >
-        {#if filteredDescriptors.length !== 0 && filteredDescriptors}
-        {#each sortedDescriptors as descriptor}
-        <div class="flex md:flex-col xl:flex-row">
-              <label class="md:text-md sm:text-sm lg:text-base" title={descriptor.description}>
-            <input class= 
-            "mx-2
-            size-4 rounded-full shadow border-none text-sky-600/90 focus:ring-sky-400/30 checked:bg-sky-700/70 checked:ring-sky-700/30 hover:checked:bg-sky-600/80 transition-all hover:scale-110" 
-            type="checkbox" id={descriptor.name} bind:group={chosenDescriptors} value={descriptor}/>
-            {descriptor.name}
-            </label>
+          <div
+            id="filter"
+            class="grid w-full items-center gap-4 rounded-lg border-none bg-white/20 p-2 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 dark:bg-gray-900/20"
+            in:fade={{ duration: 150 }}
+            bind:this={filterMenu}
+          >
+            {#if filteredDescriptors.length !== 0 && filteredDescriptors}
+              {#each sortedDescriptors as descriptor}
+                <div class="flex md:flex-col xl:flex-row">
+                  <label
+                    class="md:text-md sm:text-sm lg:text-base"
+                    title={descriptor.description}
+                  >
+                    <input
+                      class="mx-2
+            size-4 rounded-full border-none text-sky-600/90 shadow transition-all checked:bg-sky-700/70 checked:ring-sky-700/30 hover:scale-110 hover:checked:bg-sky-600/80 focus:ring-sky-400/30"
+                      type="checkbox"
+                      id={descriptor.name}
+                      bind:group={chosenDescriptors}
+                      value={descriptor}
+                    />
+                    {descriptor.name}
+                  </label>
+                </div>
+              {/each}
+            {:else}
+              <p>no descriptors found</p>
+            {/if}
           </div>
-
-          {/each}
-          {:else}
-          <p>no descriptors found</p>
-          {/if}
-      </div>
-
-{:else}
-<div id="card-holder" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          {#each data.results as ingredient}
-          {#if ingredient}
-          <BrowseCard {ingredient} bind:chosenIngredient />
-          {/if}
-          {/each}
-      </div>
-
-{/if}
-        </div>
+        {:else}
+          <div
+            id="card-holder"
+            class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3"
+          >
+            {#each data.results as ingredient}
+              {#if ingredient}
+                <BrowseCard {ingredient} bind:chosenIngredient />
+              {/if}
+            {/each}
+          </div>
         {/if}
-        </div>
       </div>
+    {/if}
+  </div>
+</div>

@@ -6,46 +6,63 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('browse', '0005_alter_family_options_alter_family_table'),
+        ("browse", "0005_alter_family_options_alter_family_table"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='family',
-            name='parent',
+            model_name="family",
+            name="parent",
         ),
         migrations.AddField(
-            model_name='ingredient',
-            name='associations',
-            field=models.TextField(blank=True, null=True, verbose_name='Associations'),
+            model_name="ingredient",
+            name="associations",
+            field=models.TextField(blank=True, null=True, verbose_name="Associations"),
         ),
         migrations.AddField(
-            model_name='ingredient',
-            name='impression',
-            field=models.TextField(blank=True, null=True, verbose_name='Impression'),
+            model_name="ingredient",
+            name="impression",
+            field=models.TextField(blank=True, null=True, verbose_name="Impression"),
         ),
         migrations.AddField(
-            model_name='ingredient',
-            name='other_names',
-            field=models.TextField(blank=True, null=True, verbose_name='Other Names'),
+            model_name="ingredient",
+            name="other_names",
+            field=models.TextField(blank=True, null=True, verbose_name="Other Names"),
         ),
         migrations.AddField(
-            model_name='ingredient',
-            name='similar_ingredients',
-            field=models.ManyToManyField(blank=True, to='browse.ingredient', verbose_name='Similar Ingredients'),
+            model_name="ingredient",
+            name="similar_ingredients",
+            field=models.ManyToManyField(
+                blank=True, to="browse.ingredient", verbose_name="Similar Ingredients"
+            ),
         ),
         migrations.RemoveField(
-            model_name='ingredient',
-            name='family',
+            model_name="ingredient",
+            name="family",
         ),
         migrations.AlterField(
-            model_name='ingredient',
-            name='ingredient_type',
-            field=models.CharField(choices=[('synthetic', 'Synthetic'), ('natural', 'Natural'), ('base', 'Base')], max_length=15, null=True, verbose_name='Type'),
+            model_name="ingredient",
+            name="ingredient_type",
+            field=models.CharField(
+                choices=[
+                    ("synthetic", "Synthetic"),
+                    ("natural", "Natural"),
+                    ("base", "Base"),
+                ],
+                max_length=15,
+                null=True,
+                verbose_name="Type",
+            ),
         ),
         migrations.AddField(
-            model_name='ingredient',
-            name='family',
-            field=models.ManyToManyField(blank=True, null=True, related_name='ingredients', to='browse.family', verbose_name='Family'),
+            model_name="ingredient",
+            name="family",
+            field=models.ManyToManyField(
+                blank=True,
+                null=True,
+                related_name="ingredients",
+                to="browse.family",
+                verbose_name="Family",
+            ),
         ),
     ]

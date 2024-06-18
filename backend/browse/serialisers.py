@@ -23,13 +23,32 @@ class IngredientSerialiser(serializers.ModelSerializer):
     contributors = serializers.StringRelatedField(many=True, read_only=True)
 
     def get_descriptors(self, obj):
-        descriptors = list(obj.descriptor1.all()) + list(obj.descriptor2.all()) + list(obj.descriptor3.all())
+        descriptors = (
+            list(obj.descriptor1.all())
+            + list(obj.descriptor2.all())
+            + list(obj.descriptor3.all())
+        )
         descriptor_names = [descriptor.name for descriptor in descriptors]
-        return ", ".join(descriptor_names) if descriptor_names else "No descriptors found"
+        return (
+            ", ".join(descriptor_names) if descriptor_names else "No descriptors found"
+        )
 
     class Meta:
-        fields = ('id', 'descriptors', 'common_name', 'other_names', 'cas', 'ingredient_type', 'use', 'volatility',
-                  'is_restricted', 'origin', 'constituents', 'similar_ingredients', 'contributors')
+        fields = (
+            "id",
+            "descriptors",
+            "common_name",
+            "other_names",
+            "cas",
+            "ingredient_type",
+            "use",
+            "volatility",
+            "is_restricted",
+            "origin",
+            "constituents",
+            "similar_ingredients",
+            "contributors",
+        )
         model = Ingredient
 
 
@@ -37,10 +56,11 @@ class SuggestedIngredientSerialiser(serializers.ModelSerializer):
     """
     Serialiser for the SuggestedIngredient model. It excludes the user field from the API response.
     """
+
     date_suggested = DateTimeSerializer(read_only=True)
 
     class Meta:
-        exclude = ('user', )
+        exclude = ("user",)
         model = SuggestedIngredient
 
 
@@ -48,6 +68,7 @@ class DescriptorSerialiser(serializers.ModelSerializer):
     """
     Serialiser for the Descriptor model. It includes all fields in the model.
     """
+
     class Meta:
-        fields = '__all__'
+        fields = "__all__"
         model = Descriptor

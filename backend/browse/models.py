@@ -7,6 +7,7 @@ class Descriptor(models.Model):
     """
     this model represents an olfactory family/descriptor seen in perfumery
     """
+
     name = models.CharField(max_length=30)
     description = models.TextField()
 
@@ -17,9 +18,10 @@ class Descriptor(models.Model):
         """
         Gives the verbose name to the families.
         """
+
         verbose_name = "Descriptor"
         verbose_name_plural = "Descriptors"
-        db_table = 'descriptors'
+        db_table = "descriptors"
 
 
 class Ingredient(models.Model):
@@ -54,10 +56,11 @@ class Ingredient(models.Model):
     :param contributors: the users who have contributed to the ingredient
     :type contributors: User
     """
+
     INGREDIENT_TYPES = [
-        ('synthetic', 'Synthetic'),
-        ('natural', 'Natural'),
-        ('base', 'Base')
+        ("synthetic", "Synthetic"),
+        ("natural", "Natural"),
+        ("base", "Base"),
     ]
 
     # primary data
@@ -66,24 +69,40 @@ class Ingredient(models.Model):
     cas = models.CharField(max_length=30, null=True, blank=True, verbose_name="CAS")
 
     # secondary data. descriptors exist independently and have no hierarchy over each other
-    descriptor1 = models.ManyToManyField('Descriptor', related_name='descriptor1', verbose_name='Descriptor 1')
-    descriptor2 = models.ManyToManyField('Descriptor', related_name='descriptor2', verbose_name='Descriptor 2')
-    descriptor3 = models.ManyToManyField('Descriptor', related_name='descriptor3', verbose_name='Descriptor 3')
+    descriptor1 = models.ManyToManyField(
+        "Descriptor", related_name="descriptor1", verbose_name="Descriptor 1"
+    )
+    descriptor2 = models.ManyToManyField(
+        "Descriptor", related_name="descriptor2", verbose_name="Descriptor 2"
+    )
+    descriptor3 = models.ManyToManyField(
+        "Descriptor", related_name="descriptor3", verbose_name="Descriptor 3"
+    )
 
-    ingredient_type = models.CharField(max_length=15, null=True, verbose_name="Type", choices=INGREDIENT_TYPES)
+    ingredient_type = models.CharField(
+        max_length=15, null=True, verbose_name="Type", choices=INGREDIENT_TYPES
+    )
     use = models.TextField(null=True, blank=True, verbose_name="Use")
-    volatility = models.CharField(max_length=20, null=True, blank=True, verbose_name="Volatility")
+    volatility = models.CharField(
+        max_length=20, null=True, blank=True, verbose_name="Volatility"
+    )
 
     # tertiary data
-    is_restricted = models.BooleanField(default=False, null=True, verbose_name="Restricted")
+    is_restricted = models.BooleanField(
+        default=False, null=True, verbose_name="Restricted"
+    )
     origin = models.TextField(null=True, blank=True, verbose_name="Origin")
-    constituents = models.ManyToManyField('self', verbose_name="Constituents", blank=True)
+    constituents = models.ManyToManyField(
+        "self", verbose_name="Constituents", blank=True
+    )
 
     # arbitrary data. depends fully on use rcontributions
-    similar_ingredients = models.ManyToManyField('self', verbose_name="Similar Ingredients", blank=True)
+    similar_ingredients = models.ManyToManyField(
+        "self", verbose_name="Similar Ingredients", blank=True
+    )
 
     # this field represents the users that have contributed to the ingredient
-    contributors = models.ManyToManyField(User, related_name='contributors')
+    contributors = models.ManyToManyField(User, related_name="contributors")
 
     def clean(self):
         """
@@ -91,10 +110,10 @@ class Ingredient(models.Model):
         Raises a validation error if the name is empty or if the ingredient type is synthetic and the cas number is empty.
         """
         if not self.common_name:
-            raise ValidationError('Name cannot be empty')
+            raise ValidationError("Name cannot be empty")
 
-        if self.ingredient_type == 'synthetic' and not self.cas:
-            raise ValidationError('CAS number is required for synthetic ingredients')
+        if self.ingredient_type == "synthetic" and not self.cas:
+            raise ValidationError("CAS number is required for synthetic ingredients")
 
     def __str__(self) -> str:
         """
@@ -109,7 +128,8 @@ class Ingredient(models.Model):
         :return:
         """
         from django.urls import reverse
-        return reverse('browse:ingredient', args=[str(self.id)])
+
+        return reverse("browse:ingredient", args=[str(self.id)])
 
     def get_descriptors(self):
         """
@@ -117,7 +137,11 @@ class Ingredient(models.Model):
         :return:
         """
         descriptors = []
-        for descriptor in [self.descriptor1.all(), self.descriptor2.all(), self.descriptor3.all()]:
+        for descriptor in [
+            self.descriptor1.all(),
+            self.descriptor2.all(),
+            self.descriptor3.all(),
+        ]:
             descriptors += [str(d) for d in descriptor]
         return ", ".join(descriptors) if descriptors else "No descriptors found"
 
@@ -126,10 +150,11 @@ class Ingredient(models.Model):
         Gives the verbose name to all ingredients. Raises a database integrity error if same name and cas are added.
         Orders everything by common name. Creates a table called ingredients.
         """
+
         verbose_name = "Ingredient"
         verbose_name_plural = "Ingredients"
-        unique_together = ('cas', 'common_name')
-        db_table = 'ingredients'
+        unique_together = ("cas", "common_name")
+        db_table = "ingredients"
 
 
 class SuggestedIngredient(models.Model):
@@ -142,16 +167,38 @@ class SuggestedIngredient(models.Model):
     """
 
     # the user fills these out
-    common_name = models.CharField(max_length=200, verbose_name="Name", default="unchanged")
-    other_names = models.TextField(null=True, blank=True, verbose_name="Other Names", default="unchanged")
-    cas = models.CharField(max_length=30, null=True, blank=True, verbose_name="CAS", default="unchanged")
-    ingredient_type = models.CharField(max_length=15, null=True, verbose_name="Type", default="unchanged")
+    common_name = models.CharField(
+        max_length=200, verbose_name="Name", default="unchanged"
+    )
+    other_names = models.TextField(
+        null=True, blank=True, verbose_name="Other Names", default="unchanged"
+    )
+    cas = models.CharField(
+        max_length=30, null=True, blank=True, verbose_name="CAS", default="unchanged"
+    )
+    ingredient_type = models.CharField(
+        max_length=15, null=True, verbose_name="Type", default="unchanged"
+    )
     use = models.TextField(null=True, blank=True, verbose_name="Use", default=1)
-    volatility = models.CharField(max_length=20, null=True, blank=True, verbose_name="Volatility", default="unchanged")
-    is_restricted = models.BooleanField(null=True, verbose_name="Restricted", default=None)
-    origin = models.TextField(null=True, blank=True, verbose_name="Origin", default="unchanged")
-    constituents = models.TextField(verbose_name="Constituents", blank=True, null=True, default="unchanged")
-    similar_ingredients = models.TextField(verbose_name="Similar Ingredients", blank=True, null=True, default=None)
+    volatility = models.CharField(
+        max_length=20,
+        null=True,
+        blank=True,
+        verbose_name="Volatility",
+        default="unchanged",
+    )
+    is_restricted = models.BooleanField(
+        null=True, verbose_name="Restricted", default=None
+    )
+    origin = models.TextField(
+        null=True, blank=True, verbose_name="Origin", default="unchanged"
+    )
+    constituents = models.TextField(
+        verbose_name="Constituents", blank=True, null=True, default="unchanged"
+    )
+    similar_ingredients = models.TextField(
+        verbose_name="Similar Ingredients", blank=True, null=True, default=None
+    )
     message = models.TextField(null=True, blank=True)
 
     # the system fills these out
@@ -159,13 +206,21 @@ class SuggestedIngredient(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     date_suggested = models.DateTimeField(auto_now_add=True)
 
-    status = models.CharField(max_length=20, default='pending',
-                              choices=[('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')])
+    status = models.CharField(
+        max_length=20,
+        default="pending",
+        choices=[
+            ("pending", "Pending"),
+            ("approved", "Approved"),
+            ("rejected", "Rejected"),
+        ],
+    )
 
     class Meta:
         """
         Gives the verbose name to the suggested ingredients. Creates a table called suggested_ingredients.
         """
+
         verbose_name = "suggested ingredient"
         verbose_name_plural = "suggested ingredients"
-        db_table = 'suggested_ingredients'
+        db_table = "suggested_ingredients"

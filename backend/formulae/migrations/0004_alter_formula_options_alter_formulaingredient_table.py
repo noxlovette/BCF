@@ -6,16 +6,20 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('formulae', '0003_rename_ingformula_formulaingredient_and_more'),
+        ("formulae", "0003_rename_ingformula_formulaingredient_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='formula',
-            options={'ordering': ['user', 'name'], 'verbose_name': "User's Formula", 'verbose_name_plural': "User's Formulae"},
+            name="formula",
+            options={
+                "ordering": ["user", "name"],
+                "verbose_name": "User's Formula",
+                "verbose_name_plural": "User's Formulae",
+            },
         ),
         migrations.AlterModelTable(
-            name='formulaingredient',
-            table='formula_ingredients',
+            name="formulaingredient",
+            table="formula_ingredients",
         ),
     ]

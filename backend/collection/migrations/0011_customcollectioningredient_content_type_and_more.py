@@ -7,19 +7,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('collection', '0010_rename_notes_collectioningredient_ideas_and_more'),
-        ('contenttypes', '0002_remove_content_type_name'),
+        ("collection", "0010_rename_notes_collectioningredient_ideas_and_more"),
+        ("contenttypes", "0002_remove_content_type_name"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customcollectioningredient',
-            name='content_type',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='contenttypes.contenttype'),
+            model_name="customcollectioningredient",
+            name="content_type",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="contenttypes.contenttype",
+            ),
         ),
         migrations.AddField(
-            model_name='customcollectioningredient',
-            name='object_id',
+            model_name="customcollectioningredient",
+            name="object_id",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
     ]

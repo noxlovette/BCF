@@ -7,29 +7,37 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('formulae', '0001_initial'),
+        ("formulae", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='formula',
-            options={'ordering': ['user', 'name'], 'verbose_name': 'Formula in Collection', 'verbose_name_plural': 'Formulae in Collection'},
+            name="formula",
+            options={
+                "ordering": ["user", "name"],
+                "verbose_name": "Formula in Collection",
+                "verbose_name_plural": "Formulae in Collection",
+            },
         ),
         migrations.AlterModelOptions(
-            name='ingformula',
-            options={'ordering': ['formula', 'collection_ing__ingredient__common_name'], 'verbose_name': 'Ingredient in Formula', 'verbose_name_plural': 'Ingredients in Formula'},
+            name="ingformula",
+            options={
+                "ordering": ["formula", "collection_ing__ingredient__common_name"],
+                "verbose_name": "Ingredient in Formula",
+                "verbose_name_plural": "Ingredients in Formula",
+            },
         ),
         migrations.AlterUniqueTogether(
-            name='formula',
-            unique_together={('user', 'name')},
+            name="formula",
+            unique_together={("user", "name")},
         ),
         migrations.AlterModelTable(
-            name='formula',
-            table='formulae',
+            name="formula",
+            table="formulae",
         ),
         migrations.AlterModelTable(
-            name='ingformula',
-            table='ing_formula',
+            name="ingformula",
+            table="ing_formula",
         ),
     ]

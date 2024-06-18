@@ -7,19 +7,29 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('collection', '0009_customcollectioningredient_use_and_more'),
-        ('formulae', '0006_alter_formula_options'),
+        ("collection", "0009_customcollectioningredient_use_and_more"),
+        ("formulae", "0006_alter_formula_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='formulaingredient',
-            name='custom_collection_ingredient',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='collection.customcollectioningredient'),
+            model_name="formulaingredient",
+            name="custom_collection_ingredient",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="collection.customcollectioningredient",
+            ),
         ),
         migrations.AlterField(
-            model_name='formulaingredient',
-            name='collection_ingredient',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='collection.collectioningredient'),
+            model_name="formulaingredient",
+            name="collection_ingredient",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="collection.collectioningredient",
+            ),
         ),
     ]

@@ -6,18 +6,18 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('collection', '0009_customcollectioningredient_use_and_more'),
+        ("collection", "0009_customcollectioningredient_use_and_more"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='collectioningredient',
-            old_name='notes',
-            new_name='ideas',
+            model_name="collectioningredient",
+            old_name="notes",
+            new_name="ideas",
         ),
         migrations.RenameField(
-            model_name='customcollectioningredient',
-            old_name='notes',
-            new_name='ideas',
+            model_name="customcollectioningredient",
+            old_name="notes",
+            new_name="ideas",
         ),
     ]

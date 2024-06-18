@@ -7,14 +7,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('collection', '0010_rename_notes_collectioningredient_ideas_and_more'),
-        ('formulae', '0008_tag_formula_tags'),
+        ("collection", "0010_rename_notes_collectioningredient_ideas_and_more"),
+        ("formulae", "0008_tag_formula_tags"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='formula',
-            name='custom_ingredient',
-            field=models.ForeignKey(blank=True, help_text='This is the custom ingredient used in this formula, if applicable.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='formulas_used_in', to='collection.customcollectioningredient'),
+            model_name="formula",
+            name="custom_ingredient",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="This is the custom ingredient used in this formula, if applicable.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="formulas_used_in",
+                to="collection.customcollectioningredient",
+            ),
         ),
     ]

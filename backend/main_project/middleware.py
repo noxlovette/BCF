@@ -10,7 +10,7 @@ class EnsureHttpsMiddleware:
     def __call__(self, request):
         if not request.is_secure() and settings.DEBUG is False:
             # Redirect to HTTPS version of the URL
-            secure_url = request.build_absolute_uri().replace('http://', 'https://')
+            secure_url = request.build_absolute_uri().replace("http://", "https://")
             return HttpResponseRedirect(secure_url)
 
         return self.get_response(request)

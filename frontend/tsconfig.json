@@ -1,5 +1,5 @@
 {
-    "extends": "./.svelte-kit/tsconfig.json",
-    "include": ["src/**/*"],
-    "exclude": ["node_modules/*"]
-  }
+  "extends": "./.svelte-kit/tsconfig.json",
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/*"]
+}

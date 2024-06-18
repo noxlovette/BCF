@@ -1,9 +1,9 @@
 <script>
-let quotes = [
-      "Perfume is the art that makes memory speak. — Francis Kurkdjian",
-      "A woman who doesn't wear perfume has no future. — Coco Chanel",
-      "Perfume is the key to our memories. — Kate Lord Brown",
-      "...the fragrance of goodness travels with us through all the worlds... — Buddha",
+  let quotes = [
+    "Perfume is the art that makes memory speak. — Francis Kurkdjian",
+    "A woman who doesn't wear perfume has no future. — Coco Chanel",
+    "Perfume is the key to our memories. — Kate Lord Brown",
+    "...the fragrance of goodness travels with us through all the worlds... — Buddha",
     "No elegance is possible without perfume. It is the unseen, unforgettable, ultimate accessory. — Coco Chanel",
     "Perfume is a way of stopping time. You smell a beautiful scent and you remember something. — Isabel Toledo",
     "Perfume is like a new dress, it makes you quite simply marvelous. — Estée Lauder",
@@ -18,20 +18,22 @@ let quotes = [
     "Only a few find the way, some don't recognize it when they do – some… don't ever want to.",
     "Then you'll see, that it is not the spoon that bends, it is only yourself",
     "...sooner or later you're going to realize just as I did that there's a difference between knowing the path and walking the path.",
-    ];
-    let chosenQuote = getRandomQuote();
-  
+  ];
+  let chosenQuote = getRandomQuote();
+
   function getRandomQuote() {
     return quotes[Math.floor(Math.random() * quotes.length)];
   }
-
 </script>
 
-<div class="mx-auto max-w-[800px] xl:max-w-7xl cursor-wait">
-<div class="size-full flex flex-col items-center">
-<div id="spinner" class="flex size-24 border-8 m-10 border-amber-400 border-dotted rounded-full animate-spin" />
-<p class="text-2xl font-bold text-center text-pretty normal-case">{chosenQuote}</p>
+<div class="mx-auto max-w-[800px] cursor-wait xl:max-w-7xl">
+  <div class="flex size-full flex-col items-center">
+    <div
+      id="spinner"
+      class="m-10 flex size-24 animate-spin rounded-full border-8 border-dotted border-amber-400"
+    />
+    <p class="text-pretty text-center text-2xl font-bold normal-case">
+      {chosenQuote}
+    </p>
+  </div>
 </div>
-</div>
-  
-  

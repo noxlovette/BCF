@@ -10,9 +10,9 @@ class ValidateReferrerMiddleware:
 
     def __call__(self, request):
         # Check if the request is for your API endpoint
-        if 'api/ingredients' in request.path:
+        if "api/ingredients" in request.path:
             # Check if the referrer is from your website – don't allow requests from other websites
-            if 'http://127.0.0.1:8000' not in request.META.get('HTTP_REFERER', ''):
+            if "http://127.0.0.1:8000" not in request.META.get("HTTP_REFERER", ""):
                 return HttpResponseForbidden()
 
         response = self.get_response(request)

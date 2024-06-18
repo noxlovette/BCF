@@ -11,8 +11,9 @@ class CollectionIngredient(models.Model):
     this is the abstract base class for the ingredients in the collection.
     inherited by the regular and custom collection ingredient models.
     """
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    unit = models.CharField(max_length=50, default='g', verbose_name="Unit")
+    unit = models.CharField(max_length=50, default="g", verbose_name="Unit")
     is_collection = models.BooleanField(default=False, verbose_name="In Collection")
     date_added = models.DateTimeField(auto_now_add=True, verbose_name="Date Added")
     amount = models.FloatField(default=0, verbose_name="Amount")
@@ -35,19 +36,43 @@ class CollectionIngredient(models.Model):
         """
         without this, the client will return hell. the decryption takes place here, on the server side.
         """
-        self._impression = decrypt_field(self.encrypted_impression) if self.encrypted_impression else None
-        self._colour = decrypt_field(self.encrypted_colour) if self.encrypted_colour else None
-        self._associations = decrypt_field(self.encrypted_associations) if self.encrypted_associations else None
-        self._ideas = decrypt_field(self.encrypted_ideas) if self.encrypted_ideas else None
+        self._impression = (
+            decrypt_field(self.encrypted_impression)
+            if self.encrypted_impression
+            else None
+        )
+        self._colour = (
+            decrypt_field(self.encrypted_colour) if self.encrypted_colour else None
+        )
+        self._associations = (
+            decrypt_field(self.encrypted_associations)
+            if self.encrypted_associations
+            else None
+        )
+        self._ideas = (
+            decrypt_field(self.encrypted_ideas) if self.encrypted_ideas else None
+        )
 
     def refresh_from_db(self, *args, **kwargs):
         """
         decrypts the fields from the database before refreshing the instance. straightforward.
         """
-        self._impression = decrypt_field(self.encrypted_impression) if self.encrypted_impression else None
-        self._colour = decrypt_field(self.encrypted_colour) if self.encrypted_colour else None
-        self._associations = decrypt_field(self.encrypted_associations) if self.encrypted_associations else None
-        self._ideas = decrypt_field(self.encrypted_ideas) if self.encrypted_ideas else None
+        self._impression = (
+            decrypt_field(self.encrypted_impression)
+            if self.encrypted_impression
+            else None
+        )
+        self._colour = (
+            decrypt_field(self.encrypted_colour) if self.encrypted_colour else None
+        )
+        self._associations = (
+            decrypt_field(self.encrypted_associations)
+            if self.encrypted_associations
+            else None
+        )
+        self._ideas = (
+            decrypt_field(self.encrypted_ideas) if self.encrypted_ideas else None
+        )
 
         super().refresh_from_db(*args, **kwargs)
 
@@ -93,17 +118,18 @@ class RegularCollectionIngredient(CollectionIngredient):
     the only difference between this and the custom collection ingredient is that this one has a foreign key to the
     ingredient model. this is the model for the ingredients that are already in the database.
     """
+
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"regular collection ing {self.user.username} - {self.ingredient.common_name}"
 
     class Meta:
-        unique_together = ['user', 'ingredient']
+        unique_together = ["user", "ingredient"]
         verbose_name = "Ingredient in Collection"
         verbose_name_plural = "Ingredients in Collection"
-        db_table = 'user_collection_ing'
-        ordering = ['user', 'ingredient__common_name']
+        db_table = "user_collection_ing"
+        ordering = ["user", "ingredient__common_name"]
 
 
 class CustomCollectionIngredient(CollectionIngredient):
@@ -112,6 +138,7 @@ class CustomCollectionIngredient(CollectionIngredient):
     encrypted. the user can add their own ingredients to the collection, and these are stored in this model. this guarantees
     trust with the app. trust me, it is hard for me to manually decrypt this.
     """
+
     encrypted_common_name = models.BinaryField(null=True, blank=True, editable=False)
     encrypted_cas = models.BinaryField(null=True, blank=True, editable=False)
     encrypted_use = models.BinaryField(null=True, blank=True, editable=False)
@@ -119,9 +146,11 @@ class CustomCollectionIngredient(CollectionIngredient):
 
     # these lines are for the generic foreign key with the Formula model. the reason why this is so is that creating a
     # simple foreign key would result in a circular error. the formula model is defined in the formulae app.
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE, null=True, blank=True
+    )
     object_id = models.PositiveIntegerField(null=True, blank=True)
-    content_object = GenericForeignKey('content_type', 'object_id')
+    content_object = GenericForeignKey("content_type", "object_id")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -136,10 +165,18 @@ class CustomCollectionIngredient(CollectionIngredient):
         it might be worth merging this and the aforementioned method into one method.
         """
         super().prepare_for_serialization()
-        self._common_name = decrypt_field(self.encrypted_common_name) if self.encrypted_common_name else None
+        self._common_name = (
+            decrypt_field(self.encrypted_common_name)
+            if self.encrypted_common_name
+            else None
+        )
         self._cas = decrypt_field(self.encrypted_cas) if self.encrypted_cas else None
         self._use = decrypt_field(self.encrypted_use) if self.encrypted_use else None
-        self._volatility = decrypt_field(self.encrypted_volatility) if self.encrypted_volatility else None
+        self._volatility = (
+            decrypt_field(self.encrypted_volatility)
+            if self.encrypted_volatility
+            else None
+        )
 
     def save(self, *args, **kwargs):
         """
@@ -167,10 +204,18 @@ class CustomCollectionIngredient(CollectionIngredient):
         """
         decrypts the fields before refreshing the instance. the plaintext fields are set to the decrypted versions of the
         """
-        self._common_name = decrypt_field(self.encrypted_common_name) if self.encrypted_common_name else None
+        self._common_name = (
+            decrypt_field(self.encrypted_common_name)
+            if self.encrypted_common_name
+            else None
+        )
         self._cas = decrypt_field(self.encrypted_cas) if self.encrypted_cas else None
         self._use = decrypt_field(self.encrypted_use) if self.encrypted_use else None
-        self._volatility = decrypt_field(self.encrypted_volatility) if self.encrypted_volatility else None
+        self._volatility = (
+            decrypt_field(self.encrypted_volatility)
+            if self.encrypted_volatility
+            else None
+        )
 
         super().refresh_from_db(*args, **kwargs)
 
@@ -179,7 +224,8 @@ class CustomCollectionIngredient(CollectionIngredient):
         yes, ordering only by user's name. ordering is near useless anyway, because the representation on the website is
         in a table, sorted automatically on the client.
         """
+
         verbose_name = "Custom Ingredient"
         verbose_name_plural = "Custom Ingredients"
-        db_table = 'custom_collection_ing'
-        ordering = ['user']
+        db_table = "custom_collection_ing"
+        ordering = ["user"]

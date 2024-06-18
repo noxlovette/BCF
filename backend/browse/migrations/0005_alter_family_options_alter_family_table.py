@@ -6,16 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('browse', '0004_family'),
+        ("browse", "0004_family"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='family',
-            options={'verbose_name': 'Family', 'verbose_name_plural': 'Families'},
+            name="family",
+            options={"verbose_name": "Family", "verbose_name_plural": "Families"},
         ),
         migrations.AlterModelTable(
-            name='family',
-            table='family',
+            name="family",
+            table="family",
         ),
     ]

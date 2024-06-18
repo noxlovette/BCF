@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('collection', '0003_alter_usercollectioning_options_and_more'),
+        ("collection", "0003_alter_usercollectioning_options_and_more"),
     ]
 
     operations = [
         migrations.AlterModelTable(
-            name='usercollectioning',
-            table='user_collection_ing',
+            name="usercollectioning",
+            table="user_collection_ing",
         ),
     ]

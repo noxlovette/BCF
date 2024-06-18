@@ -6,24 +6,24 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('browse', '0009_remove_ingredient_ifra'),
+        ("browse", "0009_remove_ingredient_ifra"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='ingredient',
-            name='associations',
+            model_name="ingredient",
+            name="associations",
         ),
         migrations.RemoveField(
-            model_name='ingredient',
-            name='colour',
+            model_name="ingredient",
+            name="colour",
         ),
         migrations.RemoveField(
-            model_name='ingredient',
-            name='impression',
+            model_name="ingredient",
+            name="impression",
         ),
         migrations.RemoveField(
-            model_name='ingredient',
-            name='is_collection',
+            model_name="ingredient",
+            name="is_collection",
         ),
     ]

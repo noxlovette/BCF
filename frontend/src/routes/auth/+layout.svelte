@@ -1,10 +1,7 @@
 <script>
-import Footer from "$lib/components/Footer.svelte";
-
+  import Footer from "$lib/components/Footer.svelte";
 </script>
 
-
-<div class="flex flex-col min-h-screen transition-opacity">
-
-    <slot></slot>
+<div class="flex min-h-screen flex-col transition-opacity">
+  <slot></slot>
 </div>

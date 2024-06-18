@@ -1,30 +1,32 @@
 <script>
   import Header from "$lib/components/Header.svelte";
   import Footer from "$lib/components/Footer.svelte";
-import Notification from "$lib/components/Notification.svelte";
-import "../app.css";
+  import Notification from "$lib/components/Notification.svelte";
+  import "../app.css";
 
-  let description = "BCF. Browse perfume compounds, collect them, and formulate your next favourite fragrance.";
-  let keywords = "perfume, formulation, fragrance, BCF, perfumers, browse, collect, formulate, ingredient, linalool, essential oil, absolute";
+  let description =
+    "BCF. Browse perfume compounds, collect them, and formulate your next favourite fragrance.";
+  let keywords =
+    "perfume, formulation, fragrance, BCF, perfumers, browse, collect, formulate, ingredient, linalool, essential oil, absolute";
   let robots = "index, follow";
   let ogTitle = "BCF";
-  let ogDescription = "BCF. Browse perfume compounds, collect them, and formulate your next favourite fragrance.";
+  let ogDescription =
+    "BCF. Browse perfume compounds, collect them, and formulate your next favourite fragrance.";
   let ogUrl = "https://bcfapp.app";
   let ogImage = "https://bcfapp.app/assets/meta/dalle-cover-main.webp";
   let ogType = "website";
-
 </script>
+
 <svelte:head>
-  <meta name="description" content={description}>
-  <meta name="keywords" content={keywords}>
-  <meta name="robots" content={robots}>
+  <meta name="description" content={description} />
+  <meta name="keywords" content={keywords} />
+  <meta name="robots" content={robots} />
 
-  <meta property="og:title" content={ogTitle}>
-  <meta property="og:description" content={ogDescription}>
-  <meta property="og:url" content={ogUrl}>
-  <meta property="og:image" content={ogImage}>
-  <meta property="og:type" content={ogType}>
-
+  <meta property="og:title" content={ogTitle} />
+  <meta property="og:description" content={ogDescription} />
+  <meta property="og:url" content={ogUrl} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:type" content={ogType} />
 
   <script type="application/ld+json">
     {
@@ -36,15 +38,17 @@ import "../app.css";
       "applicationCategory": "LifestyleApplication",
       "operatingSystem": "All"
     }
-    </script>
+  </script>
 </svelte:head>
 
-<main class="text-stone-800 dark:text-stone-100 dark:bg-stone-900 antialiased min-h-screen min-w-screen bg-orange-50/40">
-<Header />
-  <div class="flex flex-col items-center justify-start min-h-screen">
-  <slot />
+<main
+  class="min-w-screen min-h-screen bg-orange-50/40 text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100"
+>
+  <Header />
+  <div class="flex min-h-screen flex-col items-center justify-start">
+    <slot />
   </div>
 
-<Notification />
-<Footer />
+  <Notification />
+  <Footer />
 </main>

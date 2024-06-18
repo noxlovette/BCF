@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('collection', '0005_rename_usercollectioning_collectioningredient'),
+        ("collection", "0005_rename_usercollectioning_collectioningredient"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='collectioningredient',
-            name='colour',
-            field=models.CharField(blank=True, max_length=50, null=True, verbose_name='Colour'),
+            model_name="collectioningredient",
+            name="colour",
+            field=models.CharField(
+                blank=True, max_length=50, null=True, verbose_name="Colour"
+            ),
         ),
     ]

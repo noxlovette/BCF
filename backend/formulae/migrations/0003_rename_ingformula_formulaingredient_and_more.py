@@ -6,22 +6,29 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('collection', '0005_rename_usercollectioning_collectioningredient'),
-        ('formulae', '0002_alter_formula_options_alter_ingformula_options_and_more'),
+        ("collection", "0005_rename_usercollectioning_collectioningredient"),
+        ("formulae", "0002_alter_formula_options_alter_ingformula_options_and_more"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='IngFormula',
-            new_name='FormulaIngredient',
+            old_name="IngFormula",
+            new_name="FormulaIngredient",
         ),
         migrations.AlterModelOptions(
-            name='formulaingredient',
-            options={'ordering': ['formula', 'collection_ingredient__ingredient__common_name'], 'verbose_name': 'Ingredient in Formula', 'verbose_name_plural': 'Ingredients in Formula'},
+            name="formulaingredient",
+            options={
+                "ordering": [
+                    "formula",
+                    "collection_ingredient__ingredient__common_name",
+                ],
+                "verbose_name": "Ingredient in Formula",
+                "verbose_name_plural": "Ingredients in Formula",
+            },
         ),
         migrations.RenameField(
-            model_name='formulaingredient',
-            old_name='collection_ing',
-            new_name='collection_ingredient',
+            model_name="formulaingredient",
+            old_name="collection_ing",
+            new_name="collection_ingredient",
         ),
     ]

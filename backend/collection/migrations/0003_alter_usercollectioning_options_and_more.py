@@ -7,18 +7,22 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('browse', '0010_remove_ingredient_associations_and_more'),
-        ('collection', '0002_alter_usercollectioning_amount_and_more'),
+        ("browse", "0010_remove_ingredient_associations_and_more"),
+        ("collection", "0002_alter_usercollectioning_amount_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='usercollectioning',
-            options={'ordering': ['user', 'ingredient'], 'verbose_name': 'Ingredient in Collection', 'verbose_name_plural': 'Ingredients in Collection'},
+            name="usercollectioning",
+            options={
+                "ordering": ["user", "ingredient"],
+                "verbose_name": "Ingredient in Collection",
+                "verbose_name_plural": "Ingredients in Collection",
+            },
         ),
         migrations.AlterUniqueTogether(
-            name='usercollectioning',
-            unique_together={('user', 'ingredient')},
+            name="usercollectioning",
+            unique_together={("user", "ingredient")},
         ),
     ]

@@ -7,44 +7,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('formulae', '0012_formula_notes_alter_formula_description'),
+        ("formulae", "0012_formula_notes_alter_formula_description"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='formula',
-            options={'ordering': ['user', '-updated_at'], 'verbose_name': "User's Formula", 'verbose_name_plural': "User's Formulae"},
+            name="formula",
+            options={
+                "ordering": ["user", "-updated_at"],
+                "verbose_name": "User's Formula",
+                "verbose_name_plural": "User's Formulae",
+            },
         ),
         migrations.AlterUniqueTogether(
-            name='formula',
-            unique_together={('user',)},
+            name="formula",
+            unique_together={("user",)},
         ),
         migrations.AddField(
-            model_name='formula',
-            name='encrypted_description',
+            model_name="formula",
+            name="encrypted_description",
             field=models.BinaryField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='formula',
-            name='encrypted_name',
+            model_name="formula",
+            name="encrypted_name",
             field=models.BinaryField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='formula',
-            name='encrypted_notes',
+            model_name="formula",
+            name="encrypted_notes",
             field=models.BinaryField(blank=True, null=True),
         ),
         migrations.RemoveField(
-            model_name='formula',
-            name='description',
+            model_name="formula",
+            name="description",
         ),
         migrations.RemoveField(
-            model_name='formula',
-            name='name',
+            model_name="formula",
+            name="name",
         ),
         migrations.RemoveField(
-            model_name='formula',
-            name='notes',
+            model_name="formula",
+            name="notes",
         ),
     ]

@@ -2,7 +2,11 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import User
-from collection.models import RegularCollectionIngredient, Ingredient, CustomCollectionIngredient
+from collection.models import (
+    RegularCollectionIngredient,
+    Ingredient,
+    CustomCollectionIngredient,
+)
 from main_project.encryption import decrypt_field, encrypt_field
 
 
@@ -10,6 +14,7 @@ class Tag(models.Model):
     """
     This is the model of a tag. It is a list of tags that can be associated with a formula.
     """
+
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, unique=True)
 
@@ -17,10 +22,10 @@ class Tag(models.Model):
         return self.name
 
     class Meta:
-        db_table = 'tags'
+        db_table = "tags"
         verbose_name = "Tag"
         verbose_name_plural = "Tags"
-        ordering = ['name']
+        ordering = ["name"]
 
 
 class Formula(models.Model):
@@ -38,13 +43,14 @@ class Formula(models.Model):
     :param updated_at: The date and time the formula was last updated.
 
     """
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     encrypted_name = models.BinaryField(null=True, blank=True, editable=False)
     encrypted_description = models.BinaryField(null=True, blank=True, editable=False)
     encrypted_notes = models.BinaryField(null=True, blank=True, editable=False)
 
     tags = models.ManyToManyField(Tag, blank=True)
-    solvent = models.CharField(max_length=100, blank=True, null=True, default='Ethanol')
+    solvent = models.CharField(max_length=100, blank=True, null=True, default="Ethanol")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -59,16 +65,28 @@ class Formula(models.Model):
         the encryption-decryption logic repeats the same pattern as the CollectionIngredient model. the plaintext data is
         stored in temporary attributes, and the encrypted fields are set to the encrypted versions of the plaintext.
         """
-        self._description = decrypt_field(self.encrypted_description) if self.encrypted_description else None
+        self._description = (
+            decrypt_field(self.encrypted_description)
+            if self.encrypted_description
+            else None
+        )
         self._name = decrypt_field(self.encrypted_name) if self.encrypted_name else None
-        self._notes = decrypt_field(self.encrypted_notes) if self.encrypted_notes else None
+        self._notes = (
+            decrypt_field(self.encrypted_notes) if self.encrypted_notes else None
+        )
 
         return self
 
     def refresh_from_db(self, *args, **kwargs):
-        self._description = decrypt_field(self.encrypted_description) if self.encrypted_description else None
+        self._description = (
+            decrypt_field(self.encrypted_description)
+            if self.encrypted_description
+            else None
+        )
         self._name = decrypt_field(self.encrypted_name) if self.encrypted_name else None
-        self._notes = decrypt_field(self.encrypted_notes) if self.encrypted_notes else None
+        self._notes = (
+            decrypt_field(self.encrypted_notes) if self.encrypted_notes else None
+        )
 
         super().refresh_from_db(*args, **kwargs)
 
@@ -90,8 +108,8 @@ class Formula(models.Model):
     class Meta:
         verbose_name = "User's Formula"
         verbose_name_plural = "User's Formulae"
-        db_table = 'formulae'
-        ordering = ['user', '-updated_at']
+        db_table = "formulae"
+        ordering = ["user", "-updated_at"]
 
 
 class FormulaIngredient(models.Model):
@@ -108,16 +126,22 @@ class FormulaIngredient(models.Model):
     :param percentage: The percentage of the ingredient in the formula, I preset to 100. on the client, the current
     default is 10... I don't know why.
     """
-    formula = models.ForeignKey(Formula, on_delete=models.CASCADE, related_name='ingredients')
-    collection_ingredient = models.ForeignKey(RegularCollectionIngredient, on_delete=models.CASCADE, null=True, blank=True)
-    custom_collection_ingredient = models.ForeignKey(CustomCollectionIngredient, on_delete=models.CASCADE, null=True,
-                                                     blank=True)
+
+    formula = models.ForeignKey(
+        Formula, on_delete=models.CASCADE, related_name="ingredients"
+    )
+    collection_ingredient = models.ForeignKey(
+        RegularCollectionIngredient, on_delete=models.CASCADE, null=True, blank=True
+    )
+    custom_collection_ingredient = models.ForeignKey(
+        CustomCollectionIngredient, on_delete=models.CASCADE, null=True, blank=True
+    )
     amount = models.IntegerField(default=0, verbose_name="Amount")
-    unit = models.CharField(max_length=50, default='g', verbose_name="Unit")
+    unit = models.CharField(max_length=50, default="g", verbose_name="Unit")
     percentage = models.FloatField(
         default=100,
         validators=[MinValueValidator(0), MaxValueValidator(100)],
-        verbose_name="Percentage"
+        verbose_name="Percentage",
     )
 
     def clean(self):
@@ -125,7 +149,9 @@ class FormulaIngredient(models.Model):
         Override the clean method to ensure that either collection_ingredient or custom_collection_ingredient is set.
         """
         if not self.collection_ingredient and not self.custom_collection_ingredient:
-            raise ValidationError("Either collection_ingredient or custom_collection_ingredient must be set.")
+            raise ValidationError(
+                "Either collection_ingredient or custom_collection_ingredient must be set."
+            )
 
     def get_ingredient(self):
         """
@@ -139,7 +165,7 @@ class FormulaIngredient(models.Model):
             return None
 
     class Meta:
-        db_table = 'formula_ingredients'
+        db_table = "formula_ingredients"
         verbose_name = "Ingredient in Formula"
         verbose_name_plural = "Ingredients in Formula"
-        ordering = ['formula', 'collection_ingredient__ingredient__common_name']
+        ordering = ["formula", "collection_ingredient__ingredient__common_name"]

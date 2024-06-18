@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('formulae', '0011_remove_formula_custom_ingredient'),
+        ("formulae", "0011_remove_formula_custom_ingredient"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='formula',
-            name='notes',
-            field=models.TextField(blank=True, default='nothing here'),
+            model_name="formula",
+            name="notes",
+            field=models.TextField(blank=True, default="nothing here"),
         ),
         migrations.AlterField(
-            model_name='formula',
-            name='description',
-            field=models.TextField(blank=True, default='nothing here'),
+            model_name="formula",
+            name="description",
+            field=models.TextField(blank=True, default="nothing here"),
         ),
     ]

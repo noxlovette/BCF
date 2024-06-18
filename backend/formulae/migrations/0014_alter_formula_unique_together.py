@@ -6,12 +6,15 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('formulae', '0013_alter_formula_options_alter_formula_unique_together_and_more'),
+        (
+            "formulae",
+            "0013_alter_formula_options_alter_formula_unique_together_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='formula',
+            name="formula",
             unique_together=set(),
         ),
     ]

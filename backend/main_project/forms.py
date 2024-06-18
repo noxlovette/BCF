@@ -3,13 +3,23 @@ from django.contrib.auth.forms import AuthenticationForm
 
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(label='Username', widget=forms.TextInput(attrs={
-        'class': 'form-control',
-        'placeholder': 'Enter your username',
-        'id': 'username-field',
-    }))
-    password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={
-        'class': 'form-control',
-        'placeholder': 'Enter your password',
-        'id': 'password-field',
-    }))
+    username = forms.CharField(
+        label="Username",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter your username",
+                "id": "username-field",
+            }
+        ),
+    )
+    password = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter your password",
+                "id": "password-field",
+            }
+        ),
+    )

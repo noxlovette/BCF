@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('collection', '0013_alter_collectioningredient_options_and_more'),
+        ("collection", "0013_alter_collectioningredient_options_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customcollectioningredient',
-            name='encrypted_volatility',
+            model_name="customcollectioningredient",
+            name="encrypted_volatility",
             field=models.BinaryField(blank=True, null=True),
         ),
     ]

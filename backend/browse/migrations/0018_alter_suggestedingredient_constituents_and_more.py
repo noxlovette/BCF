@@ -6,18 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('browse', '0017_ingredient_contributors_suggestedingredient'),
+        ("browse", "0017_ingredient_contributors_suggestedingredient"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='suggestedingredient',
-            name='constituents',
-            field=models.TextField(blank=True, default='unchanged', null=True, verbose_name='Constituents'),
+            model_name="suggestedingredient",
+            name="constituents",
+            field=models.TextField(
+                blank=True, default="unchanged", null=True, verbose_name="Constituents"
+            ),
         ),
         migrations.AlterField(
-            model_name='suggestedingredient',
-            name='similar_ingredients',
-            field=models.TextField(blank=True, default=None, null=True, verbose_name='Similar Ingredients'),
+            model_name="suggestedingredient",
+            name="similar_ingredients",
+            field=models.TextField(
+                blank=True, default=None, null=True, verbose_name="Similar Ingredients"
+            ),
         ),
     ]

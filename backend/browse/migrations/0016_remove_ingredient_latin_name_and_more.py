@@ -6,25 +6,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('browse', '0015_rename_family_descriptor_alter_descriptor_options_and_more'),
+        ("browse", "0015_rename_family_descriptor_alter_descriptor_options_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='ingredient',
-            name='latin_name',
+            model_name="ingredient",
+            name="latin_name",
         ),
         migrations.RemoveField(
-            model_name='ingredient',
-            name='olfactory_profile',
+            model_name="ingredient",
+            name="olfactory_profile",
         ),
         migrations.RemoveField(
-            model_name='ingredient',
-            name='constituents',
+            model_name="ingredient",
+            name="constituents",
         ),
         migrations.AddField(
-            model_name='ingredient',
-            name='constituents',
-            field=models.ManyToManyField(blank=True, to='browse.ingredient', verbose_name='Constituents'),
+            model_name="ingredient",
+            name="constituents",
+            field=models.ManyToManyField(
+                blank=True, to="browse.ingredient", verbose_name="Constituents"
+            ),
         ),
     ]
