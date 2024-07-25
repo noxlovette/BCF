@@ -184,11 +184,11 @@
   };
 
   async function changePage(increment) {
-    if (
+    if (document.activeElement === searchInput) {
+      searchIngredients();
+    } else if (
       $currentPage + increment >= 1 &&
-      $currentPage + increment <= (data as { total_pages: number }).total_pages &&
-      document.activeElement !== searchInput
-    ) {
+      $currentPage + increment <= (data as { total_pages: number }).total_pages ) {
       currentPage.update((value) => value + increment);
       const message = `you are on page ${$currentPage}/${(data as { total_pages: number }).total_pages}`;
       notification.set({ message: message, type: "info" });
