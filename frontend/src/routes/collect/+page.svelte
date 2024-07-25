@@ -305,7 +305,7 @@
     {#if isLoading || collection === null}
       <Loader />
     {:else if filteredCollection.length === 0}
-      <p class="mt-12 text-5xl">hm. try a different search?</p>
+    <p class="m-12 text-5xl text-center">hm. try a different search?</p>
     {:else}
       <div id="wrapper" class="rounded-lg p-8" in:blur={{ duration: 150 }}>
         <div

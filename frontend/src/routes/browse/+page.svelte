@@ -186,7 +186,8 @@
   async function changePage(increment) {
     if (
       $currentPage + increment >= 1 &&
-      $currentPage + increment <= (data as { total_pages: number }).total_pages
+      $currentPage + increment <= (data as { total_pages: number }).total_pages &&
+      document.activeElement !== searchInput
     ) {
       currentPage.update((value) => value + increment);
       const message = `you are on page ${$currentPage}/${(data as { total_pages: number }).total_pages}`;
@@ -261,15 +262,17 @@
   </div>
 </button>
 
-<div id="app" class="my-8 flex flex-col items-center lowercase caret-sky-700">
+<div id="app" class="md:my-8 flex flex-col items-center lowercase caret-sky-700">
   <form
     id="search-bar"
-    class="group flex w-full max-w-5xl flex-col items-center justify-center space-x-0 space-y-4 px-12 sm:flex-row sm:space-x-4 sm:space-y-0"
+    class="group flex w-full max-w-5xl flex-col items-center justify-center space-x-0 space-y-4 px-8 lg:px-12 sm:flex-row sm:space-x-4 sm:space-y-0"
   >
+
+  <div class="flex-row w-full flex space-x-2 md:space-x-4">
     <button
       on:mousedown={toggleFilterMenu}
       title="filter by descriptors"
-      class="rounded-lg border border-sky-700 bg-sky-700 p-2 text-center text-sky-50 shadow transition-all hover:bg-white hover:text-sky-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
+      class="rounded-lg hidden md:flex border border-sky-700 bg-sky-700 p-2 text-center text-sky-50 shadow transition-all hover:bg-white hover:text-sky-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
     >
       {#if showFilterMenu}
         ingredients
@@ -281,7 +284,7 @@
     {#if showFilterMenu}
       <input
         type="text"
-        class="w-[250px] rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-sky-400/70 active:scale-90 lg:w-[600px] dark:bg-gray-800"
+        class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-sky-400/70 active:scale-90 lg:w-[600px] dark:bg-gray-800"
         bind:value={searchTermDescriptor}
         bind:this={searchInput}
         on:keydown={searchDescriptors}
@@ -291,7 +294,7 @@
     {:else}
       <input
         type="text"
-        class="w-[250px] rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-sky-700/60 active:scale-90 lg:w-[600px] dark:bg-gray-800"
+        class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-sky-700/60 active:scale-90 lg:w-[600px] dark:bg-gray-800"
         bind:value={$searchTerm}
         bind:this={searchInput}
         on:keydown={handleSearch}
@@ -303,10 +306,12 @@
     <button
       on:mousedown={reset}
       title="reset everything"
-      class="hidden rounded-full border border-sky-700 bg-sky-700 p-2 text-sky-50 shadow hover:bg-white hover:text-sky-700 hover:shadow-lg active:shadow-none md:block dark:hover:bg-gray-800 dark:hover:text-gray-50"
+      class="rounded-full border border-sky-700 bg-sky-700 p-2 text-sky-50 shadow hover:bg-white hover:text-sky-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
     >
       <ResetIcon />
     </button>
+
+
 
     <label
       class="md:text-md group mr-auto hidden opacity-60 transition-opacity hover:opacity-100 sm:text-sm lg:block"
@@ -320,6 +325,20 @@
         on:change={updatePageSize}
       />
     </label>
+
+  </div>
+<div class="flex flex-row md:space-x-0 space-x-4">
+    <button
+      on:mousedown={toggleFilterMenu}
+      title="filter by descriptors"
+      class="rounded-full md:hidden border border-sky-700 bg-sky-700 p-2 text-center text-sky-50 shadow transition-all hover:bg-white hover:text-sky-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
+    >
+      {#if showFilterMenu}
+        ingredients
+      {:else}
+        descriptors
+      {/if}
+    </button>
 
     <div
       id="pagination"
@@ -347,11 +366,12 @@
         </button>
       {/if}
     </div>
+  </div>
   </form>
 
   <div
     id="table-wrapper"
-    class="mx-8 flex select-text flex-row items-center font-normal selection:bg-sky-300/40 xl:font-medium
+    class=" lg:mx-8 flex select-text flex-row items-center font-normal selection:bg-sky-300/40 xl:font-medium
           "
   >
     {#if isLoading || data === null}
@@ -359,7 +379,7 @@
       <Loader />
     {:else if data.results.length === 0}
       <!-- If there are no results, display a message -->
-      <p class="mt-12 text-5xl">hm. try a different search?</p>
+      <p class="m-12 text-5xl text-center">hm. try a different search?</p>
     {:else}
       <div id="wrapper" class="rounded-lg p-8" in:blur={{ duration: 150 }}>
         {#if showFilterMenu}
