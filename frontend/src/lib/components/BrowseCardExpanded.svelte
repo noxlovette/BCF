@@ -113,9 +113,14 @@
 {#if ingredient !== null}
   <button
     id="card-big"
-    class="z-50 flex h-[600px] w-[360px] cursor-default select-text flex-col rounded-lg border-sky-950 bg-white p-8 text-left caret-sky-700 shadow-lg transition-all selection:bg-sky-300/40 sm:w-[475px] md:h-[475px] md:w-[768px] dark:bg-gray-800"
+    class="z-50 relative flex h-[600px] w-[360px] cursor-default select-text flex-col rounded-lg border-sky-950 bg-white p-8 text-left caret-sky-700 shadow-lg transition-all selection:bg-sky-300/40 sm:w-[475px] md:h-[475px] md:w-[768px] dark:bg-gray-800"
     on:mousedown|stopPropagation
   >
+  <button class="absolute top-2 right-2"
+  on:mousedown={() => ingredient = null}
+  > 
+    <CancelButton />
+  </button>
     <div id="top-part" class="flex w-full flex-row items-baseline border-b">
       <div
         id="top-left"

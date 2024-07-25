@@ -128,14 +128,32 @@
     }
   }
 
-  async function load() {
-    return await fetchIngredientsBrowse(
+  async function load(): Promise<IngredientsBrowseResult | null> {
+  try {
+    const result = await fetchIngredientsBrowse(
       Number($currentPage),
       String($searchTerm),
       Number($pageSize),
       chosenDescriptors,
     );
+
+    if (!result) {
+      console.warn("fetchIngredientsBrowse returned null or undefined");
+      return null;
+    }
+
+    // Ensure the result has the expected structure
+    return {
+      results: Array.isArray(result.results) ? result.results : [],
+      total_pages: typeof result.total_pages === 'number' ? result.total_pages : 1,
+      count: typeof result.count === 'number' ? result.count : 0
+    };
+
+  } catch (error) {
+    console.error("Error in load function:", error);
+    return null;
   }
+}
 
   async function reset() {
     searchTerm.set("");
@@ -183,26 +201,53 @@
     ));
   };
 
-  async function changePage(increment) {
+  async function changePage(increment: number) {
+  try {
     if (document.activeElement === searchInput) {
-      searchIngredients();
-    } else if (
-      $currentPage + increment >= 1 &&
-      $currentPage + increment <= (data as { total_pages: number }).total_pages ) {
-      currentPage.update((value) => value + increment);
-      const message = `you are on page ${$currentPage}/${(data as { total_pages: number }).total_pages}`;
-      notification.set({ message: message, type: "info" });
-      goto(
-        `/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`,
-      );
-      data = await load();
-    } else {
+      await searchIngredients();
+      return;
+    }
+
+    const newPage = $currentPage + increment;
+
+    if (data && (newPage < 1 || newPage > data.total_pages)) {
       notification.set({
-        message: `there is nothing to seek there`,
+        message: `There is nothing to seek there`,
         type: "error",
       });
+      return;
     }
+
+    currentPage.update((value) => value + increment);
+    
+    try {
+      await goto(`/browse?page=${newPage}&search=${$searchTerm}&page_size=${$pageSize}`);
+      
+      data = await load();
+      
+      if (data === null) {
+        throw new Error("Failed to load data");
+      }
+      
+      const message = `You are on page ${newPage}/${data.total_pages}`;
+      notification.set({ message: message, type: "info" });
+    } catch (error) {
+      console.error("Navigation or data loading error:", error);
+      notification.set({
+        message: "Failed to load the next page. Please try again.",
+        type: "error",
+      });
+      // Revert the page change
+      currentPage.update((value) => value - increment);
+    }
+  } catch (error) {
+    console.error("An error occurred:", error);
+    notification.set({
+      message: "An unexpected error occurred. Please try again.",
+      type: "error",
+    });
   }
+}
 
   async function updatePageSize() {
     goto(
