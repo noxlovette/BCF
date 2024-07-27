@@ -30,15 +30,17 @@ services:
       - db
 
   db:
-    image: postgres:13
+    image: postgres:16
     restart: always
     user: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=${PGNAME}
-      - POSTGRES_USER=${PGUSER}
-      - POSTGRES_PASSWORD=${PGPASSWORD}
+      - POSTGRES_DB=${PGNAME:-bcf}
+      - POSTGRES_USER=${PGUSER:-postgres}
+      - POSTGRES_PASSWORD=${PGPASSWORD:-your_secure_password}
+      - PGPORT=${PGPORT:-5432}
+      - PGHOST=${PGHOST:-db}
     ports:
       - "5432:5432"
     healthcheck:
@@ -48,4 +50,4 @@ services:
       retries: 5
 
 volumes:
-  postgres_data:
+  db-data:

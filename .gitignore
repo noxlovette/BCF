@@ -5,6 +5,8 @@ __pycache__/
 # Databases
 db.sqlite3
 /db/
+*.sql
+backup.sh
 
 # Environment Variables
 .env
@@ -81,5 +83,5 @@ vite.config.ts.timestamp-*
 frontend/vite.config.js.timestamp-*
 frontend/vite.config.ts.timestamp-*
 
-# hacking
+# other
 /frontend/download_page.js
