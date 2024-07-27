@@ -9,7 +9,7 @@ const config = {
       out: "build",
       precompress: false,
       env: {
-        port: process.env.PORT || 3000,
+        port: process.env.PORT || 3000, // just flexible
         host: process.env.HOST || "0.0.0.0",
       },
     }),

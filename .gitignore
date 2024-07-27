@@ -1,0 +1,85 @@
+# Python
+*.pyc
+__pycache__/
+
+# Databases
+db.sqlite3
+/db/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Editor Directories
+.vscode/
+/frontend/.vscode/
+.idea/
+/backend/.idea/
+/backend/.venv/
+/Writerside/
+
+# Logs
+*.log
+
+# Coverage
+.coverage
+
+# Documents
+*.csv
+*.xlsx
+*.xls
+*.pdf
+*.doc
+*.docx
+
+# Node
+node_modules/
+frontend/node_modules/
+package-lock.json  
+
+# Build Artifacts
+/build/
+frontend/build/
+
+# Svelte
+/.svelte-kit/
+frontend/.svelte-kit/
+
+# Packages
+/package/
+frontend/package/
+
+# DS_Store
+.DS_Store
+frontend/.DS_Store
+
+# Aliases and Dumpfiles
+dumpfile.sql
+
+# Data Directory
+data/
+
+# Backend Keys and Commands
+backend/key.py
+backend/key-test.py
+backend/key-prod.py
+backend/key-dev.py
+/backend/browse/management/
+
+# Certificates and Keys
+*.crt
+*.key
+*.pem
+
+# Sentry Config
+frontend/.sentryclirc
+
+# Vite Config Timestamps
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+frontend/vite.config.js.timestamp-*
+frontend/vite.config.ts.timestamp-*
+
+# hacking
+/frontend/download_page.js
