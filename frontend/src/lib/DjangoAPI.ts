@@ -1,7 +1,7 @@
 // src/routes/DjangoAPI
 import { get, writable } from "svelte/store";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const csrfToken = writable("");
 
 export async function fetchCSRFToken(forceFetch = false) {

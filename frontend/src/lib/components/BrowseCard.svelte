@@ -42,14 +42,14 @@
 
 <button
   id="card-small"
-  class="group rounded-lg bg-white p-4 md:p-8 text-left shadow-md transition-all hover:scale-105 hover:bg-sky-800 hover:text-sky-50 hover:shadow-lg dark:bg-gray-800"
+  class="group flex flex-col rounded-lg bg-white p-4 md:p-8 text-left shadow-lg transition-all hover:scale-105 hover:bg-sky-800 hover:text-sky-50 hover:shadow-lg dark:bg-gray-800 items-start justify-between"
   on:mousedown={() => (chosenIngredient = ingredient)}
   tabindex="0"
 >
-  <div id="top-part" class="flex flex-row items-baseline">
+  <div id="top-part" class="flex flex-row items-baseline justify-between w-full">
     <h1
       id="top-left"
-      class="mr-8 hyphens-auto text-xl md:text-3xl font-bold tracking-tighter text-sky-800 group-hover:text-sky-50"
+      class="mr-8 hyphens-auto text-xl md:text-3xl font-bold tracking-tighter text-sky-800 group-hover:text-sky-50 max-w-[65%] overflow-clip"
     >
       {ingredient.common_name}
     </h1>
@@ -62,7 +62,7 @@
   </div>
   <div id="bottom-part" class="mt-2 md:mt-4 flex flex-row">
     <div id="bottom-left" class="mr-auto flex md:w-2/3 flex-col">
-      <p class="hidden md:flex md:mr-8 h-[100px] text-left normal-case">
+      <p class="hidden md:flex md:mr-8 h-[100px] text-left normal-case overflow-clip">
         {#if ingredient.use}
           {ingredient.use}
         {:else}

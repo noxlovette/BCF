@@ -18,7 +18,7 @@
   export let currentPage = writable();
   export let pageSize = writable();
   export let searchTerm = writable("");
-  export let overlay: boolean = false;
+  let overlay: boolean = false;
   let suggestedIngredient = null;
   let chosenIngredient: any = null;
   let chosenDescriptors = [];
@@ -293,7 +293,7 @@
 
 <button
   id="overlay"
-  class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-20 bg-blend-darken backdrop-blur transition-all"
+  class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-black bg-opacity-50 backdrop-blur transition-all"
   class:hidden={!chosenIngredient}
   on:mousedown={toggleOverlay}
   aria-label="Toggle Overlay"

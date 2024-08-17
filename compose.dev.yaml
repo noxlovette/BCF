@@ -3,6 +3,7 @@ services:
     build: 
       context: ./frontend
       dockerfile: Dockerfile.dev
+    container_name: frontend
     ports:
       - "5173:5173"
     volumes:
@@ -14,6 +15,7 @@ services:
     env_file:
       - ./frontend/.env
     command: npm run dev
+
     depends_on:
       - backend
 
@@ -21,11 +23,11 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile.dev
+    container_name: backend
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
-      - /Volumes/Thor/:/app/Volumes/Thor/
     environment:
       - POSTGRES_DB=${PGNAME:-defaultdb}
       - POSTGRES_USER=${PGUSER:-postgres}
