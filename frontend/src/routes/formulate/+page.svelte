@@ -77,12 +77,12 @@
 {:else}
   <div
     id="app"
-    class="my-12 hidden h-[550px] select-text overflow-x-auto text-lime-950 caret-lime-700 selection:bg-lime-300 md:flex md:w-[720px] md:flex-row lg:w-[960px] xl:w-[1200px] dark:text-lime-50"
+    class="my-12 hidden h-[550px] select-text overflow-x-auto text-aqua-950 caret-aqua-700 selection:bg-aqua-300 md:flex md:w-[720px] md:flex-row lg:w-[960px] xl:w-[1200px] dark:text-aqua-50"
     in:fade={{ duration: 150 }}
   >
     <div
       id="sidebar"
-      class="flex flex-col rounded-lg text-lime-50 transition-all md:w-[120px] xl:w-[180px]"
+      class="flex flex-col rounded-lg text-aqua-50 transition-all md:w-[120px] xl:w-[180px]"
       in:fade={{ delay: 150, duration: 150 }}
     >
       <ul
@@ -93,7 +93,7 @@
           <button
             class:active={formula.id === activeFormulaId}
             id="formula-item"
-            class="group flex w-full flex-col rounded-lg bg-lime-700 p-4 text-left transition-all hover:bg-lime-50 hover:text-lime-950 hover:shadow active:scale-95 dark:bg-lime-800 dark:hover:bg-lime-950 dark:hover:text-lime-50"
+            class="group flex w-full flex-col rounded-lg bg-aqua-700 p-4 text-left transition-all hover:bg-aqua-50 hover:text-aqua-950 hover:shadow active:scale-95 dark:bg-aqua-800 dark:hover:bg-aqua-950 dark:hover:text-aqua-50"
             on:mousedown={() => viewFormula(formula.id)}
             title={formula.description}
           >
@@ -112,7 +112,7 @@
       <button
         id="formula-item"
         title="create new formula"
-        class="active-scale-90 mt-auto flex w-fit items-center rounded-full p-2 text-lime-950 transition-all hover:bg-lime-700 hover:text-lime-50 dark:text-lime-50"
+        class="active-scale-90 mt-auto flex w-fit items-center rounded-full p-2 text-aqua-950 transition-all hover:bg-aqua-700 hover:text-aqua-50 dark:text-aqua-50"
         on:mousedown={handleCreateFormula}
       >
         <AddCrossIcon />
@@ -137,9 +137,9 @@
 
 <style>
   .active {
-    @apply bg-lime-600;
-    @apply dark:bg-lime-800/40;
-    @apply dark:text-lime-100/80;
+    @apply bg-aqua-600;
+    @apply dark:bg-aqua-800/40;
+    @apply dark:text-aqua-100/80;
     @apply shadow-inner;
   }
 </style>

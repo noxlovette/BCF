@@ -2,7 +2,7 @@
   import BigText from "$lib/components/BigText.svelte";
   import Button from "$lib/components/Button.svelte";
   import Section from "../Section.svelte";
-  const bigText = `terms of use<span class="text-amber-300">.</span>`;
+  const bigText = `terms of use<span class="text-gold-400">.</span>`;
 </script>
 
 <div
@@ -27,7 +27,7 @@
       sectionBigText="Intellectual Property Rights"
       sectionSmallText="
   
-  All intellectual property rights associated with the software component of BCF are owned by Danila Volkov. The Browse page is based on <a href'https://ifrafragrance.org/priorities/ingredients/glossary' class='text-amber-400'> IFRA's Fragrance Ingredient Glossary</a>. BCF is distributed under the GNU License. For more information, see the <a href='https://github.com/noxlovette/BCF/blob/main/LICENSE.md'>License</a>.
+  All intellectual property rights associated with the software component of BCF are owned by Danila Volkov. The Browse page is based on <a href'https://ifrafragrance.org/priorities/ingredients/glossary' class='text-gold-400'> IFRA's Fragrance Ingredient Glossary</a>. BCF is distributed under the GNU License. For more information, see the <a href='https://github.com/noxlovette/BCF/blob/main/LICENSE.md'>License</a>.
   
   "
     />
@@ -67,11 +67,11 @@ We periodically review and update these Terms of Service to reflect new Services
     <Section
       sectionBigText="Contact Us"
       sectionSmallText="
-If you have any questions about this Notice or our privacy practices, <a class='text-amber-400' href='/paperwork/contact-us'>please contact us</a>.
+If you have any questions about this Notice or our privacy practices, <a class='text-gold-400' href='/paperwork/contact-us'>please contact us</a>.
 "
     />
 
-    <BigText text="Get to work already<span class='text-amber-300'>!</span>" />
+    <BigText text="Get to work already<span class='text-gold-400'>!</span>" />
     <Section
       sectionBigText=""
       sectionSmallText="

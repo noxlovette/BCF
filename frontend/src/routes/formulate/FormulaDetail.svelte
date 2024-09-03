@@ -112,7 +112,7 @@
 {:else}
   <div
     id="description-etc"
-    class="z-20 mr-auto flex h-full w-[175px] flex-col space-y-4 rounded-lg bg-gradient-to-br from-lime-600 to-lime-600/80 p-4 text-lime-50 shadow lg:w-[220px] dark:bg-lime-800 dark:from-lime-800 dark:to-lime-800/80"
+    class="z-20 mr-auto flex h-full w-[175px] flex-col space-y-4 rounded-lg bg-gradient-to-br from-aqua-600 to-aqua-600/80 p-4 text-aqua-50 shadow lg:w-[220px] dark:bg-aqua-800 dark:from-aqua-800 dark:to-aqua-800/80"
   >
     <div>
       <h3 class="text-sm">description</h3>
@@ -129,21 +129,21 @@
       class="mt-auto flex *:rounded-full *:hover:p-1 lg:*:hover:p-2"
     >
       <button
-        class="transition-all hover:scale-110 hover:bg-white hover:text-lime-800 dark:hover:bg-neutral-800 dark:hover:text-lime-50"
+        class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-800 dark:hover:bg-neutral-800 dark:hover:text-aqua-50"
         on:mousedown={() => editFormula(formulaDetail)}
         title="edit the formula"
       >
         <Suggestion />
       </button>
       <button
-        class="transition-all hover:scale-110 hover:bg-white hover:text-lime-800 dark:hover:bg-neutral-800 dark:hover:text-lime-50"
+        class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-800 dark:hover:bg-neutral-800 dark:hover:text-aqua-50"
         on:mousedown={() => handleDeleteFormula(formulaDetail.id)}
         title="delete the formula"
       >
         <DeleteIcon />
       </button>
       <button
-        class="transition-all hover:scale-110 hover:bg-white hover:text-lime-700 dark:hover:bg-neutral-800 dark:hover:text-lime-50"
+        class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-700 dark:hover:bg-neutral-800 dark:hover:text-aqua-50"
         on:mousedown={() => handleAddAsCustom(formulaDetail)}
         title="add the formula to collection as ingredient"
       >
@@ -165,7 +165,7 @@
         <tr class="2">
           <th class="w-1/12">#</th>
           <th
-            class="w-1/3 cursor-pointer transition-all hover:text-lime-700 active:translate-y-1"
+            class="w-1/3 cursor-pointer transition-all hover:text-aqua-700 active:translate-y-1"
             on:mousedown={() => handleSort("ingredient")}
           >
             <div class="flex items-center">
@@ -175,7 +175,7 @@
           </th>
 
           <th
-            class="hidden w-1/6 cursor-pointer transition-all hover:text-lime-700 active:translate-y-1 lg:table-cell"
+            class="hidden w-1/6 cursor-pointer transition-all hover:text-aqua-700 active:translate-y-1 lg:table-cell"
             on:mousedown={() => handleSort("volatility")}
           >
             <div class="flex items-center">
@@ -184,7 +184,7 @@
             </div>
           </th>
           <th
-            class="w-1/6 cursor-pointer transition-all hover:text-lime-700 active:translate-y-1"
+            class="w-1/6 cursor-pointer transition-all hover:text-aqua-700 active:translate-y-1"
             on:mousedown={() => handleSort("amount")}
           >
             <div class="flex items-center">
@@ -207,7 +207,7 @@
         {/each}
         <tr
           id="functional"
-          class="border-t border-lime-950/20 dark:border-lime-100/10"
+          class="border-t border-aqua-950/20 dark:border-aqua-100/10"
         >
           <td class="">x</td>
           <td class="">{formulaDetail.solvent}</td>

@@ -110,19 +110,19 @@
 
 <div
   id="description-etc"
-  class="z-20 mr-auto flex h-full w-[175px] flex-col space-y-4 rounded-lg bg-lime-600 p-4 text-lime-50 shadow lg:w-[220px] dark:bg-lime-800"
+  class="z-20 mr-auto flex h-full w-[175px] flex-col space-y-4 rounded-lg bg-aqua-600 p-4 text-aqua-50 shadow lg:w-[220px] dark:bg-aqua-800"
 >
   <div>
     <h3 class="text-sm">description</h3>
     <textarea
-      class="w-full rounded-lg border-none bg-lime-600 p-0 ring-0 focus:ring-0 dark:bg-lime-800"
+      class="w-full rounded-lg border-none bg-aqua-600 p-0 ring-0 focus:ring-0 dark:bg-aqua-800"
       bind:value={editedFormula.description}
     />
   </div>
   <div>
     <h3 class="text-sm">notes</h3>
     <textarea
-      class="w-full rounded-lg border-none bg-lime-600 p-0 ring-0 focus:ring-0 dark:bg-lime-800"
+      class="w-full rounded-lg border-none bg-aqua-600 p-0 ring-0 focus:ring-0 dark:bg-aqua-800"
       bind:value={editedFormula.notes}
     />
   </div>
@@ -135,7 +135,7 @@
   >
     <button
       tabindex="-1"
-      class="transition-all hover:scale-110 hover:bg-white hover:text-lime-800 dark:hover:bg-neutral-800 dark:hover:text-lime-50"
+      class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-800 dark:hover:bg-neutral-800 dark:hover:text-aqua-50"
       title="save changes"
       on:mousedown={saveChanges}
     >
@@ -143,7 +143,7 @@
     </button>
     <button
       tabindex="-1"
-      class="transition-all hover:scale-110 hover:bg-white hover:text-lime-800 dark:hover:bg-neutral-800 dark:hover:text-lime-50"
+      class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-800 dark:hover:bg-neutral-800 dark:hover:text-aqua-50"
       title="cancel changes"
       on:mousedown={() => {
         editing = false;
@@ -182,7 +182,7 @@
             <td class="align-middle">
               <button
                 tabindex="-1"
-                class="rounded-full p-1 transition-all hover:scale-110 hover:bg-lime-700 hover:text-lime-50 dark:hover:text-lime-950"
+                class="rounded-full p-1 transition-all hover:scale-110 hover:bg-aqua-700 hover:text-aqua-50 dark:hover:text-aqua-950"
                 on:mousedown={() => handleDeleteIngredient(ingredient.id)}
               >
                 <CrossIcon />
@@ -210,14 +210,14 @@
               <input
                 type="number"
                 bind:value={ingredient.amount}
-                class="flex w-2/3 rounded-lg border-none p-1 text-lime-700 focus:ring-0 dark:bg-neutral-800"
+                class="flex w-2/3 rounded-lg border-none p-1 text-aqua-700 focus:ring-0 dark:bg-neutral-800"
               />
             </td>
             <td>
               <input
                 type="number"
                 bind:value={ingredient.percentage}
-                class="flex w-2/3 rounded-lg border-none p-1 text-lime-700 focus:ring-0 dark:bg-neutral-800"
+                class="flex w-2/3 rounded-lg border-none p-1 text-aqua-700 focus:ring-0 dark:bg-neutral-800"
               />
             </td>
           </tr>
@@ -226,7 +226,7 @@
       <td colspan="5" class="align-middle">
         <button
           tabindex="-1"
-          class="mx-auto my-2 rounded-full p-2 transition-all hover:scale-110 hover:bg-lime-700 hover:text-lime-50 dark:hover:text-lime-950"
+          class="mx-auto my-2 rounded-full p-2 transition-all hover:scale-110 hover:bg-aqua-700 hover:text-aqua-50 dark:hover:text-aqua-950"
           on:mousedown={addIngredient}
         >
           <AddCrossIcon />
@@ -235,7 +235,7 @@
 
       <tr
         id="functional"
-        class="border-t border-lime-950/20 dark:border-lime-100/10"
+        class="border-t border-aqua-950/20 dark:border-aqua-100/10"
       >
         <td></td>
         <td>
@@ -243,7 +243,7 @@
             type="text"
             bind:value={editedFormula.solvent}
             placeholder="solvent"
-            class="flex w-2/3 rounded-lg border-none text-lime-700 focus:ring-0 dark:bg-neutral-800"
+            class="flex w-2/3 rounded-lg border-none text-aqua-700 focus:ring-0 dark:bg-neutral-800"
           />
         </td>
         <td>solvent</td>

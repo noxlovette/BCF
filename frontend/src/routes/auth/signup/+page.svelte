@@ -94,12 +94,12 @@
       }}
     >
       <h1 class="border-b-2 text-6xl font-bold tracking-tighter">
-        sign up<span class="text-amber-300">.</span>
+        sign up<span class="text-gold-400">.</span>
       </h1>
 
       <input
         type="text"
-        class="my-2 mt-8 w-full rounded-lg border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-amber-300 dark:bg-stone-800"
+        class="my-2 mt-8 w-full rounded-lg border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
         placeholder="username"
         required
         bind:value={username}
@@ -108,7 +108,7 @@
       <div id="handle email" class="mb-4 flex items-center justify-center">
         <input
           type="email"
-          class="my-2 mr-auto w-[225] rounded-lg border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-amber-300 dark:bg-stone-800"
+          class="my-2 mr-auto w-[225] rounded-lg border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
           placeholder="email"
           bind:value={email}
         />
@@ -121,7 +121,7 @@
       <div id="handle pass" class="flex w-full items-center justify-center">
         <input
           type="password"
-          class="my-2 mr-auto w-[225] rounded-lg border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-amber-300 dark:bg-stone-800"
+          class="my-2 mr-auto w-[225] rounded-lg border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
           placeholder="password"
           bind:value={password}
         />
@@ -141,7 +141,7 @@
       <div class="flex items-center justify-center" id="handle 2nd pass">
         <input
           type="password"
-          class="my-2 mr-auto w-[225] rounded-lg border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-amber-300 dark:bg-stone-800"
+          class="my-2 mr-auto w-[225] rounded-lg border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
           placeholder="repeat"
           bind:value={confirmPassword}
         />
@@ -163,23 +163,23 @@
         <a
           href="/paperwork/terms-of-service"
           on:mousedown={() => sessionStorage.setItem("terms", "true")}
-          class="text-stone-900/80 hover:text-amber-300 dark:text-stone-50/80"
+          class="text-stone-900/80 hover:text-gold-400 dark:text-stone-50/80"
           >agree to the terms</a
         >
         <input
           type="checkbox"
           bind:checked={agreeTerms}
-          class="shadow-inline size-4 rounded-lg border-none bg-stone-50 text-lime-500 ring-2 ring-stone-300/50 transition-all checked:bg-lime-500 checked:ring-amber-300 hover:scale-110 hover:checked:bg-amber-300 focus:ring-lime-700 active:scale-90 dark:bg-stone-800"
+          class="shadow-inline size-4 rounded-lg border-none bg-stone-50 text-aqua-500 ring-2 ring-stone-300/50 transition-all checked:bg-aqua-500 checked:ring-gold-300 hover:scale-110 hover:checked:bg-gold-300 focus:ring-aqua-700 active:scale-90 dark:bg-stone-800"
         />
       </div>
       <button
         type="submit"
-        class="text-5xl font-bold tracking-tighter hover:text-amber-300 active:scale-90 disabled:text-stone-400/70"
+        class="text-5xl font-bold tracking-tighter hover:text-gold-400 active:scale-90 disabled:text-stone-400/70"
         disabled={!allValid}>go</button
       >
       <a
         href="/auth/login"
-        class="mt-auto flex text-sm opacity-60 transition-all hover:text-amber-300 hover:opacity-100"
+        class="mt-auto flex text-sm opacity-60 transition-all hover:text-gold-400 hover:opacity-100"
         >have an account? sign in</a
       >
     </form>
@@ -188,7 +188,7 @@
 
 <style>
   .valid {
-    @apply text-lime-50;
-    @apply bg-lime-500;
+    @apply text-aqua-50;
+    @apply bg-aqua-500;
   }
 </style>

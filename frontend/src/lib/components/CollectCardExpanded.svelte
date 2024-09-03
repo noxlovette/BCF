@@ -77,7 +77,7 @@
 {#if ingredient !== null}
   <button
     id="card-big"
-    class="z-50 flex h-[600px] w-[360px] cursor-default select-text flex-col rounded-lg border-rose-950 bg-white p-8 text-left caret-rose-700 shadow-lg transition-all selection:bg-rose-300/40 sm:w-[475px] md:h-[475px] md:w-[768px] dark:bg-stone-800"
+    class="z-50 flex h-[600px] w-[360px] cursor-default select-text flex-col rounded-lg border-grapefruit-950 bg-white p-8 text-left caret-grapefruit-700 shadow-lg transition-all selection:bg-grapefruit-300/40 sm:w-[475px] md:h-[475px] md:w-[768px] dark:bg-stone-800"
     on:mousedown|stopPropagation
   >
     <div id="top-part" class="flex w-full flex-row items-baseline border-b">
@@ -86,14 +86,14 @@
         class="flex w-2/3 flex-col items-start border-0 pb-2 pr-4 sm:border-r"
       >
         <h1
-          class="mb-2 mr-8 flex w-full text-4xl font-bold tracking-tighter text-rose-800"
+          class="mb-2 mr-8 flex w-full text-4xl font-bold tracking-tighter text-grapefruit-800"
         >
           {#if !editedIngredient || editedIngredient.type === "CollectionIngredient"}
             {ingredient.common_name}
           {:else}
             <input
               type="text"
-              class="w-full border-none p-0 text-4xl font-bold tracking-tighter text-rose-800 ring-0 focus:ring-0 dark:bg-stone-800"
+              class="w-full border-none p-0 text-4xl font-bold tracking-tighter text-grapefruit-800 ring-0 focus:ring-0 dark:bg-stone-800"
               bind:value={editedIngredient.common_name}
               placeholder="name"
             />
@@ -260,7 +260,7 @@
         >
           {#if !editedIngredient}
             <button
-              class="rounded-full transition-all hover:bg-rose-700 hover:text-rose-50 group-hover:p-2"
+              class="rounded-full transition-all hover:bg-grapefruit-700 hover:text-grapefruit-50 group-hover:p-2"
               title="add the ingredient to your collection
         "
               on:mousedown={() => handleDeleteClick(ingredient)}
@@ -268,7 +268,7 @@
               <DeleteIcon />
             </button>
             <button
-              class="rounded-full transition-all hover:bg-rose-700 hover:text-rose-50 group-hover:p-2"
+              class="rounded-full transition-all hover:bg-grapefruit-700 hover:text-grapefruit-50 group-hover:p-2"
               title="suggest a change"
               on:mousedown={() => toggleEdit(ingredient)}
             >
@@ -276,7 +276,7 @@
             </button>
           {:else}
             <button
-              class="rounded-full transition-all hover:bg-rose-700 hover:text-rose-50 group-hover:p-2"
+              class="rounded-full transition-all hover:bg-grapefruit-700 hover:text-grapefruit-50 group-hover:p-2"
               title="submit your suggestion"
               on:mousedown={() => saveEdit(editedIngredient)}
             >
@@ -284,7 +284,7 @@
             </button>
             {#if editedIngredient.id !== null}
               <button
-                class="rounded-full transition-all hover:bg-rose-700 hover:text-rose-50 group-hover:p-2"
+                class="rounded-full transition-all hover:bg-grapefruit-700 hover:text-grapefruit-50 group-hover:p-2"
                 title="cancel your suggestion"
                 on:mousedown={() => toggleEdit(ingredient)}
               >

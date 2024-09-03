@@ -30,7 +30,7 @@
   <div class="flex size-full flex-col items-center">
     <div
       id="spinner"
-      class="m-10 flex size-24 animate-spin rounded-full border-8 border-dotted border-amber-400"
+      class="m-10 flex size-24 animate-spin rounded-full border-8 border-dotted border-gold-400"
     />
     <p class="text-pretty text-center text-2xl font-bold normal-case">
       {chosenQuote}

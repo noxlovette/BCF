@@ -228,20 +228,20 @@
   </div>
 </button>
 
-<div id="app" class="my-8 flex flex-col items-center lowercase caret-rose-700">
+<div id="app" class="my-8 flex flex-col items-center lowercase caret-grapefruit-700">
   <form
     id="search-bar"
     class="group flex w-full max-w-5xl flex-col items-center justify-center space-x-0 space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 sm:px-12 lg:max-w-5xl"
   >
     <button
-      class="rounded-full border border-rose-700 bg-rose-700 p-2 text-rose-50 shadow transition-all hover:bg-white hover:text-rose-700 hover:shadow-lg active:shadow-none dark:hover:bg-stone-800"
+      class="rounded-full border border-grapefruit-700 bg-grapefruit-700 p-2 text-grapefruit-50 shadow transition-all hover:bg-white hover:text-grapefruit-700 hover:shadow-lg active:shadow-none dark:hover:bg-stone-800"
       on:mousedown={feedCustomIngredient}
     >
       <AddCrossIcon />
     </button>
     <input
       type="text"
-      class="w-[250px] rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-rose-700/60 active:scale-90 md:w-[325px] lg:w-[600px] dark:bg-stone-800"
+      class="w-[250px] rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-grapefruit-700/60 active:scale-90 md:w-[325px] lg:w-[600px] dark:bg-stone-800"
       bind:value={$searchTerm}
       bind:this={searchInput}
       on:input={handleSearchCollection}
@@ -252,7 +252,7 @@
     <button
       on:mousedown={reset}
       title="reset everything"
-      class="hidden rounded-full border border-rose-700 bg-rose-700 p-2 text-rose-50 shadow transition-all hover:bg-white hover:text-rose-700 hover:shadow-lg active:shadow-none sm:block dark:hover:bg-stone-800"
+      class="hidden rounded-full border border-grapefruit-700 bg-grapefruit-700 p-2 text-grapefruit-50 shadow transition-all hover:bg-white hover:text-grapefruit-700 hover:shadow-lg active:shadow-none sm:block dark:hover:bg-stone-800"
     >
       <ResetIcon />
     </button>
@@ -263,7 +263,7 @@
       per page:
       <input
         type="number"
-        class="w-1/3 rounded-lg border-none focus:ring-2 focus:ring-rose-400/70 group-hover:shadow dark:bg-stone-800"
+        class="w-1/3 rounded-lg border-none focus:ring-2 focus:ring-grapefruit-400/70 group-hover:shadow dark:bg-stone-800"
         min="1"
         bind:value={$pageSize}
         on:change={updatePageSize}
@@ -272,7 +272,7 @@
 
     <div
       id="pagination"
-      class="group flex w-[100px] items-center justify-center rounded-full border border-rose-700 bg-rose-700 p-2 text-rose-50 shadow transition-all hover:bg-white hover:text-rose-700 hover:shadow-lg active:shadow-none dark:hover:bg-stone-800 {$currentPage <=
+      class="group flex w-[100px] items-center justify-center rounded-full border border-grapefruit-700 bg-grapefruit-700 p-2 text-grapefruit-50 shadow transition-all hover:bg-white hover:text-grapefruit-700 hover:shadow-lg active:shadow-none dark:hover:bg-stone-800 {$currentPage <=
         1 && $currentPage >= totalPages
         ? 'invisible'
         : 'visible'}"

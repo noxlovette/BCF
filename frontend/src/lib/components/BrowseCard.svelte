@@ -42,20 +42,20 @@
 
 <button
   id="card-small"
-  class="group flex flex-col rounded-lg bg-white p-4 md:p-8 text-left shadow-lg transition-all hover:scale-105 hover:bg-sky-800 hover:text-sky-50 hover:shadow-lg dark:bg-gray-800 items-start justify-between"
+  class="group flex flex-col rounded-lg bg-white p-4 md:p-8 text-left shadow-lg transition-all hover:scale-105 hover:bg-navy-700 hover:text-navy-50 hover:shadow-lg dark:bg-gray-800 items-start justify-between"
   on:mousedown={() => (chosenIngredient = ingredient)}
   tabindex="0"
 >
   <div id="top-part" class="flex flex-row items-baseline justify-between w-full">
     <h1
       id="top-left"
-      class="mr-8 hyphens-auto text-xl md:text-3xl font-bold tracking-tighter text-sky-800 group-hover:text-sky-50 max-w-[65%] overflow-clip"
+      class="mr-8 hyphens-auto text-xl md:text-3xl font-bold tracking-tighter text-navy-800 group-hover:text-navy-50 max-w-[65%] overflow-clip"
     >
       {ingredient.common_name}
     </h1>
     <h2
       id="top-right"
-      class="ml-auto min-w-fit text-clip hidden md:flex opacity-60 group-hover:text-sky-200/60"
+      class="ml-auto min-w-fit text-clip hidden md:flex opacity-60 group-hover:text-navy-200/60"
     >
       {ingredient.cas}
     </h2>
@@ -69,11 +69,11 @@
           Know how to use this? Submit a suggestion!
         {/if}
       </p>
-      <p class="md:hidden  min-w-fit opacity-60 text-sky-900">
+      <p class="md:hidden  min-w-fit opacity-60 text-navy-900">
       {ingredient.cas}
     </p>
       <h2
-        class="justify-start mt-auto lowercase opacity-60 group-hover:text-sky-200/60"
+        class="justify-start mt-auto lowercase opacity-60 group-hover:text-navy-200/60"
       >
         {ingredient.descriptors}
       </h2>
@@ -83,7 +83,7 @@
       class="ml-auto mt-auto hidden md:flex flex-1 flex-col items-end"
     >
       <button
-        class="invisible items-baseline rounded-full p-2 hover:bg-sky-50 hover:text-sky-700 hover:transition-all group-hover:visible"
+        class="invisible items-baseline rounded-full p-2 hover:bg-navy-50 hover:text-navy-700 hover:transition-all group-hover:visible"
         on:mousedown={() => handleAddIngredient(ingredient.id)}
         on:mousedown|stopPropagation
       >

@@ -85,13 +85,13 @@
     </h2>
     <ul class="flex flex-col items-start justify-start *:font-bold">
       <button
-        class="rounded-lg p-2 transition-all hover:translate-x-1 hover:bg-amber-400 dark:hover:text-stone-800"
+        class="rounded-lg p-2 transition-all hover:translate-x-1 hover:bg-gold-400 dark:hover:text-stone-800"
         on:mousedown={() => currentPage.set("settings")}
       >
         settings
       </button>
       <button
-        class="rounded-lg p-2 transition-all hover:translate-x-1 hover:bg-amber-400 dark:hover:text-stone-800"
+        class="rounded-lg p-2 transition-all hover:translate-x-1 hover:bg-gold-400 dark:hover:text-stone-800"
         on:mousedown={() => currentPage.set("contributions")}
       >
         contributions
@@ -109,7 +109,7 @@
     {:else}
       <div class="m-4 rounded-lg bg-white p-4 shadow dark:bg-stone-800">
         <p class="text-xl font-bold tracking-tight">
-          Good <span class="text-amber-400">{$greeting},</span>
+          Good <span class="text-gold-400">{$greeting},</span>
           {username}!
         </p>
         <div id="aussage" class="mt-8 flex flex-row">

@@ -43,13 +43,13 @@
       }}
     >
       <h1 class="mb-8 border-b-2 text-6xl font-bold tracking-tighter">
-        sign in<span class="text-amber-300">.</span>
+        sign in<span class="text-gold-400">.</span>
       </h1>
 
       <input
         id="username-field"
         type="text"
-        class="my-4 w-full rounded-lg border-none bg-stone-50 p-2 shadow-inner focus:ring-2 focus:ring-amber-300 dark:bg-stone-800"
+        class="my-4 w-full rounded-lg border-none bg-stone-50 p-2 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
         placeholder="username"
         bind:value={username}
         required
@@ -57,20 +57,20 @@
       <input
         id="password-field"
         type="password"
-        class="my-2 w-full rounded-lg border-none bg-stone-50 p-2 shadow-inner focus:ring-2 focus:ring-amber-300 dark:bg-stone-800"
+        class="my-2 w-full rounded-lg border-none bg-stone-50 p-2 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
         placeholder="password"
         bind:value={password}
         required
       />
       <button
         type="submit"
-        class="text-4xl font-bold tracking-tighter transition-all hover:text-amber-400 active:scale-90"
+        class="text-4xl font-bold tracking-tighter transition-all hover:text-gold-400 active:scale-90"
       >
         go
       </button>
       <a
         href="/auth/signup"
-        class="mt-auto flex text-sm opacity-60 transition-all hover:text-amber-400 hover:opacity-100"
+        class="mt-auto flex text-sm opacity-60 transition-all hover:text-gold-400 hover:opacity-100"
       >
         don't have an account?</a
       >

@@ -113,7 +113,7 @@
 {#if ingredient !== null}
   <button
     id="card-big"
-    class="z-50 relative flex h-[600px] w-[360px] cursor-default select-text flex-col rounded-lg border-sky-950 bg-white p-8 text-left caret-sky-700 shadow-lg transition-all selection:bg-sky-300/40 sm:w-[475px] md:h-[475px] md:w-[768px] dark:bg-gray-800"
+    class="z-50 relative flex h-[600px] w-[360px] cursor-default select-text flex-col rounded-lg border-navy-950 bg-white p-8 text-left caret-navy-700 shadow-lg transition-all selection:bg-navy-300/40 sm:w-[475px] md:h-[475px] md:w-[768px] dark:bg-gray-800"
     on:mousedown|stopPropagation
   >
   <button class="absolute top-2 right-2"
@@ -127,14 +127,14 @@
         class="flex w-2/3 flex-col items-start border-0 pb-2 pr-4 sm:border-r"
       >
         <h1
-          class="mb-2 mr-8 flex w-full text-4xl font-bold tracking-tighter text-sky-800"
+          class="mb-2 mr-8 flex w-full text-4xl font-bold tracking-tighter text-navy-800"
         >
           {#if !showSuggestion}
             {ingredient.common_name}
           {:else}
             <input
               type="text"
-              class="w-full border-none p-0 text-4xl font-bold tracking-tighter text-sky-800 ring-0 focus:ring-0 dark:bg-gray-800"
+              class="w-full border-none p-0 text-4xl font-bold tracking-tighter text-navy-800 ring-0 focus:ring-0 dark:bg-gray-800"
               bind:value={suggestedIngredient.common_name}
               placeholder="names"
             />
@@ -273,7 +273,7 @@
         >
           {#if !showSuggestion}
             <button
-              class="rounded-full transition-all hover:bg-sky-700 hover:text-sky-50 group-hover:p-2"
+              class="rounded-full transition-all hover:bg-navy-700 hover:text-navy-50 group-hover:p-2"
               title="add the ingredient to your collection
         "
               on:mousedown={() => handleAddIngredient(ingredient.id)}
@@ -282,7 +282,7 @@
             </button>
             <button
               
-              class="rounded-full transition-all hover:bg-sky-700 hover:text-sky-50 group-hover:p-2"
+              class="rounded-full transition-all hover:bg-navy-700 hover:text-navy-50 group-hover:p-2"
               title="suggest a change"
 
               on:mousedown={() => toggleSuggestion(ingredient)}
@@ -291,7 +291,7 @@
             </button>
           {:else}
             <button
-              class="rounded-full transition-all hover:bg-sky-700 hover:text-sky-50 group-hover:p-2"
+              class="rounded-full transition-all hover:bg-navy-700 hover:text-navy-50 group-hover:p-2"
               title="submit your suggestion"
 
               on:mousedown={() => submitSuggestion()}
@@ -300,7 +300,7 @@
             </button>
             <button
             
-              class="rounded-full transition-all hover:bg-sky-700 hover:text-sky-50 group-hover:p-2"
+              class="rounded-full transition-all hover:bg-navy-700 hover:text-navy-50 group-hover:p-2"
               title="cancel your suggestion"
               on:mousedown={() => toggleSuggestion(ingredient)}
             >

@@ -24,7 +24,7 @@
               viewBox="0 0 1200 1227"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              class="transition-all hover:scale-110 hover:text-amber-300 active:scale-90"
+              class="transition-all hover:scale-110 hover:text-amber-400 active:scale-90"
             >
               <path
                 d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"
@@ -40,7 +40,7 @@
               height="18"
               viewBox="0 0 1080 1080"
               xmlns="http://www.w3.org/2000/svg"
-              class="transition-all hover:scale-110 hover:text-amber-300 active:scale-90"
+              class="transition-all hover:scale-110 hover:text-amber-400 active:scale-90"
             >
               <path
                 d="M1033.05,324.45c-0.19-137.9-107.59-250.92-233.6-291.7c-156.48-50.64-362.86-43.3-512.28,27.2
@@ -58,7 +58,7 @@
               height="20"
               viewBox="0 0 98 96"
               xmlns="http://www.w3.org/2000/svg"
-              class="transition-all hover:scale-110 hover:text-amber-300 active:scale-90"
+              class="transition-all hover:scale-110 hover:text-amber-400 active:scale-90"
             >
               <path
                 fill-rule="evenodd"
@@ -84,7 +84,7 @@
         <li>
           <a
             href="/paperwork/about"
-            class="transition-all hover:text-amber-300"
+            class="transition-all hover:text-amber-400"
           >
             about
           </a>
@@ -92,7 +92,7 @@
         <li>
           <a
             href="/paperwork/contact-us"
-            class="transition-all hover:text-amber-300"
+            class="transition-all hover:text-amber-400"
           >
             contact me
           </a>
@@ -100,7 +100,7 @@
         <li class="relative">
           <button
             on:mousedown={toggleLegal}
-            class="transition-all hover:text-amber-300"
+            class="transition-all hover:text-amber-400"
           >
             legal
           </button>
@@ -112,7 +112,7 @@
               <li>
                 <a
                   href="/paperwork/privacy-policy"
-                  class="transition-all hover:text-amber-300"
+                  class="transition-all hover:text-amber-400"
                 >
                   privacy policy
                 </a>
@@ -120,7 +120,7 @@
               <li>
                 <a
                   href="/paperwork/terms-of-service"
-                  class="transition-all hover:text-amber-300"
+                  class="transition-all hover:text-amber-400"
                 >
                   terms of use
                 </a>

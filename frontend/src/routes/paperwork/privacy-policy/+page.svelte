@@ -2,7 +2,7 @@
   import BigText from "$lib/components/BigText.svelte";
   import Button from "$lib/components/Button.svelte";
   import Section from "../Section.svelte";
-  const bigText = `privacy policy<span class="text-amber-300">.</span>`;
+  const bigText = `privacy policy<span class="text-gold-400">.</span>`;
 </script>
 
 <div
@@ -21,13 +21,13 @@
     />
     <Section
       sectionBigText="About BCF Products and Services"
-      sectionSmallText="BCF is a web platform made for people interested in perfumery. The user is free to browse the database, which is based on information the <a class='text-amber-400' href='https://ifrafragrance.org/priorities/ingredients/glossary'>IFRA Fragrance Ingredient Glossary,</a> developed by The International Fragrance Association. The user is free to store their subjective opinion on certain ingredients that they see as part of their collection. They can also create and manage their perfume formulas. The user may contribute to the project's knowledge base, which is encouraged. The collect and formulate parts of the website are encrypted."
+      sectionSmallText="BCF is a web platform made for people interested in perfumery. The user is free to browse the database, which is based on information the <a class='text-gold-400' href='https://ifrafragrance.org/priorities/ingredients/glossary'>IFRA Fragrance Ingredient Glossary,</a> developed by The International Fragrance Association. The user is free to store their subjective opinion on certain ingredients that they see as part of their collection. They can also create and manage their perfume formulas. The user may contribute to the project's knowledge base, which is encouraged. The collect and formulate parts of the website are encrypted."
     />
     <Section
       sectionBigText="Information We Collect"
       sectionSmallText="
   
-  We use <a class='text-amber-400' href='https://sentry.io'>Sentry </a> to track crashes and unexpected behaviour on the website. Apart from that, there is nothing personal we collect from you. You are not required to provide a valid email address, or give your name. We don't care.
+  We use <a class='text-gold-400' href='https://sentry.io'>Sentry </a> to track crashes and unexpected behaviour on the website. Apart from that, there is nothing personal we collect from you. You are not required to provide a valid email address, or give your name. We don't care.
 
   <p class='font-extrabold mt-10 text-3xl'>Information you provide</p>
   <ul class='mt-4 space-y-4 list-disc'>
@@ -132,12 +132,12 @@ We periodically review and update this Notice to describe new Services or change
     <Section
       sectionBigText="Contact Us"
       sectionSmallText="
-If you have any questions about this Notice or our privacy practices, <a class='text-amber-400' href='/paperwork/contact-us'>please contact us</a>.
+If you have any questions about this Notice or our privacy practices, <a class='text-gold-400' href='/paperwork/contact-us'>please contact us</a>.
 "
     />
 
     <BigText
-      text="We are committed to protecting your privacy<span class='text-amber-300'>.</span>"
+      text="We are committed to protecting your privacy<span class='text-gold-400'>.</span>"
     />
     <Section
       sectionBigText=""

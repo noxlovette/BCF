@@ -24,9 +24,9 @@
       $notification.type === "error"
         ? "bg-red-500"
         : $notification.type === "success"
-          ? "bg-green-500"
+          ? "bg-aqua-500"
           : $notification.type === "info"
-            ? "bg-blue-500"
+            ? "bg-navy-500"
             : "bg-gray-500"
     }`}
     role="alert"

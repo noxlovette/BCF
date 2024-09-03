@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { scale } from "svelte/transition";
   export let text: string;
 </script>
 
@@ -13,13 +12,7 @@
           <div class="flex flex-col items-start justify-between">
             <div id="big text" class="">
               <h1
-                class="text-pretty text-center text-6xl font-bold tracking-tight xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem]"
-                in:scale={{
-                  duration: 500,
-                  delay: 0,
-                  opacity: 0.5,
-                  start: 0.5,
-                }}
+                class="text-pretty text-left text-6xl font-bold tracking-tight xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem]"
               >
                 {@html text}
               </h1>

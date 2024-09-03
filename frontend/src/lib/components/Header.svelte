@@ -63,7 +63,7 @@
     };
   });
   $: currentPath = $page.url.pathname;
-  $: currentPage = currentPath.split("/")[1] || "BCF";
+  $: currentPage = currentPath.split("/")[1] || "Welcome";
 </script>
 
 <header
@@ -104,7 +104,7 @@
             <a
               href="https://docs.bcfapp.app"
               title="learn to use BCF"
-              class=" transition-all hover:text-amber-300"
+              class=" transition-all hover:text-gold-400"
             >
               <InformationIcon />
             </a>
@@ -114,7 +114,7 @@
               href="/profile"
               aria-label={username}
               title="{username}'s profile"
-              class="transition-all hover:text-amber-300"
+              class="transition-all hover:text-gold-400"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +135,7 @@
               id="logout"
               on:mousedown={logout}
               title="log out"
-              class="transition-all hover:text-amber-300"
+              class="transition-all hover:text-gold-400"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -153,12 +153,12 @@
               </svg>
             </button>
           {:else}
-            <a href="/auth/login" class=" transition-all hover:text-amber-300"
+            <a href="/auth/login" class=" transition-all hover:text-gold-400"
               >login</a
             >
             <a
               href="/auth/signup"
-              class=" rounded-lg bg-amber-300 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-amber-300 dark:hover:bg-stone-700"
+              class=" rounded-lg bg-gold-300 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:hover:bg-stone-700"
               >sign up</a
             >
           {/if}
@@ -186,13 +186,13 @@
               class="z-10"
             >
               <ul class="flex space-x-5">
-                <li class="transition-all hover:text-sky-700">
+                <li class="transition-all hover:text-navy-700">
                   <a href="/browse"> browse </a>
                 </li>
-                <li class=" transition-all hover:text-pink-700">
+                <li class=" transition-all hover:text-grapefruit-700">
                   <a href="/collect">collect</a>
                 </li>
-                <li class=" transition-all hover:text-lime-700">
+                <li class=" transition-all hover:text-aqua-700">
                   <a href="/formulate">formulate</a>
                 </li>
               </ul>

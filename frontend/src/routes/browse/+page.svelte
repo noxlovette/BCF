@@ -307,7 +307,7 @@
   </div>
 </button>
 
-<div id="app" class="md:my-8 flex flex-col items-center lowercase caret-sky-700">
+<div id="app" class="md:my-8 flex flex-col items-center lowercase caret-navy-700">
   <form
     id="search-bar"
     class="group flex w-full max-w-5xl flex-col items-center justify-center space-x-0 space-y-4 px-8 lg:px-12 sm:flex-row sm:space-x-4 sm:space-y-0"
@@ -317,7 +317,7 @@
     <button
       on:mousedown={toggleFilterMenu}
       title="filter by descriptors"
-      class="rounded-lg hidden md:flex border border-sky-700 bg-sky-700 p-2 text-center text-sky-50 shadow transition-all hover:bg-white hover:text-sky-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
+      class="rounded-lg hidden md:flex border border-navy-700 bg-navy-700 p-2 text-center text-navy-50 shadow transition-all hover:bg-white hover:text-navy-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
     >
       {#if showFilterMenu}
         ingredients
@@ -329,7 +329,7 @@
     {#if showFilterMenu}
       <input
         type="text"
-        class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-sky-400/70 active:scale-90 lg:w-[600px] dark:bg-gray-800"
+        class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-navy-400/70 active:scale-90 lg:w-[600px] dark:bg-gray-800"
         bind:value={searchTermDescriptor}
         bind:this={searchInput}
         on:keydown={searchDescriptors}
@@ -339,7 +339,7 @@
     {:else}
       <input
         type="text"
-        class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-sky-700/60 active:scale-90 lg:w-[600px] dark:bg-gray-800"
+        class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-navy-700/60 active:scale-90 lg:w-[600px] dark:bg-gray-800"
         bind:value={$searchTerm}
         bind:this={searchInput}
         on:keydown={handleSearch}
@@ -351,7 +351,7 @@
     <button
       on:mousedown={reset}
       title="reset everything"
-      class="rounded-full border border-sky-700 bg-sky-700 p-2 text-sky-50 shadow hover:bg-white hover:text-sky-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
+      class="rounded-full border border-navy-700 bg-navy-700 p-2 text-navy-50 shadow hover:bg-white hover:text-navy-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
     >
       <ResetIcon />
     </button>
@@ -364,7 +364,7 @@
       per page:
       <input
         type="number"
-        class="w-1/3 rounded-lg border-none focus:ring-2 focus:ring-sky-400/70 group-hover:shadow dark:bg-gray-800"
+        class="w-1/3 rounded-lg border-none focus:ring-2 focus:ring-navy-400/70 group-hover:shadow dark:bg-gray-800"
         min="1"
         bind:value={$pageSize}
         on:change={updatePageSize}
@@ -376,7 +376,7 @@
     <button
       on:mousedown={toggleFilterMenu}
       title="filter by descriptors"
-      class="rounded-full md:hidden border border-sky-700 bg-sky-700 p-2 text-center text-sky-50 shadow transition-all hover:bg-white hover:text-sky-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
+      class="rounded-full md:hidden border border-navy-700 bg-navy-700 p-2 text-center text-navy-50 shadow transition-all hover:bg-white hover:text-navy-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
     >
       {#if showFilterMenu}
         ingredients
@@ -387,7 +387,7 @@
 
     <div
       id="pagination"
-      class="flex w-[100px] items-center justify-center rounded-full border border-sky-700 bg-sky-700 p-2 text-sky-50 shadow hover:bg-white hover:text-sky-700 active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50 {showFilterMenu ||
+      class="flex w-[100px] items-center justify-center rounded-full border border-navy-700 bg-navy-700 p-2 text-navy-50 shadow hover:bg-white hover:text-navy-700 active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50 {showFilterMenu ||
       ($currentPage <= 1 && $currentPage >= data.total_pages)
         ? 'invisible'
         : 'visible'}"
@@ -416,7 +416,7 @@
 
   <div
     id="table-wrapper"
-    class=" lg:mx-8 flex select-text flex-row items-center font-normal selection:bg-sky-300/40 xl:font-medium
+    class=" lg:mx-8 flex select-text flex-row items-center font-normal selection:bg-navy-300/40 xl:font-medium
           "
   >
     {#if isLoading || data === null}
@@ -443,7 +443,7 @@
                   >
                     <input
                       class="mx-2
-            size-4 rounded-full border-none text-sky-600/90 shadow transition-all checked:bg-sky-700/70 checked:ring-sky-700/30 hover:scale-110 hover:checked:bg-sky-600/80 focus:ring-sky-400/30"
+            size-4 rounded-full border-none text-navy-600/90 shadow transition-all checked:bg-navy-700/70 checked:ring-navy-700/30 hover:scale-110 hover:checked:bg-navy-600/80 focus:ring-navy-400/30"
                       type="checkbox"
                       id={descriptor.name}
                       bind:group={chosenDescriptors}

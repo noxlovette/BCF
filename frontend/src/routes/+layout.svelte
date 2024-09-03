@@ -42,7 +42,7 @@
 </svelte:head>
 
 <main
-  class="min-w-screen min-h-screen bg-orange-50/40 text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100"
+  class="min-w-screen min-h-screen bg-stone-50 text-stone-800 antialiased dark:bg-stone-900 dark:text-stone-100"
 >
   <Header />
   <div class="flex min-h-screen flex-col items-center justify-start">
