@@ -42,7 +42,7 @@
 
 <button
   id="card-small"
-  class="group flex flex-col rounded-lg bg-white p-4 md:p-8 text-left shadow-lg transition-all hover:scale-105 hover:bg-navy-700 hover:text-navy-50 hover:shadow-lg dark:bg-gray-800 items-start justify-between"
+  class="group flex flex-col rounded-lg bg-white p-4 md:p-8 text-left shadow-lg transition-all hover:scale-105 hover:bg-navy-700 hover:text-navy-50 hover:shadow-lg dark:bg-stone-800 items-start justify-between"
   on:mousedown={() => (chosenIngredient = ingredient)}
   tabindex="0"
 >

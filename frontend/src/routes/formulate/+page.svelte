@@ -1,17 +1,12 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
-  import { fade } from "svelte/transition";
   import { createFormula, fetchFormulas, fetchFormula } from "$lib/DjangoAPI";
-  import Header from "$lib/components/Header.svelte";
-  import Footer from "$lib/components/Footer.svelte";
   import Loader from "$lib/components/Loader.svelte";
   import FormulaDetail from "./FormulaDetail.svelte";
   import AddCrossIcon from "$lib/icons/AddCrossIcon.svelte";
-  import Notification from "$lib/components/Notification.svelte";
   import { notification } from "$lib/stores/notificationStore";
   import { goto } from "$app/navigation";
 
-  // main functionality
   let formulae = null;
   let formulaDetail = null;
   let cleanup = () => {};
@@ -42,11 +37,11 @@
 
   function viewFormula(formulaId) {
     if (formulaId === activeFormulaId) {
-      formulaDetail = null; // Optionally toggle detail view off if the same button is clicked again
+      formulaDetail = null; 
       activeFormulaId = null;
     } else {
       fetchFormulaDetail(formulaId);
-      activeFormulaId = formulaId; // Update the active formula ID
+      activeFormulaId = formulaId; 
     }
   }
   async function handleCreateFormula() {
@@ -78,12 +73,10 @@
   <div
     id="app"
     class="my-12 hidden h-[550px] select-text overflow-x-auto text-aqua-950 caret-aqua-700 selection:bg-aqua-300 md:flex md:w-[720px] md:flex-row lg:w-[960px] xl:w-[1200px] dark:text-aqua-50"
-    in:fade={{ duration: 150 }}
   >
     <div
       id="sidebar"
       class="flex flex-col rounded-lg text-aqua-50 transition-all md:w-[120px] xl:w-[180px]"
-      in:fade={{ delay: 150, duration: 150 }}
     >
       <ul
         id="formulate-list"
@@ -121,7 +114,7 @@
 
     <div
       id="main-content"
-      class="ml-8 flex flex-1 flex-row items-center justify-center rounded-lg bg-white shadow-md dark:bg-neutral-800"
+      class="ml-8 flex flex-1 flex-row items-center justify-center rounded-lg bg-white shadow-md dark:bg-stone-800"
     >
       {#if formulaDetail}
         <FormulaDetail bind:formulae bind:formulaDetail />

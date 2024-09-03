@@ -281,7 +281,7 @@
   const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
 </script>
 
-<svelte:window class="dark:text-gray-100" on:keydown={handleKeydown} />
+<svelte:window class="dark:text-stone-100" on:keydown={handleKeydown} />
 <svelte:head>
   <title>BCF | Browse</title>
   <meta name="description" content={description} />
@@ -317,7 +317,7 @@
     <button
       on:mousedown={toggleFilterMenu}
       title="filter by descriptors"
-      class="rounded-lg hidden md:flex border border-navy-700 bg-navy-700 p-2 text-center text-navy-50 shadow transition-all hover:bg-white hover:text-navy-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
+      class="rounded-lg hidden md:flex border border-navy-700 bg-navy-700 p-2 text-center text-navy-50 shadow transition-all hover:bg-white hover:text-navy-700 hover:shadow-lg active:shadow-none dark:hover:bg-stone-800 dark:hover:text-stone-50"
     >
       {#if showFilterMenu}
         ingredients
@@ -329,7 +329,7 @@
     {#if showFilterMenu}
       <input
         type="text"
-        class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-navy-400/70 active:scale-90 lg:w-[600px] dark:bg-gray-800"
+        class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-navy-400/70 active:scale-90 lg:w-[600px] dark:bg-stone-800"
         bind:value={searchTermDescriptor}
         bind:this={searchInput}
         on:keydown={searchDescriptors}
@@ -339,7 +339,7 @@
     {:else}
       <input
         type="text"
-        class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-navy-700/60 active:scale-90 lg:w-[600px] dark:bg-gray-800"
+        class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-navy-700/60 active:scale-90 lg:w-[600px] dark:bg-stone-800"
         bind:value={$searchTerm}
         bind:this={searchInput}
         on:keydown={handleSearch}
@@ -351,7 +351,7 @@
     <button
       on:mousedown={reset}
       title="reset everything"
-      class="rounded-full border border-navy-700 bg-navy-700 p-2 text-navy-50 shadow hover:bg-white hover:text-navy-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
+      class="rounded-full border border-navy-700 bg-navy-700 p-2 text-navy-50 shadow hover:bg-white hover:text-navy-700 hover:shadow-lg active:shadow-none dark:hover:bg-stone-800 dark:hover:text-stone-50"
     >
       <ResetIcon />
     </button>
@@ -364,7 +364,7 @@
       per page:
       <input
         type="number"
-        class="w-1/3 rounded-lg border-none focus:ring-2 focus:ring-navy-400/70 group-hover:shadow dark:bg-gray-800"
+        class="w-1/3 rounded-lg border-none focus:ring-2 focus:ring-navy-400/70 group-hover:shadow dark:bg-stone-800"
         min="1"
         bind:value={$pageSize}
         on:change={updatePageSize}
@@ -376,7 +376,7 @@
     <button
       on:mousedown={toggleFilterMenu}
       title="filter by descriptors"
-      class="rounded-full md:hidden border border-navy-700 bg-navy-700 p-2 text-center text-navy-50 shadow transition-all hover:bg-white hover:text-navy-700 hover:shadow-lg active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50"
+      class="rounded-full md:hidden border border-navy-700 bg-navy-700 p-2 text-center text-navy-50 shadow transition-all hover:bg-white hover:text-navy-700 hover:shadow-lg active:shadow-none dark:hover:bg-stone-800 dark:hover:text-stone-50"
     >
       {#if showFilterMenu}
         ingredients
@@ -387,7 +387,7 @@
 
     <div
       id="pagination"
-      class="flex w-[100px] items-center justify-center rounded-full border border-navy-700 bg-navy-700 p-2 text-navy-50 shadow hover:bg-white hover:text-navy-700 active:shadow-none dark:hover:bg-gray-800 dark:hover:text-gray-50 {showFilterMenu ||
+      class="flex w-[100px] items-center justify-center rounded-full border border-navy-700 bg-navy-700 p-2 text-navy-50 shadow hover:bg-white hover:text-navy-700 active:shadow-none dark:hover:bg-stone-800 dark:hover:text-stone-50 {showFilterMenu ||
       ($currentPage <= 1 && $currentPage >= data.total_pages)
         ? 'invisible'
         : 'visible'}"
@@ -430,7 +430,7 @@
         {#if showFilterMenu}
           <div
             id="filter"
-            class="grid w-full items-center gap-4 rounded-lg border-none bg-white/20 p-2 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 dark:bg-gray-900/20"
+            class="grid w-full items-center gap-4 rounded-lg border-none bg-white/20 p-2 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 dark:bg-stone-900/20"
             in:fade={{ duration: 150 }}
             bind:this={filterMenu}
           >

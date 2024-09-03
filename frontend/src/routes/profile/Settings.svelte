@@ -234,7 +234,7 @@
           </div>
         {:else}
           <button
-            class="invisible rounded-lg bg-zinc-400 p-2 transition-all group-hover:visible"
+            class="invisible rounded-lg bg-stone-400 p-2 transition-all group-hover:visible"
             on:mousedown={toggleWarningDelete}>erase me</button
           >
         {/if}

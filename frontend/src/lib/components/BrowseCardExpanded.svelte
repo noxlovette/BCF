@@ -113,7 +113,7 @@
 {#if ingredient !== null}
   <button
     id="card-big"
-    class="z-50 relative flex h-[600px] w-[360px] cursor-default select-text flex-col rounded-lg border-navy-950 bg-white p-8 text-left caret-navy-700 shadow-lg transition-all selection:bg-navy-300/40 sm:w-[475px] md:h-[475px] md:w-[768px] dark:bg-gray-800"
+    class="z-50 relative flex h-[600px] w-[360px] cursor-default select-text flex-col rounded-lg border-navy-950 bg-white p-8 text-left caret-navy-700 shadow-lg transition-all selection:bg-navy-300/40 sm:w-[475px] md:h-[475px] md:w-[768px] dark:bg-stone-800"
     on:mousedown|stopPropagation
   >
   <button class="absolute top-2 right-2"
@@ -134,7 +134,7 @@
           {:else}
             <input
               type="text"
-              class="w-full border-none p-0 text-4xl font-bold tracking-tighter text-navy-800 ring-0 focus:ring-0 dark:bg-gray-800"
+              class="w-full border-none p-0 text-4xl font-bold tracking-tighter text-navy-800 ring-0 focus:ring-0 dark:bg-stone-800"
               bind:value={suggestedIngredient.common_name}
               placeholder="names"
             />
@@ -145,7 +145,7 @@
             {ingredient.descriptors}
           {:else}
             <textarea
-              class="w-full border-none p-0 text-sm ring-0 focus:ring-0 dark:bg-gray-800"
+              class="w-full border-none p-0 text-sm ring-0 focus:ring-0 dark:bg-stone-800"
               bind:value={suggestedIngredient.other_names}
               placeholder="other names"
             />
@@ -167,7 +167,7 @@
           {:else}
             <input
               type="text"
-              class="w-full border-none p-0 text-sm ring-0 focus:ring-0 dark:bg-gray-800"
+              class="w-full border-none p-0 text-sm ring-0 focus:ring-0 dark:bg-stone-800"
               bind:value={suggestedIngredient.volalitliy}
               placeholder="volalitliy"
             />
@@ -186,7 +186,7 @@
             {/if}
           {:else}
             <textarea
-              class="w-full border-none p-0 ring-0 focus:ring-0 dark:bg-gray-800"
+              class="w-full border-none p-0 ring-0 focus:ring-0 dark:bg-stone-800"
               bind:value={suggestedIngredient.use}
               placeholder="how to use this ingredient?"
             />
@@ -203,7 +203,7 @@
               {/if}
             {:else}
               <textarea
-                class="w-full border-none p-0 ring-0 focus:ring-0 dark:bg-gray-800"
+                class="w-full border-none p-0 ring-0 focus:ring-0 dark:bg-stone-800"
                 bind:value={suggestedIngredient.similar_ingredients}
                 placeholder="similar ingredients"
               />
@@ -226,7 +226,7 @@
               {:else}
                 <input
                   type="text"
-                  class="w-full border-none p-0 text-sm ring-0 focus:ring-0 dark:bg-gray-800"
+                  class="w-full border-none p-0 text-sm ring-0 focus:ring-0 dark:bg-stone-800"
                   bind:value={suggestedIngredient.origin}
                   placeholder="origin"
                 />
@@ -246,7 +246,7 @@
               {:else}
                 <input
                   type="text"
-                  class="w-full border-none p-0 text-sm ring-0 focus:ring-0 dark:bg-gray-800"
+                  class="w-full border-none p-0 text-sm ring-0 focus:ring-0 dark:bg-stone-800"
                   bind:value={suggestedIngredient.is_restricted}
                   placeholder="restricted?"
                 />

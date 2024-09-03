@@ -112,7 +112,7 @@
 {:else}
   <div
     id="description-etc"
-    class="z-20 mr-auto flex h-full w-[175px] flex-col space-y-4 rounded-lg bg-gradient-to-br from-aqua-600 to-aqua-600/80 p-4 text-aqua-50 shadow lg:w-[220px] dark:bg-aqua-800 dark:from-aqua-800 dark:to-aqua-800/80"
+    class="z-20 mr-auto flex h-full w-[175px] flex-col space-y-4 rounded-lg bg-aqua-800 p-4 text-aqua-50 shadow lg:w-[220px] dark:bg-aqua-800 dark:from-aqua-800 dark:to-aqua-800/80"
   >
     <div>
       <h3 class="text-sm">description</h3>
@@ -126,24 +126,24 @@
     <!-- This div will take up the remaining space -->
     <div
       id="controls"
-      class="mt-auto flex *:rounded-full *:hover:p-1 lg:*:hover:p-2"
+      class="mt-auto flex *:rounded-full *:p-2 justify-between"
     >
       <button
-        class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-800 dark:hover:bg-neutral-800 dark:hover:text-aqua-50"
+        class="transition-all hover:bg-white hover:text-aqua-800 dark:hover:bg-stone-800 dark:hover:text-aqua-50"
         on:mousedown={() => editFormula(formulaDetail)}
         title="edit the formula"
       >
         <Suggestion />
       </button>
       <button
-        class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-800 dark:hover:bg-neutral-800 dark:hover:text-aqua-50"
+        class="transition-all hover:bg-white hover:text-aqua-800 dark:hover:bg-stone-800 dark:hover:text-aqua-50"
         on:mousedown={() => handleDeleteFormula(formulaDetail.id)}
         title="delete the formula"
       >
         <DeleteIcon />
       </button>
       <button
-        class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-700 dark:hover:bg-neutral-800 dark:hover:text-aqua-50"
+        class="transition-all hover:bg-white hover:text-aqua-700 dark:hover:bg-stone-800 dark:hover:text-aqua-50"
         on:mousedown={() => handleAddAsCustom(formulaDetail)}
         title="add the formula to collection as ingredient"
       >

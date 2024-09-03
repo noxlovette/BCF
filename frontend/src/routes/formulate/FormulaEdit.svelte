@@ -110,19 +110,19 @@
 
 <div
   id="description-etc"
-  class="z-20 mr-auto flex h-full w-[175px] flex-col space-y-4 rounded-lg bg-aqua-600 p-4 text-aqua-50 shadow lg:w-[220px] dark:bg-aqua-800"
+  class="z-20 mr-auto flex h-full w-[175px] flex-col space-y-4 rounded-lg bg-aqua-800 p-4 text-aqua-50 shadow lg:w-[220px] "
 >
   <div>
     <h3 class="text-sm">description</h3>
     <textarea
-      class="w-full rounded-lg border-none bg-aqua-600 p-0 ring-0 focus:ring-0 dark:bg-aqua-800"
+      class="w-full rounded-lg border-none bg-aqua-600 py-2 ring-0 focus:ring-0 dark:bg-aqua-800 resize-none"
       bind:value={editedFormula.description}
     />
   </div>
   <div>
     <h3 class="text-sm">notes</h3>
     <textarea
-      class="w-full rounded-lg border-none bg-aqua-600 p-0 ring-0 focus:ring-0 dark:bg-aqua-800"
+      class="w-full rounded-lg border-none bg-aqua-600 py-2 ring-0 focus:ring-0 dark:bg-aqua-800 resize-none"
       bind:value={editedFormula.notes}
     />
   </div>
@@ -131,11 +131,11 @@
 
   <div
     id="controls"
-    class="mt-auto pt-4 *:rounded-full *:hover:p-1 lg:*:hover:p-2"
+    class="mt-auto pt-4 *:rounded-full *:p-2 justify-between"
   >
     <button
       tabindex="-1"
-      class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-800 dark:hover:bg-neutral-800 dark:hover:text-aqua-50"
+      class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-800 dark:hover:bg-stone-800 dark:hover:text-aqua-50"
       title="save changes"
       on:mousedown={saveChanges}
     >
@@ -143,7 +143,7 @@
     </button>
     <button
       tabindex="-1"
-      class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-800 dark:hover:bg-neutral-800 dark:hover:text-aqua-50"
+      class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-800 dark:hover:bg-stone-800 dark:hover:text-aqua-50"
       title="cancel changes"
       on:mousedown={() => {
         editing = false;
@@ -159,7 +159,7 @@
   class="z-10 ml-4 flex size-full scroll-m-2 flex-col items-start justify-start overflow-y-auto p-4"
 >
   <input
-    class="border-none p-0 text-6xl tracking-tighter ring-0 focus:ring-0 dark:bg-neutral-800"
+    class="border-none p-0 text-6xl tracking-tighter ring-0 focus:ring-0 dark:bg-stone-800"
     bind:value={editedFormula.name}
   />
   <table
@@ -210,14 +210,14 @@
               <input
                 type="number"
                 bind:value={ingredient.amount}
-                class="flex w-2/3 rounded-lg border-none p-1 text-aqua-700 focus:ring-0 dark:bg-neutral-800"
+                class="flex w-2/3 rounded-lg border-none p-1 text-aqua-700 focus:ring-0 dark:bg-stone-800"
               />
             </td>
             <td>
               <input
                 type="number"
                 bind:value={ingredient.percentage}
-                class="flex w-2/3 rounded-lg border-none p-1 text-aqua-700 focus:ring-0 dark:bg-neutral-800"
+                class="flex w-2/3 rounded-lg border-none p-1 text-aqua-700 focus:ring-0 dark:bg-stone-800"
               />
             </td>
           </tr>
@@ -243,7 +243,7 @@
             type="text"
             bind:value={editedFormula.solvent}
             placeholder="solvent"
-            class="flex w-2/3 rounded-lg border-none text-aqua-700 focus:ring-0 dark:bg-neutral-800"
+            class="flex w-2/3 rounded-lg border-none text-aqua-700 focus:ring-0 dark:bg-stone-800"
           />
         </td>
         <td>solvent</td>

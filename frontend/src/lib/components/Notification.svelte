@@ -27,7 +27,7 @@
           ? "bg-aqua-500"
           : $notification.type === "info"
             ? "bg-navy-500"
-            : "bg-gray-500"
+            : "bg-stone-500"
     }`}
     role="alert"
     in:fade={{ duration: 150 }}
