@@ -4,6 +4,7 @@
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import { fetchCollection } from "$lib/DjangoAPI";
+  import { isLoading } from "$lib/stores/loadingStore";
 
   import { notification } from "$lib/stores/notificationStore";
 
@@ -17,12 +18,13 @@
     if (data.error) {
       notification.set({ message: data.error, type: "error" });
     } else {
-      // Process success scenario
+      isLoading.set(true);
       await fetchCollection();
       sessionStorage.setItem("username", data.username);
       sessionStorage.setItem("is_authenticated", "true");
       sessionStorage.setItem("email", data.email);
       notification.set({ message: "Welcome back!", type: "success" });
+      isLoading.set(false);
       goto("/collect/");
     }
   };

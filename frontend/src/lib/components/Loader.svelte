@@ -1,4 +1,11 @@
 <script>
+import { isLoading } from "$lib/stores/loadingStore";
+import {fade} from "svelte/transition";
+
+let loadingState;
+
+$: loadingState = $isLoading;
+
   let quotes = [
     "Perfume is the art that makes memory speak. — Francis Kurkdjian",
     "A woman who doesn't wear perfume has no future. — Coco Chanel",
@@ -26,14 +33,31 @@
   }
 </script>
 
-<div class="mx-auto max-w-[800px] cursor-wait xl:max-w-7xl">
-  <div class="flex size-full flex-col items-center">
-    <div
-      id="spinner"
-      class="m-10 flex size-24 animate-spin rounded-full border-8 border-dotted border-gold-400"
-    />
-    <p class="text-pretty text-center text-2xl font-bold normal-case">
-      {chosenQuote}
-    </p>
+{#if loadingState}
+<div class="loading-overlay" transition:fade>
+    <div class="flex size-full flex-col items-center">
+      <div
+        id="spinner"
+        class="m-10 flex size-24 animate-spin rounded-full border-8 border-dotted border-gold-400"
+      />
+      <p class="text-pretty text-center text-2xl font-bold normal-case">
+        {chosenQuote}
+      </p>
+    </div>
   </div>
-</div>
+{/if}
+
+<style>
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent overlay */
+    z-index: 9999;
+  }
+  </style>

@@ -9,12 +9,12 @@
 </script>
 
 <footer
-  class="relative z-10 flex flex-col items-center justify-center py-2 opacity-80"
+  class="relative z-10 flex flex-col items-center justify-between py-2 opacity-80"
 >
   <div
-    class="xs:grid-cols-1 clear-end mt-4 grid max-w-7xl justify-center text-sm font-semibold sm:grid-cols-1 sm:gap-4 md:grid-cols-3 md:gap-6 xl:gap-8"
+    class="xs:grid-cols-1 clear-end mt-4 grid max-w-7xl w-full justify-between text-sm font-semibold sm:grid-cols-1 sm:gap-4 md:grid-cols-3 md:gap-6 xl:gap-8"
   >
-    <div id="social" class="flex w-full items-center justify-center">
+    <div id="social" class="flex w-full items-center">
       <ul class="flex items-center space-x-4">
         <li class="">
           <a href="https://twitter.com/BCF_app">
@@ -78,7 +78,7 @@
 
     <div
       id="paperwork"
-      class="md:text-md relative m-2 ml-auto flex w-full sm:text-sm"
+      class="md:text-md relative m-2 ml-auto flex w-full sm:text-sm justify-end"
     >
       <ul class="flex items-center *:mx-4 sm:*:mx-2">
         <li>

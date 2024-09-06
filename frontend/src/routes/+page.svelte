@@ -1,19 +1,10 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import BigText from "$lib/components/BigText.svelte";
     import Section from "$lib/UI/Section.svelte";
-
   const bigText = `Want to create your own <span class="text-gold-400"> perfume? </span>We've got you covered<span class="text-gold-400">.</span>`;
-  let isMounted = false;
 
-  onMount(() => {
-    isMounted = true;
-  });
 </script>
 
-<svelte:head>
-  <title>BCF</title>
-</svelte:head>
   <div
     class="flex flex-col py-12"
   >
@@ -65,7 +56,7 @@
                   </div>
                   <a
                     href="/auth/signup"
-                    class="button px-6 py-3 text-gold-400 transition-all hover:text-current"
+                    class="button px-6 py-3 text-gold-400 transition-all hover:text-gold-200"
                     >sign up</a
                   >
                 </div>
@@ -76,6 +67,3 @@
       </div>
     </div>
   </div>
-
-<style>
-</style>

@@ -6,6 +6,7 @@
   import AddCrossIcon from "$lib/icons/AddCrossIcon.svelte";
   import { notification } from "$lib/stores/notificationStore";
   import { goto } from "$app/navigation";
+    import MetaData from "$lib/components/MetaData.svelte";
 
   let formulae = null;
   let formulaDetail = null;
@@ -58,10 +59,7 @@
   }
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
-<svelte:head>
-  <title>BCF | Formulate</title>
-</svelte:head>
+<MetaData title="BCF | Formulate" />
 
 <div class="flex h-full items-center justify-center md:hidden">
   <h1 class="text-xl font-bold">this page is desktop only :(</h1>

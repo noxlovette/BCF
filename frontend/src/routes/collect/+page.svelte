@@ -1,7 +1,6 @@
 <script lang="ts">
   import { fetchCollection } from "$lib/DjangoAPI";
   import { onMount } from "svelte";
-  import { writable } from "svelte/store";
   import { goto } from "$app/navigation";
   import { blur } from "svelte/transition";
   import Loader from "$lib/components/Loader.svelte";
@@ -12,18 +11,21 @@
   import CollectCard from "$lib/components/CollectCard.svelte";
   import { notification } from "$lib/stores/notificationStore";
   import AddCrossIcon from "$lib/icons/AddCrossIcon.svelte";
+  import MetaData from "$lib/components/MetaData.svelte";
+  import { handleKeydown } from "$lib/utils";
+  import { currentPage, pageSize, searchTerm } from "$lib/stores";
 
   export let collection = [];
 
-  let pageSize = writable(9);
-  let currentPage = writable(1);
-  let searchTerm = writable("");
+
   let searchInput: any = null;
   let isLoading = true;
   let editedIngredient = null;
   let filteredCollection = [];
   let startIndex = 0;
   let paginatedCollection = [];
+  let chosenIngredient: any = null;
+  let totalPages: number = 0;
 
   async function handleFetch(forceReload = false) {
     const data = await fetchCollection({ forceReload: forceReload });
@@ -38,7 +40,6 @@
     filteredCollection = collection;
   }
 
-  // pagination logic, pagesize logic
   async function updatePageSize() {
     currentPage.set(1);
     goto(
@@ -64,20 +65,6 @@
     }
   }
 
-  async function handleSearch() {
-    currentPage.set(1);
-    if ($searchTerm === "") {
-      notification.set({ message: "Showing everything", type: "info" });
-    } else {
-      notification.set({
-        message: `Searching for ${$searchTerm}...`,
-        type: "info",
-      });
-    }
-    goto(
-      `/collect?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`,
-    );
-  }
 
   const handleSearchCollection = () => {
     filteredCollection = collection.filter((ingredient) => {
@@ -95,7 +82,6 @@
     startIndex = ($currentPage - 1) * $pageSize;
   }
 
-  let totalPages: number = 0;
 
   $: {
     try {
@@ -153,62 +139,17 @@
     });
   });
 
-  let chosenIngredient: any = null;
+  
   function toggleOverlay() {
     chosenIngredient = null;
     editedIngredient = null;
   }
 
-  function handleKeydown(event) {
-    if (event.key === "/") {
-      event.preventDefault(); // Prevents the default action associated with the '/' key
-
-      // Toggle focus
-      if (document.activeElement === searchInput) {
-        searchInput.blur(); // If the searchInput is already focused, unfocus it
-      } else {
-        searchInput.focus(); // Otherwise, set the focus on the searchInput
-      }
-    } else if (event.key === "Escape") {
-      if (document.activeElement === searchInput) {
-        searchInput.blur();
-        searchTerm.set("");
-      } else {
-        event.preventDefault();
-        toggleOverlay();
-      }
-    } else if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      changePage(-1);
-    } else if (event.key === "ArrowRight") {
-      event.preventDefault();
-      changePage(+1);
-    } else if (event.key === "ArrowUp") {
-      event.preventDefault();
-      changePage(-1);
-    } else if (event.key === "ArrowDown") {
-      event.preventDefault();
-      changePage(+1);
-    }
-  }
-
-  const description =
-    "Collect perfume ingredients. Leave comments, manage your laboratory.";
-  const ogTitle = "BCF | Collect";
-  const ogUrl = "https://bcfapp.app/collect";
-  const imageUrl = "https://bcfapp.app/assets/img/dalle-collect-1.webp";
+  
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
-
-<svelte:head>
-  <title>BCF | Collect</title>
-  <meta name="description" content={description} />
-  <meta property="og:title" content={ogTitle} />
-  <meta property="og:description" content={description} />
-  <meta property="og:image" content={imageUrl} />
-  <meta property="og:url" content={ogUrl} />
-</svelte:head>
+<MetaData title="BCF | Collect" ogTitle="BCF | Collect" description="Collect perfume ingredients. Leave comments, manage your laboratory." ogUrl="https://bcfapp.app/collect" />
+<svelte:window on:keydown={handleKeydown(searchInput, toggleOverlay, changePage, $searchTerm)} />
 
 <button
   id="overlay"
