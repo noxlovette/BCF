@@ -1,10 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { fetchDescriptors } from "$lib/DjangoAPI";
   import { tick } from "svelte";
   import { derived, writable } from "svelte/store";
   import { blur, fade } from "svelte/transition";
+
+  import type { PageServerData } from "./$types";
 
   import {handleKeydown} from "$lib/utils";
 
@@ -17,9 +18,9 @@
   import ResetIcon from "$lib/icons/ResetIcon.svelte";
     import MetaData from "$lib/components/MetaData.svelte";
 
-  export let data: any = null;
-  export let currentPage = writable();
-  export let pageSize = writable();
+  export let data: PageServerData;
+  export let currentPage = writable(1);
+  export let pageSize = writable(9);
   export let searchTerm = writable("");
   const urlParams = derived([currentPage, pageSize], ([$currentPage, $pageSize]) => {
   return `/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`;
@@ -34,7 +35,6 @@
 
   let showTuneMenu = false;
   let isLoading = true;
-  let descriptors = [];
   let searchTermDescriptor = "";
   let filteredDescriptors = [];
   let sortedDescriptors = [];
@@ -46,49 +46,52 @@
 
   isLoading = false;
 
-  fetchDescriptors().then((data) => {
-    descriptors = data;
-    filteredDescriptors = descriptors;
-  });
+  filteredDescriptors = data.descriptors;
+  searchDescriptors();
 
-  // Persist store values to storage
   currentPage.subscribe((value) => sessionStorage.setItem("currentPage", String(value)));
   pageSize.subscribe((value) => localStorage.setItem("pageSize", String(value)));
   searchTerm.subscribe((value) => sessionStorage.setItem("searchTerm", String(value)));
 
-  // Subscribe to the derived store
   const unsubscribe = urlParams.subscribe(async (url) => {
     if (isLoading) return; // Avoid navigation during initial load
     await goto(url); // Navigate only when URL changes
   });
 
-  // Clean up on destroy
   return () => {
     unsubscribe();
   };
 });
 
-  function sortDescriptors(descriptors) {
-    return descriptors.sort((a, b) => a.name.localeCompare(b.name));
+const searchDescriptors = () => {
+  // If search field is empty, reset to show all descriptors
+  if (searchTermDescriptor.trim() === "") {
+    filteredDescriptors = data.descriptors;
+  } else {
+    // Filter descriptors based on search term
+    filteredDescriptors = data.descriptors.filter((descriptor) =>
+      descriptor.name.toLowerCase().includes(searchTermDescriptor.toLowerCase())
+    );
   }
 
-  $: {
-    sortedDescriptors = sortDescriptors(filteredDescriptors);
-    if (chosenDescriptors.length > 0) {
-      let descriptorNames = chosenDescriptors.map(
-        (descriptor) => descriptor.name,
-      );
-      notification.set({ message: descriptorNames.join(", "), type: "info" });
-      currentPage.set(1);
-    }
+  // Sort filtered descriptors by name
+  sortedDescriptors = filteredDescriptors.sort((a, b) => a.name.localeCompare(b.name));
+
+  // Handle notification for chosen descriptors
+  if (chosenDescriptors.length > 0) {
+    const descriptorNames = chosenDescriptors.map((descriptor) => descriptor.name);
+    notification.set({ message: descriptorNames.join(", "), type: "info" });
   }
+};
 
   let filterMenu;
+  let searchInputDescriptor;
+
   function handleClickOutside(event) {
     if (
       filterMenu &&
       !filterMenu.contains(event.target) &&
-      !searchInput.contains(event.target)
+      !searchInputDescriptor.contains(event.target)
     ) {
       document.removeEventListener("click", handleClickOutside);
       showFilterMenu = false;
@@ -115,14 +118,6 @@
       });
     }
   }
-  
-  const searchDescriptors = () => {
-    return (filteredDescriptors = descriptors.filter((descriptor) =>
-      descriptor.name
-        .toLowerCase()
-        .includes(searchTermDescriptor.toLowerCase()),
-    ));
-  };
 
   async function changePage(increment: number) {
   try {
@@ -131,7 +126,7 @@
       return;
     }
 
-    const newPage = $currentPage + increment;
+    const newPage:number = $currentPage + increment;
 
     if (data.ingredients && (newPage < 1 || newPage > data.ingredients.total_pages)) {
       notification.set({
@@ -141,7 +136,7 @@
       return;
     }
 
-    currentPage.update((value) => value + increment);
+    currentPage.update((value: number) => value + increment);
     
     try {  
       if (data.ingredients === null) {
@@ -156,7 +151,6 @@
         message: "Failed to load the next page. Please try again.",
         type: "error",
       });
-      // Revert the page change
       currentPage.update((value) => value - increment);
     }
   } catch (error) {
@@ -236,8 +230,8 @@
         class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-navy-400/70 active:scale-90 lg:w-[600px] dark:bg-stone-800"
         bind:value={searchTermDescriptor}
         class:hidden={!showFilterMenu}
-        bind:this={searchInput}
-        on:keydown={searchDescriptors}
+        bind:this={searchInputDescriptor}
+        on:input={searchDescriptors}
         placeholder="/ search descriptors..."
         title="find the descriptor that you are looking for"
       />
@@ -247,7 +241,7 @@
     bind:value={$searchTerm}
     class:hidden={showFilterMenu}
     bind:this={searchInput}
-    on:keydown={(event) => event.key === "Enter" && searchIngredients()}
+    on:input={(event) => event.key === "Enter" && searchIngredients()}
     on:blur={searchIngredients}
     placeholder="/ search ingredients..."
     title="find an ingredient by CAS or the multiple names that it might have"

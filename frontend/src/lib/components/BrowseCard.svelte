@@ -42,14 +42,14 @@
 
 <button
   id="card-small"
-  class="group flex flex-col rounded-lg bg-white p-4 md:p-8 text-left shadow-lg transition-all hover:scale-105 hover:bg-navy-700 hover:text-navy-50 hover:shadow-lg dark:bg-stone-800 items-start justify-between"
+  class="group flex flex-col rounded-lg bg-white p-4  md:p-8 text-left shadow-lg transition-all hover:scale-105 hover:bg-navy-700 hover:text-navy-50 hover:shadow-lg dark:bg-stone-800 items-start justify-between"
   on:mousedown={() => (chosenIngredient = ingredient)}
   tabindex="0"
 >
   <div id="top-part" class="flex flex-row items-baseline justify-between w-full">
     <h1
       id="top-left"
-      class="mr-8 hyphens-auto text-xl md:text-3xl font-bold tracking-tighter text-navy-800 group-hover:text-navy-50 max-w-[65%] overflow-clip"
+      class="mr-8 hyphens-auto text-xl md:text-3xl font-bold tracking-tighter text-navy-800 dark:text-navy-600 group-hover:text-navy-50 max-w-[65%] overflow-clip"
     >
       {ingredient.common_name}
     </h1>
