@@ -50,6 +50,23 @@ class BrowseView(APIView):
         ingredients_json = serializer.data
 
         return paginator.get_paginated_response(ingredients_json)
+    
+class IngredientDetailView(APIView):
+    """
+    This view returns detailed information about a single ingredient
+    """
+
+    def get(self, request, slug):
+        try:
+            ingredient = Ingredient.objects.get(slug=slug)
+        except Ingredient.DoesNotExist:
+            return Response({"error": "Ingredient not found"}, status=404)
+        
+        serializer = IngredientSerialiser(ingredient)
+        return Response(serializer.data)
+            
+            
+            
 
 
 class CustomPageNumberPagination(PageNumberPagination):

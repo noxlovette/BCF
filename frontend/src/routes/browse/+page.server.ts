@@ -22,7 +22,6 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
             const response = await fetch(`${VITE_API_URL}/browse/api/ingredients?page=${page}&search=${search}&page_size=${pageSize}`);
             ingredients = await response.json();
             await redis.set(cacheKeyIngredients, JSON.stringify(ingredients), 'EX', 7200);
-            console.log('Ingredients fetched from API');
         }
 
         // Fetch and cache descriptors
@@ -37,8 +36,8 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
             const response = await fetch(`${VITE_API_URL}/browse/api/descriptors/`);
             descriptors = await response.json();
             await redis.set(cacheKeyDescriptors, JSON.stringify(descriptors), 'EX', 7200);
-            console.log('Descriptors fetched from API');
         }
+        console.log(ingredients);
 
         return { ingredients, descriptors };
 

@@ -8,13 +8,11 @@ export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
     try {
         let value = await redis.get(`formula-${sessionid}-${slug}`);
         if (value !== null) {
-            console.log('Cache hit!');
+
             return {
                 formulae: JSON.parse(value),
             };
         }
-
-
         const endpoint = `${VITE_API_URL}/formulae/api/formula/${slug}/`;
 
         const response = await fetch(endpoint,
@@ -27,8 +25,8 @@ export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
             }
         );
         const formula = await response.json();
-        await redis.set(`formulae-${sessionid}-${slug}`, JSON.stringify(formula), 'EX', 120);
-        console.log('Cache miss!');
+        await redis.set(`formulae-${sessionid}-${slug}`, JSON.stringify(formula), 'EX', 2400);
+
         return { formula };
 
     } catch (error) {

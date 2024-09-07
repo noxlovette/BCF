@@ -14,7 +14,6 @@ export const load: PageServerLoad = async ({ cookies }) => {
     const cacheKey = `collection-${sessionid}`;
     const value = await redis.get(cacheKey);
     if ( value !== null) {
-      console.log('Cache hit!');
       return {
         collection: JSON.parse(value),
       };
@@ -38,7 +37,6 @@ export const load: PageServerLoad = async ({ cookies }) => {
     const data:App.IngredientCollection[] = await response.json();
 
     redis.set(cacheKey, JSON.stringify(data), 'EX', 1800);
-    console.log('Data fetched from API');
     return {
       collection: data
     };

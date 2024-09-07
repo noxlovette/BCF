@@ -20,7 +20,7 @@
 
   export let data: PageServerData;
   export let currentPage = writable(1);
-  export let pageSize = writable(9);
+  export let pageSize = writable(18);
   export let searchTerm = writable("");
   const urlParams = derived([currentPage, pageSize], ([$currentPage, $pageSize]) => {
   return `/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`;

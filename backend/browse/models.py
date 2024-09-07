@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 
 class Descriptor(models.Model):
@@ -103,6 +104,8 @@ class Ingredient(models.Model):
 
     # this field represents the users that have contributed to the ingredient
     contributors = models.ManyToManyField(User, related_name="contributors")
+    
+    slug = models.SlugField(blank=True, max_length=255, unique=True)
 
     def clean(self):
         """
@@ -144,6 +147,11 @@ class Ingredient(models.Model):
         ]:
             descriptors += [str(d) for d in descriptor]
         return ", ".join(descriptors) if descriptors else "No descriptors found"
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.common_name)
+        super().save(*args, **kwargs)
 
     class Meta:
         """

@@ -7,6 +7,11 @@ urlpatterns = [
     # /browse/
     path("api/ingredients", views.BrowseView.as_view(), name="api-ingredients"),
     path(
+        "api/ingredients/<slug:slug>/",
+        views.IngredientDetailView.as_view(),
+        name="api-ingredient-detail",
+    ),
+    path(
         "api/suggested-ingredients/new/",
         views.SuggestedIngredientCreateView.as_view(),
         name="api-suggested-ingredients",

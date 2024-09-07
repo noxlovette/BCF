@@ -36,6 +36,7 @@ class IngredientSerialiser(serializers.ModelSerializer):
     class Meta:
         fields = (
             "id",
+            "slug",
             "descriptors",
             "common_name",
             "other_names",

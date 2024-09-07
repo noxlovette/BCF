@@ -5,6 +5,7 @@ declare global {
     // Declare your interfaces inside the App namespace
     interface IngredientBrowse {
       id: number;
+      slug: string;
       cas: string;
       common_name: string;
       descriptors: string;

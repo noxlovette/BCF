@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
     try {
         let value = await redis.get(`formulae-${sessionid}`);
         if (value !== null) {
-            console.log('Cache hit!');
+
             return {
                 formulae: JSON.parse(value),
             };
@@ -28,8 +28,8 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
             }
         );
         const formulae = await response.json();
-        await redis.set(`formulae-${sessionid}`, JSON.stringify(formulae), 'EX', 120);
-        console.log('Cache miss!');
+        await redis.set(`formulae-${sessionid}`, JSON.stringify(formulae), 'EX', 2400);
+
         return { formulae };
 
     } catch (error) {
