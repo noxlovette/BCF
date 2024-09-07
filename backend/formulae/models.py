@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 from collection.models import (
     RegularCollectionIngredient,
     Ingredient,
@@ -53,6 +54,8 @@ class Formula(models.Model):
     solvent = models.CharField(max_length=100, blank=True, null=True, default="Ethanol")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

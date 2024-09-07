@@ -250,11 +250,11 @@ class FormulaSerializer(serializers.ModelSerializer):
             "updated",
             "created",
             "id",
+            "uuid",
             "name",
             "description",
             "ingredients",
             "notes",
-            "created_at",
             "solvent",
         ]
-        read_only_fields = ["id", "created_at", "updated_at"]
+        read_only_fields = ["id", "uuid", "created", "updated"]

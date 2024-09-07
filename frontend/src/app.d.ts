@@ -42,6 +42,29 @@ declare global {
       use: string;
       volatility: string;
     }
+
+    interface Formula {
+      id: number;
+      uuid: string;
+      name: string;
+      created: string;
+      updated: string;
+      created_at: string;
+      notes: string;
+      description: string;
+      solvent: string;
+      ingredients: FormulaIngredient[];
+
+    }
+
+    interface FormulaIngredient {
+      id: number;
+      amount: number;
+      collection_ingredient_id?: number;
+      custom_collection_ingredient_id?: number;
+      formula_id: number;
+      percentage: number;
+    }
   }
 }
 

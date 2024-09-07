@@ -48,12 +48,16 @@ class FormulaDetailViewAPI(RetrieveUpdateAPIView):
 
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
+    lookup_field = 'uuid'  # Use 'uuid' for lookups
 
     def get_object(self):
         """
         Retrieves and prepares the object for serialization.
         """
         obj = super().get_object()  # Retrieve the object as usual
+        if obj.user != self.request.user:
+            raise PermissionDenied("You do not have permission to access this formula.")
+        
         obj.prepare_for_serialization()  # Prepare data for serialization
         return obj
 

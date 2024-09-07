@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 app_name = "formulae"
@@ -10,8 +10,8 @@ urlpatterns = [
     path(
         "api/formula/list/", views.FormulaListViewAPI.as_view(), name="formula_list_api"
     ),
-    path(
-        "api/formula/<int:pk>/",
+    re_path(
+        r"api/formula/(?P<uuid>[a-f0-9\-]+)/",
         views.FormulaDetailViewAPI.as_view(),
         name="formula_detail",
     ),
