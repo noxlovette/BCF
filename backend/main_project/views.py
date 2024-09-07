@@ -96,6 +96,7 @@ class UserLoginAPI(APIView):
                     "username": user.username,
                     "is_authenticated": user.is_authenticated,
                     "email": user.email,
+                    "sessionid": request.session.session_key,
                 }
             )
         else:

@@ -129,6 +129,10 @@ class CollectionAPI(APIView):
 
     def get_collection(self, request):
         user = self.request.user
+
+        print("User:", user)
+        print("User Authenticated:", user.is_authenticated)
+        print("Session Cookies:", request.COOKIES)
         if not user.is_authenticated:
             raise PermissionDenied("You must be logged in to perform this action")
 

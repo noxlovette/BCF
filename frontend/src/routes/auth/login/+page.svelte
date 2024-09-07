@@ -1,32 +1,31 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { enhance } from "$app/forms";
   import { logIn } from "$lib/DjangoAPI";
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import { fetchCollection } from "$lib/DjangoAPI";
-  import { isLoading } from "$lib/stores/loadingStore";
 
   import { notification } from "$lib/stores/notificationStore";
 
   let username = "";
   let password = "";
+  export let form;
 
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // prevent form from submitting the traditional way
-    const body = { username, password };
-    const data = await logIn(body);
-    if (data.error) {
-      notification.set({ message: data.error, type: "error" });
-    } else {
-      isLoading.set(true);
-      await fetchCollection();
-      sessionStorage.setItem("username", data.username);
-      sessionStorage.setItem("is_authenticated", "true");
-      sessionStorage.setItem("email", data.email);
+
+  const handleLoginResult = async ({ result, update }) => {
+    if (result.type === 'success' && result.data.success) {
+      const { user } = result.data;
+      sessionStorage.setItem("username", user.username);
+      sessionStorage.setItem("is_authenticated", user.isAuthenticated.toString());
+      sessionStorage.setItem("email", user.email);
       notification.set({ message: "Welcome back!", type: "success" });
-      isLoading.set(false);
-      goto("/collect/");
+      await goto("/collect/");
+    } else {
+      notification.set({ message: result.data.error || "Login failed", type: "error" });
     }
+
+    update();
   };
 </script>
 
@@ -37,7 +36,7 @@
 <div class="mx-auto max-w-[800px] xl:max-w-7xl">
   <div id="authentification" class="m-10 flex flex-col items-center p-10">
     <form
-      on:submit|preventDefault={handleSubmit}
+    method="POST" action="?/login" use:enhance={() => handleLoginResult} on:submit|preventDefault
       class="flex h-[475px] w-[300px] flex-col items-start justify-start rounded-lg bg-white p-8 shadow dark:bg-stone-950"
       in:fade={{
         duration: 100,
@@ -51,6 +50,7 @@
       <input
         id="username-field"
         type="text"
+        name="username"
         class="my-4 w-full rounded-lg border-none bg-stone-50 p-2 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
         placeholder="username"
         bind:value={username}
@@ -59,6 +59,7 @@
       <input
         id="password-field"
         type="password"
+        name="password"
         class="my-2 w-full rounded-lg border-none bg-stone-50 p-2 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
         placeholder="password"
         bind:value={password}
@@ -76,6 +77,11 @@
       >
         don't have an account?</a
       >
+      
     </form>
+
+    {#if form?.success === false}
+  <p class="error">{form.error}</p>
+{/if}
   </div>
 </div>

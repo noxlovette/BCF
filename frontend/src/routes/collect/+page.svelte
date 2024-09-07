@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fetchCollection } from "$lib/DjangoAPI";
   import { onMount } from "svelte";
-  import { goto } from "$app/navigation";
+  import { goto, invalidateAll } from "$app/navigation";
   import { blur } from "svelte/transition";
   import Loader from "$lib/components/Loader.svelte";
   import ArrowLeftIcon from "$lib/icons/ArrowLeftIcon.svelte";
@@ -14,10 +14,10 @@
   import MetaData from "$lib/components/MetaData.svelte";
   import { handleKeydown } from "$lib/utils";
   import { currentPage, pageSize, searchTerm } from "$lib/stores";
+    import type { PageData } from "../$types";
 
-  export let collection = [];
-
-
+  export let data:PageData;
+  let collection = data.collection;
   let searchInput: any = null;
   let isLoading = true;
   let editedIngredient = null;
@@ -25,24 +25,23 @@
   let startIndex = 0;
   let paginatedCollection = [];
   let chosenIngredient: any = null;
-  let totalPages: number = 0;
-
-  async function handleFetch(forceReload = false) {
-    const data = await fetchCollection({ forceReload: forceReload });
-    return data;
-  }
+  let totalPages: number = 0;  
 
   async function reset() {
+    invalidateAll();
+    notification.set({
+      message: "resetting everything",
+      type: "info",
+    });
     searchTerm.set("");
     currentPage.set(1);
-    collection = await handleFetch(true);
     editedIngredient = null;
     filteredCollection = collection;
   }
 
   async function updatePageSize() {
     currentPage.set(1);
-    goto(
+    await goto(
       `/collect?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`,
     );
   }
@@ -77,7 +76,6 @@
     });
   };
 
-  // Compute the start index for slicing the array based on the current page and page size
   $: {
     startIndex = ($currentPage - 1) * $pageSize;
   }
@@ -113,18 +111,13 @@
         message: "Please log in to access this page",
         type: "error",
       });
-      goto("/auth/login");
+     await goto("/auth/login");
     } else {
       currentPage.set(
         parseInt(sessionStorage.getItem("currentPageCollect")) || 1,
       );
       pageSize.set(parseInt(localStorage.getItem("pageSizeCollect")) || 10);
       searchTerm.set(sessionStorage.getItem("searchTermCollect") || "");
-    }
-
-    collection = await handleFetch();
-    if (collection) {
-      isLoading = false;
     }
 
     filteredCollection = collection;
@@ -243,7 +236,7 @@
     id="table-wrapper"
     class="ml-6 mr-6 mt-0 flex h-full flex-row items-center overflow-x-auto overflow-y-auto p-2 text-sm"
   >
-    {#if isLoading || collection === null}
+    {#if collection === null}
       <Loader />
     {:else if filteredCollection.length === 0}
     <p class="m-12 text-5xl text-center">hm. try a different search?</p>
@@ -253,7 +246,7 @@
           id="card-holder"
           class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3"
         >
-          {#each paginatedCollection as ingredient}
+          {#each paginatedCollection as ingredient}          
             {#if ingredient}
               <CollectCard
                 {ingredient}

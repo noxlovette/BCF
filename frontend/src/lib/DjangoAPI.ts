@@ -1,7 +1,7 @@
 // src/routes/DjangoAPI
 import { get, writable } from "svelte/store";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://backend:8000";
 const csrfToken = writable("");
 
 export async function fetchCSRFToken(forceFetch = false) {
@@ -50,6 +50,50 @@ export async function fetchCentralDjangoApi(
     return response.json();
   }
 }
+
+export async function fetchCentralDjangoApi2(
+  endpoint: string,
+  method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+  body: any = null,
+): Promise<any> {
+  await fetchCSRFToken();
+  const token = get(csrfToken); // Use the get function to access the value of the csrfToken store
+  const options: RequestInit = {
+    
+    method,
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": token,
+    },
+    body: body ? JSON.stringify(body) : null,
+    credentials: 'include',
+  };
+
+  console.log("Request URL:", endpoint);
+  console.log("Request Options:", options);
+
+  try {
+    const response = await fetch(endpoint, options);
+    console.log("Response Status:", response.status);
+    console.log("Response Headers:", response.headers);
+    
+
+    const responseBody = response.status === 204 ? null : await response.json();
+    console.log("Response Body:", responseBody);
+
+    if (!response.ok) {
+      throw new Error(responseBody?.error || "Unknown error");
+    }
+
+    return responseBody;
+  } catch (error) {
+    console.error("Fetch Central Django API Error:", error);
+    throw error;
+  }
+}
+
+
+
 
 // BROWSE PAGE
 export async function fetchIngredientsBrowse(

@@ -51,8 +51,8 @@
       {ingredient.cas}
     </h2>
   </div>
-  <div id="bottom-part" class="mt-2 md:mt-4 flex flex-row">
-    <div id="bottom-left" class="mr-auto flex w-2/3 flex-col">
+  <div id="bottom-part" class="mt-2 md:mt-4 flex flex-row justify-between w-full">
+    <div id="bottom-left" class="flex w-2/3 flex-col">
       <p class="hidden md:flex md:mr-8 h-[100px] text-left normal-case overflow-clip">
         {#if ingredient.impression}
           {ingredient.impression}
@@ -72,7 +72,7 @@
     </div>
     <div
       id="bottom-right"
-      class="ml-auto mt-auto hidden md:flex flex-1 flex-col items-end"
+      class="mt-auto hidden md:flex flex-1 flex-col items-end justify-end"
     >
       <button
         class="invisible items-baseline rounded-full p-2 hover:bg-grapefruit-50 hover:text-grapefruit-700 hover:transition-all group-hover:visible"
