@@ -3,20 +3,19 @@
   import { goto } from "$app/navigation";
   import { tick } from "svelte";
   import { derived, writable } from "svelte/store";
-  import { blur, fade } from "svelte/transition";
 
   import type { PageServerData } from "./$types";
 
-  import {handleKeydown} from "$lib/utils";
+  import {changePage, handleKeydown} from "$lib/utils";
 
-  import Loader from "$lib/components/Loader.svelte";
   import BrowseCard from "$lib/components/BrowseCard.svelte";
   import { notification } from "$lib/stores/notificationStore";
   import ArrowLeftIcon from "$lib/icons/ArrowLeftIcon.svelte";
   import ArrowRightIcon from "$lib/icons/ArrowRightIcon.svelte";
   import ResetIcon from "$lib/icons/ResetIcon.svelte";
     import MetaData from "$lib/components/MetaData.svelte";
-
+    import Pagination from "$lib/components/UI/Pagination.svelte";
+    
   export let data: PageServerData;
   export let currentPage = writable(1);
   export let pageSize = writable(24);
@@ -50,8 +49,7 @@
   searchTerm.subscribe((value) => sessionStorage.setItem("searchTerm", String(value)));
 
   const unsubscribe = urlParams.subscribe(async (url) => {
-    if (isLoading) return; // Avoid navigation during initial load
-    await goto(url); // Navigate only when URL changes
+    await goto(url);
   });
 
   return () => {
@@ -115,48 +113,11 @@ const searchDescriptors = () => {
     }
   }
 
-  async function changePage(increment: number) {
-  try {
-    if (document.activeElement === searchInput) {
-      await searchIngredients();
-      return;
-    }
-
-    const newPage:number = $currentPage + increment;
-
-    if (data.ingredients && (newPage < 1 || newPage > data.ingredients.total_pages)) {
-      notification.set({
-        message: `There is nothing to seek there`,
-        type: "error",
-      });
-      return;
-    }
-
-    currentPage.update((value: number) => value + increment);
-    
-    try {  
-      if (data.ingredients === null) {
-        throw new Error("Failed to load data");
-      }
-      
-      const message = `You are on page ${newPage}/${data.ingredients.total_pages}`;
-      notification.set({ message: message, type: "info" });
-    } catch (error) {
-      console.error("Navigation or data loading error:", error);
-      notification.set({
-        message: "Failed to load the next page. Please try again.",
-        type: "error",
-      });
-      currentPage.update((value) => value - increment);
-    }
-  } catch (error) {
-    console.error("An error occurred:", error);
-    notification.set({
-      message: "An unexpected error occurred. Please try again.",
-      type: "error",
-    });
+  async function handleChangePage(increment:number) {
+    const newPage = await changePage(increment, data.ingredients.total_pages, $currentPage);
+    currentPage.set(newPage);
   }
-}
+
 
   async function toggleFilterMenu() {
     showFilterMenu = !showFilterMenu;
@@ -178,7 +139,7 @@ const searchDescriptors = () => {
 </script>
 
 <MetaData title={ogTitle} description={description} ogTitle={ogTitle} ogUrl={ogUrl} ogImage={imageUrl} />
-<svelte:window class="dark:text-stone-100" on:keydown={handleKeydown(searchInput, toggleOverlay, changePage, $searchTerm)} />
+<svelte:window class="dark:text-stone-100" on:keydown={handleKeydown(searchInput, handleChangePage, $searchTerm)} />
 
 
 <div id="app" class="flex flex-col items-center lowercase caret-navy-700">
@@ -245,34 +206,7 @@ const searchDescriptors = () => {
     </label>
 
 
-
-    <div
-      id="pagination"
-      class="flex w-[100px] items-center justify-center rounded-full border border-navy-700 bg-navy-700 p-2 text-navy-50 shadow hover:bg-white hover:text-navy-700 active:shadow-none dark:hover:bg-stone-800 dark:hover:text-stone-50 {showFilterMenu ||
-      ($currentPage <= 1 && $currentPage >= data.ingredients.total_pages)
-        ? 'invisible'
-        : 'visible'}"
-    >
-      {#if !showFilterMenu && $currentPage > 1}
-        <button
-          id="prevPage"
-          on:mousedown={() => changePage(-1)}
-          class="transition-all hover:-translate-x-2 active:scale-90"
-        >
-          <ArrowLeftIcon />
-        </button>
-      {/if}
-      {#if !showFilterMenu && $currentPage < data.ingredients.total_pages}
-        <button
-          id="nextPage"
-          on:mousedown={() => changePage(1)}
-          class="transition-all hover:translate-x-2 active:scale-90"
-        >
-          <ArrowRightIcon />
-        </button>
-      {/if}
-    </div>
-
+    <Pagination on:nextPage={()=> handleChangePage(1)} on:prevPage={()=> handleChangePage(-1)} />
   </form>
 
   <div

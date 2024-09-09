@@ -52,11 +52,11 @@
   }
 
   $: currentPath = $page.url.pathname;
-  $: currentPage = currentPath.split("/")[1] || "Welcome";
+  $: currentPage = currentPath.split("/")[1] || "welcome to bcf";
 </script>
 
 <header
-  class="group relative z-20 flex flex-col items-center justify-center py-4 w-full"
+  class="group relative z-20 flex flex-col items-center justify-center py-4 w-full font-space"
 >
   <div class="flex w-full max-w-7xl items-center justify-center px-4">
     <a
@@ -74,7 +74,7 @@
     <div class="ml-2 size-full flex-col justify-center">
       <div
         id="wider-part"
-        class="flex h-2/3 flex-grow border-b border-stone-400/50 dark:border-stone-100/50"
+        class="flex h-2/3 flex-grow border-b border-gold-900"
       >
         {#if currentPage}
           <p

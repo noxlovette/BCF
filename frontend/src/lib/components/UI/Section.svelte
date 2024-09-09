@@ -9,7 +9,6 @@
     navy: "group-hover:text-navy-700 group-hover:dark:text-navy-400",
     aqua: "group-hover:text-aqua-700 group-hover:dark:text-aqua-400",
     gold: "group-hover:text-gold-700 group-hover:dark:text-gold-400",
-    // add more colors as needed
   };
 </script>
 

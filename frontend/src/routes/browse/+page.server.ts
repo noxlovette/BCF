@@ -6,7 +6,7 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
 
     const page = url.searchParams.get('page') || '1';
     const search = url.searchParams.get('search') || '';
-    const pageSize = url.searchParams.get('page_size') || '9';
+    const pageSize = url.searchParams.get('page_size') || '24';
     const descriptors = url.searchParams.getAll('descriptors') || [];
 
     try {

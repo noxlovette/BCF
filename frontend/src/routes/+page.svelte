@@ -1,12 +1,12 @@
 <script lang="ts">
   import BigText from "$lib/components/BigText.svelte";
-    import Section from "$lib/UI/Section.svelte";
+    import Section from "$lib/components/UI/Section.svelte";
   const bigText = `Want to create your own <span class="text-gold-400"> perfume? </span>We've got you covered<span class="text-gold-400">.</span>`;
 
 </script>
 
   <div
-    class="flex flex-col py-12"
+    class="flex flex-col my-12"
   >
     <BigText text={bigText} />
 
@@ -24,46 +24,13 @@
     </div>
 
 
-    <div class="lg:px-8 lg:py-8">
-      <div class="flex flex-col items-center">
-        <div class="mx-auto max-w-[800px] xl:max-w-7xl">
           <div
-            class="2xl:max-w-6x1 max-w-md px-4 sm:max-w-2xl sm:px-6 md:max-w-3xl lg:max-w-4xl lg:px-0 xl:max-w-5xl"
+            class="text-6xl xl:text-[6rem] font-bold"
           >
-            <div class="flex w-full flex-col items-center gap-4">
-              <div class="flex flex-col items-start justify-between">
-                <div
-                  id="buttons"
-                  class="flex flex-col text-pretty text-center text-6xl font-bold tracking-tight xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem]"
-                  style="width: 100%;"
-                >
-                  <div class="flex flex-col xl:flex-row">
-                    <a
-                      href="/browse"
-                      class="button px-6 py-3 transition-all hover:text-navy-700"
-                      >browse</a
-                    >
-                    <a
-                      href="/collect"
-                      class="button px-6 py-3 transition-all hover:text-grapefruit-700"
-                      >collect</a
-                    >
-                    <a
-                      href="/formulate"
-                      class="button px-6 py-3 transition-all hover:text-aqua-700"
-                      >formulate</a
-                    >
-                  </div>
                   <a
                     href="/auth/signup"
-                    class="button px-6 py-3 text-gold-400 transition-all hover:text-gold-200"
+                    class="button px-6 py-3 hover:text-gold-400 transition-all"
                     >sign up</a
                   >
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>

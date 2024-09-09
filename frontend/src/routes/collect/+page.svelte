@@ -16,6 +16,10 @@
   import { currentPage, pageSize, searchTerm } from "$lib/stores";
     import type { PageData } from "../$types";
 
+
+    import { changePage } from "$lib/utils";
+    import Pagination from "$lib/components/UI/Pagination.svelte";
+
   export let data:PageData;
   let collection = data.collection;
   let searchInput: any = null;
@@ -45,23 +49,10 @@
     );
   }
 
-  async function changePage(increment) {
-    if (
-      $currentPage + increment >= 1 &&
-      $currentPage + increment <= totalPages
-    ) {
-      currentPage.update((value) => value + increment);
-      notification.set({
-        message: `you are on page ${$currentPage}`,
-        type: "info",
-      });
-    } else {
-      notification.set({
-        message: `there is nothing to seek there`,
-        type: "error",
-      });
-    }
-  }
+  async function handleChangePage(increment:number) {
+    const newPage = await changePage(increment, totalPages, $currentPage);
+    currentPage.set(newPage);
+  };
 
 
   const handleSearchCollection = () => {
@@ -127,7 +118,7 @@
 </script>
 
 <MetaData title="BCF | Collect" ogTitle="BCF | Collect" description="Collect perfume ingredients. Leave comments, manage your laboratory." ogUrl="https://bcfapp.app/collect" />
-<svelte:window on:keydown={handleKeydown(searchInput, toggleOverlay, changePage, $searchTerm)} />
+<svelte:window on:keydown={handleKeydown(searchInput, handleChangePage, $searchTerm)} />
 
 
 
@@ -173,32 +164,8 @@
       />
     </label>
 
-    <div
-      id="pagination"
-      class="group flex w-[100px] items-center justify-center rounded-full border border-grapefruit-700 bg-grapefruit-700 p-2 text-grapefruit-50 shadow transition-all hover:bg-white hover:text-grapefruit-700 hover:shadow-lg active:shadow-none dark:hover:bg-stone-800 {$currentPage <=
-        1 && $currentPage >= totalPages
-        ? 'invisible'
-        : 'visible'}"
-    >
-      {#if $currentPage > 1}
-        <button
-          id="prevPage"
-          on:mousedown={() => changePage(-1)}
-          class="transition-all hover:-translate-x-2 active:scale-90"
-        >
-          <ArrowLeftIcon />
-        </button>
-      {/if}
-      {#if $currentPage < totalPages}
-        <button
-          id="nextPage"
-          on:mousedown={() => changePage(1)}
-          class="transition-all hover:translate-x-2 active:scale-90"
-        >
-          <ArrowRightIcon />
-        </button>
-      {/if}
-    </div>
+
+    <Pagination on:nextPage={() => handleChangePage(1)} on:prevPage={() => handleChangePage(-1)} />
     
   </form>
 

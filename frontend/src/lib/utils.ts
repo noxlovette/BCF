@@ -1,5 +1,8 @@
+import { writable } from "svelte/store";
+import { notification } from "./stores/notificationStore";
 
-export function handleKeydown(searchInput, toggleOverlay, changePage, searchTerm) {
+
+export function handleKeydown(searchInput, changePage, searchTerm) {
     return (event) => {
       if (event.key === "/") {
         event.preventDefault();
@@ -13,9 +16,6 @@ export function handleKeydown(searchInput, toggleOverlay, changePage, searchTerm
         if (document.activeElement === searchInput) {
           searchInput.blur();
           searchTerm.set("");
-        } else {
-          event.preventDefault();
-          toggleOverlay();
         }
       } else if (event.key === "ArrowLeft") {
         event.preventDefault();
@@ -34,21 +34,36 @@ export function handleKeydown(searchInput, toggleOverlay, changePage, searchTerm
   }
   
 
-  async function changePage(increment, currentPage, totalPages, notification) {
-    if (
-      currentPage + increment >= 1 &&
-      currentPage + increment <= totalPages
-    ) {
-      currentPage.update((value) => value + increment);
+export async function changePage(
+  increment: number, total_pages:number, currentPage:number
+
+) {
+  try {
+    const newPage: number = currentPage + increment;
+
+    // Check if new page is within valid range
+    if (newPage < 1 || newPage > total_pages) {
       notification.set({
-        message: `you are on page ${currentPage}`,
-        type: "info",
-      });
-    } else {
-      notification.set({
-        message: `there is nothing to seek there`,
+        message: `There is nothing to seek there`,
         type: "error",
       });
+      return currentPage;
     }
-  }
 
+    // Update the current page
+    const message = `You are on page ${newPage}/${total_pages}`;
+    notification.set({ message: message, type: "info" });
+    return currentPage += increment;
+
+
+  } catch (error) {
+    console.error("An error occurred:", error);
+    notification.set({
+      message: "An unexpected error occurred. Please try again.",
+      type: "error",
+    });
+
+    // Roll back the page update in case of error
+    return currentPage -= increment;
+  }
+}
