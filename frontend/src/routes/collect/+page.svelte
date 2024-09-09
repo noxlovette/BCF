@@ -95,13 +95,13 @@
 
 <AppWrap>
   <SearchBar>
-    <CreateButton href="/collect/create" />
-
+    
     <Search on:search={handleSearchCollection} bind:searchInput />
-
+    
+    <PerPage on:updatePageSize={updatePageSize} />
+    <CreateButton href="/collect/create" />
     <ResetButton on:reset={reset} />
 
-    <PerPage on:updatePageSize={updatePageSize} />
 
     <Pagination
       on:nextPage={() => handleChangePage(1)}

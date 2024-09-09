@@ -95,21 +95,21 @@
 
 <AppWrap>
   <SearchBar>
-    <DescriptorToggle bind:showFilterMenu />
-
+    
     {#if showFilterMenu}
     <Search value={secondSearchTerm} on:input={()=>searchDescriptors} bind:searchInput={searchInputDescriptor} on:blur={()=>searchDescriptors} placeholder="/ search descriptors..." />
-{:else}
-    <Search value={searchTerm} on:input={(event) => event.key === "Enter" && searchIngredients()} bind:searchInput on:blur={searchIngredients} />
-{/if}
-    <ResetButton on:reset={reset} />
+      {:else}
+      <Search value={searchTerm} on:input={(event) => event.key === "Enter" && searchIngredients()} bind:searchInput on:blur={searchIngredients} />
+        {/if}
+        <PerPage />
 
-    <PerPage />
-
+        <DescriptorToggle bind:showFilterMenu />
+        <ResetButton on:reset={reset} />
     <Pagination
       on:nextPage={() => handleChangePage(1)}
       on:prevPage={() => handleChangePage(-1)}
     />
+
   </SearchBar>
 
   <div

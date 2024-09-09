@@ -22,7 +22,7 @@
 <button
   on:mousedown|preventDefault={reset}
   title="reset everything"
-  class="hidden rounded-full border border-gold-700 bg-gold-700 p-2 text-gold-50 shadow transition-all hover:bg-white hover:text-gold-700 hover:shadow-lg active:shadow-none sm:block dark:hover:bg-stone-800"
+  class="hidden rounded-full border border-gold-900 bg-gold-700 p-2 text-gold-50 shadow transition-all hover:bg-white hover:text-gold-700 hover:shadow-lg active:shadow-none sm:block dark:hover:bg-stone-800"
 >
   <ResetIcon />
 </button>
