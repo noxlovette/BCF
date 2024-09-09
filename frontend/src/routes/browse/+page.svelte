@@ -19,19 +19,16 @@
 
   export let data: PageServerData;
   export let currentPage = writable(1);
-  export let pageSize = writable(18);
+  export let pageSize = writable(24);
   export let searchTerm = writable("");
   const urlParams = derived([currentPage, pageSize], ([$currentPage, $pageSize]) => {
   return `/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`;
 });
-  let suggestedIngredient = null;
-  let chosenIngredient: any = null;
+
+
   let chosenDescriptors = [];
   let showFilterMenu = false;
   let searchInput;
-  let showSuggestion = false;
-
-
   let showTuneMenu = false;
   let isLoading = true;
   let searchTermDescriptor = "";
@@ -40,7 +37,7 @@
 
   onMount(() => {
   currentPage.set(parseInt(sessionStorage.getItem("currentPage")) || 1);
-  pageSize.set(parseInt(localStorage.getItem("pageSize")) || 9);
+  pageSize.set(parseInt(localStorage.getItem("pageSize")) || 24);
   searchTerm.set(sessionStorage.getItem("searchTerm") || "");
 
   isLoading = false;
@@ -110,7 +107,7 @@ const searchDescriptors = () => {
     if ($searchTerm === "") {
       notification.set({ message: "Showing all ingredients", type: "info" });
     } else {
-      goto(`/browse?page=1&search=${$searchTerm}&page_size=${$pageSize}`);
+      await goto(`/browse?page=1&search=${$searchTerm}&page_size=${$pageSize}`);
       notification.set({
         message: `Searching for ${$searchTerm}...`,
         type: "info",
@@ -174,12 +171,6 @@ const searchDescriptors = () => {
     showTuneMenu = false;
   }
 
-  function toggleOverlay() {
-    chosenIngredient = null;
-    showSuggestion = false;
-    suggestedIngredient = null;
-  }
-
   const description = "Browse perfume compounds. IFRA FIG.";
   const ogTitle = "BCF | Browse";
   const ogUrl = "https://bcfapp.app/browse";
@@ -193,10 +184,9 @@ const searchDescriptors = () => {
 <div id="app" class="flex flex-col items-center lowercase caret-navy-700">
   <form
     id="search-bar"
-    class="group flex w-full max-w-5xl flex-col items-center justify-center space-x-0 space-y-4 px-8 lg:px-12 sm:flex-row sm:space-x-4 sm:space-y-0"
+    class="group flex w-full flex-col items-center justify-between space-x-0 space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0"
   >
 
-  <div class="flex-row w-full flex space-x-2 md:space-x-4">
     <button
       on:mousedown={toggleFilterMenu}
       title="filter by descriptors"
@@ -219,6 +209,7 @@ const searchDescriptors = () => {
         placeholder="/ search descriptors..."
         title="find the descriptor that you are looking for"
       />
+
     <input
     type="text"
     class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-navy-700/60 active:scale-90 lg:w-[600px] dark:bg-stone-800"
@@ -253,19 +244,7 @@ const searchDescriptors = () => {
       />
     </label>
 
-  </div>
-<div class="flex flex-row md:space-x-0 space-x-4">
-    <button
-      on:mousedown={toggleFilterMenu}
-      title="filter by descriptors"
-      class="rounded-full md:hidden border border-navy-700 bg-navy-700 p-2 text-center text-navy-50 shadow transition-all hover:bg-white hover:text-navy-700 hover:shadow-lg active:shadow-none dark:hover:bg-stone-800 dark:hover:text-stone-50"
-    >
-      {#if showFilterMenu}
-        ingredients
-      {:else}
-        descriptors
-      {/if}
-    </button>
+
 
     <div
       id="pagination"
@@ -293,27 +272,23 @@ const searchDescriptors = () => {
         </button>
       {/if}
     </div>
-  </div>
+
   </form>
 
   <div
-    id="table-wrapper"
-    class="flex select-text flex-row items-center font-normal selection:bg-navy-300/40 xl:font-medium
-          "
+  id="table-wrapper"
+    class="flex w-full flex-col items-center justify-center my-8"
   >
-    {#if isLoading || data.ingredients === null}
-      <!-- If isLoading is true, display a loading message -->
-      <Loader />
-    {:else if data.ingredients.results.length === 0}
+
+    {#if data.ingredients.results.length === 0}
       <!-- If there are no results, display a message -->
-      <p class="m-12 text-5xl text-center">hm. try a different search?</p>
+      <p class="m-12 text-5xl">Hm. Try a different search?</p>
     {:else}
-      <div id="wrapper" class="rounded-lg p-8" in:blur={{ duration: 150 }}>
-        {#if showFilterMenu}
+
           <div
             id="filter"
             class="grid w-full items-center gap-4 rounded-lg border-none bg-white/20 p-2 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 dark:bg-stone-900/20"
-            in:fade={{ duration: 150 }}
+            class:hidden={!showFilterMenu}
             bind:this={filterMenu}
           >
             {#if filteredDescriptors.length !== 0 && filteredDescriptors}
@@ -339,19 +314,17 @@ const searchDescriptors = () => {
               <p>no descriptors found</p>
             {/if}
           </div>
-        {:else}
+
           <div
             id="card-holder"
-            class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3"
+            class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-full"
           >
             {#each data.ingredients.results as ingredient}
               {#if ingredient}
-                <BrowseCard {ingredient} bind:chosenIngredient />
+                <BrowseCard {ingredient} />
               {/if}
             {/each}
           </div>
         {/if}
       </div>
-    {/if}
   </div>
-</div>

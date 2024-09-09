@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { error} from '@sveltejs/kit';
+
   import { goto, invalidateAll } from "$app/navigation";
-  import { blur } from "svelte/transition";
+
   import Loader from "$lib/components/Loader.svelte";
   import ArrowLeftIcon from "$lib/icons/ArrowLeftIcon.svelte";
   import ArrowRightIcon from "$lib/icons/ArrowRightIcon.svelte";
   import ResetIcon from "$lib/icons/ResetIcon.svelte";
-  import CollectCardExpanded from "$lib/components/CollectCardExpanded.svelte";
+
   import CollectCard from "$lib/components/CollectCard.svelte";
   import { notification } from "$lib/stores/notificationStore";
   import AddCrossIcon from "$lib/icons/AddCrossIcon.svelte";
@@ -19,7 +19,6 @@
   export let data:PageData;
   let collection = data.collection;
   let searchInput: any = null;
-  let isLoading = true;
   let editedIngredient = null;
   let filteredCollection = [];
   let startIndex = 0;
@@ -108,7 +107,7 @@
       currentPage.set(
         parseInt(sessionStorage.getItem("currentPageCollect")) || 1,
       );
-      pageSize.set(parseInt(localStorage.getItem("pageSizeCollect")) || 10);
+      pageSize.set(parseInt(localStorage.getItem("pageSizeCollect")) || 24);
       searchTerm.set(sessionStorage.getItem("searchTermCollect") || "");
 
     filteredCollection = collection;
@@ -123,11 +122,6 @@
     });
   });
 
-  
-  function toggleOverlay() {
-    chosenIngredient = null;
-    editedIngredient = null;
-  }
 
   
 </script>
@@ -135,28 +129,12 @@
 <MetaData title="BCF | Collect" ogTitle="BCF | Collect" description="Collect perfume ingredients. Leave comments, manage your laboratory." ogUrl="https://bcfapp.app/collect" />
 <svelte:window on:keydown={handleKeydown(searchInput, toggleOverlay, changePage, $searchTerm)} />
 
-<button
-  id="overlay"
-  class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-stone-900 bg-opacity-20 bg-blend-darken backdrop-blur transition-all"
-  class:hidden={!chosenIngredient}
-  on:mousedown={toggleOverlay}
-  aria-label="Toggle Overlay"
->
-  <div>
-    <CollectCardExpanded
-      ingredient={chosenIngredient}
-      bind:filteredCollection
-      bind:collection
-      bind:editedIngredient
-      bind:chosenIngredient
-    />
-  </div>
-</button>
 
-<div id="app" class="my-8 flex flex-col items-center lowercase caret-grapefruit-700">
+
+<div id="app" class="flex flex-col lowercase caret-grapefruit-700">
   <form
     id="search-bar"
-    class="group flex w-full max-w-5xl flex-col items-center justify-center space-x-0 space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 sm:px-12 lg:max-w-5xl"
+    class="group flex w-full flex-col items-center justify-between space-x-0 space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0"
   >
     <button
       class="rounded-full border border-grapefruit-700 bg-grapefruit-700 p-2 text-grapefruit-50 shadow transition-all hover:bg-white hover:text-grapefruit-700 hover:shadow-lg active:shadow-none dark:hover:bg-stone-800"
@@ -166,7 +144,7 @@
     </button>
     <input
       type="text"
-      class="w-[250px] rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-grapefruit-700/60 active:scale-90 md:w-[325px] lg:w-[600px] dark:bg-stone-800"
+      class="rounded-lg border-none w-full md:w-1/2 bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-grapefruit-700/60 active:scale-90  dark:bg-stone-800"
       bind:value={$searchTerm}
       bind:this={searchInput}
       on:input={handleSearchCollection}
@@ -221,33 +199,30 @@
         </button>
       {/if}
     </div>
+    
   </form>
 
   <div
     id="table-wrapper"
-    class="ml-6 mr-6 mt-0 flex h-full flex-row items-center overflow-x-auto overflow-y-auto p-2 text-sm"
+    class="flex w-full items-center justify-center my-8"
   >
     {#if collection === null}
       <Loader />
     {:else if filteredCollection.length === 0}
-    <p class="m-12 text-5xl text-center">hm. try a different search?</p>
+    <p class="m-12 text-5xlr">Hm. Try a different search?</p>
     {:else}
-      <div id="wrapper" class="rounded-lg p-8" in:blur={{ duration: 150 }}>
         <div
           id="card-holder"
-          class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3"
+          class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-full"
         >
           {#each paginatedCollection as ingredient}          
             {#if ingredient}
               <CollectCard
                 {ingredient}
-                bind:chosenIngredient
-                bind:filteredCollection
               />
             {/if}
           {/each}
         </div>
-      </div>
     {/if}
   </div>
 </div>
