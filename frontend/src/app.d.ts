@@ -68,6 +68,12 @@ declare global {
       formula_id: number;
       percentage: number;
     }
+
+    interface User {
+      is_authenticated: boolean;
+      username: string;
+      email: string;
+    }
   }
 }
 

@@ -7,9 +7,16 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
     import Button from "$lib/components/UI/Button.svelte";
+    import { user } from "$lib/stores/userStore";
 
-  const is_authenticated = writable(false);
-  let username = "";
+    onMount (() => {
+      user.subscribe((value) => {
+        is_authenticated = value.is_authenticated;
+        username = value.username;
+      });
+    });
+  let is_authenticated = $user.is_authenticated;
+  let username = $user.username;
 
   async function logout() {
     if (!is_authenticated) return;
@@ -20,12 +27,14 @@
       console.error("Failed to log out");
     }
   }
+
   let isDropdownOpen = false;
   let countdownTimer; // Variable to store the timer ID
   function toggleDropdown() {
     isDropdownOpen = true;
     resetCountdown();
   }
+
   // Function to start the countdown timer
   function startCountdown() {
     countdownTimer = setTimeout(closeDropdown, 3000);
@@ -42,27 +51,6 @@
     isDropdownOpen = false;
   }
 
-  // Function to update the authentication state and username from sessionStorage
-  function updateAuthState() {
-    const authState = sessionStorage.getItem("is_authenticated") === "true";
-    is_authenticated.set(authState);
-    username = sessionStorage.getItem("username") || "stranger";
-  }
-
-  // Initialize and subscribe to page changes
-  onMount(() => {
-    updateAuthState();
-
-    // Subscribe to page changes
-    const unsubscribe = page.subscribe(() => {
-      updateAuthState();
-    });
-
-    // Cleanup subscription on component unmount
-    return () => {
-      unsubscribe();
-    };
-  });
   $: currentPath = $page.url.pathname;
   $: currentPage = currentPath.split("/")[1] || "Welcome";
 </script>
@@ -101,7 +89,7 @@
           id="user"
           class="mb-auto ml-auto mt-auto flex flex-row items-center justify-center space-x-4"
         >
-          {#if $is_authenticated}
+          {#if is_authenticated}
             <a
               href="https://docs.bcfapp.app"
               title="learn to use BCF"

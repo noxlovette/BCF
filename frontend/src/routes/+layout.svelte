@@ -1,9 +1,26 @@
-<script>
+<script lang="ts">
   import Header from "$lib/components/Header.svelte";
   import Footer from "$lib/components/Footer.svelte";
   import Notification from "$lib/components/Notification.svelte";
   import "../app.css";
     import MetaData from "$lib/components/MetaData.svelte";
+    import type { LayoutData } from "./$types";
+    import {setUser} from "$lib/stores/userStore";
+    import { onMount } from "svelte";
+    
+
+
+export let data:LayoutData;
+
+onMount(() => {
+  setUser(
+    data.user
+  );
+
+  console.log(data.user);
+
+
+});
 
 </script>
 

@@ -20,7 +20,15 @@ export const load: PageServerLoad = async ({ fetch, params, cookies }) => {
         }
         const endpoint = `${VITE_API_URL}/collection/api/ingredient/${slug}/`;
 
-        const response = await fetch(endpoint);
+        const response = await fetch(endpoint,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cookie': `sessionid=${sessionid}`,
+                },
+            }
+        );
         const ingredient = await response.json();
         await redis.set(`ingredient-${sessionid}-${slug}`, JSON.stringify(ingredient), 'EX', 3600);
         return { ingredient };

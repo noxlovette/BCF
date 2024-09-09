@@ -213,3 +213,24 @@ def get_csrf_token(request):
         request
     )  # Ensures CSRF cookie is set and retrieves the token
     return JsonResponse({"csrfToken": csrf_token})  # Send CSRF token in JSON response
+
+
+class CheckSessionAPI(APIView):
+    """
+    Check if the user is authenticated.
+    """
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return Response(
+                {
+                    "is_authenticated": request.user.is_authenticated,
+                    "username": request.user.username,
+                    "email": request.user.email,
+                }
+            )
+        else:
+            return Response(
+                {"is_authenticated": request.user.is_authenticated},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
