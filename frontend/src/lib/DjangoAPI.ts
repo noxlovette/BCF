@@ -59,14 +59,13 @@ export async function fetchCentralDjangoApi2(
   await fetchCSRFToken();
   const token = get(csrfToken); // Use the get function to access the value of the csrfToken store
   const options: RequestInit = {
-    
     method,
     headers: {
       "Content-Type": "application/json",
       "X-CSRFToken": token,
     },
     body: body ? JSON.stringify(body) : null,
-    credentials: 'include',
+    credentials: "include",
   };
 
   console.log("Request URL:", endpoint);
@@ -76,7 +75,6 @@ export async function fetchCentralDjangoApi2(
     const response = await fetch(endpoint, options);
     console.log("Response Status:", response.status);
     console.log("Response Headers:", response.headers);
-    
 
     const responseBody = response.status === 204 ? null : await response.json();
     console.log("Response Body:", responseBody);
@@ -91,9 +89,6 @@ export async function fetchCentralDjangoApi2(
     throw error;
   }
 }
-
-
-
 
 // BROWSE PAGE
 export async function fetchIngredientsBrowse(

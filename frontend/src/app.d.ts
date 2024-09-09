@@ -57,7 +57,6 @@ declare global {
       description: string;
       solvent: string;
       ingredients: FormulaIngredient[];
-
     }
 
     interface FormulaIngredient {

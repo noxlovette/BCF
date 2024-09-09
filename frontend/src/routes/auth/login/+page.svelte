@@ -11,17 +11,22 @@
   let password = "";
   export let form;
 
-
   const handleLoginResult = async ({ result, update }) => {
-    if (result.type === 'success' && result.data.success) {
+    if (result.type === "success" && result.data.success) {
       const { user } = result.data;
       sessionStorage.setItem("username", user.username);
-      sessionStorage.setItem("is_authenticated", user.isAuthenticated.toString());
+      sessionStorage.setItem(
+        "is_authenticated",
+        user.isAuthenticated.toString(),
+      );
       sessionStorage.setItem("email", user.email);
       notification.set({ message: "Welcome back!", type: "success" });
       await goto("/collect/");
     } else {
-      notification.set({ message: result.data.error || "Login failed", type: "error" });
+      notification.set({
+        message: result.data.error || "Login failed",
+        type: "error",
+      });
     }
 
     update();
@@ -35,7 +40,10 @@
 <div class="mx-auto max-w-[800px] xl:max-w-7xl">
   <div id="authentification" class="m-10 flex flex-col items-center p-10">
     <form
-    method="POST" action="?/login" use:enhance={() => handleLoginResult} on:submit|preventDefault
+      method="POST"
+      action="?/login"
+      use:enhance={() => handleLoginResult}
+      on:submit|preventDefault
       class="flex h-[475px] w-[300px] flex-col items-start justify-start rounded-lg bg-white p-8 shadow dark:bg-stone-950"
       in:fade={{
         duration: 100,
@@ -76,11 +84,10 @@
       >
         don't have an account?</a
       >
-      
     </form>
 
     {#if form?.success === false}
-  <p class="error">{form.error}</p>
-{/if}
+      <p class="error">{form.error}</p>
+    {/if}
   </div>
 </div>

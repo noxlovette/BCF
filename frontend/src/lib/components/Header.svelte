@@ -6,15 +6,15 @@
   import InformationIcon from "$lib/icons/InformationIcon.svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-    import Button from "$lib/components/UI/Button.svelte";
-    import { user } from "$lib/stores/userStore";
+  import Button from "$lib/components/UI/Button.svelte";
+  import { user } from "$lib/stores/userStore";
 
-    onMount (() => {
-      user.subscribe((value) => {
-        is_authenticated = value.is_authenticated;
-        username = value.username;
-      });
+  onMount(() => {
+    user.subscribe((value) => {
+      is_authenticated = value.is_authenticated;
+      username = value.username;
     });
+  });
   let is_authenticated = $user.is_authenticated;
   let username = $user.username;
 
@@ -56,9 +56,9 @@
 </script>
 
 <header
-  class="group relative z-20 flex flex-col items-center justify-center py-4 w-full font-space"
+  class="group relative z-20 flex w-full flex-col items-center justify-center py-4 font-space"
 >
-  <div class="flex w-full max-w-7xl items-center justify-center px-4">
+  <div class="flex w-full max-w-7xl items-center justify-center">
     <a
       href="/"
       class="z-15 size-16 flex-none items-center justify-center transition-all md:size-20"

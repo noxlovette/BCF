@@ -1,10 +1,10 @@
 <script>
-import { isLoading } from "$lib/stores/loadingStore";
-import {fade} from "svelte/transition";
+  import { isLoading } from "$lib/stores/loadingStore";
+  import { fade } from "svelte/transition";
 
-let loadingState;
+  let loadingState;
 
-$: loadingState = $isLoading;
+  $: loadingState = $isLoading;
 
   let quotes = [
     "Perfume is the art that makes memory speak. — Francis Kurkdjian",
@@ -34,7 +34,7 @@ $: loadingState = $isLoading;
 </script>
 
 {#if loadingState}
-<div class="loading-overlay" transition:fade>
+  <div class="loading-overlay" transition:fade>
     <div class="flex size-full flex-col items-center">
       <div
         id="spinner"
@@ -60,4 +60,4 @@ $: loadingState = $isLoading;
     background-color: rgba(0, 0, 0, 0.5); /* semi-transparent overlay */
     z-index: 9999;
   }
-  </style>
+</style>

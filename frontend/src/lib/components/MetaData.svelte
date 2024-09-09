@@ -1,8 +1,8 @@
 <script>
-   export let description =
+  export let description =
     "BCF. Browse perfume compounds, collect them, and formulate your next favourite fragrance.";
 
-export let title = "BCF";
+  export let title = "BCF";
 
   export let keywords =
     "perfume, formulation, fragrance, BCF, perfumers, browse, collect, formulate, ingredient, linalool, essential oil, absolute";
@@ -16,12 +16,11 @@ export let title = "BCF";
 </script>
 
 <svelte:head>
-<title>{title}</title>
+  <title>{title}</title>
 
   <meta name="description" content={description} />
   <meta name="keywords" content={keywords} />
   <meta name="robots" content={robots} />
-
 
   <meta property="og:title" content={ogTitle} />
   <meta property="og:description" content={ogDescription} />

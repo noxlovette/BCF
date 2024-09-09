@@ -1,42 +1,39 @@
 <script lang="ts">
-    import MetaData from "$lib/components/MetaData.svelte";
-    import type { PageData } from "../$types";
-    import FormulateCard from "$lib/components/FormulateCard.svelte";
-    import {navigating } from "$app/stores";
-    import { Jumper } from "svelte-loading-spinners";
+  import MetaData from "$lib/components/MetaData.svelte";
+  import type { PageData } from "../$types";
+  import FormulateCard from "$lib/components/FormulateCard.svelte";
+  import { navigating } from "$app/stores";
+  import { Jumper } from "svelte-loading-spinners";
 
-    export let data: PageData;
+  export let data: PageData;
 
-  let formulae:App.Formula[] = data.formulae;
-
+  let formulae: App.Formula[] = data.formulae;
 </script>
 
 <MetaData title="BCF | Formulate" />
 
-
-
-
-<div id="app" class="my-8 flex flex-col items-center lowercase caret-grapefruit-700">
-
-  <div class="flex h-full items-center justify-center md:hidden">
-  <h1 class="text-xl font-bold">this page is desktop only :(</h1>
-</div>
-
-
 <div
+  id="app"
+  class="my-8 flex flex-col items-center lowercase caret-grapefruit-700"
+>
+  <div class="flex h-full items-center justify-center md:hidden">
+    <h1 class="text-xl font-bold">this page is desktop only :(</h1>
+  </div>
+
+  <div
     id="table-wrapper"
     class="ml-6 mr-6 mt-0 flex h-full flex-row items-center overflow-x-auto overflow-y-auto p-2 text-sm"
   >
-      <div id="wrapper" class="rounded-lg p-8">
-        <div
-          id="card-holder"
-          class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3"
-        >
-            {#each formulae as formula}
-            <FormulateCard {formula} />
-          {/each}
-        </div>
+    <div id="wrapper" class="rounded-lg p-8">
+      <div
+        id="card-holder"
+        class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3"
+      >
+        {#each formulae as formula}
+          <FormulateCard {formula} />
+        {/each}
       </div>
+    </div>
   </div>
 </div>
 

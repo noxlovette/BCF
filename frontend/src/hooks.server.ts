@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/sveltekit";
-import type { HandleFetch } from "@sveltejs/kit";
 import { handleErrorWithSentry, sentryHandle } from "@sentry/sveltekit";
+import type { HandleFetch } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 
 if (process.env.NODE_ENV === "production") {
@@ -18,9 +18,8 @@ export const handle = sequence(sentryHandle());
 export const handleError = handleErrorWithSentry();
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
-  if (request.url.startsWith('http://backend')) {
-      request.headers.set('sessionid', event.request.headers.get('sessionid'));
+  if (request.url.startsWith("http://backend")) {
+    request.headers.set("sessionid", event.request.headers.get("sessionid"));
   }
   return fetch(request);
-  
-  }
+};

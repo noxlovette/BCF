@@ -126,7 +126,7 @@
     <!-- This div will take up the remaining space -->
     <div
       id="controls"
-      class="mt-auto flex *:rounded-full *:p-2 justify-between"
+      class="mt-auto flex justify-between *:rounded-full *:p-2"
     >
       <button
         class="transition-all hover:bg-white hover:text-aqua-800 dark:hover:bg-stone-800 dark:hover:text-aqua-50"

@@ -110,29 +110,26 @@
 
 <div
   id="description-etc"
-  class="z-20 mr-auto flex h-full w-[175px] flex-col space-y-4 rounded-lg bg-aqua-800 p-4 text-aqua-50 shadow lg:w-[220px] "
+  class="z-20 mr-auto flex h-full w-[175px] flex-col space-y-4 rounded-lg bg-aqua-800 p-4 text-aqua-50 shadow lg:w-[220px]"
 >
   <div>
     <h3 class="text-sm">description</h3>
     <textarea
-      class="w-full rounded-lg border-none bg-aqua-600 py-2 ring-0 focus:ring-0 dark:bg-aqua-800 resize-none"
+      class="w-full resize-none rounded-lg border-none bg-aqua-600 py-2 ring-0 focus:ring-0 dark:bg-aqua-800"
       bind:value={editedFormula.description}
     />
   </div>
   <div>
     <h3 class="text-sm">notes</h3>
     <textarea
-      class="w-full rounded-lg border-none bg-aqua-600 py-2 ring-0 focus:ring-0 dark:bg-aqua-800 resize-none"
+      class="w-full resize-none rounded-lg border-none bg-aqua-600 py-2 ring-0 focus:ring-0 dark:bg-aqua-800"
       bind:value={editedFormula.notes}
     />
   </div>
   <div class="flex-grow"></div>
   <!-- This div will take up the remaining space -->
 
-  <div
-    id="controls"
-    class="mt-auto pt-4 *:rounded-full *:p-2 justify-between"
-  >
+  <div id="controls" class="mt-auto justify-between pt-4 *:rounded-full *:p-2">
     <button
       tabindex="-1"
       class="transition-all hover:scale-110 hover:bg-white hover:text-aqua-800 dark:hover:bg-stone-800 dark:hover:text-aqua-50"

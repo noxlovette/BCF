@@ -113,14 +113,15 @@
 {#if ingredient !== null}
   <button
     id="card-big"
-    class="z-50 relative flex h-[600px] w-[360px] cursor-default select-text flex-col rounded-lg border-navy-950 bg-white p-8 text-left caret-navy-700 shadow-lg transition-all selection:bg-navy-300/40 sm:w-[475px] md:h-[475px] md:w-[768px] dark:bg-stone-800"
+    class="relative z-50 flex h-[600px] w-[360px] cursor-default select-text flex-col rounded-lg border-navy-950 bg-white p-8 text-left caret-navy-700 shadow-lg transition-all selection:bg-navy-300/40 sm:w-[475px] md:h-[475px] md:w-[768px] dark:bg-stone-800"
     on:mousedown|stopPropagation
   >
-  <button class="absolute top-2 right-2"
-  on:mousedown={() => ingredient = null}
-  > 
-    <CancelButton />
-  </button>
+    <button
+      class="absolute right-2 top-2"
+      on:mousedown={() => (ingredient = null)}
+    >
+      <CancelButton />
+    </button>
     <div id="top-part" class="flex w-full flex-row items-baseline border-b">
       <div
         id="top-left"
@@ -281,10 +282,8 @@
               <Add />
             </button>
             <button
-              
               class="rounded-full transition-all hover:bg-navy-700 hover:text-navy-50 group-hover:p-2"
               title="suggest a change"
-
               on:mousedown={() => toggleSuggestion(ingredient)}
             >
               <Suggestion />
@@ -293,13 +292,11 @@
             <button
               class="rounded-full transition-all hover:bg-navy-700 hover:text-navy-50 group-hover:p-2"
               title="submit your suggestion"
-
               on:mousedown={() => submitSuggestion()}
             >
               <SaveButton />
             </button>
             <button
-            
               class="rounded-full transition-all hover:bg-navy-700 hover:text-navy-50 group-hover:p-2"
               title="cancel your suggestion"
               on:mousedown={() => toggleSuggestion(ingredient)}

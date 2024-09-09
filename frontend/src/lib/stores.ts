@@ -1,5 +1,5 @@
 // src/stores.ts
-import { writable, derived } from "svelte/store";
+import { writable } from "svelte/store";
 
 // Define the individual stores
 export let isAuthenticated = writable(false);

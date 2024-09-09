@@ -9,10 +9,10 @@
 </script>
 
 <footer
-  class="relative z-10 flex flex-col items-center justify-between py-2 opacity-80 w-full"
+  class="relative z-10 flex w-full flex-col items-center justify-between py-2 opacity-80"
 >
   <div
-    class="xs:grid-cols-1 clear-end mt-4 grid max-w-7xl w-full justify-between text-sm font-semibold sm:grid-cols-1 sm:gap-4 md:grid-cols-3 md:gap-6 xl:gap-8"
+    class="xs:grid-cols-1 clear-end mt-4 grid w-full max-w-7xl justify-between text-sm font-semibold sm:grid-cols-1 sm:gap-4 md:grid-cols-3 md:gap-6 xl:gap-8"
   >
     <div id="social" class="flex w-full items-center">
       <ul class="flex items-center space-x-4">
@@ -78,7 +78,7 @@
 
     <div
       id="paperwork"
-      class="md:text-md relative m-2 ml-auto flex w-full sm:text-sm justify-end"
+      class="md:text-md relative m-2 ml-auto flex w-full justify-end sm:text-sm"
     >
       <ul class="flex items-center *:mx-4 sm:*:mx-2">
         <li>
