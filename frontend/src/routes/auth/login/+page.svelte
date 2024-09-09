@@ -1,10 +1,9 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { enhance } from "$app/forms";
-  import { logIn } from "$lib/DjangoAPI";
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
-  import { fetchCollection } from "$lib/DjangoAPI";
+  import { Jumper } from "svelte-loading-spinners";
 
   import { notification } from "$lib/stores/notificationStore";
 

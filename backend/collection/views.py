@@ -121,6 +121,44 @@ class CustomIngredientDeleteView(generics.DestroyAPIView):
         return self.queryset.filter(user=user)
 
 
+class IngredientDetailView(generics.RetrieveAPIView):
+    """
+    RETRIEVE A COLLECTION OR CUSTOM INGREDIENT
+    """
+    print("IngredientDetailView called")
+    serializer_class = None  # Will be set dynamically based on the object type
+    lookup_field = 'uuid'  # Use 'uuid' for lookups
+
+
+    def get_serializer_class(self):
+        # Set the serializer class dynamically based on the object type
+        # Check which model is being queried to set the correct serializer
+        uuid = self.kwargs.get('uuid')
+        if RegularCollectionIngredient.objects.filter(uuid=uuid).exists():
+            return StandardCollectionIngredientSerializer
+        if CustomCollectionIngredient.objects.filter(uuid=uuid).exists():
+            return CustomCollectionIngredientSerializer
+        raise generics.Http404("Ingredient not found.")
+
+    def get_object(self):
+        # Find the object in the RegularCollectionIngredient first
+        try:
+            obj = RegularCollectionIngredient.objects.get(uuid=self.kwargs.get('uuid'))
+        except RegularCollectionIngredient.DoesNotExist:
+            # If not found, look for it in CustomCollectionIngredient
+            try:
+                obj = CustomCollectionIngredient.objects.get(uuid=self.kwargs.get('uuid'))
+            except CustomCollectionIngredient.DoesNotExist:
+                raise generics.Http404("Ingredient not found.")
+
+        # Check permissions
+        # if obj.user != self.request.user:
+        #     raise PermissionDenied("You do not have permission to access this ingredient.")
+        
+        # Prepare for serialization
+        obj.prepare_for_serialization()
+        return obj
+
 # LIST VIEWS
 class CollectionAPI(APIView):
     """
@@ -129,10 +167,6 @@ class CollectionAPI(APIView):
 
     def get_collection(self, request):
         user = self.request.user
-
-        print("User:", user)
-        print("User Authenticated:", user.is_authenticated)
-        print("Session Cookies:", request.COOKIES)
         if not user.is_authenticated:
             raise PermissionDenied("You must be logged in to perform this action")
 
@@ -152,7 +186,6 @@ class CollectionAPI(APIView):
         return collection_ingredients, custom_collection_ingredients
 
     def get(self, request):
-        logger.info("GET request received")
         collection_ingredients, custom_collection_ingredients = self.get_collection(
             request
         )

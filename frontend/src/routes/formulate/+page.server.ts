@@ -1,12 +1,16 @@
 import type { PageServerLoad } from "./$types";
-import type { Actions } from "./$types";
+import { error } from '@sveltejs/kit';
 import redis from '$lib/redisClient';
 
 export const load: PageServerLoad = async ({ fetch, cookies }) => {
+    try {
     const VITE_API_URL = import.meta.env.VITE_API_URL;
     const sessionid = cookies.get('sessionid');
 
-    try {
+    if (!sessionid) {
+        throw error(401, 'Unauthorized');
+    }
+
         let value = await redis.get(`formulae-${sessionid}`);
         if (value !== null) {
 
@@ -27,16 +31,23 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
                 },
             }
         );
-        const formulae = await response.json();
+
+        if (!response.ok) {
+            if (response.status === 403) {
+                throw error(403, 'Forbidden');
+            } else {
+                throw error(response.status, 'Failed to fetch formulae data');
+            }
+        }
+        const formulae:App.Formula[] = await response.json();
         await redis.set(`formulae-${sessionid}`, JSON.stringify(formulae), 'EX', 2400);
 
         return { formulae };
 
-    } catch (error) {
-        console.error("Error fetching data:", error);
-        return {
-            error: "Failed to fetch formulae data",
-        };
-    }
-}
-
+    } catch (err: any) {
+        if (err.status) {
+            throw error(err.status, err.body);
+          }
+          throw error(500, 'Internal Server Error'); // Catch any unexpected errors
+        }
+};

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { fetchCollection } from "$lib/DjangoAPI";
   import { onMount } from "svelte";
+  import { error} from '@sveltejs/kit';
   import { goto, invalidateAll } from "$app/navigation";
   import { blur } from "svelte/transition";
   import Loader from "$lib/components/Loader.svelte";
@@ -105,20 +105,11 @@
   }
 
   onMount(async () => {
-    let is_authenticated = sessionStorage.getItem("is_authenticated");
-    if (is_authenticated === "false" || is_authenticated === null) {
-      notification.set({
-        message: "Please log in to access this page",
-        type: "error",
-      });
-     await goto("/auth/login");
-    } else {
       currentPage.set(
         parseInt(sessionStorage.getItem("currentPageCollect")) || 1,
       );
       pageSize.set(parseInt(localStorage.getItem("pageSizeCollect")) || 10);
       searchTerm.set(sessionStorage.getItem("searchTermCollect") || "");
-    }
 
     filteredCollection = collection;
     currentPage.subscribe((value) =>

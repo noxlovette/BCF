@@ -6,8 +6,6 @@
     const formula = data.formula;
 
 
-
-
 </script>
 
 

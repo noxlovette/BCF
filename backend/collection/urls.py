@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 app_name = "collection"
@@ -27,4 +27,8 @@ urlpatterns = [
         "api/ingredient/custom/<int:customCollectionIngredientId>/delete/",
         views.CustomIngredientDeleteView.as_view(),
     ),
+    re_path(
+        r"^api/ingredient/(?P<uuid>[0-9a-f-]+)/$",
+        views.IngredientDetailView.as_view(),
+    )
 ]

@@ -37,7 +37,6 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
             descriptors = await response.json();
             await redis.set(cacheKeyDescriptors, JSON.stringify(descriptors), 'EX', 7200);
         }
-        console.log(ingredients);
 
         return { ingredients, descriptors };
 

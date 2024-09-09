@@ -43,6 +43,7 @@ class CollectionIngredientSerializer(serializers.ModelSerializer):
         fields = [
             "type",
             "id",
+            "uuid",
             "common_name",
             "cas",
             "volatility",

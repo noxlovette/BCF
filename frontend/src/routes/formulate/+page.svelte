@@ -1,30 +1,24 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { notification } from "$lib/stores/notificationStore";
-  import { goto } from "$app/navigation";
     import MetaData from "$lib/components/MetaData.svelte";
     import type { PageData } from "../$types";
     import FormulateCard from "$lib/components/FormulateCard.svelte";
+    import {navigating } from "$app/stores";
+    import { Jumper } from "svelte-loading-spinners";
 
     export let data: PageData;
 
   let formulae:App.Formula[] = data.formulae;
 
-  onMount(async () => {
-    let is_authenticated = sessionStorage.getItem("is_authenticated");
-    if (is_authenticated === "false" || is_authenticated === null) {
-      await goto("/auth/login");
-      notification.set({
-        message: "Please log in to access this page",
-        type: "error",
-      });
-    }
-  });
 </script>
 
 <MetaData title="BCF | Formulate" />
+
+
+
+
 <div id="app" class="my-8 flex flex-col items-center lowercase caret-grapefruit-700">
-<div class="flex h-full items-center justify-center md:hidden">
+
+  <div class="flex h-full items-center justify-center md:hidden">
   <h1 class="text-xl font-bold">this page is desktop only :(</h1>
 </div>
 

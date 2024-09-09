@@ -9,7 +9,7 @@
 </script>
 
 <footer
-  class="relative z-10 flex flex-col items-center justify-between py-2 opacity-80"
+  class="relative z-10 flex flex-col items-center justify-between py-2 opacity-80 w-full"
 >
   <div
     class="xs:grid-cols-1 clear-end mt-4 grid max-w-7xl w-full justify-between text-sm font-semibold sm:grid-cols-1 sm:gap-4 md:grid-cols-3 md:gap-6 xl:gap-8"

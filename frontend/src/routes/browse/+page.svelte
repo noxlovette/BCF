@@ -10,7 +10,6 @@
   import {handleKeydown} from "$lib/utils";
 
   import Loader from "$lib/components/Loader.svelte";
-  import BrowseCardExpanded from "$lib/components/BrowseCardExpanded.svelte";
   import BrowseCard from "$lib/components/BrowseCard.svelte";
   import { notification } from "$lib/stores/notificationStore";
   import ArrowLeftIcon from "$lib/icons/ArrowLeftIcon.svelte";
@@ -190,23 +189,8 @@ const searchDescriptors = () => {
 <MetaData title={ogTitle} description={description} ogTitle={ogTitle} ogUrl={ogUrl} ogImage={imageUrl} />
 <svelte:window class="dark:text-stone-100" on:keydown={handleKeydown(searchInput, toggleOverlay, changePage, $searchTerm)} />
 
-<button
-  id="overlay"
-  class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-black bg-opacity-50 backdrop-blur transition-all"
-  class:hidden={!chosenIngredient}
-  on:mousedown={toggleOverlay}
-  aria-label="Toggle Overlay"
->
-  <div>
-    <BrowseCardExpanded
-      ingredient={chosenIngredient}
-      bind:showSuggestion
-      bind:suggestedIngredient
-    />
-  </div>
-</button>
 
-<div id="app" class="md:my-8 flex flex-col items-center lowercase caret-navy-700">
+<div id="app" class="flex flex-col items-center lowercase caret-navy-700">
   <form
     id="search-bar"
     class="group flex w-full max-w-5xl flex-col items-center justify-center space-x-0 space-y-4 px-8 lg:px-12 sm:flex-row sm:space-x-4 sm:space-y-0"
@@ -314,7 +298,7 @@ const searchDescriptors = () => {
 
   <div
     id="table-wrapper"
-    class=" lg:mx-8 flex select-text flex-row items-center font-normal selection:bg-navy-300/40 xl:font-medium
+    class="flex select-text flex-row items-center font-normal selection:bg-navy-300/40 xl:font-medium
           "
   >
     {#if isLoading || data.ingredients === null}

@@ -4,6 +4,7 @@ from browse.models import Ingredient
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from main_project.encryption import decrypt_field, encrypt_field
+import uuid
 
 
 class CollectionIngredient(models.Model):
@@ -13,6 +14,8 @@ class CollectionIngredient(models.Model):
     """
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
     unit = models.CharField(max_length=50, default="g", verbose_name="Unit")
     is_collection = models.BooleanField(default=False, verbose_name="In Collection")
     date_added = models.DateTimeField(auto_now_add=True, verbose_name="Date Added")

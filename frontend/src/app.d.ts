@@ -30,6 +30,7 @@ declare global {
 
     interface IngredientCollection {
       id: number;
+      uuid: string;
       amount: number;
       cas: string;
       colour?: string;
@@ -42,6 +43,7 @@ declare global {
       unit: string;
       use: string;
       volatility: string;
+      associations: string;
     }
 
     interface Formula {

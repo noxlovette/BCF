@@ -6,6 +6,7 @@
   import InformationIcon from "$lib/icons/InformationIcon.svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
+    import Button from "$lib/components/UI/Button.svelte";
 
   const is_authenticated = writable(false);
   let username = "";
@@ -67,7 +68,7 @@
 </script>
 
 <header
-  class="group relative z-20 flex flex-col items-center justify-center py-4"
+  class="group relative z-20 flex flex-col items-center justify-center py-4 w-full"
 >
   <div class="flex w-full max-w-7xl items-center justify-center px-4">
     <a
@@ -153,14 +154,10 @@
               </svg>
             </button>
           {:else}
-            <a href="/auth/login" class=" transition-all hover:text-gold-400"
+            <a href="/auth/login" class="transition-all hover:text-gold-400"
               >login</a
             >
-            <a
-              href="/auth/signup"
-              class=" rounded-lg bg-gold-300 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:hover:bg-stone-700"
-              >sign up</a
-            >
+            <Button href="/auth/signup">sign up</Button>
           {/if}
         </div>
       </div>

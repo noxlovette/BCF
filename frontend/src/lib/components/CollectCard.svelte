@@ -31,10 +31,10 @@
   }
 </script>
 
-<button
+<a
   id="card-small"
   class="group flex flex-col rounded-lg items-start justify-between bg-white p-4 md:p-8 text-left shadow-lg transition-all hover:scale-105 hover:bg-grapefruit-700 hover:text-grapefruit-50 hover:shadow-lg dark:bg-stone-800"
-  on:mousedown={() => (chosenIngredient = ingredient)}
+  href="/collect/{ingredient.uuid}"
   tabindex="0"
 >
   <div id="top-part" class="flex flex-row items-baseline justify-between w-full">
@@ -83,4 +83,4 @@
       </button>
     </div>
   </div>
-</button>
+</a>

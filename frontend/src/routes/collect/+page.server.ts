@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
 
     const cacheKey = `collection-${sessionid}`;
     const value = await redis.get(cacheKey);
-    if ( value !== null) {
+    if (value !== null) {
       return {
         collection: JSON.parse(value),
       };
@@ -22,27 +22,37 @@ export const load: PageServerLoad = async ({ cookies }) => {
     const endpoint = `${VITE_API_URL}/collection/api/collection/`;
 
     const response = await fetch(endpoint, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Cookie': `sessionid=${sessionid}`,
-        },
-    }
-    );
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': `sessionid=${sessionid}`,
+      },
+    });
+
 
     if (!response.ok) {
-      throw error(response.status, 'Failed to fetch collection data');
+      if (response.status === 403) {
+        throw error(403, 'Forbidden'); // Properly throw the 403 error
+      } else {
+        throw error(response.status, 'Failed to fetch collection data');
+      }
     }
 
-    const data:App.IngredientCollection[] = await response.json();
+    const data: App.IngredientCollection[] = await response.json();
 
-    redis.set(cacheKey, JSON.stringify(data), 'EX', 1800);
+    // Cache the result
+    await redis.set(cacheKey, JSON.stringify(data), 'EX', 1800);
+
     return {
-      collection: data
+      collection: data,
     };
 
-  } catch (err) {
-    console.error("Error fetching collection data:", err);
-    throw error(500, 'Failed to fetch collection data');
+  } catch (err: any) {
+    // Ensure all thrown errors are caught
+    console.log(err);
+    if (err.status) {
+      throw error(err.status, err.body);
+    }
+    throw error(500, 'Internal Server Error'); // Catch any unexpected errors
   }
 };
