@@ -3,9 +3,8 @@
   import { enhance } from "$app/forms";
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
-  import { Jumper } from "svelte-loading-spinners";
 
-  import { notification } from "$lib/stores";
+  import { notification, setUser } from "$lib/stores";
 
   let username = "";
   let password = "";
@@ -14,12 +13,8 @@
   const handleLoginResult = async ({ result, update }) => {
     if (result.type === "success" && result.data.success) {
       const { user } = result.data;
-      sessionStorage.setItem("username", user.username);
-      sessionStorage.setItem(
-        "is_authenticated",
-        user.isAuthenticated.toString(),
-      );
-      sessionStorage.setItem("email", user.email);
+
+      setUser(user);
       notification.set({ message: "Welcome back!", type: "success" });
       await goto("/collect/");
     } else {

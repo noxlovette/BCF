@@ -13,7 +13,6 @@ export function handleKeydown(searchInput, changePage, searchTerm) {
     } else if (event.key === "Escape") {
       if (document.activeElement === searchInput) {
         searchInput.blur();
-        searchTerm.set("");
       }
     } else if (event.key === "ArrowLeft") {
       event.preventDefault();

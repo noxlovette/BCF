@@ -1,12 +1,13 @@
 
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, SvelteComponent } from "svelte";
+  import { searchTerm } from "$lib/stores";
 
   const dispatch = createEventDispatcher();
 
   export let searchInput: HTMLInputElement | null = null;
   export let placeholder: string = "/ search ingredients...";
-  export let value;
+  export let value = searchTerm;
 
   function handleSearch() {
   dispatch("search" );

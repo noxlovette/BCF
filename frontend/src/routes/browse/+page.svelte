@@ -25,12 +25,12 @@
     },
   );
 
-  let chosenDescriptors = [];
-  let filteredDescriptors = [];
+  let chosenDescriptors:App.Descriptor[];
+  let filteredDescriptors:App.Descriptor[];
   let showFilterMenu = false;
-  let searchInput;
-  let searchInputDescriptor;
-  let filterMenu;
+  let searchInput: HTMLInputElement;
+  let searchInputDescriptor: HTMLInputElement;
+  let filterMenu: HTMLDivElement;
 
   $: {
     searchDescriptors($secondSearchTerm);
@@ -80,9 +80,6 @@
     currentPage.set(newPage);
   }
 
-  function toggleFilterMenu() {
-    showFilterMenu = !showFilterMenu;
-  }
 
   const description = "Browse perfume compounds. IFRA FIG.";
   const ogTitle = "BCF | Browse";
@@ -98,7 +95,7 @@
 
 <AppWrap>
   <SearchBar>
-    <DescriptorToggle {showFilterMenu} on:toggleFilterMenu={toggleFilterMenu} />
+    <DescriptorToggle bind:showFilterMenu />
 
     {#if showFilterMenu}
     <Search value={secondSearchTerm} on:input={()=>searchDescriptors} bind:searchInput={searchInputDescriptor} on:blur={()=>searchDescriptors} placeholder="/ search descriptors..." />
@@ -156,6 +153,7 @@
       <div
         id="card-holder"
         class="grid w-full grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+        class:dimmed={showFilterMenu}
       >
         {#each data.ingredients.results as ingredient}
           {#if ingredient}
@@ -166,3 +164,10 @@
     {/if}
   </div>
 </AppWrap>
+
+<style>
+  #card-holder.dimmed {
+    filter: blur(1px);
+    opacity: 80%;
+  }
+</style>
