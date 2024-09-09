@@ -5,15 +5,13 @@
   import "../app.css";
   import MetaData from "$lib/components/MetaData.svelte";
   import type { LayoutData } from "./$types";
-  import { setUser } from "$lib/stores/userStore";
+  import { setUser } from "$lib/stores";
   import { onMount } from "svelte";
 
   export let data: LayoutData;
 
   onMount(() => {
     setUser(data.user);
-
-    console.log(data.user);
   });
 </script>
 

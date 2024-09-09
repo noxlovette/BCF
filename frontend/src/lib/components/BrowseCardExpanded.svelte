@@ -11,7 +11,7 @@
   export let suggestedIngredient = null;
   let message = null;
 
-  import { notification } from "$lib/stores/notificationStore";
+  import { notification } from "$lib/stores";
 
   onMount(async () => {
     is_authenticated = sessionStorage.getItem("is_authenticated");

@@ -6,7 +6,7 @@
   import DeleteIcon from "$lib/icons/DeleteIcon.svelte";
   import PuzzleIcon from "$lib/icons/PuzzleIcon.svelte";
   import ArrowsIcon from "$lib/icons/ArrowsIcon.svelte";
-  import { notification } from "$lib/stores/notificationStore";
+  import { notification } from "$lib/stores";
 
   export let formulaDetail;
   export let formulae;

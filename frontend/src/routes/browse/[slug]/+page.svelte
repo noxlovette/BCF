@@ -13,7 +13,7 @@
 
   const ingredient: App.IngredientBrowse = data.ingredient;
 
-  import { notification } from "$lib/stores/notificationStore";
+  import { notification } from "$lib/stores";
 
   onMount(async () => {
     is_authenticated = sessionStorage.getItem("is_authenticated");

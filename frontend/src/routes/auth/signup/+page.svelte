@@ -4,7 +4,7 @@
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import { onMount } from "svelte";
-  import { notification } from "$lib/stores/notificationStore";
+  import { notification } from "$lib/stores";
   let username = "";
   let email = "";
   let password = "";

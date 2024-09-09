@@ -13,7 +13,6 @@
     }
   }
 
-  export let totalPages = 10;
 </script>
 
 <div

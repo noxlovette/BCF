@@ -7,7 +7,7 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import Button from "$lib/components/UI/Button.svelte";
-  import { user } from "$lib/stores/userStore";
+  import { user } from "$lib/stores";
 
   onMount(() => {
     user.subscribe((value) => {

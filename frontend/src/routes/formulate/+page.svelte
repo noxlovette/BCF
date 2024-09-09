@@ -4,6 +4,8 @@
   import FormulateCard from "$lib/components/FormulateCard.svelte";
   import { navigating } from "$app/stores";
   import { Jumper } from "svelte-loading-spinners";
+    import AppWrap from "$lib/components/AppWrap.svelte";
+    import SearchBar from "$lib/components/SearchBar.svelte";
 
   export let data: PageData;
 
@@ -12,17 +14,15 @@
 
 <MetaData title="BCF | Formulate" />
 
-<div
-  id="app"
-  class="my-8 flex flex-col items-center lowercase caret-grapefruit-700"
->
+<AppWrap>
+  <SearchBar />
   <div class="flex h-full items-center justify-center md:hidden">
     <h1 class="text-xl font-bold">this page is desktop only :(</h1>
   </div>
 
   <div
     id="table-wrapper"
-    class="ml-6 mr-6 mt-0 flex h-full flex-row items-center overflow-x-auto overflow-y-auto p-2 text-sm"
+    class="flex h-full flex-row items-center overflow-x-auto overflow-y-auto p-2 text-sm"
   >
     <div id="wrapper" class="rounded-lg p-8">
       <div
@@ -35,13 +35,5 @@
       </div>
     </div>
   </div>
-</div>
+</AppWrap>
 
-<style>
-  .active {
-    @apply bg-aqua-600;
-    @apply dark:bg-aqua-800/40;
-    @apply dark:text-aqua-100/80;
-    @apply shadow-inner;
-  }
-</style>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { derived } from "svelte/store";
-  import { notification } from "$lib/stores/notificationStore";
+  import { notification } from "$lib/stores";
   import { fade } from "svelte/transition";
 
   const notificationStore = derived(

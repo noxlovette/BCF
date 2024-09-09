@@ -2,7 +2,7 @@
   import { updateUserProfile, deleteUserProfile } from "$lib/DjangoAPI";
 
   import { goto } from "$app/navigation";
-  import { notification } from "$lib/stores/notificationStore";
+  import { notification } from "$lib/stores";
 
   export let username;
   export let email;

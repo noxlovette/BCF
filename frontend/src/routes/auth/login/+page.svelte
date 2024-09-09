@@ -5,7 +5,7 @@
   import { quintOut } from "svelte/easing";
   import { Jumper } from "svelte-loading-spinners";
 
-  import { notification } from "$lib/stores/notificationStore";
+  import { notification } from "$lib/stores";
 
   let username = "";
   let password = "";

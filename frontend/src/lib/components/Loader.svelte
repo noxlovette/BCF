@@ -1,8 +1,11 @@
 <script>
-  import { isLoading } from "$lib/stores/loadingStore";
   import { fade } from "svelte/transition";
+  import { writable } from "svelte/store";
+
+  export let isLoading = writable(true);
 
   let loadingState;
+
 
   $: loadingState = $isLoading;
 

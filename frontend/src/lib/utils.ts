@@ -1,4 +1,4 @@
-import { notification } from "./stores/notificationStore";
+import { notification } from "./stores";
 
 export function handleKeydown(searchInput, changePage, searchTerm) {
   return (event) => {

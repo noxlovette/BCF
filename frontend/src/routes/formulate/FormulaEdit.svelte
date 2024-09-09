@@ -13,7 +13,7 @@
   import CrossIcon from "$lib/icons/CrossIcon.svelte";
 
   import OkIcon from "$lib/icons/OkIcon.svelte";
-  import { notification } from "$lib/stores/notificationStore";
+  import { notification } from "$lib/stores";
 
   import Dropdown from "./Dropdown.svelte";
   export let editedFormula = null;

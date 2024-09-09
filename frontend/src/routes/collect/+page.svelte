@@ -5,19 +5,22 @@
   import { changePage } from "$lib/utils";
   import CollectCard from "$lib/components/CollectCard.svelte";
   import MetaData from "$lib/components/MetaData.svelte";
+  import PerPage from "$lib/components/UI/PerPage.svelte";
 
   import ResetButton from "$lib/components/UI/ResetButton.svelte";
   import { handleKeydown } from "$lib/utils";
   import { currentPage, pageSize, searchTerm } from "$lib/stores";
   import type { PageData } from "../$types";
   import Pagination from "$lib/components/UI/Pagination.svelte";
+    import AppWrap from "$lib/components/AppWrap.svelte";
+    import SearchBar from "$lib/components/SearchBar.svelte";
+    import Search from "$lib/components/UI/Search.svelte";
 
   export let data: PageData;
   let collection = data.collection;
   let searchInput: HTMLInputElement | null = null;
   let filteredCollection: any[] = [];
   let paginatedCollection: any[] = [];
-  let chosenIngredient: any = null;
   let totalPages: number = 0;
 
   $: totalItems = filteredCollection.length;
@@ -35,7 +38,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const pageFromUrl = parseInt(urlParams.get("page") || "1");
     const searchFromUrl = urlParams.get("search") || "";
-    const pageSizeFromUrl = parseInt(urlParams.get("page_size") || "10");
+    const pageSizeFromUrl = parseInt(urlParams.get("page_size") || "24");
 
     currentPage.set(pageFromUrl);
     searchTerm.set(searchFromUrl);
@@ -90,43 +93,21 @@
   on:keydown={handleKeydown(searchInput, handleChangePage, $searchTerm)}
 />
 
-<div id="app" class="flex w-full flex-col lowercase caret-grapefruit-700">
-  <form
-    id="search-bar"
-    class="group flex w-full flex-col items-center justify-between space-x-0 space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0"
-  >
+<AppWrap>
+  <SearchBar>
     <CreateButton href="/collect/create" />
 
-    <input
-      type="text"
-      class="w-full rounded-lg border-none bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-grapefruit-700/60 active:scale-90 md:w-1/2 dark:bg-stone-800"
-      bind:value={$searchTerm}
-      bind:this={searchInput}
-      on:change={handleSearchCollection}
-      placeholder="/ search ingredients..."
-      title="find an ingredient by CAS or the multiple names that it might have"
-    />
+    <Search on:search={handleSearchCollection} bind:searchInput />
 
     <ResetButton on:reset={reset} />
 
-    <label
-      class="md:text-md group mr-auto hidden items-center opacity-60 transition-opacity hover:opacity-100 sm:text-sm lg:block"
-    >
-      per page:
-      <input
-        type="number"
-        class="w-1/3 rounded-lg border-none focus:ring-2 focus:ring-grapefruit-400/70 group-hover:shadow dark:bg-stone-800"
-        min="1"
-        bind:value={$pageSize}
-        on:change={updatePageSize}
-      />
-    </label>
+    <PerPage on:updatePageSize={updatePageSize} />
 
     <Pagination
       on:nextPage={() => handleChangePage(1)}
       on:prevPage={() => handleChangePage(-1)}
     />
-  </form>
+  </SearchBar>
 
   <div id="table-wrapper" class="my-8 flex w-full items-center justify-center">
     {#if paginatedCollection.length === 0}
@@ -148,4 +129,4 @@
   <div class="mt-4 flex items-center justify-between">
     <p>Showing {startIndex + 1} to {endIndex} of {totalItems} items</p>
   </div>
-</div>
+</AppWrap>

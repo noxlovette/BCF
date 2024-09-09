@@ -9,7 +9,7 @@
   } from "$lib/DjangoAPI";
   import DeleteIcon from "$lib/icons/DeleteIcon.svelte";
   import OkIcon from "$lib/icons/OkIcon.svelte";
-  import { notification } from "$lib/stores/notificationStore";
+  import { notification } from "$lib/stores";
 
   export let filteredCollection = [];
   export let chosenIngredient: any = null;
