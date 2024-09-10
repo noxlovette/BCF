@@ -127,6 +127,3 @@ class CustomCollectionIngredientSerializer(CollectionIngredientSerializer):
     class Meta(CollectionIngredientSerializer.Meta):
         model = CustomCollectionIngredient
 
-
-# Compare this snippet from browse/models.py:
-# Path: collection/serialisers.py

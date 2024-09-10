@@ -92,18 +92,14 @@ export const actions = {
         credentials: 'include',
       });
 
-      console.log("Response:", response);
   
       if (response.ok) {
-        console.log("Successfully added ingredient to collection");
         return { success: true };
       } else {
-        console.log("Failed");
         return { success: false, error: response.error || "An error occurred" };
       }
 
     } catch (err: any) {
-      console.error("Error in add action:", err);
       throw error(500, "Failed to add ingredient to collection");
     }
   },
