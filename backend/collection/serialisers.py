@@ -16,23 +16,11 @@ class NewCollectionSerializer(serializers.ModelSerializer):
     colour = serializers.CharField(
         allow_null=True, allow_blank=True, source="_colour", required=False
     )
-
-
     def create(self, validated_data):
-        colour = validated_data.pop("_colour", None)
-        impression = validated_data.pop("_impression", None)
-        associations = validated_data.pop("_associations", None)
-        ideas = validated_data.pop("_ideas", None)
-
-        instance = NewCollectionIngredient.objects.create(**validated_data)
-
-        instance._colour = colour
-        instance._impression = impression
-        instance._associations = associations
-        instance._ideas = ideas
-
-        instance.save()
-        return instance
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            return NewCollectionIngredient.objects.create(user=request.user, **validated_data)
+        raise serializers.ValidationError("User must be authenticated to create an ingredient.")
     
     def update(self, instance, validated_data): 
         request = self.context.get('request')
@@ -45,6 +33,7 @@ class NewCollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewCollectionIngredient
         fields = "__all__"
+        read_only_fields = ('user',)  # Make user read-only
 
 
 

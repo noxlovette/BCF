@@ -1,6 +1,6 @@
 import redis from "$lib/redisClient";
 import { error } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ cookies }) => {
   try {
@@ -54,3 +54,39 @@ export const load: PageServerLoad = async ({ cookies }) => {
     throw error(500, "Internal Server Error"); // Catch any unexpected errors
   }
 };
+
+export const actions = {
+  create: async ({ cookies, request }) => {
+    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    const sessionid = cookies.get("sessionid");
+    const csrfToken = cookies.get("csrftoken");
+
+    if (!sessionid) {
+      throw error(401, "Unauthorized");
+    }
+
+    try {
+      const response = await fetch(`${VITE_API_URL}/collection/new/api/ingredient/create/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken,
+          Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+        },
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+      redis.del(`collection-${sessionid}`);
+        return { success: true };
+} else {
+  const errorData = await response.json();
+  console.log("Response Error Data:", errorData);
+        return { success: false, error: response.error || "An error occurred" };
+      }
+
+    } catch (err: any) {
+      throw error(500, "Failed to create ingredient");
+    }
+  }
+} satisfies Actions;

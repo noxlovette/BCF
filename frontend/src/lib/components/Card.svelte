@@ -6,7 +6,9 @@
 
 <a
   id="card-small"
-  class="group flex flex-col items-start justify-between space-y-2 overflow-clip rounded-lg border bg-white p-4 text-left font-space shadow-lg transition-all hover:scale-105  hover:bg-gold-700 dark:hover:bg-gold-800 hover:text-gold-50 hover:shadow-lg border-gold-400 dark:border-gold-900 dark:bg-stone-800"
+  class="group flex flex-col items-start justify-between space-y-2 overflow-clip rounded-lg border bg-white p-4 text-left font-space shadow-lg transition-all hover:scale-105  hover:bg-gold-700 dark:hover:bg-gold-800 hover:text-gold-50 hover:shadow-lg border-gold-400 dark:border-gold-900 dark:bg-stone-800
+{$$props.class} {body === "0000-00-0" ? 'bg-peach-400' : ''}
+  "
   {href}
   tabindex="0"
 >

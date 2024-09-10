@@ -1,13 +1,9 @@
 <script lang="ts">
   import type { PageServerData } from "./$types";
-  import { notification } from "$lib/stores";
   import RoundButton from "$lib/components/UI/RoundButton.svelte";
-  import Suggestion from "$lib/components/Suggestion.svelte";
   import SuggestionIcon from "$lib/icons/SuggestionIcon.svelte";
   import MetaData from "$lib/components/MetaData.svelte";
   import AppWrap from "$lib/components/AppWrap.svelte";
-  import Add from "$lib/icons/Add.svelte";
-  import { enhance } from "$app/forms";
   import { user } from "$lib/stores";
     import EditCollect from "$lib/components/EditCollect.svelte";
 

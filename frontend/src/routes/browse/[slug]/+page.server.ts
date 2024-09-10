@@ -159,6 +159,5 @@ export const actions = {
       console.error("Error in add action:", err);
       throw error(500, "Failed to suggest a change");
     }
-  }
-  
+  },
 } satisfies Actions;

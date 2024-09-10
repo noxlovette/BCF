@@ -81,12 +81,6 @@ export const actions = {
         body: JSON.stringify(body),
         credentials: 'include',
       });
-
-
-
-const errorData = await response.json();
-
-
   
       if (response.ok) {
 //TODO make the page RELOAD

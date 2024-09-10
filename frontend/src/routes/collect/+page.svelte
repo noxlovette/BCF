@@ -15,6 +15,8 @@
     import AppWrap from "$lib/components/AppWrap.svelte";
     import SearchBar from "$lib/components/SearchBar.svelte";
     import Search from "$lib/components/UI/Search.svelte";
+    import { notification } from "$lib/stores";
+    import { enhance } from "$app/forms";
 
   export let data: PageServerData;
   let collection = data.collection;
@@ -99,7 +101,11 @@
     <Search on:search={handleSearchCollection} bind:searchInput />
     
     <PerPage on:updatePageSize={updatePageSize} />
-    <CreateButton href="/collect/create" />
+    <form 
+    method="post" action="?/create" use:enhance={() => notification.set({ message: 'Added to your collection', type: 'success' })}
+  >
+    <CreateButton on:create />
+  </form>
     <ResetButton on:reset={reset} />
 
 

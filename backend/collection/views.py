@@ -12,14 +12,13 @@ from .models import (
 )
 from rest_framework.views import APIView
 from rest_framework.exceptions import ParseError, PermissionDenied
+from rest_framework.permissions import IsAuthenticated
 import logging
 from .serialisers import (
     StandardCollectionIngredientSerializer,
     CustomCollectionIngredientSerializer,
     NewCollectionSerializer,
 )
-
-from django.views.decorators.csrf import csrf_exempt
 
 logger = logging.getLogger(__name__)
 
@@ -30,12 +29,18 @@ class NewIngredientCreateView(generics.CreateAPIView):
     """
 
     serializer_class = NewCollectionSerializer
+    permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        user = self.request.user
-        if not user.is_authenticated:
-            raise PermissionDenied("You must be logged in to perform this action")
-        serializer.save(user=user)
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+   # def perform_create(self, serializer):
+   #     user = self.request.user
+   #     if not user.is_authenticated:
+   #         raise PermissionDenied("You must be logged in to perform this action")
+   #     serializer.save(user=user)
 
 # CREATE VIEWS
 class IngredientCreateView(generics.CreateAPIView):

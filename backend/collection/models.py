@@ -10,12 +10,12 @@ class NewCollectionIngredient(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    common_name = models.CharField(max_length=100, verbose_name="Common Name")
-    cas = models.CharField(max_length=100, verbose_name="CAS")
+    common_name = models.CharField(max_length=100, verbose_name="Common Name", default="New Ingredient")
+    cas = models.CharField(max_length=100, verbose_name="CAS", default="0000-00-0")
     volatility = models.CharField(max_length=100, verbose_name="Volatility", null=True, blank=True)
     use = models.TextField(verbose_name="Use", null=True, blank=True)
 
-    descriptors = models.CharField(verbose_name="Descriptors")
+    descriptors = models.CharField(verbose_name="Descriptors", default="New Ingredient", max_length=100)
 
     other_names = models.TextField(verbose_name="Other Names", null=True, blank=True)
     is_restricred = models.BooleanField(default=False, verbose_name="Restricted")
@@ -38,6 +38,12 @@ class NewCollectionIngredient(models.Model):
         self._associations = None
         self._ideas = None
 
+    def create(self, validated_data):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            validated_data['user'] = request.user
+        return super().create(validated_data)
+    
     def prepare_for_serialization(self):
         """
         without this, the client will return hell. the decryption takes place here, on the server side.
@@ -116,7 +122,7 @@ class NewCollectionIngredient(models.Model):
         return f"COLLECTION INGREDIENT {self.user.username} {self.common_name}"
 
     class Meta:
-        unique_together = ["user", "common_name"]
+        unique_together = ["user", "id"]
         verbose_name = "Collection Ingredient"
         verbose_name_plural = "Collection Ingredients"
         db_table = "collection_ingredients"

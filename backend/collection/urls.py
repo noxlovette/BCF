@@ -42,5 +42,9 @@ urlpatterns = [
     re_path(
         r"^new/api/ingredient/update/(?P<pk>[0-9a-f-]+)/$",
         views.NewIngredientUpdateView.as_view(),
+    ),
+    path(
+        "new/api/ingredient/create/",
+        views.NewIngredientCreateView.as_view(),
     )
 ]
