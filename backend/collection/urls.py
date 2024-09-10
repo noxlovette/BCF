@@ -39,4 +39,8 @@ urlpatterns = [
         "new/api/collection/",
         views.NewCollectionAPI.as_view(),
     ),
+    re_path(
+        r"^new/api/ingredient/update/(?P<pk>[0-9a-f-]+)/$",
+        views.NewIngredientUpdateView.as_view(),
+    )
 ]

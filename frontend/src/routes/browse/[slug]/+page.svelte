@@ -46,12 +46,15 @@
 
 <AppWrap class="2xl:px-24 select-text caret-navy-800 selection:bg-navy-100 selection:text-navy-800">
   <div class=" rounded-lg border-navy-800">
-    <div id="top-part" class="flex flex-row items-center p-8 rounded-t-lg bg-navy-700 text-navy-50 border-b border-navy-800">
-      <div id="top-left" class="flex w-3/4 flex-col space-y-2 pr-24">
-        <h1 class="flex w-full text-5xl font-bold tracking-tighter font-space">
+    <div id="top-part" class="flex flex-row items-center p-8 rounded-lg bg-navy-700 text-navy-50 border-b border-navy-800">
+      <div id="top-left" class="flex w-3/4 flex-col space-y-6 pr-24">
+        <h1 class="flex w-full text-5xl font-bold tracking-tighter font-space pb-4 border-b-2">
           {ingredient.common_name}
         </h1>
+        <div>
         <h2 class="w-full lowercase"><span class="opacity-60">descriptors:</span> {ingredient.descriptors}</h2>
+        <h3 class=" "><span class="opacity-60 ">other names:</span> {otherNames}</h3>
+      </div>
       </div>
       <div id="top-right" class=" flex-1 flex-col flex">
         <h2 class="mb-2 min-w-fit text-2xl font-space">{ingredient.cas}</h2>
@@ -75,52 +78,49 @@
       {/if}
     </div>
   
-    <div id="bottom-part" class="flex flex-row p-8 ">
-      <div id="bottom-left" class="flex w-3/4 flex-col pr-24">
-        <p class="opacity-60">how to use</p>
-        <p class="py-4 ">{useMessage}</p>
+    <div id="bottom-part" class="flex flex-row py-4">
+      <div id="bottom-left" class="flex-1 flex mr-8 flex-col border-2 rounded-lg p-4 border-navy-700">
+        <p class="opacity-60 text-navy-600 dark:text-navy-300">how to use</p>
+        <p class="">{useMessage}</p>
         
-        <ul class="flex flex-col mt-auto space-y-4">
+        <ul class="flex flex-row mt-auto w-full justify-between">
           <li class="flex flex-col">
-            <h3 class=" opacity-60">similar ingredients</h3>
+            <h3 class=" opacity-60 text-navy-600 dark:text-navy-300">similar ingredients</h3>
             <p class="w-full">{similarIngredients}</p>
           </li>
-          <li class="flex flex-col">
-            <h3 class=" opacity-60">other names</h3>
-            <p class="w-full">{otherNames}</p>
-          </li>
         </ul>
+
       </div>
   
-      <div id="bottom-right" class="flex flex-1 flex-col">
+      <div id="bottom-right" class="flex w-1/4 flex-col border-2 border-navy-700 p-4 rounded-lg">
         <ul class="space-y-8">
           <li class="flex flex-col">
-            <h3 class=" opacity-60">origin</h3>
+            <h3 class=" opacity-60 text-navy-600 dark:text-navy-300">origin</h3>
             <p>{origin}</p>
           </li>
           <li class="flex flex-col">
-            <h3 class=" opacity-60">IFRA</h3>
+            <h3 class=" opacity-60 text-navy-600 dark:text-navy-300">IFRA</h3>
             <p>{ifraStatus}</p>
           </li>
           <li class="flex-col flex">
-            <h3 class=" opacity-60">contributors</h3>
+            <h3 class=" opacity-60 text-navy-600 dark:text-navy-300">contributors</h3>
             <p>{contributors}</p>
           </li>
         </ul>
       </div>
     </div>
   
-    <div class="w-full h-32 overflow-hidden"> <!-- Set the parent div as thin -->
+    <div class="w-full h-32 relative overflow-hidden opacity-60 text-navy-600 dark:text-navy-300"> <!-- Set the parent div as thin -->
       <img 
         alt={ingredient.common_name} 
         src={unsplashData.urls.regular} 
-        class="w-full h-full object-cover rounded-b-lg"
+        class="w-full h-full object-cover rounded-lg"
       />
+      <p class="absolute text-sm italic bottom-2 right-2 px-2 py-1 bg-blend-screen bg-stone-50 text-stone-900 rounded-lg">
+        Photo by <a href={href}>{unsplashData.user.name}</a> on <a href="https://unsplash.com/?utm_source=bcf&utm_medium=referral">Unsplash</a>
+      </p>
     </div>
   </div>
-<p class="text-sm italic">
-  Photo by <a href={href}>{unsplashData.user.name}</a> on <a href="https://unsplash.com/?utm_source=bcf&utm_medium=referral">Unsplash</a>
-</p>
 
 
 {#if showSuggestion}

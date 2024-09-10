@@ -6,38 +6,37 @@
     
     export let ingredient: App.IngredientCollection;
     
-        let suggestion = {
-          common_name: ingredient.common_name,
-          volatility: ingredient.volatility,
-          use: ingredient.use,
-          colour: ingredient.colour,
-          impression: ingredient.impression,
-          associations: ingredient.associations,
-          ideas: ingredient.ideas,
-        }
-    
     </script>
-    <form method="POST" action="?/suggest" use:enhance= {()=> notification.set({message:"suggestion sent", type:"success"})} class="grid grid-cols-2 items-center">
-        <div class="p-4 space-y-2">
-          <Input type="text" name="common_name" value="{suggestion.common_name}" label="Common Name" />
-          <Input type="text" name="other_names" value="{suggestion.other_names}" label="Other Names" />
-          <Input type="text" name="volatility" value="{suggestion.volatility}" label="Volatility" />
-        </div>
-        <Textarea name="use" value="{suggestion.use}" label="Use" class="p-4 h-full" />
-        <div class="p-4 space-y-2">
-          <Input type="text" name="similar_ingredients" value="{suggestion.similar_ingredients.toString()}" label="Similar Ingredients" />
-          <Input type="text" name="origin" value="{suggestion.origin}" label="Origin" />
-          <Input type="text" name="is_restricted" value="{suggestion.is_restricted}" label="IFRA Status" />
-          <input type="hidden" name="ingredient" value="{ingredient.id}" />
-        </div>
-        <div class="col-span-2 flex justify-center p-4">
-          <button
+    <form class="my-6 space-y-8" method="POST" action="?/update" use:enhance= {()=> notification.set({message:"Ingredient sent", type:"success"})}
+    >
+    <div class="flex flex-row justify-between items-baseline">
+    <h1 class="text-5xl border-b-2 border-grapefruit-600">
+      Editing {ingredient.common_name}
+    </h1>
+    <button
           type=submit
       class="text-center w-[100px] rounded-lg bg-gold-400 border-gold-700 dark:border-gold-900 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:hover:bg-stone-700"
       >
     Submit
         </button>
-    
+      </div>
+    <div  class="grid grid-cols-3 gap-4 items-center">
+          <Input type="text" name="common_name" value="{ingredient.common_name}" label="Common Name" />
+          <Input type="text" name="cas" value="{ingredient.cas}" label="CAS Number" />
+          <Input type="text" name="other_names" value="{ingredient.other_names}" label="Other Names" />
+          <Input type="text" name="volatility" value="{ingredient.volatility}" label="Volatility" />
+          <Input type="text" name="origin" value="{ingredient.origin}" label="Origin" />
+          <Input type="text" name="is_restricted" value="{ingredient.is_restricted}" label="IFRA Status" />
+          <Input type="text" name="colour" value="{ingredient.colour}" label="Colour" />
+          <Input type="text" name="ideas" value="{ingredient.ideas}" label="Ideas" />
+          <block></block>
+          <Textarea name="use" value="{ingredient.use}" label="Use" class=" h-full" />
+          <Textarea name="associations" value="{ingredient.associations}" label="Associations" class=" h-full" />
+          <Textarea name="impression" value="{ingredient.impression}" label="Impression" class=" h-full" />
+          <div class="col-span-3 flex justify-center ">
+          <input type="hidden" name="id" value="{ingredient.id}" />
+          <input type="hidden" name="descriptors" value="{ingredient.descriptors}" />
+        
         </div>
-      </form>
-      
+      </div>
+    </form>

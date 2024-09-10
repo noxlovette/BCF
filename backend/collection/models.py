@@ -8,7 +8,7 @@ import uuid
 
 class NewCollectionIngredient(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     common_name = models.CharField(max_length=100, verbose_name="Common Name")
     cas = models.CharField(max_length=100, verbose_name="CAS")

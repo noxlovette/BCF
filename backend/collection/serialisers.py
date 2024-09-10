@@ -33,6 +33,13 @@ class NewCollectionSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+    
+    def update(self, instance, validated_data): 
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            instance.user = request.user
+
+        return super().update(instance, validated_data)
 
     
     class Meta:

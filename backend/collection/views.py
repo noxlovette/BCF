@@ -51,6 +51,35 @@ class IngredientCreateView(generics.CreateAPIView):
             raise PermissionDenied("You must be logged in to perform this action")
         serializer.save(user=user)
 
+class NewIngredientUpdateView(generics.UpdateAPIView):
+    queryset = NewCollectionIngredient.objects.all()
+    serializer_class = NewCollectionSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied("You must be logged in to perform this action")
+        return self.queryset.filter(user=user)
+    
+    def get_serializer_context(self):
+        # Add the request to the serializer context
+        return {'request': self.request}
+    
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", True)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, "_prefetched_objects_cache", None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+    
+
 
 # UPDATE VIEWS. #TODO identical. Can be combined
 class CustomIngredientUpdateView(generics.UpdateAPIView):

@@ -32,15 +32,18 @@ declare global {
 
     interface IngredientCollection {
       id: number;
-      uuid: string;
       amount: number;
       cas: string;
+      descriptors: string;
+      origin: string;
+      other_names: string;
       colour?: string;
       common_name: string;
       date_added: string;
       impression?: string;
       ideas?: string;
       is_collection: boolean;
+      is_restricted: boolean;
       type: string;
       unit: string;
       use: string;

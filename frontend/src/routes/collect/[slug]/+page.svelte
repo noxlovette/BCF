@@ -12,6 +12,9 @@
     import EditCollect from "$lib/components/EditCollect.svelte";
 
   export let data: PageServerData;
+  let editing = false;
+
+
   console.log(data);
 
   const ingredient = data.ingredient;
@@ -42,7 +45,7 @@
       </div>
       {#if $user.is_authenticated}
       <div class="flex space-x-2 items-center justify-center rounded-lg flex-1">
-        <RoundButton>
+        <RoundButton on:click={() => editing = !editing}>
           <SuggestionIcon />
         </RoundButton>
       </div>
@@ -83,5 +86,8 @@
     </div>
   </div>
 
+  {#if editing}
+  <EditCollect ingredient={ingredient} />
+  {/if}
 
 </AppWrap>
