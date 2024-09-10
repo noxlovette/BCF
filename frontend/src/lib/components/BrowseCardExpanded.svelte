@@ -1,6 +1,6 @@
 <script lang="ts">
   import Add from "$lib/icons/Add.svelte";
-  import Suggestion from "$lib/icons/Suggestion.svelte";
+  import Suggestion from "$lib/icons/SuggestionIcon.svelte";
   import { addSuggestionBrowse, addToCollectionBrowse } from "$lib/DjangoAPI";
   import { onMount } from "svelte";
   import CancelButton from "$lib/icons/CancelButton.svelte";

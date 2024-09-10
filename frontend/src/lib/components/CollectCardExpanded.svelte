@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Suggestion from "$lib/icons/Suggestion.svelte";
+  import Suggestion from "$lib/icons/SuggestionIcon.svelte";
   import CancelButton from "$lib/icons/CancelButton.svelte";
   import {
     deleteFromCollection,

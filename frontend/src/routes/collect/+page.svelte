@@ -10,13 +10,13 @@
   import ResetButton from "$lib/components/UI/ResetButton.svelte";
   import { handleKeydown } from "$lib/utils";
   import { currentPage, pageSize, searchTerm } from "$lib/stores";
-  import type { PageData } from "../$types";
+  import type { PageServerData } from "../$types";
   import Pagination from "$lib/components/UI/Pagination.svelte";
     import AppWrap from "$lib/components/AppWrap.svelte";
     import SearchBar from "$lib/components/SearchBar.svelte";
     import Search from "$lib/components/UI/Search.svelte";
 
-  export let data: PageData;
+  export let data: PageServerData;
   let collection = data.collection;
   let searchInput: HTMLInputElement | null = null;
   let filteredCollection: any[] = [];

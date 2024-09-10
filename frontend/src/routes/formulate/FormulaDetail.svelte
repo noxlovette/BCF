@@ -2,7 +2,7 @@
   import { addFormulaAsCustomIngredient, deleteFormula } from "$lib/DjangoAPI";
   import FormulaEdit from "./FormulaEdit.svelte";
   import { writable } from "svelte/store";
-  import Suggestion from "$lib/icons/Suggestion.svelte";
+  import Suggestion from "$lib/icons/SuggestionIcon.svelte";
   import DeleteIcon from "$lib/icons/DeleteIcon.svelte";
   import PuzzleIcon from "$lib/icons/PuzzleIcon.svelte";
   import ArrowsIcon from "$lib/icons/ArrowsIcon.svelte";

@@ -219,14 +219,17 @@ class CheckSessionAPI(APIView):
     """
     Check if the user is authenticated.
     """
-
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
+            csrf_token = get_token(
+        request
+    )
             return Response(
                 {
                     "is_authenticated": request.user.is_authenticated,
                     "username": request.user.username,
                     "email": request.user.email,
+                    "csrfToken": csrf_token,
                 }
             )
         else:

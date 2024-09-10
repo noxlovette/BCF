@@ -14,7 +14,7 @@
 >
 <input
 type="number"
-class="w-16 px-3 py-2 rounded-lg border border-stone-300 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/70 shadow-sm transition-all duration-300 dark:bg-stone-800 dark:border-stone-700 dark:focus:border-gold-400 dark:focus:ring-gold-400/70"
+class="w-16 px-3 py-2 rounded-lg border  focus:border-gold-400  border-gold-400 dark:border-gold-900 focus:ring-2 focus:ring-gold-400/70 shadow-sm transition-all duration-300 dark:bg-stone-800 dark:focus:border-gold-400 dark:focus:ring-gold-400/70"
 min="1"
 bind:value={$pageSize}
 on:change={updatePageSize}

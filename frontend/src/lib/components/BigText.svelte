@@ -11,7 +11,8 @@
         <div class="flex w-full flex-col items-center gap-4">
           <div class="flex flex-col items-start justify-between">
             <h1
-              class="text-pretty text-left text-6xl font-bold tracking-tight xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem]"
+              class="text-pretty text-left text-6xl font-bold tracking-tight xl:text-[6rem] xl:tracking-tight 2xl:text-[6.5rem]
+              {$$props.class}"
             >
               {@html text}
             </h1>

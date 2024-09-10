@@ -1,13 +1,12 @@
 <script lang="ts">
   import MetaData from "$lib/components/MetaData.svelte";
-  import type { PageData } from "../$types";
+  import type { PageServerData } from "../$types";
   import FormulateCard from "$lib/components/FormulateCard.svelte";
-  import { navigating } from "$app/stores";
-  import { Jumper } from "svelte-loading-spinners";
+
     import AppWrap from "$lib/components/AppWrap.svelte";
     import SearchBar from "$lib/components/SearchBar.svelte";
 
-  export let data: PageData;
+  export let data: PageServerData;
 
   let formulae: App.Formula[] = data.formulae;
 </script>

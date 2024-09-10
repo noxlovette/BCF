@@ -17,6 +17,8 @@ from .serialisers import (
     CustomCollectionIngredientSerializer,
 )
 
+from django.views.decorators.csrf import csrf_exempt
+
 logger = logging.getLogger(__name__)
 
 
@@ -160,6 +162,7 @@ class IngredientDetailView(generics.RetrieveAPIView):
         return obj
 
 # LIST VIEWS
+
 class CollectionAPI(APIView):
     """
     API VIEW TO DISPLAY THE USER'S COLLECTION
@@ -185,6 +188,7 @@ class CollectionAPI(APIView):
 
         return collection_ingredients, custom_collection_ingredients
 
+
     def get(self, request):
         collection_ingredients, custom_collection_ingredients = self.get_collection(
             request
@@ -207,7 +211,7 @@ class CollectionAPI(APIView):
 
         return JsonResponse(combined_data, safe=False)
 
-    # this is the browse functionality
+
     def post(self, request):
         """
         adds a new ingredient to the user's collection (FROM THE BROWSE APP)
@@ -219,9 +223,6 @@ class CollectionAPI(APIView):
             ingredient_id = data.get("ingredient_id")
             user = self.request.user
             ingredient = Ingredient.objects.get(id=ingredient_id)
-            logger.info(
-                f"Adding ingredient {ingredient.common_name} to user {user.username}"
-            )
             RegularCollectionIngredient.objects.create(user=user, ingredient=ingredient)
 
             return JsonResponse({"success": True})

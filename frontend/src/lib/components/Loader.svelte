@@ -1,13 +1,8 @@
 <script>
   import { fade } from "svelte/transition";
   import { writable } from "svelte/store";
-
-  export let isLoading = writable(true);
-
-  let loadingState;
-
-
-  $: loadingState = $isLoading;
+  import { navigating } from "$app/stores";
+  import { Jumper, Square, Chasing, Diamonds, Circle2, Circle3 } from "svelte-loading-spinners";
 
   let quotes = [
     "Perfume is the art that makes memory speak. — Francis Kurkdjian",
@@ -36,31 +31,20 @@
   }
 </script>
 
-{#if loadingState}
-  <div class="loading-overlay" transition:fade>
-    <div class="flex size-full flex-col items-center">
-      <div
-        id="spinner"
-        class="m-10 flex size-24 animate-spin rounded-full border-8 border-dotted border-gold-400"
-      />
-      <p class="text-pretty text-center text-2xl font-bold normal-case">
+{#if $navigating}
+  <div 
+  class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-stone-950 bg-opacity-40 backdrop-blur"
+  transition:fade={{duration: 300}}
+  >
+    <div 
+    class="relative flex flex-col space-y-2 max-w-[400px]"
+    
+    >
+      <Circle3 ballTopLeft="#FFD773" ballTopRight="#A2B9C7" ballBottomLeft="#F9AA99" ballBottomRight="#FCD0A3" size="100" />
+      <p class="text-pretty text-2xl font-bold normal-case text-gold-50 italic">
         {chosenQuote}
       </p>
     </div>
   </div>
 {/if}
 
-<style>
-  .loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent overlay */
-    z-index: 9999;
-  }
-</style>

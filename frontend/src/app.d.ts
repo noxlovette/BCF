@@ -5,7 +5,7 @@ declare global {
     // Declare your interfaces inside the App namespace
     interface IngredientBrowse {
       id: number;
-      slug: string;
+      slug?: string;
       cas: string;
       common_name: string;
       descriptors: string;
@@ -15,6 +15,8 @@ declare global {
       other_names: string;
       use: string;
       volatility: string;
+      similar_ingredients: IngredientBrowse[];
+      contributors: User[];
     }
 
     interface ResponseBrowse {
@@ -72,6 +74,7 @@ declare global {
       is_authenticated: boolean;
       username: string;
       email: string;
+      csrfToken: string;
     }
   }
 }

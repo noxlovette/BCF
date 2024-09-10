@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
+  import type { PageServerData } from "./$types";
 
-  export let data: PageData;
+  export let data: PageServerData;
 
   const ingredient: App.IngredientCollection = data.ingredient;
 </script>

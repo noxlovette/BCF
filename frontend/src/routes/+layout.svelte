@@ -7,6 +7,7 @@
   import type { LayoutData } from "./$types";
   import { setUser } from "$lib/stores";
   import { onMount } from "svelte";
+    import Loader from "$lib/components/Loader.svelte";
 
   export let data: LayoutData;
 
@@ -29,7 +30,7 @@
   >
     <slot />
   </div>
-
+  <Loader />
   <Notification />
   <Footer />
 </main>

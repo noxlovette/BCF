@@ -14,7 +14,10 @@ export const load: LayoutServerLoad = async ({ cookies, fetch }) => {
     },
   });
 
+  
   const user: App.User = await response.json();
+  cookies.set("csrftoken", user.csrfToken, { path: "/" });
+  console.log("User:", user);
 
   return { user };
 };
