@@ -2,23 +2,64 @@ import redis from "$lib/redisClient";
 import type { PageServerLoad } from "./$types";
 import type { Actions } from "./$types";
 import { error } from "@sveltejs/kit";
+import getUnsplashURL from "$lib/unsplash";
 
 export const load: PageServerLoad = async ({ fetch, params }) => {
   const VITE_API_URL = import.meta.env.VITE_API_URL;
   const { slug } = params;
-  try {
-    let value = await redis.get(slug);
-    if (value !== null) {
-      return {
-        ingredient: JSON.parse(value),
-      };
-    }
-    const endpoint = `${VITE_API_URL}/browse/api/ingredients/${slug}/`;
 
-    const response = await fetch(endpoint);
-    const ingredient = await response.json();
-    await redis.set(slug, JSON.stringify(ingredient), "EX", 3600);
-    return { ingredient };
+  try {
+    // Check if the ingredient is in the Redis cache
+    let ingredient: App.IngredientBrowse | null = null;
+    let cachedIngredient = await redis.get(slug);
+    let photo = null;
+
+    if (cachedIngredient !== null) {
+      // If the ingredient is cached, parse it
+      ingredient = JSON.parse(cachedIngredient);
+    } else {
+      // If the ingredient is not cached, fetch it from the API
+      const endpoint = `${VITE_API_URL}/browse/api/ingredients/${slug}/`;
+      const response = await fetch(endpoint);
+      if (!response.ok) {
+        throw new Error("Failed to fetch ingredient data from API");
+      }
+      ingredient = await response.json();
+      // Cache the fetched ingredient data in Redis
+      await redis.set(slug, JSON.stringify(ingredient), "EX", 3600);
+    }
+
+    // Extract the query from the ingredient to use for the Unsplash API
+    const query = ingredient.descriptors;
+
+    // Check if the Unsplash photo is in the Redis cache
+    let cachedPhoto = await redis.get(`${query}-photo`);
+
+    if (cachedPhoto !== null) {
+      // If the photo is cached, parse it
+      photo = JSON.parse(cachedPhoto);
+    } else {
+      // If the photo is not cached, fetch it from the Unsplash API
+      const unsplashURL = getUnsplashURL(query);
+      console.log("Unsplash URL:", unsplashURL);
+
+      const unsplashResponse = await fetch(unsplashURL);
+
+      // Check if the Unsplash response is OK (status 200)
+      if (!unsplashResponse.ok) {
+        throw new Error("Failed to fetch photo from Unsplash");
+      }
+
+      // Extract JSON data from the Unsplash response
+      photo = await unsplashResponse.json();
+      console.log("Unsplash response data:", photo);
+
+      // Cache the fetched Unsplash photo data in Redis
+      await redis.set(`${query}-photo`, JSON.stringify(photo), "EX", 3600);
+    }
+
+    // Return both the ingredient and photo data
+    return { ingredient, photo };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
