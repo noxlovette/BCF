@@ -30,5 +30,13 @@ urlpatterns = [
     re_path(
         r"^api/ingredient/(?P<uuid>[0-9a-f-]+)/$",
         views.IngredientDetailView.as_view(),
-    )
+    ),
+    re_path(
+        r"^new/api/ingredient/(?P<pk>[0-9a-f-]+)/$",
+        views.NewIngredientDetailView.as_view(),
+    ),
+    path(
+        "new/api/collection/",
+        views.NewCollectionAPI.as_view(),
+    ),
 ]

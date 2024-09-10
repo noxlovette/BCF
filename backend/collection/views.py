@@ -8,6 +8,7 @@ from .models import (
     Ingredient,
     User,
     CustomCollectionIngredient,
+    NewCollectionIngredient,
 )
 from rest_framework.views import APIView
 from rest_framework.exceptions import ParseError, PermissionDenied
@@ -15,12 +16,26 @@ import logging
 from .serialisers import (
     StandardCollectionIngredientSerializer,
     CustomCollectionIngredientSerializer,
+    NewCollectionSerializer,
 )
 
 from django.views.decorators.csrf import csrf_exempt
 
 logger = logging.getLogger(__name__)
 
+
+class NewIngredientCreateView(generics.CreateAPIView):
+    """
+    CREATE A NEW INGREDIENT
+    """
+
+    serializer_class = NewCollectionSerializer
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied("You must be logged in to perform this action")
+        serializer.save(user=user)
 
 # CREATE VIEWS
 class IngredientCreateView(generics.CreateAPIView):
@@ -127,7 +142,6 @@ class IngredientDetailView(generics.RetrieveAPIView):
     """
     RETRIEVE A COLLECTION OR CUSTOM INGREDIENT
     """
-    print("IngredientDetailView called")
     serializer_class = None  # Will be set dynamically based on the object type
     lookup_field = 'uuid'  # Use 'uuid' for lookups
 
@@ -160,6 +174,75 @@ class IngredientDetailView(generics.RetrieveAPIView):
         # Prepare for serialization
         obj.prepare_for_serialization()
         return obj
+
+class NewIngredientDetailView(generics.RetrieveAPIView):
+    queryset = NewCollectionIngredient.objects.all()
+    serializer_class = NewCollectionSerializer
+
+    def get_object(self):
+        obj = super().get_object()
+        if obj.user != self.request.user:
+            raise PermissionDenied("You do not have permission to access this ingredient.")
+                                   
+        obj.prepare_for_serialization()
+        return obj
+
+class NewCollectionAPI(generics.ListAPIView):
+    serializer_class = NewCollectionSerializer
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied("You must be logged in to perform this action")
+        
+        # Filter the queryset based on the authenticated user
+        queryset = NewCollectionIngredient.objects.filter(user=user)
+
+        for ingredient in queryset:
+            ingredient.prepare_for_serialization()
+
+        # Pass the queryset to the serializer
+        serializer = self.serializer_class(queryset, many=True)
+        
+        return Response(serializer.data)
+    
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied("You must be logged in to perform this action")
+        
+        try:
+            data = request.data
+            ingredient_id = data.get("ingredient_id")
+            ingredient = Ingredient.objects.get(id=ingredient_id)
+
+            NewCollectionIngredient.objects.create(
+                user=user,
+                common_name=ingredient.common_name,
+                cas = ingredient.cas,
+                volatility = ingredient.volatility,
+                use = ingredient.use,
+
+                descriptors = ingredient.get_descriptors(),
+
+                other_names = ingredient.other_names,
+                origin = ingredient.origin,
+                
+                )
+            
+            return JsonResponse({"success": True})
+        except IntegrityError:
+            return JsonResponse(
+                {"error": "ingredient is already in collection"}, status=400
+            )
+        except (User.DoesNotExist, Ingredient.DoesNotExist):
+            return JsonResponse(
+                {"error": "user or ingredient does not exist"}, status=400
+            )
+        except ValueError:
+            return JsonResponse({"error": "invalid ingredient_id"}, status=400)
+
+
 
 # LIST VIEWS
 

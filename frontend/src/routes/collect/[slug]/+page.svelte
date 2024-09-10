@@ -12,8 +12,9 @@
     import EditCollect from "$lib/components/EditCollect.svelte";
 
   export let data: PageServerData;
+  console.log(data);
 
-  const ingredient: App.IngredientCollection = data.ingredient;
+  const ingredient = data.ingredient;
 
   let volatility = ingredient.volatility || 'unknown';
   let useMessage = ingredient.use || 'Nobody has added a use for this ingredient yet';
@@ -21,6 +22,7 @@
   let impression = ingredient.impression || 'unknown';
   let associations = ingredient.associations || 'unknown';
   let ideas = ingredient.ideas || 'unknown';
+  let origin = ingredient.origin || 'unknown';
   
 </script>
 
@@ -81,6 +83,5 @@
     </div>
   </div>
 
-  <EditCollect {ingredient} />
 
 </AppWrap>

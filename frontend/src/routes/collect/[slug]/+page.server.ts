@@ -11,13 +11,13 @@ export const load: PageServerLoad = async ({ fetch, params, cookies }) => {
 
   const { slug } = params;
   try {
-    let value = await redis.get(`ingredient-${sessionid}-${slug}`);
-    if (value !== null) {
-      return {
-        ingredient: JSON.parse(value),
-      };
-    }
-    const endpoint = `${VITE_API_URL}/collection/api/ingredient/${slug}/`;
+  //  let value = await redis.get(`ingredient-${sessionid}-${slug}`);
+  //  if (value !== null) {
+  //    return {
+  //      ingredient: JSON.parse(value),
+  //    };
+  //  }
+    const endpoint = `${VITE_API_URL}/collection/new/api/ingredient/${slug}/`;
 
     const response = await fetch(endpoint, {
       method: "GET",

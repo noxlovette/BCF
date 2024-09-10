@@ -1,6 +1,44 @@
 from rest_framework import serializers
-from .models import RegularCollectionIngredient, CustomCollectionIngredient
+from .models import RegularCollectionIngredient, CustomCollectionIngredient, NewCollectionIngredient
 from browse.serialisers import DateTimeSerializer
+
+
+class NewCollectionSerializer(serializers.ModelSerializer):
+    impression = serializers.CharField(
+        allow_null=True, allow_blank=True, source="_impression", required=False
+    )
+    ideas = serializers.CharField(
+        allow_null=True, allow_blank=True, source="_ideas", required=False
+    )
+    associations = serializers.CharField(
+        allow_null=True, allow_blank=True, source="_associations", required=False
+    )
+    colour = serializers.CharField(
+        allow_null=True, allow_blank=True, source="_colour", required=False
+    )
+
+
+    def create(self, validated_data):
+        colour = validated_data.pop("_colour", None)
+        impression = validated_data.pop("_impression", None)
+        associations = validated_data.pop("_associations", None)
+        ideas = validated_data.pop("_ideas", None)
+
+        instance = NewCollectionIngredient.objects.create(**validated_data)
+
+        instance._colour = colour
+        instance._impression = impression
+        instance._associations = associations
+        instance._ideas = ideas
+
+        instance.save()
+        return instance
+
+    
+    class Meta:
+        model = NewCollectionIngredient
+        fields = "__all__"
+
 
 
 class CollectionIngredientSerializer(serializers.ModelSerializer):

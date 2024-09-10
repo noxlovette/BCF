@@ -11,13 +11,13 @@ export const load: PageServerLoad = async ({ cookies }) => {
       throw error(401, "Unauthorized");
     }
 
-    const cacheKey = `collection-${sessionid}`;
-    const value = await redis.get(cacheKey);
-    if (value !== null) {
-      return {
-        collection: JSON.parse(value),
-      };
-    }
+ //   const cacheKey = `collection-${sessionid}`;
+ //   const value = await redis.get(cacheKey);
+ //   if (value !== null) {
+ //     return {
+ //       collection: JSON.parse(value),
+ //     };
+ //   }
 
     const endpoint = `${VITE_API_URL}/collection/new/api/collection/`;
 
@@ -31,16 +31,16 @@ export const load: PageServerLoad = async ({ cookies }) => {
 
     if (!response.ok) {
       if (response.status === 403) {
-        throw error(403, "Forbidden"); // Properly throw the 403 error
+        throw error(403, "Forbidden"); 
       } else {
         throw error(response.status, "Failed to fetch collection data");
       }
     }
 
-    const data: App.IngredientCollection[] = await response.json();
+    const data = await response.json();
 
     // Cache the result
-    await redis.set(cacheKey, JSON.stringify(data), "EX", 1800);
+    // await redis.set(cacheKey, JSON.stringify(data), "EX", 1800);
 
     return {
       collection: data,

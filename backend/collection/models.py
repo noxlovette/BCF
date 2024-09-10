@@ -12,23 +12,23 @@ class NewCollectionIngredient(models.Model):
 
     common_name = models.CharField(max_length=100, verbose_name="Common Name")
     cas = models.CharField(max_length=100, verbose_name="CAS")
-    volatility = models.CharField(max_length=100, verbose_name="Volatility")
-    use = models.TextField(verbose_name="Use")
+    volatility = models.CharField(max_length=100, verbose_name="Volatility", null=True, blank=True)
+    use = models.TextField(verbose_name="Use", null=True, blank=True)
 
     descriptors = models.CharField(verbose_name="Descriptors")
 
-    other_names = models.TextField(verbose_name="Other Names")
+    other_names = models.TextField(verbose_name="Other Names", null=True, blank=True)
     is_restricred = models.BooleanField(default=False, verbose_name="Restricted")
-    origin = models.CharField(max_length=100, verbose_name="Origin")
+    origin = models.CharField(max_length=100, verbose_name="Origin", null=True, blank=True)
 
     amount = models.FloatField(default=0, verbose_name="Amount")
     unit = models.CharField(max_length=50, default="g", verbose_name="Unit")
     is_collection = models.BooleanField(default=False, verbose_name="In Collection")
 
-    encrypted_impression = models.BinaryField(null=True, blank=True, editable=False)
-    encrypted_colour = models.BinaryField(null=True, blank=True, editable=False)
-    encrypted_associations = models.BinaryField(null=True, blank=True, editable=False)
-    encrypted_ideas = models.BinaryField(null=True, blank=True, editable=False)
+    encrypted_impression = models.BinaryField(null=True, blank=True)
+    encrypted_colour = models.BinaryField(null=True, blank=True)
+    encrypted_associations = models.BinaryField(null=True, blank=True)
+    encrypted_ideas = models.BinaryField(null=True, blank=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

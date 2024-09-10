@@ -81,7 +81,7 @@ export const actions = {
     }
 
     try {
-      const response = await fetch(`${VITE_API_URL}/collection/api/collection/`, {
+      const response = await fetch(`${VITE_API_URL}/collection/new/api/collection/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,6 +94,12 @@ export const actions = {
 
   
       if (response.ok) {
+        const cacheKey = `collection-${sessionid}`;
+        const value = await redis.get(cacheKey);
+        if (value !== null) {
+          await redis.del(cacheKey);
+        }
+
         return { success: true };
       } else {
         return { success: false, error: response.error || "An error occurred" };

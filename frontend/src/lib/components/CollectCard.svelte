@@ -7,5 +7,5 @@
 <Card
   header={ingredient.common_name}
   body={ingredient.cas}
-  href={`/collect/${ingredient.uuid}`}
+  href={`/collect/${ingredient.id}`}
 />
