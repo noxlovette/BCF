@@ -10,18 +10,21 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
   const descriptors = url.searchParams.getAll("descriptors") || [];
 
   try {
+    console.log("page", page);
     // Fetch and cache ingredients
     const cacheKeyIngredients = `browse-${page}-${search}-${pageSize}`;
     let ingredients: App.ResponseBrowse;
 
     const cachedIngredients = await redis.get(cacheKeyIngredients);
     if (cachedIngredients) {
+
       ingredients = await JSON.parse(cachedIngredients);
     } else {
       const response = await fetch(
         `${VITE_API_URL}/browse/api/ingredients?page=${page}&search=${search}&page_size=${pageSize}`,
       );
       ingredients = await response.json();
+
       await redis.set(
         cacheKeyIngredients,
         JSON.stringify(ingredients),
@@ -48,7 +51,12 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
       );
     }
 
-    return { ingredients, descriptors };
+
+    return { ingredients, descriptors, urlParams: {
+      page,
+      search,
+      pageSize
+    } };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {

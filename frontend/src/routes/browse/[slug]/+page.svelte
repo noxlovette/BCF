@@ -46,7 +46,7 @@
   <div class=" rounded-lg border-navy-800">
     <div id="top-part" class="flex flex-row items-center p-8 rounded-lg bg-navy-700 text-navy-50 border-b border-navy-800">
       <div id="top-left" class="flex w-3/4 flex-col space-y-6 pr-24">
-        <h1 class="flex w-full text-5xl font-bold tracking-tighter font-space pb-4 border-b-2">
+        <h1 class="flex w-full text-5xl font-bold tracking-tighter font-quicksand pb-4 border-b-2">
           {ingredient.common_name}
         </h1>
         <div>
@@ -55,7 +55,7 @@
       </div>
       </div>
       <div id="top-right" class=" flex-1 flex-col flex">
-        <h2 class="mb-2 min-w-fit text-2xl font-space">{ingredient.cas}</h2>
+        <h2 class="mb-2 min-w-fit text-2xl font-quicksand">{ingredient.cas}</h2>
         <h2 class="lowercase">{volatility} <span class="opacity-60">note</span></h2>
       </div>
       {#if $user.is_authenticated}

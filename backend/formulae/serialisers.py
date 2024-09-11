@@ -1,7 +1,7 @@
 from rest_framework import serializers, generics
 
 from collection.models import RegularCollectionIngredient, CustomCollectionIngredient
-from formulae.models import FormulaIngredient, Formula, Tag
+from formulae.models import FormulaIngredient, Formula, Tag, NewFormulaIngredient, NewFormula
 from main_project.encryption import decrypt_field
 from browse.serialisers import DateTimeSerializer
 
@@ -258,3 +258,81 @@ class FormulaSerializer(serializers.ModelSerializer):
             "solvent",
         ]
         read_only_fields = ["id", "uuid", "created", "updated"]
+
+#NEW
+class NewFormulaIngredientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewFormulaIngredient
+        fields = '__all__'
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class NewFormulaSerializer(serializers.ModelSerializer):
+    ingredients = FormulaIngredientSerializer(many=True)
+    name = serializers.CharField(source="_name")
+    description = serializers.CharField(
+        source="_description", allow_null=True, allow_blank=True
+    )
+    notes = serializers.CharField(source="_notes", allow_null=True, allow_blank=True)
+    solvent = serializers.CharField(allow_null=True, allow_blank=True)
+
+    def update(self, instance, validated_data):
+        instance._name = validated_data.pop("_name", instance._name)
+        instance._description = validated_data.pop(
+            "_description", instance._description
+        )
+        instance._notes = validated_data.pop("_notes", instance._notes)
+        instance.solvent = validated_data.get("solvent", instance.solvent)
+
+        # guarantee some degree of consistency
+        instance.save()
+
+        ingredients_data = validated_data.pop("ingredients", [])
+        for ingredient_data in ingredients_data:
+            formula_ingredient_id = ingredient_data.get("id")
+            if formula_ingredient_id:  # If the id exists, update the instance
+                NewFormulaIngredient.objects.update_or_create(
+                    id=formula_ingredient_id,
+                    defaults={
+                        "amount": ingredient_data.get("amount"),
+                        "formula": instance,
+                        "volatility": ingredient_data.get("volatility"),
+                        "percentage": ingredient_data.get("percentage"),
+                        "common_name": ingredient_data.get("common_name"),
+                        "other_names": ingredient_data.get("other_names")
+                    },
+                )
+            else:  # If id is None or Null, create a new instance
+                NewFormulaIngredient.objects.create(
+                    amount=ingredient_data.get("amount"),
+                    formula=instance,
+                    volatility=ingredient_data.get("volatility"),
+                    percentage=ingredient_data.get("percentage"),
+                    common_name=ingredient_data.get("common_name"),
+                    other_names= ingredient_data.get("other_names")
+                )
+        
+        return instance
+    
+    def create(self, validated_data):
+        ingredients_data = validated_data.pop("ingredients", [])
+
+        name = validated_data.pop("_name", None)
+        description = validated_data.pop("_description", None)
+        notes = validated_data.pop("_notes", None)
+        instance = NewFormula.objects.create(**validated_data)
+
+        instance._name = name
+        instance._description = description
+        instance._notes = notes
+
+        for ingredient_data in ingredients_data:
+            NewFormulaIngredient.objects.create(formula=instance, **ingredient_data)
+
+        instance.save()
+        return instance
+    
+    class Meta:
+        model = NewFormula
+        fields = "__all__"
+        read_only_fields = ["id", "created_at", "updated_at"]

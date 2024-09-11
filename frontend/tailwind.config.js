@@ -8,6 +8,13 @@ export default {
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
         space: ["Space Mono", ...defaultTheme.fontFamily.mono],
+        merriweather: ["Merriweather", ...defaultTheme.fontFamily.serif],
+        spectral: ["Spectral", ...defaultTheme.fontFamily.serif],
+        lora: ["Lora", ...defaultTheme.fontFamily.serif],
+        montserrat: ["Montserrat", ...defaultTheme.fontFamily.sans],
+        montserrat_alt: ["Montserrat Alternates", ...defaultTheme.fontFamily.sans],
+        quicksand: ["Quicksand", ...defaultTheme.fontFamily.sans],
+
       },
       colors: {
         gold: {

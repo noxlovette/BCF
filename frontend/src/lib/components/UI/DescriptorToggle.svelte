@@ -18,7 +18,7 @@
 </script>
 
 <button
-  on:mousedown={toggleFilterMenu}
+  on:mousedown|preventDefault={toggleFilterMenu}
   title="filter by descriptors"
   class="hidden rounded-full border border-gold-400 dark:border-gold-900 bg-gold-700 p-2 text-center text-gold-50 shadow transition-colors hover:bg-white hover:text-gold-700 hover:shadow-lg active:shadow-none md:flex dark:hover:bg-stone-800 dark:hover:text-stone-50"
 >

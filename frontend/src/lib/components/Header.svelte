@@ -56,7 +56,7 @@
 </script>
 
 <header
-  class="group relative z-20 flex w-full flex-col items-center justify-center py-4 font-space"
+  class="group relative z-20 flex w-full flex-col items-center justify-center py-4 font-quicksand"
 >
   <div class="flex w-full max-w-7xl items-center justify-center">
     <a

@@ -34,7 +34,7 @@
 {#if $navigating}
   <div 
   class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-stone-950 bg-opacity-40 backdrop-blur"
-  transition:fade={{duration: 300, delay: 500}}
+  transition:fade={{duration: 300}}
   >
     <div 
     class="relative flex flex-col space-y-2 max-w-[400px]"

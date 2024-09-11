@@ -29,6 +29,8 @@ class Tag(models.Model):
         ordering = ["name"]
 
 
+
+
 class Formula(models.Model):
     """
     This the model of a formula. It is a list of ingredients used in a perfume formula.
@@ -172,3 +174,99 @@ class FormulaIngredient(models.Model):
         verbose_name = "Ingredient in Formula"
         verbose_name_plural = "Ingredients in Formula"
         ordering = ["formula", "collection_ingredient__ingredient__common_name"]
+
+
+
+#NEW FORMULA MODELS
+class NewFormula(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, primary_key=True)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    encrypted_name = models.BinaryField(null=True, blank=True, editable=False)
+    encrypted_description = models.BinaryField(null=True, blank=True, editable=False)
+    encrypted_notes = models.BinaryField(null=True, blank=True, editable=False)
+
+    tags = models.ManyToManyField(Tag, blank=True)
+    solvent = models.CharField(max_length=100, blank=True, null=True, default="Ethanol")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._description = None
+        self._name = None
+        self._notes = None
+
+    def prepare_for_serialization(self):
+        """
+        the encryption-decryption logic repeats the same pattern as the CollectionIngredient model. the plaintext data is
+        stored in temporary attributes, and the encrypted fields are set to the encrypted versions of the plaintext.
+        """
+        self._description = (
+            decrypt_field(self.encrypted_description)
+            if self.encrypted_description
+            else None
+        )
+        self._name = decrypt_field(self.encrypted_name) if self.encrypted_name else None
+        self._notes = (
+            decrypt_field(self.encrypted_notes) if self.encrypted_notes else None
+        )
+
+        return self
+
+    def refresh_from_db(self, *args, **kwargs):
+        self._description = (
+            decrypt_field(self.encrypted_description)
+            if self.encrypted_description
+            else None
+        )
+        self._name = decrypt_field(self.encrypted_name) if self.encrypted_name else None
+        self._notes = (
+            decrypt_field(self.encrypted_notes) if self.encrypted_notes else None
+        )
+
+        super().refresh_from_db(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self._description:
+            self.encrypted_description = encrypt_field(self._description)
+        if self._name:
+            self.encrypted_name = encrypt_field(self._name)
+        if self._notes:
+            self.encrypted_notes = encrypt_field(self._notes)
+
+        # Clear the temporary attributes.
+        self._description = None
+        self._name = None
+        self._notes = None
+
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "User's Formula"
+        verbose_name_plural = "User's Formulas"
+        db_table = "formulas"
+        ordering = ["user", "-updated_at"]
+
+class NewFormulaIngredient(models.Model):
+    formula = models.ForeignKey(
+        NewFormula, on_delete=models.CASCADE, related_name="ingredients"
+    )
+    id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, primary_key=True)
+    common_name = models.CharField(max_length=100, verbose_name="Common Name", default="New Ingredient")
+    other_names = models.TextField(verbose_name="Other Names", null=True, blank=True)
+    amount = models.IntegerField(default=0, verbose_name="Amount")
+    unit = models.CharField(max_length=50, default="g", verbose_name="Unit")
+    volatility = models.CharField(max_length=50, default="Top", verbose_name="Volatility")
+    percentage = models.FloatField(
+        default=10,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        verbose_name="Percentage",
+    )
+
+    class Meta:
+        db_table = "new_formula_ingredients"
+        verbose_name = "New Ingredient in Formula"
+        verbose_name_plural = "New Ingredients in Formula"
+        ordering = ["formula", "volatility"]

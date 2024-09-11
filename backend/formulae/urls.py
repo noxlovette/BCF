@@ -35,4 +35,22 @@ urlpatterns = [
         views.FormulaTagAPI.as_view(),
         name="formula_add_tag_api",
     ),
+
+
+    re_path(
+        r"api/new/formula/(?P<uuid>[a-f0-9\-]+)",
+        views.NewFormulaDetail.as_view(),
+        name="formula_update_api",
+    ),
+    re_path(
+        r"api/new/formula/delete/(?P<uuid>[a-f0-9\-]+)",
+        views.NewFormulaDelete.as_view(),
+        name="formula_update_api",
+    ),
+    path(
+        "api/new/formula/list/", views.NewFormulaList.as_view(), name="formula_list_api"
+    ),
+    path(
+        "api/new/formula/create/", views.NewFormulaCreate.as_view(), name="formula_create_api"
+    ),
 ]

@@ -25,7 +25,7 @@
     },
   );
 
-  let chosenDescriptors:App.Descriptor[];
+  let chosenDescriptors:App.Descriptor[] =[];
   let filteredDescriptors:App.Descriptor[];
   let showFilterMenu = false;
   let searchInput: HTMLInputElement;
@@ -33,11 +33,17 @@
   let filterMenu: HTMLDivElement;
 
   $: {
+    console.log(chosenDescriptors);
     searchDescriptors($secondSearchTerm);
   }
 
   onMount(() => {
     filteredDescriptors = data.descriptors;
+    
+    currentPage.set(parseInt(data.urlParams.page));
+    pageSize.set(parseInt(data.urlParams.pageSize));
+    searchTerm.set(data.urlParams.search);
+
 
     const unsubscribe = urlParams.subscribe(async (url) => {
       await goto(url);
@@ -120,7 +126,7 @@
       <!-- If there are no results, display a message -->
       <p class="m-12 text-5xl">Hm. Try a different search?</p>
     {:else}
-      <div
+    <div
         id="filter"
         class="grid w-full items-center gap-4 mb-12 py-4 border-b-2 border-gold-400 bg-white/20 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 dark:bg-stone-900/20"
         class:hidden={!showFilterMenu}
@@ -149,6 +155,7 @@
           <p>No descriptors found</p>
         {/if}
       </div>
+      
 
       <div
         id="card-holder"

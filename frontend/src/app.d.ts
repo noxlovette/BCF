@@ -28,6 +28,7 @@ declare global {
     interface Descriptor {
       id: number;
       name: string;
+      description: string;
     }
 
     interface IngredientCollection {
@@ -67,10 +68,10 @@ declare global {
     interface FormulaIngredient {
       id: number;
       amount: number;
-      collection_ingredient_id?: number;
-      custom_collection_ingredient_id?: number;
+      common_name: string;
       formula_id: number;
       percentage: number;
+      volatility: string;
     }
 
     interface User {
