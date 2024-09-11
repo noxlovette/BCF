@@ -25,7 +25,7 @@
     <p>Error: {error}</p>
   {:else}
     <div
-      class="flex flex-col items-start rounded-lg bg-white p-4 dark:bg-stone-800"
+      class="flex flex-col items-start rounded bg-white p-4 dark:bg-stone-800"
     >
       <h3 class="font-bold">submitted ingredients</h3>
 

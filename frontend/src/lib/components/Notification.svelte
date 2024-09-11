@@ -20,7 +20,7 @@
 
 {#if $notification.message}
   <div
-    class={`fixed bottom-8 left-1/2 z-50 -translate-x-1/2 transform rounded-lg p-4 text-center text-stone-50 shadow-lg ${$notification.message ? "block" : "hidden"}  ${
+    class={`fixed bottom-8 left-1/2 z-50 -translate-x-1/2 transform rounded p-4 text-center text-stone-50 shadow-lg ${$notification.message ? "block" : "hidden"}  ${
       $notification.type === "error"
         ? "bg-peach-700"
         : $notification.type === "success"

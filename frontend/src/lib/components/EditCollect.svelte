@@ -17,13 +17,13 @@
     </h1>
     <button
           type=submit
-      class="text-center w-[100px] rounded-lg bg-gold-400 border-gold-700 dark:border-gold-900 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:hover:bg-stone-700"
+      class="text-center w-[100px] rounded bg-gold-400 border-gold-700 dark:border-gold-900 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:hover:bg-stone-700"
       >
     Submit
         </button>
 
         <button on:click|preventDefault={() => editing = false}
-      class="text-center w-[100px] rounded-lg bg-gold-400 border-gold-700 dark:border-gold-900 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:hover:bg-stone-700"
+      class="text-center w-[100px] rounded bg-gold-400 border-gold-700 dark:border-gold-900 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:hover:bg-stone-700"
       >
     Cancel
         </button>
@@ -31,7 +31,7 @@
   <input type="hidden" name="id" value="{ingredient.id}" />
   <button
   type=submit
-class="text-center w-[100px] rounded-lg bg-peach-400 border-peach-700 dark:border-peach-900 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-peach-400 dark:hover:bg-stone-700"
+class="text-center w-[100px] rounded bg-peach-400 border-peach-700 dark:border-peach-900 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-peach-400 dark:hover:bg-stone-700"
 >
 Delete
 </button>

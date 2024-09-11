@@ -106,7 +106,7 @@
           </button>
           {#if legalOn}
             <div
-              class="absolute bottom-full right-0 mb-2 flex flex-col space-y-2 rounded-lg bg-stone-50 p-2 shadow-lg dark:bg-stone-800"
+              class="absolute bottom-full right-0 mb-2 flex flex-col space-y-2 rounded bg-stone-50 p-2 shadow-lg dark:bg-stone-800"
               in:fade
             >
               <li>

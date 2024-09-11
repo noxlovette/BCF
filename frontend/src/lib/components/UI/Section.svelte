@@ -13,9 +13,9 @@
   };
 </script>
 
-<section id={href} class="w-full text-pretty rounded-lg">
+<section id={href} class="w-full text-pretty rounded">
   <div
-    class="group flex flex-col rounded-lg bg-white/70 p-4 backdrop-blur-lg transition-all hover:bg-white hover:shadow-lg lg:p-8 dark:bg-stone-900/70 dark:hover:bg-stone-800"
+    class="group flex flex-col rounded bg-white/70 p-4 backdrop-blur-lg transition-all hover:bg-white hover:shadow-lg lg:p-8 dark:bg-stone-900/70 dark:hover:bg-stone-800"
   >
     <a href="/{href}" class="">
       <h2

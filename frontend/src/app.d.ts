@@ -53,12 +53,10 @@ declare global {
     }
 
     interface Formula {
-      id: number;
-      uuid: string;
+      id: string;
       name: string;
       created: string;
       updated: string;
-      created_at: string;
       notes: string;
       description: string;
       solvent: string;
@@ -66,12 +64,14 @@ declare global {
     }
 
     interface FormulaIngredient {
-      id: number;
+      id: string;
       amount: number;
       common_name: string;
       formula_id: number;
       percentage: number;
       volatility: string;
+      unit: string;
+      counterpart?: IngredientCollection;
     }
 
     interface User {

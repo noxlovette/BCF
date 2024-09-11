@@ -8,7 +8,7 @@
       <h1 class="text-6xl">Error {$page.status}: {$page.error.message}</h1>
       <a
         href="https://t.me/noxlovette"
-        class="rounded-lg text-center text-6xl font-bold"
+        class="rounded text-center text-6xl font-bold"
         >Nothing is perfect. Please complain by clicking on this message.</a
       >
     </div>

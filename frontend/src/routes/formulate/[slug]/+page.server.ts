@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
     }
 
     const { slug } = params;
-    let value = await redis.get(`formula-${sessionid}-${slug}`);
+    let value = null // await redis.get(`formula-${sessionid}-${slug}`);
     if (value !== null) {
       return {
         formulae: JSON.parse(value),
@@ -62,13 +62,7 @@ export const actions = {
     const formData = await request.formData();
     const id = formData.get("id");
 
-    let body = {
-      name: formData.get("name"),
-      description: formData.get("description"),
-      ideas: formData.get("ideas"),
-      ingredients: [], //TODO 
-      id: id,
-    };
+    const fullData = formData.get("fullData");
 
     if (!sessionid) {
       throw error(401, "Unauthorized");
@@ -81,22 +75,23 @@ export const actions = {
           "X-CSRFToken": csrfToken,
           Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
         },
-        body: JSON.stringify(body),
+        body: fullData,
         credentials: 'include',
       });
   
+      let errorData = await response.json();
+
       if (response.ok) {
-//TODO make the page RELOAD
         redis.del(`formula-${sessionid}-${id}`);
-      
+        redis.del(`formulas-${sessionid}`);
+        redis.del(`collection-${sessionid}`);
         return { success: true };
       } else {
-
         return { success: false, error: response.error || "An error occurred" };
       }
 
     } catch (err: any) {
-      throw error(500, "Failed to edit the ingredient");
+      throw error(500, "Failed to edit the formula");
     }
   },
   delete: async ({ cookies, request }) => {

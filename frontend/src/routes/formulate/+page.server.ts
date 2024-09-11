@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
       throw error(401, "Unauthorized");
     }
 
-    let value = await redis.get(`formulae-${sessionid}`);
+    let value = await redis.get(`formulas-${sessionid}`);
     if (value !== null) {
       return {
         formulae: JSON.parse(value),
@@ -29,6 +29,8 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
       },
     });
 
+    
+
     if (!response.ok) {
       if (response.status === 403) {
         throw error(403, "Forbidden");
@@ -38,7 +40,7 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
     }
     const formulae: App.Formula[] = await response.json();
     await redis.set(
-      `formulae-${sessionid}`,
+      `formulas-${sessionid}`,
       JSON.stringify(formulae),
       "EX",
       2400,

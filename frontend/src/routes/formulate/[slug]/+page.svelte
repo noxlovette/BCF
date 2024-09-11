@@ -1,38 +1,33 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
   import AppWrap from "$lib/components/AppWrap.svelte";
-import type { PageServerData } from "./$types";
+    import EditFormulate from "$lib/components/EditFormulate.svelte";
+  import type { PageServerData } from "./$types";
 
   export let data: PageServerData;
 
   const formula = data.formula;
+
+  let editing = false;
+  
 </script>
 
 <AppWrap>
-  <h1>
+  <div class="bg-aqua-900 text-aqua-50 p-4 rounded grid grid-cols-4 items-baseline">
+  <h1 class="text-6xl font-quicksand">
     {formula.name}
   </h1>
-  <ul class="space-y-2">
+  <block />
   <p>
     {formula.description}
   </p>
   <p>
     {formula.notes}
   </p>
-</ul>
-  
-  <input type="text" name="name" value={formula.notes} />
-  <form method="post" action="?/update" use:enhance>
-    <input type="hidden" name="id" value={formula.id} />
-    <button type="submit">
-      update
-    </button>
-  </form>
 
-  <form method="post" action="?/delete" use:enhance>
-    <input type="hidden" name="id" value={formula.id} />
-    <button type="submit">
-      delete
-    </button>
-  </form>
+</div>
+
 </AppWrap>
+
+{#if editing}
+<EditFormulate {formula} />
+{/if}

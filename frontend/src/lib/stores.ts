@@ -36,3 +36,12 @@ export const user = writable({
     type: "none",
   });
   
+
+  export const editedFormula = writable({
+    id: "",
+    name: "",
+    description: "",
+    solvent: "",
+    notes: "",
+    ingredients: [],
+  });

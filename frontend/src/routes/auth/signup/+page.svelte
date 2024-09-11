@@ -87,7 +87,7 @@
   >
     <form
       on:submit|preventDefault={handleSignup}
-      class="flex h-[600px] w-[380px] flex-col items-start justify-start rounded-lg bg-white p-8 shadow dark:bg-stone-950"
+      class="flex h-[600px] w-[380px] flex-col items-start justify-start rounded bg-white p-8 shadow dark:bg-stone-950"
       in:fade={{
         duration: 100,
         easing: quintOut,
@@ -99,7 +99,7 @@
 
       <input
         type="text"
-        class="my-2 mt-8 w-full rounded-lg border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
+        class="my-2 mt-8 w-full rounded border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
         placeholder="username"
         required
         bind:value={username}
@@ -108,32 +108,32 @@
       <div id="handle email" class="mb-4 flex items-center justify-center">
         <input
           type="email"
-          class="my-2 mr-auto w-[225] rounded-lg border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
+          class="my-2 mr-auto w-[225] rounded border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
           placeholder="email"
           bind:value={email}
         />
         <span
           class:valid={validEmail}
-          class="ml-4 h-[40px] w-[96px] rounded-lg bg-stone-50 p-2 text-left text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+          class="ml-4 h-[40px] w-[96px] rounded bg-stone-50 p-2 text-left text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
           >valid</span
         >
       </div>
       <div id="handle pass" class="flex w-full items-center justify-center">
         <input
           type="password"
-          class="my-2 mr-auto w-[225] rounded-lg border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
+          class="my-2 mr-auto w-[225] rounded border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
           placeholder="password"
           bind:value={password}
         />
         <span
           class:valid={validCase}
-          class="mx-4 size-[40px] rounded-lg bg-stone-50 p-2 normal-case text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+          class="mx-4 size-[40px] rounded bg-stone-50 p-2 normal-case text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
         >
           aZ
         </span>
         <span
           class:valid={validLength}
-          class="text-baseline size-[40px] rounded-lg bg-stone-50 p-2 text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+          class="text-baseline size-[40px] rounded bg-stone-50 p-2 text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
         >
           8+
         </span>
@@ -141,18 +141,18 @@
       <div class="flex items-center justify-center" id="handle 2nd pass">
         <input
           type="password"
-          class="my-2 mr-auto w-[225] rounded-lg border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
+          class="my-2 mr-auto w-[225] rounded border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
           placeholder="repeat"
           bind:value={confirmPassword}
         />
         <span
           class:valid={validDuplicate}
-          class="mx-4 size-[40px] rotate-90 rounded-lg bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+          class="mx-4 size-[40px] rotate-90 rounded bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
           >||</span
         >
         <span
           class:valid={validSpecial}
-          class="size-[40px] rounded-lg bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+          class="size-[40px] rounded bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
           >&~</span
         >
       </div>
@@ -169,7 +169,7 @@
         <input
           type="checkbox"
           bind:checked={agreeTerms}
-          class="shadow-inline size-4 rounded-lg border-none bg-stone-50 text-aqua-500 ring-2 ring-stone-300/50 transition-all checked:bg-aqua-500 checked:ring-gold-300 hover:scale-110 hover:checked:bg-gold-300 focus:ring-aqua-700 active:scale-90 dark:bg-stone-800"
+          class="shadow-inline size-4 rounded border-none bg-stone-50 text-aqua-500 ring-2 ring-stone-300/50 transition-all checked:bg-aqua-500 checked:ring-gold-300 hover:scale-110 hover:checked:bg-gold-300 focus:ring-aqua-700 active:scale-90 dark:bg-stone-800"
         />
       </div>
       <button

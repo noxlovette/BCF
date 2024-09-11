@@ -78,20 +78,20 @@
 >
   <div
     id="sidebar"
-    class="mb-4 flex flex-col justify-start rounded-lg p-4 text-left drop-shadow transition-all md:mb-0 dark:bg-stone-800"
+    class="mb-4 flex flex-col justify-start rounded p-4 text-left drop-shadow transition-all md:mb-0 dark:bg-stone-800"
   >
     <h2 id="header" class="mb-4 border-b-2 border-stone-400 p-2 tracking-tight">
       {username}
     </h2>
     <ul class="flex flex-col items-start justify-start *:font-bold">
       <button
-        class="rounded-lg p-2 transition-all hover:translate-x-1 hover:bg-gold-400 dark:hover:text-stone-800"
+        class="rounded p-2 transition-all hover:translate-x-1 hover:bg-gold-400 dark:hover:text-stone-800"
         on:mousedown={() => currentPage.set("settings")}
       >
         settings
       </button>
       <button
-        class="rounded-lg p-2 transition-all hover:translate-x-1 hover:bg-gold-400 dark:hover:text-stone-800"
+        class="rounded p-2 transition-all hover:translate-x-1 hover:bg-gold-400 dark:hover:text-stone-800"
         on:mousedown={() => currentPage.set("contributions")}
       >
         contributions
@@ -100,14 +100,14 @@
   </div>
   <div
     id="main-content"
-    class="flex flex-1 flex-row items-center justify-start rounded-lg bg-stone-200 p-8 shadow md:ml-4 dark:bg-stone-700"
+    class="flex flex-1 flex-row items-center justify-start rounded bg-stone-200 p-8 shadow md:ml-4 dark:bg-stone-700"
   >
     {#if $currentPage === "settings"}
       <Settings {email} {username} />
     {:else if $currentPage === "contributions"}
       <Contributions />
     {:else}
-      <div class="m-4 rounded-lg bg-white p-4 shadow dark:bg-stone-800">
+      <div class="m-4 rounded bg-white p-4 shadow dark:bg-stone-800">
         <p class="text-xl font-bold tracking-tight">
           Good <span class="text-gold-400">{$greeting},</span>
           {username}!

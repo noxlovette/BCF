@@ -129,7 +129,7 @@
 
   <div
     id="grid"
-    class="grid grid-cols-1 gap-4 *:w-full *:rounded-lg *:bg-white *:p-4 *:shadow lg:grid-cols-2 xl:grid-cols-3 xl:gap-8 *:dark:bg-stone-800/80"
+    class="grid grid-cols-1 gap-4 *:w-full *:rounded *:bg-white *:p-4 *:shadow lg:grid-cols-2 xl:grid-cols-3 xl:gap-8 *:dark:bg-stone-800/80"
   >
     <div id="account settings" class="flex flex-col">
       <h2 class="mb-8 font-bold">account settings</h2>
@@ -137,14 +137,14 @@
       <input
         type="password"
         bind:value={oldPassword}
-        class="flex w-full rounded-lg border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 focus:ring-gold-700/70 dark:bg-stone-950/20"
+        class="flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 focus:ring-gold-700/70 dark:bg-stone-950/20"
         placeholder="old password"
       />
       {#if oldPassword}
         <input
           type="password"
           bind:value={newPassword}
-          class="flex w-full rounded-lg border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 focus:ring-gold-700/70 dark:bg-stone-950/20"
+          class="flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 focus:ring-gold-700/70 dark:bg-stone-950/20"
           placeholder="new password"
         />
 
@@ -152,19 +152,19 @@
           <div>
             <span
               class:valid={validCase}
-              class="rounded-lg p-1 normal-case text-grapefruit-400/80"
+              class="rounded p-1 normal-case text-grapefruit-400/80"
             >
               a..Z
             </span>
             <span
               class:valid={validLength}
-              class="rounded-lg p-1 text-grapefruit-400/80"
+              class="rounded p-1 text-grapefruit-400/80"
             >
               8+
             </span>
             <span
               class:valid={validSpecial}
-              class="rounded-lg p-1 text-grapefruit-400/80">~&#</span
+              class="rounded p-1 text-grapefruit-400/80">~&#</span
             >
           </div>
         {/if}
@@ -172,11 +172,11 @@
         <input
           type="password"
           bind:value={confirmPassword}
-          class="flex w-full rounded-lg border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 focus:ring-gold-700/70 dark:bg-stone-950/20"
+          class="flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 focus:ring-gold-700/70 dark:bg-stone-950/20"
           placeholder="confirm password"
         />
         {#if confirmPassword}
-          <span class:valid={validDuplicate} class="m-4 rounded-lg p-1"
+          <span class:valid={validDuplicate} class="m-4 rounded p-1"
             >match</span
           >
         {/if}
@@ -194,7 +194,7 @@
       <input
         type="email"
         bind:value={email}
-        class="flex w-full rounded-lg border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 focus:ring-gold-700/70 dark:bg-stone-950/20"
+        class="flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 focus:ring-gold-700/70 dark:bg-stone-950/20"
         placeholder="new email"
       />
 
@@ -210,7 +210,7 @@
       <input
         type="text"
         bind:value={username}
-        class="flex w-full rounded-lg border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 focus:ring-gold-700/70 dark:bg-stone-950/20"
+        class="flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 focus:ring-gold-700/70 dark:bg-stone-950/20"
         placeholder="new username"
       />
       <h3 class="mt-4 font-normal">2FA</h3>
@@ -220,7 +220,7 @@
 
         {#if deleteWarning}
           <div
-            class="flex flex-col items-center rounded-lg bg-aqua-600/10 p-2 *:transition-all"
+            class="flex flex-col items-center rounded bg-aqua-600/10 p-2 *:transition-all"
           >
             <h3 class="m-4 font-normal">all i am offering is the truth</h3>
             <button
@@ -234,7 +234,7 @@
           </div>
         {:else}
           <button
-            class="invisible rounded-lg bg-stone-400 p-2 transition-all group-hover:visible"
+            class="invisible rounded bg-stone-400 p-2 transition-all group-hover:visible"
             on:mousedown={toggleWarningDelete}>erase me</button
           >
         {/if}

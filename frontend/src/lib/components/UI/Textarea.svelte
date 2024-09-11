@@ -16,7 +16,7 @@
 	name={name.toLowerCase().replace(/\s+/g, '-')}
     rows="6"
 	class="
-    rounded-lg border  focus:border-gold-400  border-gold-400 dark:border-gold-900 focus:ring-2 focus:ring-gold-400/70 shadow-sm  dark:bg-stone-800 dark:focus:border-gold-400 dark:focus:ring-gold-400/70
+    rounded border  focus:border-gold-400  border-gold-400 dark:border-gold-900 focus:ring-2 focus:ring-gold-400/70 shadow-sm  dark:bg-stone-800 dark:focus:border-gold-400 dark:focus:ring-gold-400/70
 		"
 	bind:value
 />

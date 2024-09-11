@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from rest_framework.exceptions import PermissionDenied
 from .models import Ingredient, SuggestedIngredient, Descriptor
 from rest_framework.views import APIView
@@ -67,8 +66,6 @@ class IngredientDetailView(APIView):
             
             
             
-
-
 class CustomPageNumberPagination(PageNumberPagination):
     """
     defines a custom pagination class that returns the current page number and the total number of pages in the response

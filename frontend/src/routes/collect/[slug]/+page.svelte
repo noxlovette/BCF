@@ -25,7 +25,7 @@
 <MetaData title="{ingredient.common_name}" />
 
 <AppWrap class="2xl:px-24 select-text caret-grapefruit-800 selection:bg-grapefruit-100 selection:text-grapefruit-800">
-  <div class=" rounded-lg border-grapefruit-800">
+  <div class=" rounded border-grapefruit-800">
     <div id="top-part" class="flex flex-row items-center p-8 rounded-t-lg bg-grapefruit-700 text-grapefruit-50 border-b border-grapefruit-800">
       <div id="top-left" class="flex w-3/4 flex-col space-y-2 pr-24">
         <h1 class="flex w-full text-5xl font-bold tracking-tighter font-quicksand">
@@ -37,7 +37,7 @@
         <h2 class="lowercase">{volatility} <span class="opacity-60">note</span></h2>
       </div>
       {#if $user.is_authenticated}
-      <div class="flex space-x-2 items-center justify-center rounded-lg flex-1">
+      <div class="flex space-x-2 items-center justify-center rounded flex-1">
         <RoundButton on:click={() => editing = !editing}>
           <SuggestionIcon />
         </RoundButton>

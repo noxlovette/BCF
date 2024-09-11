@@ -33,7 +33,7 @@ export let ingredient: App.IngredientBrowse;
     <div class="col-span-2 flex justify-center p-4">
       <button
       type=submit
-  class="text-center w-[100px] rounded-lg bg-gold-400 border-gold-700 dark:border-gold-900 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:hover:bg-stone-700"
+  class="text-center w-[100px] rounded bg-gold-400 border-gold-700 dark:border-gold-900 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:hover:bg-stone-700"
   >
 Submit
     </button>

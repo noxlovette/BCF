@@ -40,7 +40,7 @@
       action="?/login"
       use:enhance={() => handleLoginResult}
       on:submit|preventDefault
-      class="flex h-[475px] w-[300px] flex-col items-start justify-start rounded-lg bg-white p-8 shadow dark:bg-stone-950"
+      class="flex h-[475px] w-[300px] flex-col items-start justify-start rounded bg-white p-8 shadow dark:bg-stone-950"
       in:fade={{
         duration: 100,
         easing: quintOut,
@@ -54,7 +54,7 @@
         id="username-field"
         type="text"
         name="username"
-        class="my-4 w-full rounded-lg border-none bg-stone-50 p-2 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
+        class="my-4 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
         placeholder="username"
         bind:value={username}
         required
@@ -63,7 +63,7 @@
         id="password-field"
         type="password"
         name="password"
-        class="my-2 w-full rounded-lg border-none bg-stone-50 p-2 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
+        class="my-2 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
         placeholder="password"
         bind:value={password}
         required
