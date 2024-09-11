@@ -10,9 +10,6 @@
   export let data: PageServerData;
   let editing = false;
 
-
-  console.log(data);
-
   const ingredient = data.ingredient;
 
   let volatility = ingredient.volatility || 'unknown';
@@ -83,7 +80,7 @@
   </div>
 
   {#if editing}
-  <EditCollect ingredient={ingredient} />
+  <EditCollect ingredient={ingredient} bind:editing />
   {/if}
 
 </AppWrap>

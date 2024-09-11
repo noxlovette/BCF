@@ -1,6 +1,7 @@
 import redis from "$lib/redisClient";
-import { error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
+import { invalidate } from "$app/navigation";
 
 export const load: PageServerLoad = async ({ cookies }) => {
   try {
@@ -47,7 +48,6 @@ export const load: PageServerLoad = async ({ cookies }) => {
     };
   } catch (err: any) {
     // Ensure all thrown errors are caught
-    console.log(err);
     if (err.status) {
       throw error(err.status, err.body);
     }
@@ -65,7 +65,6 @@ export const actions = {
       throw error(401, "Unauthorized");
     }
 
-    try {
       const response = await fetch(`${VITE_API_URL}/collection/new/api/ingredient/create/`, {
         method: "POST",
         headers: {
@@ -76,17 +75,26 @@ export const actions = {
         credentials: 'include',
       });
 
+
+
       if (response.ok) {
       redis.del(`collection-${sessionid}`);
-        return { success: true };
+      const data = await response.json();
+      redirect(301, data.url);
 } else {
   const errorData = await response.json();
-  console.log("Response Error Data:", errorData);
-        return { success: false, error: response.error || "An error occurred" };
-      }
 
-    } catch (err: any) {
-      throw error(500, "Failed to create ingredient");
+        return { success: false, error: response.error || "An error occurred" };
+      }    
+  },
+  reset: async ({ cookies }) => {
+    const sessionid = cookies.get("sessionid");
+
+    if (!sessionid) {
+      throw error(401, "Unauthorized");
     }
+
+    redis.del(`collection-${sessionid}`);
+    redirect(301, "/collect");
   }
 } satisfies Actions;

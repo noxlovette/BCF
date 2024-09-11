@@ -49,12 +49,6 @@
     handleSearchCollection();
   }
 
-  async function reset() {
-    await invalidateAll();
-    filteredCollection = collection;
-    updateUrl();
-  }
-
   async function updatePageSize() {
     currentPage.set(1);
     updateUrl();
@@ -102,11 +96,14 @@
     
     <PerPage on:updatePageSize={updatePageSize} />
     <form 
-    method="post" action="?/create" use:enhance={() => notification.set({ message: 'Added to your collection', type: 'success' })}
+    method="post" action="?/create" use:enhance={() => notification.set({ message: 'New Ingredient Created', type: 'success' })}
   >
     <CreateButton on:create />
   </form>
-    <ResetButton on:reset={reset} />
+
+  <form method="post" action="?/reset">
+        <ResetButton />
+    </form>
 
 
     <Pagination

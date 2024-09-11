@@ -41,7 +41,7 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
     } else {
       // If the photo is not cached, fetch it from the Unsplash API
       const unsplashURL = getUnsplashURL(query);
-      console.log("Unsplash URL:", unsplashURL);
+
 
       const unsplashResponse = await fetch(unsplashURL);
 
@@ -52,7 +52,7 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
 
       // Extract JSON data from the Unsplash response
       photo = await unsplashResponse.json();
-      console.log("Unsplash response data:", photo);
+
 
       // Cache the fetched Unsplash photo data in Redis
       await redis.set(`${query}-photo`, JSON.stringify(photo), "EX", 3600);
@@ -145,18 +145,14 @@ export const actions = {
         credentials: 'include',
       });
 
-      console.log("Response:", response);
   
       if (response.ok) {
-        console.log("Successfully suggested a change");
         return { success: true };
       } else {
-        console.log("Failed");
         return { success: false, error: response.error || "An error occurred" };
       }
 
     } catch (err: any) {
-      console.error("Error in add action:", err);
       throw error(500, "Failed to suggest a change");
     }
   },

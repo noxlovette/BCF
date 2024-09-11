@@ -1,5 +1,5 @@
 import redis from "$lib/redisClient";
-import { error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import type { Actions } from "./$types";
 
@@ -85,6 +85,7 @@ export const actions = {
       if (response.ok) {
 //TODO make the page RELOAD
         redis.del(`ingredient-${sessionid}-${id}`);
+      
         return { success: true };
       } else {
 
@@ -93,6 +94,31 @@ export const actions = {
 
     } catch (err: any) {
       throw error(500, "Failed to edit the ingredient");
+    }
+  },
+  delete: async ({ cookies, request }) => {
+    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    const sessionid = cookies.get("sessionid");
+    const csrfToken = cookies.get("csrftoken");
+    const formData = await request.formData();
+    const id = formData.get("id");
+
+    const response = await fetch(`${VITE_API_URL}/collection/new/api/ingredient/delete/${id}/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrfToken,
+        Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+      },
+      credentials: 'include',
+    });
+
+    if (response.ok) {
+      redis.del(`ingredient-${sessionid}-${id}`);
+      redis.del(`collection-${sessionid}`);
+      redirect(301, "/collect");
+    } else {
+      throw error(400, "Failed to delete the ingredient");
     }
   }
   

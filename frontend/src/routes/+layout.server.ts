@@ -2,7 +2,7 @@
 
 import type { LayoutServerLoad } from "./$types";
 
-export const load: LayoutServerLoad = async ({ cookies, fetch }) => {
+export const load: LayoutServerLoad = async ({ cookies, fetch, depends }) => {
   const VITE_API_URL = import.meta.env.VITE_API_URL;
   const sessionid = cookies.get("sessionid");
   const endpoint = `${VITE_API_URL}/api/check-session/`;
@@ -17,5 +17,6 @@ export const load: LayoutServerLoad = async ({ cookies, fetch }) => {
   const user: App.User = await response.json();
   cookies.set("csrftoken", user.csrfToken, { path: "/" });
 
+  depends('app:user:login')
   return { user };
 };

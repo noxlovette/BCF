@@ -46,5 +46,9 @@ urlpatterns = [
     path(
         "new/api/ingredient/create/",
         views.NewIngredientCreateView.as_view(),
-    )
+    ),
+    re_path(
+        r"^new/api/ingredient/delete/(?P<pk>[0-9a-f-]+)/$",
+        views.NewIngredientDeleteView.as_view(),
+    ),
 ]

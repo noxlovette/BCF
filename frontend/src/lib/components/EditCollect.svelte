@@ -5,6 +5,8 @@
         import Textarea from "./UI/Textarea.svelte";
     
     export let ingredient: App.IngredientCollection;
+
+    export let editing:boolean;
     
     </script>
     <form class="my-6 space-y-8" method="POST" action="?/update" use:enhance= {()=> notification.set({message:"Ingredient sent", type:"success"})}
@@ -19,6 +21,22 @@
       >
     Submit
         </button>
+
+        <button on:click|preventDefault={() => editing = false}
+      class="text-center w-[100px] rounded-lg bg-gold-400 border-gold-700 dark:border-gold-900 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:hover:bg-stone-700"
+      >
+    Cancel
+        </button>
+<form method="POST" action="?/delete" use:enhance={()=> notification.set({message: `Deleted ${ingredient.common_name}`, type:"success"})}>
+  <input type="hidden" name="id" value="{ingredient.id}" />
+  <button
+  type=submit
+class="text-center w-[100px] rounded-lg bg-peach-400 border-peach-700 dark:border-peach-900 p-2 text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-peach-400 dark:hover:bg-stone-700"
+>
+Delete
+</button>
+</form>
+
       </div>
     <div  class="grid grid-cols-3 gap-4 items-center">
           <Input type="text" name="common_name" value="{ingredient.common_name}" label="Common Name" />

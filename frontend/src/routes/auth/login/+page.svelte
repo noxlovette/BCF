@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
+  import { goto, invalidate } from "$app/navigation";
   import { enhance } from "$app/forms";
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
@@ -15,6 +15,7 @@
       const { user } = result.data;
 
       setUser(user);
+      invalidate('app:user:login');
       notification.set({ message: "Welcome back!", type: "success" });
       await goto("/collect/");
     } else {

@@ -19,8 +19,6 @@
 
   const href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
 
-  console.log(unsplashData);
-
   let volatility = ingredient.volatility || 'unknown';
   let useMessage = ingredient.use || 'Do you know how to use this ingredient? Submit a suggestion!';
   let similarIngredients = Array.isArray(ingredient.similar_ingredients) && ingredient.similar_ingredients.length > 0
