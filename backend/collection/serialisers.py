@@ -33,7 +33,7 @@ class NewCollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewCollectionIngredient
         fields = "__all__"
-        read_only_fields = ('user',)  # Make user read-only
+        read_only_fields = ('user') 
 
 
 

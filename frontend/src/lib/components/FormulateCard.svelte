@@ -7,5 +7,5 @@
 <Card
   header={formula.name}
   body={formula.description}
-  href={`/formulate/${formula.uuid}`}
+  href={`/formulate/${formula.id}`}
 />

@@ -5,6 +5,8 @@
 
     import AppWrap from "$lib/components/AppWrap.svelte";
     import SearchBar from "$lib/components/SearchBar.svelte";
+    import { enhance } from "$app/forms";
+    import { notification } from "$lib/stores";
 
   export let data: PageServerData;
 
@@ -14,7 +16,13 @@
 <MetaData title="BCF | Formulate" />
 
 <AppWrap>
-  <SearchBar />
+  <SearchBar>
+<form method="post" action="?/create" use:enhance={() => notification.set({message:"Formula Created", type:"Success"})}>
+  <button type="submit">
+    add new
+  </button>
+</form>
+    </SearchBar>
   <div class="flex h-full items-center justify-center md:hidden">
     <h1 class="text-xl font-bold">this page is desktop only :(</h1>
   </div>

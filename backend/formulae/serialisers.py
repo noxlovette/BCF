@@ -320,7 +320,10 @@ class NewFormulaSerializer(serializers.ModelSerializer):
         name = validated_data.pop("_name", None)
         description = validated_data.pop("_description", None)
         notes = validated_data.pop("_notes", None)
-        instance = NewFormula.objects.create(**validated_data)
+
+        request = self.context.get('request')
+
+        instance = NewFormula.objects.create(user=request.user, **validated_data)
 
         instance._name = name
         instance._description = description
@@ -335,4 +338,4 @@ class NewFormulaSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewFormula
         fields = "__all__"
-        read_only_fields = ["id", "created_at", "updated_at"]
+        read_only_fields = ["id", "user", "created_at", "updated_at"]

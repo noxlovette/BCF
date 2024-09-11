@@ -10,6 +10,7 @@ from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView
 from rest_framework.response import Response
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 
 
 class FormulaCreateAPI(generics.CreateAPIView):
@@ -181,16 +182,21 @@ class FormulaTagAPI(generics.RetrieveUpdateAPIView):
 
 
 class NewFormulaCreate(generics.CreateAPIView):
-    """
-    CREATE A NEW FORMULA. for more info see the serialiser.
-    """
     serializer_class = NewFormulaSerializer
     permission_classes = [IsAuthenticated]
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+    
+    def create(self, request, *args, **kwargs):
+        # Use the default create behavior from DRF
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        formula = serializer.save()
 
+        return Response({"id": formula.id, "url": f"/formulate/{formula.id}"}, status=status.HTTP_201_CREATED)
 
-    def perform_create(self, serializer):
-        user = self.request.user
-        serializer.save(user=user, created_at=timezone.now(), updated_at=timezone.now())
 
 class NewFormulaList(ListAPIView):
     """

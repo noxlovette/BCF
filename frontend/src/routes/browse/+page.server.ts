@@ -10,8 +10,6 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
   const descriptors = url.searchParams.getAll("descriptors") || [];
 
   try {
-    console.log("page", page);
-    // Fetch and cache ingredients
     const cacheKeyIngredients = `browse-${page}-${search}-${pageSize}`;
     let ingredients: App.ResponseBrowse;
 

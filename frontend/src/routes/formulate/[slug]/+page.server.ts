@@ -17,7 +17,9 @@ export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
         formulae: JSON.parse(value),
       };
     }
-    const endpoint = `${VITE_API_URL}/formulae/api/formula/${slug}/`;
+    const endpoint = `${VITE_API_URL}/formulae/api/new/formula/${slug}/`;
+
+    
 
     const response = await fetch(endpoint, {
       method: "GET",

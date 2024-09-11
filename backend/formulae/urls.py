@@ -4,9 +4,7 @@ from . import views
 app_name = "formulae"
 
 urlpatterns = [
-    path(
-        "api/formula/new/", views.FormulaCreateAPI.as_view(), name="formula_create_api"
-    ),
+    
     path(
         "api/formula/list/", views.FormulaListViewAPI.as_view(), name="formula_list_api"
     ),
@@ -38,12 +36,12 @@ urlpatterns = [
 
 
     re_path(
-        r"api/new/formula/(?P<uuid>[a-f0-9\-]+)",
+        r"api/new/formula/(?P<pk>[a-f0-9\-]+)",
         views.NewFormulaDetail.as_view(),
         name="formula_update_api",
     ),
     re_path(
-        r"api/new/formula/delete/(?P<uuid>[a-f0-9\-]+)",
+        r"api/new/formula/delete/(?P<pk>[a-f0-9\-]+)",
         views.NewFormulaDelete.as_view(),
         name="formula_update_api",
     ),
@@ -51,6 +49,6 @@ urlpatterns = [
         "api/new/formula/list/", views.NewFormulaList.as_view(), name="formula_list_api"
     ),
     path(
-        "api/new/formula/create/", views.NewFormulaCreate.as_view(), name="formula_create_api"
+        "api/formula/new/", views.NewFormulaCreate.as_view(), name="formula_create_api"
     ),
 ]

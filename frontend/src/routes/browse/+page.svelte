@@ -33,7 +33,6 @@
   let filterMenu: HTMLDivElement;
 
   $: {
-    console.log(chosenDescriptors);
     searchDescriptors($secondSearchTerm);
   }
 
