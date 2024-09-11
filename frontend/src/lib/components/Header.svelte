@@ -57,7 +57,7 @@
 </script>
 
 <header
-  class="group relative z-20 flex w-full flex-col items-center justify-center py-4 font-quicksand"
+  class="group relative z-20 flex w-full flex-col items-center justify-center py-4 font-quicksand font-medium my-2"
 >
   <div class="flex w-full max-w-7xl items-center justify-center">
     <a
@@ -72,15 +72,15 @@
         alt="Go to home page"
       />
     </a>
-    <div class="ml-2 size-full flex-col justify-center">
+    <div class="ml-8 size-full flex-col justify-center">
       <div
         id="wider-part"
-        class="flex h-2/3 flex-grow border-b border-gold-900"
+        class="flex h-2/3 flex-grow  border-b-2 xl:border-b-4 border-gold-900"
       >
         {#if currentPage}
           <p
             on:mouseenter={toggleDropdown}
-            class="m-2 text-3xl font-light tracking-tighter"
+            class="m-2 text-3xl tracking-tighter"
           >
             {currentPage}
           </p>
