@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
       throw error(401, "Unauthorized");
     }
 
-    let value = null // await redis.get(`formulae-${sessionid}`);
+    let value = await redis.get(`formulae-${sessionid}`);
     if (value !== null) {
       return {
         formulae: JSON.parse(value),

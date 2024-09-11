@@ -4,6 +4,7 @@
   import { createEventDispatcher } from "svelte";
   import { currentPage, searchTerm } from "$lib/stores";
     import RoundButton from "./RoundButton.svelte";
+    import { RotateCcw } from "lucide-svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -21,6 +22,6 @@
 </script>
 
 <RoundButton on:click={reset}>
-  <ResetIcon />
+  <RotateCcw size="26" />
 </RoundButton>
 

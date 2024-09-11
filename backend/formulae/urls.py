@@ -14,11 +14,6 @@ urlpatterns = [
         name="formula_detail",
     ),
     path(
-        "api/formula/<int:pk>/delete/",
-        views.FormulaDeleteAPIView.as_view(),
-        name="formula_delete_api",
-    ),
-    path(
         "api/ingredient/<int:pk>/delete/",
         views.FormulaIngredientDeleteAPIView.as_view(),
         name="ingredient_delete_api",
@@ -41,7 +36,7 @@ urlpatterns = [
         name="formula_update_api",
     ),
     re_path(
-        r"api/new/formula/delete/(?P<pk>[a-f0-9\-]+)",
+        r"api/formula/delete/(?P<pk>[a-f0-9\-]+)/",
         views.NewFormulaDelete.as_view(),
         name="formula_update_api",
     ),

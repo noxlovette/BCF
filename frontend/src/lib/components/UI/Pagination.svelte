@@ -1,6 +1,7 @@
 <script lang="ts">
   import ArrowLeftIcon from "$lib/icons/ArrowLeftIcon.svelte";
   import ArrowRightIcon from "$lib/icons/ArrowRightIcon.svelte";
+    import { ArrowLeft, ArrowRight } from "lucide-svelte";
   import { createEventDispatcher } from "svelte";
 
   const dispatcher = createEventDispatcher();
@@ -21,10 +22,10 @@
       "
 >
   <button id="prevPage" on:click|preventDefault={() => handleClick(-1)} class="p-1 dark:hover:bg-gold-700 hover:bg-gold-400 rounded-full transition-colors">
-    <ArrowLeftIcon />
+    <ArrowLeft />
   </button>
 
   <button id="nextPage" on:click|preventDefault={() => handleClick(1)} class="p-1 dark:hover:bg-gold-700 hover:bg-gold-400 rounded-full transition-colors">
-    <ArrowRightIcon />
+    <ArrowRight />
   </button>
 </div>
