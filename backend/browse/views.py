@@ -8,10 +8,18 @@ from .serialisers import (
     IngredientSerialiser,
     SuggestedIngredientSerialiser,
     DescriptorSerialiser,
+    IngredientListSerialiser,
 )
 from rest_framework import generics
 
 
+class TotalBrowseView(generics.ListAPIView):
+    """
+    The view for the total browse page, showing all ingredients in the database
+    """
+
+    queryset = Ingredient.objects.all().order_by("common_name")
+    serializer_class = IngredientListSerialiser
 class BrowseView(APIView):
     """
     the basic view for the browse page, search functionality in-built

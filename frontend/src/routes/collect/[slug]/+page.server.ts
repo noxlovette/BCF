@@ -1,9 +1,13 @@
 import redis from "$lib/redisClient";
 import { error, redirect } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
-import type { Actions } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ fetch, params, cookies, depends }) => {
+export const load: PageServerLoad = async ({
+  fetch,
+  params,
+  cookies,
+  depends,
+}) => {
   const VITE_API_URL = import.meta.env.VITE_API_URL;
   const sessionid = cookies.get("sessionid");
   depends("collect:update");
@@ -13,12 +17,12 @@ export const load: PageServerLoad = async ({ fetch, params, cookies, depends }) 
 
   const { slug } = params;
   try {
-let value = await redis.get(`ingredient-${sessionid}-${slug}`);
-if (value !== null) {
- return {
-   ingredient: JSON.parse(value),
- };
-}
+    let value = await redis.get(`ingredient-${sessionid}-${slug}`);
+    if (value !== null) {
+      return {
+        ingredient: JSON.parse(value),
+      };
+    }
     const endpoint = `${VITE_API_URL}/collection/new/api/ingredient/${slug}/`;
 
     const response = await fetch(endpoint, {
@@ -72,25 +76,26 @@ export const actions = {
       throw error(401, "Unauthorized");
     }
     try {
-      const response = await fetch(`${VITE_API_URL}/collection/new/api/ingredient/update/${id}/`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-          Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+      const response = await fetch(
+        `${VITE_API_URL}/collection/new/api/ingredient/update/${id}/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+            Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+          },
+          body: JSON.stringify(body),
+          credentials: "include",
         },
-        body: JSON.stringify(body),
-        credentials: 'include',
-      });
-  
+      );
+
       if (response.ok) {
         redis.del(`ingredient-${sessionid}-${id}`);
         return { success: true };
       } else {
-
         return { success: false, error: response.error || "An error occurred" };
       }
-
     } catch (err: any) {
       throw error(500, "Failed to edit the ingredient");
     }
@@ -102,15 +107,18 @@ export const actions = {
     const formData = await request.formData();
     const id = formData.get("id");
 
-    const response = await fetch(`${VITE_API_URL}/collection/new/api/ingredient/delete/${id}/`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrfToken,
-        Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+    const response = await fetch(
+      `${VITE_API_URL}/collection/new/api/ingredient/delete/${id}/`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken,
+          Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+        },
+        credentials: "include",
       },
-      credentials: 'include',
-    });
+    );
 
     if (response.ok) {
       redis.del(`ingredient-${sessionid}-${id}`);
@@ -119,6 +127,5 @@ export const actions = {
     } else {
       throw error(400, "Failed to delete the ingredient");
     }
-  }
-  
+  },
 } satisfies Actions;

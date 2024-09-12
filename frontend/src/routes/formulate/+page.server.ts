@@ -1,7 +1,6 @@
 import redis from "$lib/redisClient";
 import { error, redirect } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
-import type { Actions } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, cookies }) => {
   try {
@@ -28,8 +27,6 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
         Cookie: `sessionid=${sessionid}`,
       },
     });
-
-    
 
     if (!response.ok) {
       if (response.status === 403) {
@@ -68,32 +65,31 @@ export const actions = {
       solvent: null,
     };
 
-
     if (!sessionid) {
       throw error(401, "Unauthorized");
     }
 
-      const response = await fetch(`${VITE_API_URL}/formulae/api/formula/new/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-          Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
-        },
-        body: JSON.stringify(body),
-        credentials: 'include',
-      });
+    const response = await fetch(`${VITE_API_URL}/formulae/api/formula/new/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrfToken,
+        Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+      },
+      body: JSON.stringify(body),
+      credentials: "include",
+    });
 
-      if (response.ok) {
+    if (response.ok) {
       const data = await response.json();
       redis.del(`formulae-${sessionid}`);
       redirect(301, data.url);
-} else {
-  const errorData = await response.json();
-        console.error('Server response:', response.status, errorData);
+    } else {
+      const errorData = await response.json();
+      console.error("Server response:", response.status, errorData);
 
-        return { success: false, error: response.error || "An error occurred" };
-      }    
+      return { success: false, error: response.error || "An error occurred" };
+    }
   },
   reset: async ({ cookies }) => {
     const sessionid = cookies.get("sessionid");
@@ -104,5 +100,5 @@ export const actions = {
 
     redis.del(`collection-${sessionid}`);
     redirect(301, "/collect");
-  }
+  },
 } satisfies Actions;

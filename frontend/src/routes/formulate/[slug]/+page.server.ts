@@ -1,7 +1,6 @@
 import redis from "$lib/redisClient";
-import { error,redirect } from "@sveltejs/kit";
-import type { PageServerLoad, Actions } from "./$types";
-import { invalidate } from "$app/navigation";
+import { error, redirect } from "@sveltejs/kit";
+import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
   try {
@@ -12,15 +11,13 @@ export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
     }
 
     const { slug } = params;
-    let value = null // await redis.get(`formula-${sessionid}-${slug}`);
+    let value = null; // await redis.get(`formula-${sessionid}-${slug}`);
     if (value !== null) {
       return {
         formulae: JSON.parse(value),
       };
     }
     const endpoint = `${VITE_API_URL}/formulae/api/new/formula/${slug}/`;
-
-    
 
     const response = await fetch(endpoint, {
       method: "GET",
@@ -69,17 +66,20 @@ export const actions = {
       throw error(401, "Unauthorized");
     }
     try {
-      const response = await fetch(`${VITE_API_URL}/formulae/api/new/formula/${id}/`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-          Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+      const response = await fetch(
+        `${VITE_API_URL}/formulae/api/new/formula/${id}/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+            Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+          },
+          body: fullData,
+          credentials: "include",
         },
-        body: fullData,
-        credentials: 'include',
-      });
-  
+      );
+
       let errorData = await response.json();
 
       if (response.ok) {
@@ -90,7 +90,6 @@ export const actions = {
       } else {
         return { success: false, error: response.error || "An error occurred" };
       }
-
     } catch (err: any) {
       throw error(500, "Failed to edit the formula");
     }
@@ -102,15 +101,18 @@ export const actions = {
     const formData = await request.formData();
     const id = formData.get("id");
 
-    const response = await fetch(`${VITE_API_URL}/formulae/api/formula/delete/${id}/`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrfToken,
-        Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+    const response = await fetch(
+      `${VITE_API_URL}/formulae/api/formula/delete/${id}/`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken,
+          Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+        },
+        credentials: "include",
       },
-      credentials: 'include',
-    });
+    );
 
     if (response.ok) {
       redis.del(`formula-${sessionid}-${id}`);
@@ -119,6 +121,5 @@ export const actions = {
     } else {
       throw error(400, "Failed to delete the formula");
     }
-  }
-  
+  },
 } satisfies Actions;

@@ -1,16 +1,19 @@
 <script lang="ts">
-import { getContext } from "svelte";
-export let text:string = 'Hello World!';
-export let value:any;
+  import { getContext } from "svelte";
+  export let text: string = "Hello World!";
+  export let value: any;
 
-const editing = getContext("editing");
-
-
+  const editing = getContext("editing");
 </script>
+
 {#if $editing}
-  <textarea rows="10" bind:value={value} class="dark:bg-stone-800 resize-none w-full bg-transparent font-medium xl:text-2xl focus:ring-0 p-0 border-none xl:text-2xlring-0" />
+  <textarea
+    rows="10"
+    bind:value
+    class="xl:text-2xlring-0 w-full resize-none border-none bg-transparent p-0 font-medium focus:ring-0 xl:text-2xl dark:bg-stone-800"
+  />
 {:else}
-  <p class="{$$props.class} font-medium xl:text-2xl">
+  <p class={$$props.class}>
     {text}
   </p>
 {/if}

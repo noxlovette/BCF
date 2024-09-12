@@ -1,7 +1,6 @@
 import redis from "$lib/redisClient";
 import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { invalidate } from "$app/navigation";
 
 export const load: PageServerLoad = async ({ cookies }) => {
   try {
@@ -65,27 +64,28 @@ export const actions = {
       throw error(401, "Unauthorized");
     }
 
-      const response = await fetch(`${VITE_API_URL}/collection/new/api/ingredient/create/`, {
+    const response = await fetch(
+      `${VITE_API_URL}/collection/new/api/ingredient/create/`,
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-CSRFToken": csrfToken,
           Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
         },
-        credentials: 'include',
-      });
+        credentials: "include",
+      },
+    );
 
-
-
-      if (response.ok) {
+    if (response.ok) {
       redis.del(`collection-${sessionid}`);
       const data = await response.json();
       redirect(301, data.url);
-} else {
-  const errorData = await response.json();
+    } else {
+      const errorData = await response.json();
 
-        return { success: false, error: response.error || "An error occurred" };
-      }    
+      return { success: false, error: response.error || "An error occurred" };
+    }
   },
   reset: async ({ cookies }) => {
     const sessionid = cookies.get("sessionid");
@@ -96,5 +96,5 @@ export const actions = {
 
     redis.del(`collection-${sessionid}`);
     redirect(301, "/collect");
-  }
+  },
 } satisfies Actions;

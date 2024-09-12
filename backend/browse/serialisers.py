@@ -12,6 +12,36 @@ class DateTimeSerializer(serializers.DateTimeField):
         return formatted_datetime
 
 
+class IngredientListSerialiser(serializers.ModelSerializer):
+    descriptors = serializers.SerializerMethodField()
+    constituents = serializers.StringRelatedField(many=True)
+
+    def get_descriptors(self, obj):
+        descriptors = (
+            list(obj.descriptor1.all())
+            + list(obj.descriptor2.all())
+            + list(obj.descriptor3.all())
+        )
+        descriptor_names = [descriptor.name for descriptor in descriptors]
+        return (
+            ", ".join(descriptor_names) if descriptor_names else "No descriptors found"
+        )
+
+    class Meta:
+        fields = (
+            "slug",
+            "descriptors",
+            "common_name",
+            "other_names",
+            "cas",
+            "volatility",
+            "origin",
+            "constituents",
+            "similar_ingredients",
+        )
+        model = Ingredient
+
+
 class IngredientSerialiser(serializers.ModelSerializer):
     """
     Serialiser for the Ingredient model. It doubles the conversion of descriptors defined in the Ingredient model,

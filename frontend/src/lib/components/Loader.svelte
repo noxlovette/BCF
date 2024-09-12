@@ -2,7 +2,14 @@
   import { fade } from "svelte/transition";
   import { writable } from "svelte/store";
   import { navigating } from "$app/stores";
-  import { Jumper, Square, Chasing, Diamonds, Circle2, Circle3 } from "svelte-loading-spinners";
+  import {
+    Jumper,
+    Square,
+    Chasing,
+    Diamonds,
+    Circle2,
+    Circle3,
+  } from "svelte-loading-spinners";
 
   let quotes = [
     "Perfume is the art that makes memory speak. — Francis Kurkdjian",
@@ -32,19 +39,21 @@
 </script>
 
 {#if $navigating}
-  <div 
-  class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-stone-950 bg-opacity-40 backdrop-blur"
-  transition:fade={{duration: 300}}
+  <div
+    class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-stone-950 bg-opacity-40 backdrop-blur"
+    transition:fade={{ duration: 300 }}
   >
-    <div 
-    class="relative flex flex-col space-y-2 max-w-[400px]"
-    
-    >
-      <Circle3 ballTopLeft="#FFD773" ballTopRight="#A2B9C7" ballBottomLeft="#F9AA99" ballBottomRight="#FCD0A3" size="100" />
-      <p class="text-pretty text-2xl font-bold normal-case text-gold-50 italic">
+    <div class="relative flex max-w-[400px] flex-col space-y-2">
+      <Circle3
+        ballTopLeft="#FFD773"
+        ballTopRight="#A2B9C7"
+        ballBottomLeft="#F9AA99"
+        ballBottomRight="#FCD0A3"
+        size="100"
+      />
+      <p class="text-pretty text-2xl font-bold normal-case italic text-gold-50">
         {chosenQuote}
       </p>
     </div>
   </div>
 {/if}
-

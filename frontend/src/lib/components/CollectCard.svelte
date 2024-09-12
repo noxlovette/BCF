@@ -3,7 +3,6 @@
   import Card from "./Card.svelte";
 
   export let ingredient: App.IngredientCollection;
-  
 </script>
 
 <Card

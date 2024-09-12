@@ -8,7 +8,7 @@
   import { goto } from "$app/navigation";
   import Button from "$lib/components/UI/Button.svelte";
   import { user } from "$lib/stores";
-    import { CircleUser, InfoIcon, LogOutIcon } from "lucide-svelte";
+  import { CircleUser, InfoIcon, LogOutIcon } from "lucide-svelte";
 
   onMount(() => {
     user.subscribe((value) => {
@@ -57,7 +57,7 @@
 </script>
 
 <header
-  class="group relative z-20 flex w-full flex-col items-center justify-center py-4 font-quicksand font-medium my-2"
+  class="group relative z-20 my-2 flex w-full flex-col items-center justify-center py-4 font-quicksand font-medium"
 >
   <div class="flex w-full max-w-7xl items-center justify-center">
     <a
@@ -75,7 +75,7 @@
     <div class="ml-8 size-full flex-col justify-center">
       <div
         id="wider-part"
-        class="flex h-2/3 flex-grow  border-b-2 xl:border-b-4 border-gold-900"
+        class="flex h-2/3 flex-grow border-b-2 border-gold-900 xl:border-b-4"
       >
         {#if currentPage}
           <p
@@ -96,7 +96,7 @@
               title="learn to use BCF"
               class=" transition-all hover:text-gold-400"
             >
-          <InfoIcon />
+              <InfoIcon />
             </a>
 
             <a
@@ -106,7 +106,7 @@
               title="{username}'s profile"
               class="transition-all hover:text-gold-400"
             >
-            <CircleUser />
+              <CircleUser />
             </a>
             <button
               id="logout"

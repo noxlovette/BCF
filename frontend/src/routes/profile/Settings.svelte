@@ -176,8 +176,7 @@
           placeholder="confirm password"
         />
         {#if confirmPassword}
-          <span class:valid={validDuplicate} class="m-4 rounded p-1"
-            >match</span
+          <span class:valid={validDuplicate} class="m-4 rounded p-1">match</span
           >
         {/if}
       {/if}

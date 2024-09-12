@@ -15,7 +15,6 @@
       const { user } = result.data;
 
       setUser(user);
-      invalidate('app:user:login');
       notification.set({ message: "Welcome back!", type: "success" });
       await goto("/collect/");
     } else {

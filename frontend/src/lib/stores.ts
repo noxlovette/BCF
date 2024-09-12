@@ -10,38 +10,36 @@ export let secondSearchTerm = writable("");
 export const isLoading = writable(false);
 
 export const user = writable({
+  is_authenticated: false,
+  username: "",
+  email: "",
+});
+
+export function setUser(data) {
+  user.update((currentState) => ({
+    ...currentState,
+    ...data,
+  }));
+}
+
+export function clearUser() {
+  user.update(() => ({
     is_authenticated: false,
     username: "",
     email: "",
-  });
-  
-  export function setUser(data) {
-    user.update((currentState) => ({
-      ...currentState,
-      ...data,
-    }));
-  }
-  
-  export function clearUser() {
-    user.update(() => ({
-      is_authenticated: false,
-      username: "",
-      email: "",
-    }));
-  }
-  
+  }));
+}
 
-  export const notification = writable({
-    message: "",
-    type: "none",
-  });
-  
+export const notification = writable({
+  message: "",
+  type: "none",
+});
 
-  export const editedFormula = writable({
-    id: "",
-    name: "",
-    description: "",
-    solvent: "",
-    notes: "",
-    ingredients: [],
-  });
+export const editedFormula = writable({
+  id: "",
+  name: "",
+  description: "",
+  solvent: "",
+  notes: "",
+  ingredients: [],
+});

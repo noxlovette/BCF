@@ -6,126 +6,212 @@
   export let showSuggestion = false;
   import { notification } from "$lib/stores";
   import RoundButton from "$lib/components/UI/RoundButton.svelte";
-    import MetaData from "$lib/components/MetaData.svelte";
-    import AppWrap from "$lib/components/AppWrap.svelte";
-    import { enhance } from "$app/forms";
-    
-    import {user } from "$lib/stores";
+  import MetaData from "$lib/components/MetaData.svelte";
+  import AppWrap from "$lib/components/AppWrap.svelte";
+  import { enhance } from "$app/forms";
+  import { user } from "$lib/stores";
+  import { writable } from "svelte/store";
+
+  import Label from "$lib/components/UI/Label.svelte";
+  import VariableInput from "$lib/components/UI/VariableInput.svelte";
+  import VariableTextarea from "$lib/components/UI/VariableTextarea.svelte";
 
   export let data: PageServerData;
 
+  const editing = writable(false);
+
   const ingredient: App.IngredientBrowse = data.ingredient;
+  let suggestion: App.IngredientBrowse = ingredient;
   const unsplashData = data.photo;
 
   const href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
 
-  let volatility = ingredient.volatility || 'unknown';
-  let useMessage = ingredient.use || 'Do you know how to use this ingredient? Submit a suggestion!';
-  let similarIngredients = Array.isArray(ingredient.similar_ingredients) && ingredient.similar_ingredients.length > 0
-    ? ingredient.similar_ingredients
-    : 'none for now';
-  let origin = ingredient.origin || 'unknown';
-  let otherNames = Array.isArray(ingredient.other_names) && ingredient.other_names.length > 0
-    ? ingredient.other_names
-    : 'none for now';
-  let ifraStatus = ingredient.is_restricted === true ? 'restricted' : 'not restricted';
+  let volatility = ingredient.volatility || "Unknown";
+  let useMessage =
+    ingredient.use || "Nobody has told us how to use this ingredient yet";
+  let similarIngredients =
+    Array.isArray(ingredient.similar_ingredients) &&
+    ingredient.similar_ingredients.length > 0
+      ? ingredient.similar_ingredients
+      : "Nobody knows";
+  let origin = ingredient.origin || "Earth";
+  let otherNames = ingredient.other_names || "Nobody knows";
+  let ifraStatus =
+    ingredient.is_restricted === true ? "Restricted" : "Not restricted";
   let contributors = showSuggestion
-    ? 'you!'
-    : (Array.isArray(ingredient.contributors) && ingredient.contributors.length > 0)
-    ? ingredient.contributors
-    : 'IFRA, Danila Volkov';
+    ? "you!"
+    : Array.isArray(ingredient.contributors) &&
+        ingredient.contributors.length > 0
+      ? ingredient.contributors
+      : "IFRA, Danila Volkov";
 
-
-    const description = `Discover ${ingredient.common_name}. ${ingredient.use}. Explore similar ingredients and fragrances at BCF.`;
-    const keywords = `${ingredient.common_name}, ${ingredient.descriptors}, ${ingredient.other_names}, ${ingredient.cas}, ${ingredient.origin}, ${ingredient.volatility}, fragrance, BCF, ingredient, perfume, perfumery`;
-
+  const description = `Discover ${ingredient.common_name}. ${ingredient.use}. Explore similar ingredients and fragrances at BCF.`;
+  const keywords = `${ingredient.common_name}, ${ingredient.descriptors}, ${ingredient.other_names}, ${ingredient.cas}, ${ingredient.origin}, ${ingredient.volatility}, fragrance, BCF, ingredient, perfume, perfumery`;
 </script>
 
-<MetaData title="{ingredient.common_name}" description={description} keywords={keywords} ogUrl={`https://bcfapp.app/ingredient/${ingredient.slug}`} />
+<MetaData
+  title={ingredient.common_name}
+  {description}
+  {keywords}
+  ogUrl={`https://bcfapp.app/browse/${ingredient.slug}`}
+/>
 
-<AppWrap class="2xl:px-24 select-text caret-navy-800 selection:bg-navy-100 selection:text-navy-800">
-  <div class=" rounded border-navy-800">
-    <div id="top-part" class="flex flex-row items-center p-8 rounded bg-navy-700 text-navy-50 border-b border-navy-800">
-      <div id="top-left" class="flex w-3/4 flex-col space-y-6 pr-24">
-        <h1 class="flex w-full text-5xl font-bold tracking-tighter font-quicksand pb-4 border-b-2">
-          {ingredient.common_name}
-        </h1>
-        <div>
-        <h2 class="w-full lowercase"><span class="opacity-60">descriptors:</span> {ingredient.descriptors}</h2>
-        <h3 class=" "><span class="opacity-60 ">other names:</span> {otherNames}</h3>
-      </div>
-      </div>
-      <div id="top-right" class=" flex-1 flex-col flex">
-        <h2 class="mb-2 min-w-fit text-2xl font-quicksand">{ingredient.cas}</h2>
-        <h2 class="lowercase">{volatility} <span class="opacity-60">note</span></h2>
-      </div>
-      {#if $user.is_authenticated}
-      <div class="flex space-x-2 items-center justify-center rounded flex-1">
-      <form 
-      method="post" action="?/add" use:enhance={() => notification.set({ message: 'Added to your collection', type: 'success' })}
-      >
-      <input type="hidden" name="id" value="{ingredient.id}" />
-        <RoundButton>
-          <Add />
-        </RoundButton>
-  
-      </form>
-        <RoundButton on:click={() => showSuggestion = !showSuggestion}>
-          <SuggestionIcon />
-        </RoundButton>
-      </div>
-      {/if}
+<AppWrap
+  class="select-text justify-between caret-aqua-700 selection:bg-aqua-700 selection:text-aqua-50"
+>
+  <div
+    id="header"
+    class="flex w-full flex-row items-baseline justify-between border-b-2 border-stone-500 pb-4 font-medium xl:border-b-4"
+  >
+    <div class="w-full">
+      <h1 class="">
+        <VariableInput
+          text={ingredient.common_name}
+          bind:value={suggestion.common_name}
+          class="font-quicksand text-7xl font-medium"
+        />
+      </h1>
     </div>
-  
-    <div id="bottom-part" class="flex flex-row py-4">
-      <div id="bottom-left" class="flex-1 flex mr-8 flex-col border-2 rounded p-4 border-navy-700">
-        <p class="opacity-60 text-navy-600 dark:text-navy-300">how to use</p>
-        <p class="">{useMessage}</p>
-        
-        <ul class="flex flex-row mt-auto w-full justify-between">
-          <li class="flex flex-col">
-            <h3 class=" opacity-60 text-navy-600 dark:text-navy-300">similar ingredients</h3>
-            <p class="w-full">{similarIngredients}</p>
-          </li>
-        </ul>
-
-      </div>
-  
-      <div id="bottom-right" class="flex w-1/4 flex-col border-2 border-navy-700 p-4 rounded">
-        <ul class="space-y-8">
-          <li class="flex flex-col">
-            <h3 class=" opacity-60 text-navy-600 dark:text-navy-300">origin</h3>
-            <p>{origin}</p>
-          </li>
-          <li class="flex flex-col">
-            <h3 class=" opacity-60 text-navy-600 dark:text-navy-300">IFRA</h3>
-            <p>{ifraStatus}</p>
-          </li>
-          <li class="flex-col flex">
-            <h3 class=" opacity-60 text-navy-600 dark:text-navy-300">contributors</h3>
-            <p>{contributors}</p>
-          </li>
-        </ul>
-      </div>
-    </div>
-  
-    <div class="w-full h-32 relative overflow-hidden text-navy-600 dark:text-navy-300">
-      {#if unsplashData}
-      <img 
-        alt={ingredient.common_name} 
-        src={unsplashData.urls.regular} 
-        class="w-full h-full object-cover rounded"
-      />
-      <p class="absolute text-sm italic bottom-2 right-2 px-2 py-1 bg-blend-screen bg-stone-50 text-stone-900 rounded">
-        Photo by <a href={href}>{unsplashData.user.name}</a> on <a href="https://unsplash.com/?utm_source=bcf&utm_medium=referral">Unsplash</a>
-      </p>
+    <div
+      id="controls"
+      class="flex flex-row items-baseline justify-end space-x-4 font-medium xl:text-2xl"
+    >
+      {#if $editing}
+        <button
+          type="submit"
+          class="rounded border-2 border-stone-500 px-6 py-2"
+          on:click={() => editing.set(false)}
+        >
+          Cancel
+        </button>
+        <form method="post" action="?/update" class="" use:enhance>
+          <input type="hidden" name="id" value={suggestion.id} />
+          <input type="hidden" name="fullData" />
+          <button
+            type="submit"
+            class="rounded border-2 border-stone-500 px-6 py-2"
+          >
+            Save
+          </button>
+        </form>
+      {:else}
+        <form
+          method="post"
+          action="?/add"
+          use:enhance={() =>
+            notification.set({
+              message: "Added to your collection",
+              type: "success",
+            })}
+        >
+          <input type="hidden" name="id" value={ingredient.id} />
+          <button class="rounded border-2 border-stone-500 px-6 py-2">
+            Add
+          </button>
+        </form>
+        <button
+          on:click={() => editing.set(!$editing)}
+          class="rounded border-2 border-stone-500 px-6 py-2"
+        >
+          Edit
+        </button>
       {/if}
     </div>
   </div>
 
+  <div id="center" class="flex flex-row justify-between py-4">
+    <div id="left-part" class="flex w-2/3 flex-col space-y-8 pr-8">
+      <div class="flex flex-row space-x-8">
+        <div>
+          <Label>descriptors</Label>
+          <VariableTextarea
+            text={ingredient.descriptors}
+            bind:value={suggestion.descriptors}
+            class="font-medium xl:text-2xl"
+          />
+        </div>
+        <div>
+          <Label>CAS</Label>
+          <VariableInput
+            text={ingredient.cas}
+            bind:value={suggestion.cas}
+            class="font-medium xl:text-2xl"
+          />
+        </div>
+      </div>
+      <div>
+        <Label>how to use it</Label>
+        <VariableTextarea
+          text={useMessage}
+          bind:value={suggestion.use}
+          class="min-h-36 font-medium xl:text-2xl"
+        />
+      </div>
+      <div class="flex flex-col space-y-4">
+        <div class="flex w-full max-w-2xl space-x-8">
+          <div>
+            <Label>volatility</Label>
+            <VariableInput
+              text={volatility}
+              bind:value={suggestion.is_restricted}
+              class="font-medium xl:text-2xl"
+            />
+          </div>
+          <div>
+            <Label>restricted</Label>
+            <VariableInput
+              text={ifraStatus}
+              bind:value={suggestion.is_restricted}
+              class="font-medium xl:text-2xl"
+            />
+          </div>
+          <div>
+            <Label>origin</Label>
+            <VariableInput
+              text={origin}
+              bind:value={suggestion.origin}
+              class="font-medium xl:text-2xl"
+            />
+          </div>
+        </div>
+        <div>
+          <Label>similar to</Label>
+          <VariableTextarea
+            text={similarIngredients}
+            bind:value={suggestion.similar_ingredients}
+          />
+        </div>
+        <div>
+          <Label>also known as</Label>
+          <VariableTextarea
+            text={otherNames}
+            bind:value={suggestion.other_names}
+            class=""
+          />
+        </div>
+      </div>
+    </div>
+
+    <div id="right-part" class="relative flex-1 overflow-hidden">
+      {#if unsplashData}
+        <img
+          alt={ingredient.common_name}
+          src={unsplashData.urls.regular}
+          class="aspect-square h-full w-full rounded object-cover"
+        />
+        <p
+          class="absolute bottom-2 right-2 rounded bg-stone-50 px-2 py-1 text-sm italic text-stone-900 bg-blend-screen"
+        >
+          Photo by <a {href}>{unsplashData.user.name}</a> on
+          <a href="https://unsplash.com/?utm_source=bcf&utm_medium=referral"
+            >Unsplash</a
+          >
+        </p>
+      {/if}
+    </div>
+  </div>
+</AppWrap>
 
 {#if showSuggestion}
-<Suggestion {ingredient} />
+  <Suggestion {ingredient} />
 {/if}
-
-</AppWrap>

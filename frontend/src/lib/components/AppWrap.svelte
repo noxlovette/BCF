@@ -1,5 +1,8 @@
-<div id="app" class="flex w-full min-h-full flex-col caret-gold-700
+<div
+  id="app"
+  class="flex min-h-full w-full flex-col caret-gold-700
 {$$props.class}
-">
-<slot />
+"
+>
+  <slot />
 </div>

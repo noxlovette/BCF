@@ -1,8 +1,7 @@
 import redis from "$lib/redisClient";
-import type { PageServerLoad } from "./$types";
-import type { Actions } from "./$types";
-import { error } from "@sveltejs/kit";
 import getUnsplashURL from "$lib/unsplash";
+import { error } from "@sveltejs/kit";
+import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, params }) => {
   const VITE_API_URL = import.meta.env.VITE_API_URL;
@@ -42,7 +41,6 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
       // If the photo is not cached, fetch it from the Unsplash API
       const unsplashURL = getUnsplashURL(query);
 
-
       const unsplashResponse = await fetch(unsplashURL);
 
       // Check if the Unsplash response is OK (status 200)
@@ -52,7 +50,6 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
 
       // Extract JSON data from the Unsplash response
       photo = await unsplashResponse.json();
-
 
       // Cache the fetched Unsplash photo data in Redis
       await redis.set(`${query}-photo`, JSON.stringify(photo), "EX", 3600);
@@ -81,18 +78,20 @@ export const actions = {
     }
 
     try {
-      const response = await fetch(`${VITE_API_URL}/collection/new/api/collection/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-          Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+      const response = await fetch(
+        `${VITE_API_URL}/collection/new/api/collection/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+            Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+          },
+          body: JSON.stringify({ ingredient_id: ingredientId }),
+          credentials: "include",
         },
-        body: JSON.stringify({ ingredient_id: ingredientId }),
-        credentials: 'include',
-      });
+      );
 
-  
       if (response.ok) {
         const cacheKey = `collection-${sessionid}`;
         const value = await redis.get(cacheKey);
@@ -104,7 +103,6 @@ export const actions = {
       } else {
         return { success: false, error: response.error || "An error occurred" };
       }
-
     } catch (err: any) {
       throw error(500, "Failed to add ingredient to collection");
     }
@@ -116,17 +114,17 @@ export const actions = {
     const formData = await request.formData();
 
     let body = {
-      message: formData.get('message'), // Assuming you have a field named 'message' in your form
-      ingredient: formData.get('ingredient'),
-      common_name: formData.get('common_name'),
-      other_names: formData.get('other_names'),
-      volatility: formData.get('volatility'),
-      use: formData.get('use'),
-      origin: formData.get('origin'),
-      similar_ingredients: formData.get('similar_ingredients') 
-        ? JSON.stringify(formData.get('similar_ingredients'))
+      message: formData.get("message"), // Assuming you have a field named 'message' in your form
+      ingredient: formData.get("ingredient"),
+      common_name: formData.get("common_name"),
+      other_names: formData.get("other_names"),
+      volatility: formData.get("volatility"),
+      use: formData.get("use"),
+      origin: formData.get("origin"),
+      similar_ingredients: formData.get("similar_ingredients")
+        ? JSON.stringify(formData.get("similar_ingredients"))
         : null,
-      is_restricted: formData.get('is_restricted'),
+      is_restricted: formData.get("is_restricted"),
     };
 
     if (!sessionid) {
@@ -134,24 +132,25 @@ export const actions = {
     }
 
     try {
-      const response = await fetch(`${VITE_API_URL}/browse/api/suggested-ingredients/new/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-          Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+      const response = await fetch(
+        `${VITE_API_URL}/browse/api/suggested-ingredients/new/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+            Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
+          },
+          body: JSON.stringify(body),
+          credentials: "include",
         },
-        body: JSON.stringify(body),
-        credentials: 'include',
-      });
+      );
 
-  
       if (response.ok) {
         return { success: true };
       } else {
         return { success: false, error: response.error || "An error occurred" };
       }
-
     } catch (err: any) {
       throw error(500, "Failed to suggest a change");
     }

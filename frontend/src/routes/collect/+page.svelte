@@ -12,11 +12,11 @@
   import { currentPage, pageSize, searchTerm } from "$lib/stores";
   import type { PageServerData } from "../$types";
   import Pagination from "$lib/components/UI/Pagination.svelte";
-    import AppWrap from "$lib/components/AppWrap.svelte";
-    import SearchBar from "$lib/components/SearchBar.svelte";
-    import Search from "$lib/components/UI/Search.svelte";
-    import { notification } from "$lib/stores";
-    import { enhance } from "$app/forms";
+  import AppWrap from "$lib/components/AppWrap.svelte";
+  import SearchBar from "$lib/components/SearchBar.svelte";
+  import Search from "$lib/components/UI/Search.svelte";
+  import { notification } from "$lib/stores";
+  import { enhance } from "$app/forms";
 
   export let data: PageServerData;
   let collection = data.collection;
@@ -91,20 +91,24 @@
 
 <AppWrap>
   <SearchBar>
-    
     <Search on:search={handleSearchCollection} bind:searchInput />
-    
-    <PerPage on:updatePageSize={updatePageSize} />
-    <form 
-    method="post" action="?/create" use:enhance={() => notification.set({ message: 'New Ingredient Created', type: 'success' })}
-  >
-    <CreateButton on:create />
-  </form>
 
-  <form method="post" action="?/reset">
-        <ResetButton />
+    <PerPage on:updatePageSize={updatePageSize} />
+    <form
+      method="post"
+      action="?/create"
+      use:enhance={() =>
+        notification.set({
+          message: "New Ingredient Created",
+          type: "success",
+        })}
+    >
+      <CreateButton on:create />
     </form>
 
+    <form method="post" action="?/reset">
+      <ResetButton />
+    </form>
 
     <Pagination
       on:nextPage={() => handleChangePage(1)}

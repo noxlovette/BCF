@@ -15,7 +15,6 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
 
     const cachedIngredients = await redis.get(cacheKeyIngredients);
     if (cachedIngredients) {
-
       ingredients = await JSON.parse(cachedIngredients);
     } else {
       const response = await fetch(
@@ -49,12 +48,15 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
       );
     }
 
-
-    return { ingredients, descriptors, urlParams: {
-      page,
-      search,
-      pageSize
-    } };
+    return {
+      ingredients,
+      descriptors,
+      urlParams: {
+        page,
+        search,
+        pageSize,
+      },
+    };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {

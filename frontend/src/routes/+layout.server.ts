@@ -17,6 +17,6 @@ export const load: LayoutServerLoad = async ({ cookies, fetch, depends }) => {
   const user: App.User = await response.json();
   cookies.set("csrftoken", user.csrfToken, { path: "/" });
 
-  depends('app:user:login')
+  depends("app:user:login");
   return { user };
 };

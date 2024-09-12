@@ -26,4 +26,9 @@ urlpatterns = [
         views.DescriptorsListAPIView.as_view(),
         name="api-descriptors",
     ),
+    path(
+        "api/ingredients-total/",
+        views.TotalBrowseView.as_view(),
+        name="api-ingredients-total",
+    )
 ]

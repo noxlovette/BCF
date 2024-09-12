@@ -28,7 +28,6 @@ export const actions = {
       const userData = await response.json();
 
       cookies.set("sessionid", userData.sessionid, { path: "/" });
-  
 
       return {
         success: true,

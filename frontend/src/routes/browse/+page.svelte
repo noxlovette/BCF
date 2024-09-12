@@ -10,7 +10,13 @@
   import Pagination from "$lib/components/UI/Pagination.svelte";
   import ResetButton from "$lib/components/UI/ResetButton.svelte";
 
-  import { currentPage, pageSize, searchTerm, notification, secondSearchTerm } from "$lib/stores";
+  import {
+    currentPage,
+    pageSize,
+    searchTerm,
+    notification,
+    secondSearchTerm,
+  } from "$lib/stores";
   import AppWrap from "$lib/components/AppWrap.svelte";
   import SearchBar from "$lib/components/SearchBar.svelte";
   import PerPage from "$lib/components/UI/PerPage.svelte";
@@ -24,8 +30,8 @@
     },
   );
 
-  let chosenDescriptors:App.Descriptor[] =[];
-  let filteredDescriptors:App.Descriptor[];
+  let chosenDescriptors: App.Descriptor[] = [];
+  let filteredDescriptors: App.Descriptor[];
   let showFilterMenu = false;
   let searchInput: HTMLInputElement;
   let searchInputDescriptor: HTMLInputElement;
@@ -37,11 +43,10 @@
 
   onMount(() => {
     filteredDescriptors = data.descriptors;
-    
+
     currentPage.set(parseInt(data.urlParams.page));
     pageSize.set(parseInt(data.urlParams.pageSize));
     searchTerm.set(data.urlParams.search);
-
 
     const unsubscribe = urlParams.subscribe(async (url) => {
       await goto(url);
@@ -53,7 +58,7 @@
 
   function searchDescriptors(term: string) {
     filteredDescriptors = data.descriptors.filter((descriptor) =>
-      descriptor.name.toLowerCase().includes(term.toLowerCase())
+      descriptor.name.toLowerCase().includes(term.toLowerCase()),
     );
   }
 
@@ -84,7 +89,6 @@
     currentPage.set(newPage);
   }
 
-
   const description = "Browse perfume compounds. IFRA FIG.";
   const ogTitle = "BCF | Browse";
   const ogUrl = "https://bcfapp.app/browse";
@@ -99,21 +103,30 @@
 
 <AppWrap>
   <SearchBar>
-    
     {#if showFilterMenu}
-    <Search value={secondSearchTerm} on:input={()=>searchDescriptors} bind:searchInput={searchInputDescriptor} on:blur={()=>searchDescriptors} placeholder="/ search descriptors..." />
-      {:else}
-      <Search value={searchTerm} on:input={(event) => event.key === "Enter" && searchIngredients()} bind:searchInput on:blur={searchIngredients} />
-        {/if}
-        <PerPage />
+      <Search
+        value={secondSearchTerm}
+        on:input={() => searchDescriptors}
+        bind:searchInput={searchInputDescriptor}
+        on:blur={() => searchDescriptors}
+        placeholder="/ search descriptors..."
+      />
+    {:else}
+      <Search
+        value={searchTerm}
+        on:input={(event) => event.key === "Enter" && searchIngredients()}
+        bind:searchInput
+        on:blur={searchIngredients}
+      />
+    {/if}
+    <PerPage />
 
-        <DescriptorToggle bind:showFilterMenu />
-        <ResetButton on:reset={reset} />
+    <DescriptorToggle bind:showFilterMenu />
+    <ResetButton on:reset={reset} />
     <Pagination
       on:nextPage={() => handleChangePage(1)}
       on:prevPage={() => handleChangePage(-1)}
     />
-
   </SearchBar>
 
   <div
@@ -124,9 +137,9 @@
       <!-- If there are no results, display a message -->
       <p class="m-12 text-5xl">Hm. Try a different search?</p>
     {:else}
-    <div
+      <div
         id="filter"
-        class="grid w-full items-center gap-4 mb-12 py-4 border-b-2 border-gold-400 bg-white/20 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 dark:bg-stone-900/20"
+        class="mb-12 grid w-full items-center gap-4 border-b-2 border-gold-400 bg-white/20 py-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 dark:bg-stone-900/20"
         class:hidden={!showFilterMenu}
         bind:this={filterMenu}
       >
@@ -153,7 +166,6 @@
           <p>No descriptors found</p>
         {/if}
       </div>
-      
 
       <div
         id="card-holder"
