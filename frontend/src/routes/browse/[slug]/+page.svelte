@@ -1,27 +1,33 @@
 <script lang="ts">
-  import Add from "$lib/icons/Add.svelte";
+
   import Suggestion from "$lib/components/Suggestion.svelte";
-  import SuggestionIcon from "$lib/icons/SuggestionIcon.svelte";
+
   import type { PageServerData, ActionData } from "./$types";
   export let showSuggestion = false;
   import { notification } from "$lib/stores";
-  import RoundButton from "$lib/components/UI/RoundButton.svelte";
+
   import MetaData from "$lib/components/MetaData.svelte";
   import AppWrap from "$lib/components/AppWrap.svelte";
   import { enhance } from "$app/forms";
-  import { user } from "$lib/stores";
+
   import { writable } from "svelte/store";
 
   import Label from "$lib/components/UI/Label.svelte";
   import VariableInput from "$lib/components/UI/VariableInput.svelte";
   import VariableTextarea from "$lib/components/UI/VariableTextarea.svelte";
+    import { setContext } from "svelte";
 
   export let data: PageServerData;
 
   const editing = writable(false);
+  setContext("editing", editing);
 
   const ingredient: App.IngredientBrowse = data.ingredient;
   let suggestion: App.IngredientBrowse = ingredient;
+
+
+
+
   const unsplashData = data.photo;
 
   const href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
@@ -47,6 +53,10 @@
 
   const description = `Discover ${ingredient.common_name}. ${ingredient.use}. Explore similar ingredients and fragrances at BCF.`;
   const keywords = `${ingredient.common_name}, ${ingredient.descriptors}, ${ingredient.other_names}, ${ingredient.cas}, ${ingredient.origin}, ${ingredient.volatility}, fragrance, BCF, ingredient, perfume, perfumery`;
+
+
+
+  $: console.log(suggestion);
 </script>
 
 <MetaData
@@ -84,9 +94,18 @@
         >
           Cancel
         </button>
-        <form method="post" action="?/update" class="" use:enhance>
-          <input type="hidden" name="id" value={suggestion.id} />
-          <input type="hidden" name="fullData" />
+        <form method="post" action="?/suggest" class="" use:enhance={() =>
+    notification.set({ message: "suggestion sent", type: "success" })}>
+          <input type="hidden" name="ingredient" value={suggestion.id} />
+          <input type="hidden" name="common_name" bind:value={suggestion.common_name} />
+          <input type="hidden" name="cas" bind:value={suggestion.cas} />
+          <input type="hidden" name="use" bind:value={suggestion.use} />
+          <input type="hidden" name="is_restricted" bind:value={suggestion.is_restricted} />
+          <input type="hidden" name="origin" bind:value={suggestion.origin} />
+          <input type="hidden" name="similar_ingredients" bind:value={suggestion.similar_ingredients} />
+          <input type="hidden" name="other_names" bind:value={suggestion.other_names} />
+          <input type="hidden" name="volatility" bind:value={suggestion.volatility} />
+
           <button
             type="submit"
             class="rounded border-2 border-stone-500 px-6 py-2"
@@ -212,6 +231,3 @@
   </div>
 </AppWrap>
 
-{#if showSuggestion}
-  <Suggestion {ingredient} />
-{/if}

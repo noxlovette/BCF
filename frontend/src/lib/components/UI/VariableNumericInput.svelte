@@ -10,6 +10,7 @@
 {#if $editing}
   <input
     type="number"
+    placeholder={text}
     bind:value
     class="border-none bg-transparent p-0 font-medium ring-0 focus:ring-0 xl:text-2xl dark:bg-stone-800 {$$props.class}"
   />
