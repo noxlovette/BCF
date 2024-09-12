@@ -1,6 +1,7 @@
 import redis from "$lib/redisClient";
 import { error,redirect } from "@sveltejs/kit";
 import type { PageServerLoad, Actions } from "./$types";
+import { invalidate } from "$app/navigation";
 
 export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
   try {

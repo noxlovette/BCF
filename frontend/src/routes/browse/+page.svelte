@@ -16,7 +16,6 @@
   import PerPage from "$lib/components/UI/PerPage.svelte";
   import Search from "$lib/components/UI/Search.svelte";
 
-
   export let data: PageServerData;
   const urlParams = derived(
     [currentPage, pageSize],

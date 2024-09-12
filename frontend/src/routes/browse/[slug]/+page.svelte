@@ -36,11 +36,12 @@
     : 'IFRA, Danila Volkov';
 
 
-    
+    const description = `Discover ${ingredient.common_name}. ${ingredient.use}. Explore similar ingredients and fragrances at BCF.`;
+    const keywords = `${ingredient.common_name}, ${ingredient.descriptors}, ${ingredient.other_names}, ${ingredient.cas}, ${ingredient.origin}, ${ingredient.volatility}, fragrance, BCF, ingredient, perfume, perfumery`;
 
 </script>
 
-<MetaData title="{ingredient.common_name}" description="{ingredient.descriptors}" />
+<MetaData title="{ingredient.common_name}" description={description} keywords={keywords} ogUrl={`https://bcfapp.app/ingredient/${ingredient.slug}`} />
 
 <AppWrap class="2xl:px-24 select-text caret-navy-800 selection:bg-navy-100 selection:text-navy-800">
   <div class=" rounded border-navy-800">

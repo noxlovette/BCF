@@ -3,9 +3,10 @@ import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import type { Actions } from "./$types";
 
-export const load: PageServerLoad = async ({ fetch, params, cookies }) => {
+export const load: PageServerLoad = async ({ fetch, params, cookies, depends }) => {
   const VITE_API_URL = import.meta.env.VITE_API_URL;
   const sessionid = cookies.get("sessionid");
+  depends("collect:update");
   if (!sessionid) {
     throw error(401, "Unauthorized");
   }
@@ -83,9 +84,7 @@ export const actions = {
       });
   
       if (response.ok) {
-//TODO make the page RELOAD
         redis.del(`ingredient-${sessionid}-${id}`);
-      
         return { success: true };
       } else {
 

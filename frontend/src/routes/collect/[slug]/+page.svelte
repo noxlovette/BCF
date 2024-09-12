@@ -22,7 +22,7 @@
   
 </script>
 
-<MetaData title="{ingredient.common_name}" />
+<MetaData title="{ingredient.common_name}" robots="noindex, nofollow" />
 
 <AppWrap class="2xl:px-24 select-text caret-grapefruit-800 selection:bg-grapefruit-100 selection:text-grapefruit-800">
   <div class=" rounded border-grapefruit-800">

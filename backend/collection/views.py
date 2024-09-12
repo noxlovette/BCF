@@ -5,8 +5,11 @@ from rest_framework.response import Response
 
 from .models import (
     User,
+    
     NewCollectionIngredient,
 )
+
+from browse.models import Ingredient
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 import logging

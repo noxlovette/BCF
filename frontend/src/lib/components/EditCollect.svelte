@@ -3,13 +3,20 @@
     import {notification} from "$lib/stores";
         import Input from "./UI/Input.svelte";
         import Textarea from "./UI/Textarea.svelte";
+import { invalidate } from "$app/navigation";
     
     export let ingredient: App.IngredientCollection;
 
     export let editing:boolean;
+
+
+    function handleEnhance() {
+    notification.set({ message: "Ingredient sent", type: "success" });
+    invalidate("collect:update");
+  }
     
     </script>
-    <form class="my-6 space-y-8" method="POST" action="?/update" use:enhance= {()=> notification.set({message:"Ingredient sent", type:"success"})}
+    <form class="my-6 space-y-8" method="POST" action="?/update" use:enhance= {handleEnhance}
     >
     <div class="flex flex-row justify-between items-baseline">
     <h1 class="text-5xl border-b-2 border-grapefruit-600">

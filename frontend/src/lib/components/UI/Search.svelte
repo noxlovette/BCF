@@ -23,7 +23,7 @@
 
 <input
       type="text"
-      class="w-full rounded border-gold-400 dark:border-gold-900 bg-white shadow transition-all hover:shadow-lg focus:scale-95 focus:ring-2 focus:ring-gold-700/60 active:scale-90 md:w-1/2 dark:bg-stone-800 {$$props.class}"
+      class="w-full focus:border-gold-200 rounded border-gold-400 dark:border-gold-900 bg-stone-50 shadow transition-all hover:shadow-lg focus:ring-2 focus:ring-gold-700/60 md:w-1/2 dark:bg-stone-800 {$$props.class}"
       bind:value={$value}
       bind:this={searchInput}
       on:change={handleSearch}

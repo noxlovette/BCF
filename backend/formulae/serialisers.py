@@ -116,7 +116,7 @@ class NewFormulaSerializer(serializers.ModelSerializer):
 
         # Try to find a NewCollectionIngredient by common_name or other_names
         counterpart = NewCollectionIngredient.objects.filter(
-            Q(common_name__iexact=common_name) | Q(other_names__icontains=common_name)
+            Q(common_name__icontains=common_name) | Q(other_names__icontains=common_name)
         ).first()
 
         if not counterpart:

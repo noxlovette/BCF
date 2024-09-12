@@ -55,8 +55,8 @@ declare global {
     interface Formula {
       id: string;
       name: string;
-      created: string;
-      updated: string;
+      created?: string;
+      updated?: string;
       notes: string;
       description: string;
       solvent: string;

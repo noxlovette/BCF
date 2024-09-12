@@ -6,7 +6,7 @@
 
   export let keywords =
     "perfume, formulation, fragrance, BCF, perfumers, browse, collect, formulate, ingredient, linalool, essential oil, absolute";
-  let robots = "index, follow";
+  export let robots = "index, follow";
   export let ogTitle = "BCF";
   export let ogDescription =
     "BCF. Browse perfume compounds, collect them, and formulate your next favourite fragrance.";
