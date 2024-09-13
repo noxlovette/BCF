@@ -16,6 +16,8 @@
       notification.set({ message: "Welcome back!", type: "success" });
       await goto("/collect/");
     } else {
+      
+
       notification.set({
         message: result.data.error || "Login failed",
         type: "error",

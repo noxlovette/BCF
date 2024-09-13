@@ -1,4 +1,4 @@
-import { invalidate } from "$app/navigation";
+import {error} from "@sveltejs/kit";
 import type { Actions } from "./$types";
 
 export const actions = {
@@ -23,7 +23,9 @@ export const actions = {
       });
 
       if (!response.ok) {
-        throw new Error("Login failed");
+        const errorData = await response.json();
+        console.log(errorData);
+        throw error(401, "Login failed");
       }
 
       const userData = await response.json();
