@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/sveltekit";
 import { handleErrorWithSentry, replayIntegration } from "@sentry/sveltekit";
 
-if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {
+if (process.env.NODE_ENV === "production") {
   Sentry.init({
     // This sets your DSN to the SENTRY_DSN environment variable
 
