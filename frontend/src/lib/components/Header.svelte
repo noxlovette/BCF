@@ -2,8 +2,6 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
 
-  import { logOut } from "$lib/DjangoAPI";
-
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import Button from "$lib/components/UI/Button.svelte";

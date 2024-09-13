@@ -162,24 +162,27 @@
           <BrowseCard {ingredient} />
         {/each}
       </CardHolder>
-    {:else if foundInCommonName.length !== 0 || foundinOtherNames.length !== 0}
-      <div class="flex items-center space-x-2">
-        <h3 class="my-2 font-quicksand text-2xl font-medium">Found in Names</h3>
-        <button on:click={() => (showNames = !showNames)} class:showNames>
-          <ChevronDown class="size-8"></ChevronDown>
-        </button>
-      </div>
-      {#if showNames}
-        <CardHolder>
-          {#each foundInCommonName as ingredient}
-            <BrowseCard {ingredient} />
-          {/each}
-          {#each foundinOtherNames as ingredient}
-            <BrowseCard {ingredient} />
-          {/each}
-        </CardHolder>
+    {:else}
+      {#if foundInCommonName.length !== 0 || foundinOtherNames.length !== 0}
+        <div class="flex items-center space-x-2">
+          <h3 class="my-2 font-quicksand text-2xl font-medium">
+            Found in Names
+          </h3>
+          <button on:click={() => (showNames = !showNames)} class:showNames>
+            <ChevronDown class="size-8"></ChevronDown>
+          </button>
+        </div>
+        {#if showNames}
+          <CardHolder>
+            {#each foundInCommonName as ingredient}
+              <BrowseCard {ingredient} />
+            {/each}
+            {#each foundinOtherNames as ingredient}
+              <BrowseCard {ingredient} />
+            {/each}
+          </CardHolder>
+        {/if}
       {/if}
-      
 
       {#if foundInDescriptors.length !== 0}
         <div class="flex items-center space-x-2">
@@ -200,26 +203,24 @@
             {/each}
           </CardHolder>
         {/if}
-        {/if}
+      {/if}
 
-        {#if foundInCas.length !== 0}
-          <div class="flex items-center space-x-2">
-            <h3 class="my-2 font-quicksand text-2xl font-medium">
-              Found in CAS
-            </h3>
-            <button on:click={() => (showCas = !showCas)} class:showCas>
-              <ChevronDown class="size-8"></ChevronDown>
-            </button>
-          </div>
-          {#if showCas}
-            <CardHolder>
-              {#each foundInCas as ingredient}
-                <BrowseCard {ingredient} />
-              {/each}
-            </CardHolder>
-          {/if}
+      {#if foundInCas.length !== 0}
+        <div class="flex items-center space-x-2">
+          <h3 class="my-2 font-quicksand text-2xl font-medium">Found in CAS</h3>
+          <button on:click={() => (showCas = !showCas)} class:showCas>
+            <ChevronDown class="size-8"></ChevronDown>
+          </button>
+        </div>
+        {#if showCas}
+          <CardHolder>
+            {#each foundInCas as ingredient}
+              <BrowseCard {ingredient} />
+            {/each}
+          </CardHolder>
+        {/if}
       {/if}
-      {/if}
+    {/if}
   </div>
 </AppWrap>
 
