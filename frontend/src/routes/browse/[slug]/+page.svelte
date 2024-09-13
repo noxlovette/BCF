@@ -1,8 +1,6 @@
 <script lang="ts">
   import type { PageServerData } from "./$types";
-  export let showSuggestion = false;
   import { notification } from "$lib/stores";
-
   import MetaData from "$lib/components/MetaData.svelte";
   import AppWrap from "$lib/components/AppWrap.svelte";
   import { enhance } from "$app/forms";
@@ -13,20 +11,17 @@
   import VariableInput from "$lib/components/UI/VariableInput.svelte";
   import VariableTextarea from "$lib/components/UI/VariableTextarea.svelte";
     import { setContext } from "svelte";
+    import { user } from "$lib/stores";
 
   export let data: PageServerData;
 
   const editing = writable(false);
   setContext("editing", editing);
 
-  const ingredient: App.IngredientBrowse = data.ingredient;
+  let ingredient: App.IngredientBrowse = data.ingredient;
   let suggestion: App.IngredientBrowse = ingredient;
 
-
-
-
   const unsplashData = data.photo;
-
   const href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
 
   let volatility = ingredient.volatility || "Unknown";
@@ -36,24 +31,16 @@
     Array.isArray(ingredient.related_ingredients) &&
     ingredient.related_ingredients.length > 0
       ? ingredient.related_ingredients
-      : "Nobody knows";
+      : [{"common_name":"Nobody knows", "slug":""}];
   let origin = ingredient.origin || "Earth";
   let otherNames = ingredient.other_names || "Nobody knows";
   let ifraStatus =
     ingredient.is_restricted === true ? "Restricted" : "Not restricted";
-  let contributors = showSuggestion
-    ? "you!"
-    : Array.isArray(ingredient.contributors) &&
-        ingredient.contributors.length > 0
-      ? ingredient.contributors
-      : "IFRA, Danila Volkov";
 
   const description = `Discover ${ingredient.common_name}. ${ingredient.use}. Explore similar ingredients and fragrances at BCF.`;
   const keywords = `${ingredient.common_name}, ${ingredient.descriptors}, ${ingredient.other_names}, ${ingredient.cas}, ${ingredient.origin}, ${ingredient.volatility}, fragrance, BCF, ingredient, perfume, perfumery`;
 
 
-
-  $: console.log(suggestion);
 </script>
 
 <MetaData
@@ -121,13 +108,13 @@
             })}
         >
           <input type="hidden" name="id" value={ingredient.id} />
-          <button class="rounded border-2 border-stone-500 px-6 py-2">
+          <button disabled={!$user.is_authenticated} class="rounded border-2 border-stone-500 px-6 py-2 disabled:text-stone-400 disabled:border-stone-300">
             Add
           </button>
         </form>
-        <button
+        <button disabled={!$user.is_authenticated}
           on:click={() => editing.set(!$editing)}
-          class="rounded border-2 border-stone-500 px-6 py-2"
+          class="rounded border-2 border-stone-500 px-6 py-2 disabled:text-stone-400 disabled:border-stone-300"
         >
           Edit
         </button>
@@ -192,10 +179,22 @@
         </div>
         <div>
           <Label>related</Label>
-          <VariableTextarea
-            text={relatedIngredients}
-            bind:value={suggestion.related_ingredients}
+          {#if $editing}
+          <input
+          type="text"
+          bind:value={suggestion.related_ingredients}
+          placeholder="related ingredients"
+          class="rounded border-none font-medium xl:text-2xl border-stone-500 bg-transparent p-0 ring-0 focus:border-stone-500 focus:ring-0 dark:bg-stone-800
+          "
           />
+          {:else}
+          {#each relatedIngredients as related}
+            <a class="font-medium xl:text-2xl hover:text-aqua-700 transition-colors" href="/browse/{related.slug}" data-sveltekit-reload>
+              {related.common_name};
+            </a>
+            {/each}
+          {/if}
+
         </div>
         <div>
           <Label>also known as</Label>

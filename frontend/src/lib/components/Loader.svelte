@@ -1,13 +1,10 @@
 <script>
   import { fade } from "svelte/transition";
-  import { writable } from "svelte/store";
+  import { onDestroy } from "svelte";
+
   import { navigating } from "$app/stores";
   import {
-    Jumper,
-    Square,
-    Chasing,
-    Diamonds,
-    Circle2,
+    
     Circle3,
   } from "svelte-loading-spinners";
 
@@ -36,9 +33,36 @@
   function getRandomQuote() {
     return quotes[Math.floor(Math.random() * quotes.length)];
   }
+
+  let counter = 0;
+  let intervalId = null;
+
+  $: {
+    if ($navigating) {
+      if (intervalId === null) { // Ensure interval is set only once
+        intervalId = setInterval(() => {
+          counter += 1;
+        }, 300);
+      }
+    } else {
+
+      if (intervalId !== null) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    }
+  }
+
+  // Clean up the interval when the component is destroyed
+  onDestroy(() => {
+    if (intervalId !== null) {
+      clearInterval(intervalId);
+    }
+  });
+
 </script>
 
-{#if $navigating}
+{#if $navigating && counter > 1}
   <div
     class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-stone-950 bg-opacity-40 backdrop-blur"
     transition:fade={{ duration: 300 }}

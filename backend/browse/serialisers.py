@@ -11,10 +11,14 @@ class DateTimeSerializer(serializers.DateTimeField):
         formatted_datetime = value.strftime("%d.%m.%Y, %I:%M%p")
         return formatted_datetime
 
+class RelatedIngredientSerialiser(serializers.ModelSerializer):
+    class Meta:
+        fields = ("slug", "common_name")
+        model = Ingredient
 
 class IngredientListSerialiser(serializers.ModelSerializer):
     descriptors = serializers.SerializerMethodField()
-    constituents = serializers.StringRelatedField(many=True)
+    related_ingredients = RelatedIngredientSerialiser(many=True)
 
     def get_descriptors(self, obj):
         descriptors = (
@@ -34,12 +38,12 @@ class IngredientListSerialiser(serializers.ModelSerializer):
             "common_name",
             "other_names",
             "cas",
-            "volatility",
-            "origin",
-            "constituents",
-            "similar_ingredients",
+            "related_ingredients",
         )
         model = Ingredient
+
+
+
 
 
 class IngredientSerialiser(serializers.ModelSerializer):
@@ -49,7 +53,7 @@ class IngredientSerialiser(serializers.ModelSerializer):
     """
 
     descriptors = serializers.SerializerMethodField()
-    related_ingredients = serializers.StringRelatedField(many=True)
+    related_ingredients = RelatedIngredientSerialiser(many=True)
     contributors = serializers.StringRelatedField(many=True, read_only=True)
 
     def get_descriptors(self, obj):

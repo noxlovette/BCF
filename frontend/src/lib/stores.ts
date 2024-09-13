@@ -4,7 +4,7 @@ import { writable } from "svelte/store";
 // Define the individual stores
 export let isAuthenticated = writable(false);
 export let currentPage = writable(1);
-export let pageSize = writable(100);
+export let pageSize = writable(50);
 export let searchTerm = writable("");
 export let secondSearchTerm = writable("");
 export const isLoading = writable(false);

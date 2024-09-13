@@ -15,7 +15,10 @@ declare global {
       other_names: string;
       use: string;
       volatility: string;
-      related_ingredients: IngredientBrowse[];
+      related_ingredients: {
+        common_name: string;
+        slug: string;
+      };
       contributors: User[];
     }
 

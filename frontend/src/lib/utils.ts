@@ -38,16 +38,10 @@ export async function changePage(
   try {
     const newPage: number = currentPage + increment;
 
-    // Check if new page is within valid range
     if (newPage < 1 || newPage > total_pages) {
-      notification.set({
-        message: `There is nothing to seek there`,
-        type: "error",
-      });
       return currentPage;
     }
 
-    // Update the current page
     const message = `You are on page ${newPage}/${total_pages}`;
     notification.set({ message: message, type: "info" });
     return (currentPage += increment);

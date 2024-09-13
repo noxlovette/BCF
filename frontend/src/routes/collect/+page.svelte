@@ -17,6 +17,7 @@
   import Search from "$lib/components/UI/Search.svelte";
   import { notification } from "$lib/stores";
   import { enhance } from "$app/forms";
+    import CardHolder from "$lib/components/CardHolder.svelte";
 
   export let data: PageServerData;
   let collection = data.collection;
@@ -40,7 +41,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const pageFromUrl = parseInt(urlParams.get("page") || "1");
     const searchFromUrl = urlParams.get("search") || "";
-    const pageSizeFromUrl = parseInt(urlParams.get("page_size") || "24");
+    const pageSizeFromUrl = parseInt(urlParams.get("page_size") || "100");
 
     currentPage.set(pageFromUrl);
     searchTerm.set(searchFromUrl);
@@ -51,13 +52,11 @@
 
   async function updatePageSize() {
     currentPage.set(1);
-    updateUrl();
   }
 
   async function handleChangePage(increment: number) {
     const newPage = await changePage(increment, totalPages, $currentPage);
     currentPage.set(newPage);
-    updateUrl();
   }
 
   function handleSearchCollection() {
@@ -70,7 +69,6 @@
       );
     });
     currentPage.set(1);
-    updateUrl();
   }
 
   function updateUrl() {
@@ -106,7 +104,7 @@
       <CreateButton on:create />
     </form>
 
-    <form method="post" action="?/reset">
+    <form method="post" action="?/reset" use:enhance>
       <ResetButton />
     </form>
 
@@ -120,16 +118,12 @@
     {#if paginatedCollection.length === 0}
       <p class="m-12 text-5xl">Hm. Try a different search?</p>
     {:else}
-      <div
-        id="card-holder"
-        class="grid w-full grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
-      >
+      <CardHolder>
         {#each paginatedCollection as ingredient}
-          {#if ingredient}
             <CollectCard {ingredient} />
-          {/if}
         {/each}
-      </div>
+      </CardHolder>
+
     {/if}
   </div>
 
