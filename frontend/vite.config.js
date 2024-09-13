@@ -21,7 +21,8 @@ export default defineConfig({
   // this is the config for dev server
 
   server: {
-    host: "0.0.0.0",
-    port: 5173,
+    host: true,
+    port: process.env.NODE_ENV === "development" ? 5173 : 3000,
   },
+  
 });

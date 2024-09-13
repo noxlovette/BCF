@@ -3,8 +3,10 @@ import { handleErrorWithSentry, sentryHandle } from "@sentry/sveltekit";
 import type { HandleFetch } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {
   Sentry.init({
+
+    environment: process.env.NODE_ENV,
     dsn: "https://cb2fec3778ef3f394a970f72701a67f2@o4507272574468096.ingest.de.sentry.io/4507272578203728",
     tracesSampleRate: 1.0,
 

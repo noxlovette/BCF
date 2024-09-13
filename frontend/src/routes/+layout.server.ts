@@ -14,14 +14,20 @@ export const load: LayoutServerLoad = async ({ cookies, fetch, depends }) => {
     },
   });
 
+
+  let user: App.User | null = null;
   if (response.status === 401) {
     return { user: null };
   }
 
+  try {
+    user = await response.json();
+  } catch (error) {
+    console.error("Error parsing JSON response", error);
+    return { user: null };
+  }
 
-  const user: App.User = await response.json();
   cookies.set("csrftoken", user.csrfToken, { path: "/" });
-
   depends("app:user:login");
   return { user };
 };

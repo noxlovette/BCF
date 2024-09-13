@@ -2,26 +2,24 @@ services:
   frontend:
     build: 
       context: ./frontend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: frontend
     ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend/static:/app/static
-      - ./frontend/src:/app/src
+      - "3000:3000"
     environment:
-      - NODE_ENV=development
-      - CHOKIDAR_USEPOLLING=true
+      - NODE_ENV=staging
+      - PORT=3000
+      - HOST=0.0.0.0
     env_file:
       - ./frontend/.env
-    command: npm run dev
-
+    restart: always
     depends_on:
       - backend
+      - redis
 
   redis:
     image: redis/redis-stack:latest
-    container_name: redis-bcf
+    container_name: redis
     ports:
       - "6379:6379"
       - "8001:8001"
@@ -29,34 +27,32 @@ services:
   backend:
     build: 
       context: ./backend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: backend
     ports:
       - "8000:8000"
-    volumes:
-      - ./backend:/app
     environment:
-      - POSTGRES_DB=${PGNAME:-defaultdb}
-      - POSTGRES_USER=${PGUSER:-postgres}
-      - POSTGRES_PASSWORD=${PGPASSWORD:-changeme}
-      - POSTGRES_HOST=db
-      - POSTGRES_PORT=5432
-      - NODE_ENV=development
+      - POSTGRES_DB=${PGNAME}
+      - POSTGRES_USER=${PGUSER}
+      - POSTGRES_PASSWORD=${PGPASSWORD}
+      - POSTGRES_HOST=${PGHOST}
+      - POSTGRES_PORT=${PGPORT}
     env_file:
       - ./backend/.env
-    command: python manage.py runserver 0.0.0.0:8000
     depends_on:
       - db
 
   db:
-    image: postgres
-    restart: always
+    image: postgres:16
     user: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=${PGNAME:-defaultdb}
-      - POSTGRES_PASSWORD=${PGPASSWORD:-changeme}
+      - POSTGRES_DB=${PGNAME:-bcf}
+      - POSTGRES_USER=${PGUSER:-postgres}
+      - POSTGRES_PASSWORD=${PGPASSWORD:-your_secure_password}
+      - PGPORT=${PGPORT:-5432}
+      - PGHOST=${PGHOST:-db}
     ports:
       - "5432:5432"
     healthcheck:

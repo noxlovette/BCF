@@ -13,6 +13,7 @@ services:
     restart: always
     depends_on:
       - backend
+      - redis
 
   redis:
     image: redis/redis-stack:latest
@@ -41,7 +42,6 @@ services:
 
   db:
     image: postgres:16
-    restart: always
     user: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
