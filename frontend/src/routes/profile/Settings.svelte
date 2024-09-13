@@ -289,7 +289,7 @@
       />
       <label for="email-off">off</label>
     </div>
-  </div>
+    </div>
 </div>
 
 <style>
