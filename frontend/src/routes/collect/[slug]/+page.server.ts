@@ -90,6 +90,9 @@ export const actions = {
         },
       );
 
+      const data = await response.json();
+      console.log(data);
+
       if (response.ok) {
         redis.del(`ingredient-${sessionid}-${id}`);
         return { success: true };

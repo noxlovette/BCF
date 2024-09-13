@@ -1,94 +1,227 @@
 <script lang="ts">
   import type { PageServerData } from "./$types";
-  import RoundButton from "$lib/components/UI/RoundButton.svelte";
-  import SuggestionIcon from "$lib/icons/SuggestionIcon.svelte";
+
   import MetaData from "$lib/components/MetaData.svelte";
   import AppWrap from "$lib/components/AppWrap.svelte";
   import { user } from "$lib/stores";
-  import EditCollect from "$lib/components/EditCollect.svelte";
+
+  import { notification } from "$lib/stores";
+  import Label from "$lib/components/UI/Label.svelte";
+  import VariableInput from "$lib/components/UI/VariableInput.svelte";
+  import VariableTextarea from "$lib/components/UI/VariableTextarea.svelte";
+  import { writable } from "svelte/store";
+  import { setContext } from "svelte";
+  import { enhance } from "$app/forms";
 
   export let data: PageServerData;
-  let editing = false;
+  let ingredient: App.IngredientCollection = data.ingredient;
+  const editing = writable(false);
+  const editedIngredient = writable(ingredient);
 
-  const ingredient = data.ingredient;
-
-  let volatility = ingredient.volatility || "unknown";
+  let ifraStatus = ingredient.is_restricted ? "Restricted" : "Not restricted";
+  let otherNames = ingredient.other_names || "Unknown";
+  let volatility = ingredient.volatility || "Unknown";
   let useMessage =
     ingredient.use || "Nobody has added a use for this ingredient yet";
-  let colour = ingredient.colour || "unknown";
-  let impression = ingredient.impression || "unknown";
-  let associations = ingredient.associations || "unknown";
-  let ideas = ingredient.ideas || "unknown";
-  let origin = ingredient.origin || "unknown";
+  let colour = ingredient.colour || "No colour";
+  let impression =
+    ingredient.impression || "You haven't recorded an impression yet";
+  let associations = ingredient.associations || "None";
+  let ideas = ingredient.ideas || "You haven't recorded any ideas yet";
+  let origin = ingredient.origin || "Earth";
+  setContext("editing", editing);
+
+  function handleEnhance() {
+    editing.set(false);
+    ingredient = $editedIngredient;
+    notification.set({ message: "Ingredient Updated", type: "success" });
+  }
 </script>
 
 <MetaData title={ingredient.common_name} robots="noindex, nofollow" />
 
 <AppWrap
-  class="select-text caret-grapefruit-800 selection:bg-grapefruit-100 selection:text-grapefruit-800 2xl:px-24"
+  class="select-text justify-between caret-aqua-700 selection:bg-aqua-700 selection:text-aqua-50"
 >
-  <div class=" rounded border-grapefruit-800">
+  <form method="post" action="?/update" class="" use:enhance={handleEnhance}>
     <div
-      id="top-part"
-      class="flex flex-row items-center rounded-t-lg border-b border-grapefruit-800 bg-grapefruit-700 p-8 text-grapefruit-50"
+      id="header"
+      class="flex w-full flex-row items-baseline justify-between border-b-2 border-stone-500 pb-4 font-medium xl:border-b-4"
     >
-      <div id="top-left" class="flex w-3/4 flex-col space-y-2 pr-24">
-        <h1
-          class="flex w-full font-quicksand text-5xl font-bold tracking-tighter"
-        >
-          {ingredient.common_name}
+      <div class="w-full">
+        <h1 class="">
+          <VariableInput
+            text={ingredient.common_name}
+            bind:value={$editedIngredient.common_name}
+            name="common_name"
+            class="font-quicksand text-7xl font-medium"
+          />
         </h1>
       </div>
-      <div id="top-right" class=" flex flex-1 flex-col">
-        <h2 class="mb-2 min-w-fit font-quicksand text-2xl">{ingredient.cas}</h2>
-        <h2 class="lowercase">
-          {volatility} <span class="opacity-60">note</span>
-        </h2>
+      <div
+        id="controls"
+        class="flex flex-row items-baseline justify-end space-x-4 font-medium xl:text-2xl"
+      >
+        {#if $editing}
+          <button
+            type="submit"
+            class="rounded border-2 border-stone-500 px-6 py-2"
+            on:click={() => editing.set(false)}
+          >
+            Cancel
+          </button>
+
+          <form
+            method="post"
+            action="?/delete"
+            use:enhance={() =>
+              notification.set({
+                message: `Deleted ${ingredient.common_name}`,
+                type: "success",
+              })}
+          >
+            <input type="hidden" name="id" value={ingredient.id} />
+            <button
+              disabled={!$user.is_authenticated}
+              class="rounded border-2 border-stone-500 px-6 py-2 disabled:border-stone-300 disabled:text-stone-400"
+            >
+              Delete
+            </button>
+          </form>
+          <input type="hidden" name="id" value={ingredient.id} />
+          <button
+            type="submit"
+            class="rounded border-2 border-stone-500 px-6 py-2"
+          >
+            Save
+          </button>
+
+        {:else}
+          <button
+            disabled={!$user.is_authenticated}
+            on:click={() => editing.set(!$editing)}
+            class="rounded border-2 border-stone-500 px-6 py-2 disabled:border-stone-300 disabled:text-stone-400"
+          >
+            Edit
+          </button>
+        {/if}
       </div>
-      {#if $user.is_authenticated}
-        <div class="flex flex-1 items-center justify-center space-x-2 rounded">
-          <RoundButton on:click={() => (editing = !editing)}>
-            <SuggestionIcon />
-          </RoundButton>
+    </div>
+
+    <div id="center" class="flex flex-row justify-between py-4">
+      <div id="left-part" class="flex w-2/3 flex-col space-y-8 pr-8">
+        <div class="flex flex-row space-x-8">
+          <div>
+            <Label>descriptors</Label>
+            <VariableTextarea
+              text={ingredient.descriptors}
+              bind:value={$editedIngredient.descriptors}
+              name="descriptors"
+              class="font-medium xl:text-2xl"
+            />
+          </div>
+          <div>
+            <Label>CAS</Label>
+            <VariableInput
+              text={ingredient.cas}
+              name="cas"
+              bind:value={$editedIngredient.cas}
+              class="font-medium xl:text-2xl"
+            />
+          </div>
         </div>
-      {/if}
-    </div>
+        <div>
+          <Label>how to use it</Label>
+          <VariableTextarea
+            text={useMessage}
+            bind:value={$editedIngredient.use}
+            name="use"
+            class="min-h-36 font-medium xl:text-2xl"
+          />
+        </div>
+        <div class="flex flex-col space-y-4">
+          <div class="flex w-full max-w-2xl space-x-8">
+            <div>
+              <Label>volatility</Label>
+              <VariableInput
+                text={volatility}
+                name="volatility"
+                bind:value={$editedIngredient.volatility}
+                class="font-medium xl:text-2xl"
+              />
+            </div>
+            <div>
+              <Label>restricted</Label>
+              <VariableInput
+                text={ifraStatus}
+                name="is_restricted"
+                bind:value={$editedIngredient.is_restricted}
+                class="font-medium xl:text-2xl"
+              />
+            </div>
+            <div>
+              <Label>origin</Label>
+              <VariableInput
+                text={origin}
+                name="origin"
+                bind:value={$editedIngredient.origin}
+                class="font-medium xl:text-2xl"
+              />
+            </div>
+          </div>
 
-    <div id="bottom-part" class="flex flex-row p-8">
-      <div id="bottom-left" class="flex w-3/4 flex-col pr-24">
-        <p class="opacity-60">how to use</p>
-        <p class="py-4">{useMessage}</p>
-        <p class="opacity-60">impression</p>
-        <p class="py-4">{impression}</p>
-
-        <ul class="mt-auto flex flex-col space-y-4">
-          <li class="flex flex-col">
-            <h3 class=" opacity-60">associations</h3>
-            <p class="w-full">{associations}</p>
-          </li>
-        </ul>
+          <div>
+            <Label>also known as</Label>
+            <VariableTextarea
+              text={otherNames}
+              name="other_names"
+              bind:value={$editedIngredient.other_names}
+              class=""
+            />
+          </div>
+        </div>
       </div>
+      <div id="right-part" class="flex flex-1 flex-col space-y-8">
+        <div class="flex flex-row space-x-8">
+          <div>
+            <Label>colour</Label>
+            <VariableInput
+              text={colour}
+              name="colour"
+              bind:value={$editedIngredient.colour}
+              class="font-medium xl:text-2xl"
+            />
+          </div>
+          <div>
+            <Label>associations</Label>
+            <VariableInput
+              text={associations}
+              name="associations"
+              bind:value={$editedIngredient.associations}
+              class="font-medium xl:text-2xl"
+            />
+          </div>
+        </div>
+        <div>
+          <Label>my impression</Label>
+          <VariableTextarea
+            text={impression}
+            name="impression"
+            bind:value={$editedIngredient.impression}
+            class="min-h-36 font-medium xl:text-2xl"
+          />
+        </div>
 
-      <div id="bottom-right" class="flex flex-1 flex-col">
-        <ul class="space-y-8">
-          <li class="flex flex-col">
-            <h3 class=" opacity-60">origin</h3>
-            <p>{origin}</p>
-          </li>
-          <li class="flex flex-col">
-            <h3 class=" opacity-60">Colour</h3>
-            <p>{colour}</p>
-          </li>
-          <li class="flex flex-col">
-            <h3 class=" opacity-60">ideas</h3>
-            <p>{ideas}</p>
-          </li>
-        </ul>
+        <div>
+          <Label>ideas</Label>
+          <VariableTextarea
+            text={ideas}
+            name="ideas"
+            bind:value={$editedIngredient.ideas}
+            class="min-h-36 font-medium xl:text-2xl"
+          />
+        </div>
       </div>
     </div>
-  </div>
-
-  {#if editing}
-    <EditCollect {ingredient} bind:editing />
-  {/if}
+  </form>
 </AppWrap>
