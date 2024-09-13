@@ -1,7 +1,6 @@
 from pathlib import Path
 from dotenv import load_dotenv
 import sentry_sdk
-from corsheaders.defaults import default_headers
 import os
 
 load_dotenv()
@@ -34,7 +33,6 @@ MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware"
