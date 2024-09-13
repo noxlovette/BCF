@@ -1,3 +1,4 @@
+import { invalidate } from "$app/navigation";
 import type { Actions } from "./$types";
 
 export const actions = {

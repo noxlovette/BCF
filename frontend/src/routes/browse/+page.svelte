@@ -179,7 +179,7 @@
           {/each}
         </CardHolder>
       {/if}
-      {/if}
+      
 
       {#if foundInDescriptors.length !== 0}
         <div class="flex items-center space-x-2">
@@ -218,6 +218,7 @@
               {/each}
             </CardHolder>
           {/if}
+      {/if}
       {/if}
   </div>
 </AppWrap>

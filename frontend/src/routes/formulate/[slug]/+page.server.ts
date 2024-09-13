@@ -116,7 +116,7 @@ export const actions = {
 
     if (response.ok) {
       redis.del(`formula-${sessionid}-${id}`);
-      redis.del(`formulae-${sessionid}`);
+      redis.del(`formulas-${sessionid}`);
       redirect(301, "/formulate");
     } else {
       throw error(400, "Failed to delete the formula");

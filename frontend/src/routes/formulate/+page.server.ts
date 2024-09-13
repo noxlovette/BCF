@@ -82,7 +82,7 @@ export const actions = {
 
     if (response.ok) {
       const data = await response.json();
-      redis.del(`formulae-${sessionid}`);
+      redis.del(`formulas-${sessionid}`);
       redirect(301, data.url);
     } else {
       const errorData = await response.json();

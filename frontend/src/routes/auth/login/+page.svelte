@@ -4,17 +4,15 @@
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
 
-  import { notification, setUser } from "$lib/stores";
+  import { notification, setUser, user } from "$lib/stores";
 
   let username = "";
   let password = "";
   export let form;
 
   const handleLoginResult = async ({ result, update }) => {
-    if (result.type === "success" && result.data.success) {
-      const { user } = result.data;
-
-      setUser(user);
+    if (result.data.success) {
+      $user.is_authenticated = true;
       notification.set({ message: "Welcome back!", type: "success" });
       await goto("/collect/");
     } else {
@@ -38,7 +36,6 @@
       method="POST"
       action="?/login"
       use:enhance={() => handleLoginResult}
-      on:submit|preventDefault
       class="flex h-[475px] w-[300px] flex-col items-start justify-start rounded bg-white p-8 shadow dark:bg-stone-950"
       in:fade={{
         duration: 100,
