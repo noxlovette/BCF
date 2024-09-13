@@ -4,6 +4,7 @@ import type { Actions } from "./$types";
 export const actions = {
   login: async ({ request, cookies }) => {
     const data = await request.formData();
+    const csrfToken = cookies.get("csrftoken");
     const username = data.get("username");
     const password = data.get("password");
 
@@ -17,6 +18,8 @@ export const actions = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken,
+          Cookie: `csrftoken=${csrfToken}`,
         },
         body: JSON.stringify({ username, password }),
         credentials: "include",
