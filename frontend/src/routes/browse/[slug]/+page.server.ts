@@ -121,8 +121,8 @@ export const actions = {
       volatility: formData.get("volatility"),
       use: formData.get("use"),
       origin: formData.get("origin"),
-      similar_ingredients: formData.get("similar_ingredients")
-        ? JSON.stringify(formData.get("similar_ingredients"))
+      related_ingredients: formData.get("related_ingredients")
+        ? JSON.stringify(formData.get("related_ingredients"))
         : null,
       is_restricted: formData.get("is_restricted"),
     };

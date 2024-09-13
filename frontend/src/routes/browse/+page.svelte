@@ -2,7 +2,6 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { derived } from "svelte/store";
-  import DescriptorToggle from "$lib/components/UI/DescriptorToggle.svelte";
   import type { PageServerData } from "./$types";
   import { changePage, handleKeydown } from "$lib/utils";
   import BrowseCard from "$lib/components/BrowseCard.svelte";
@@ -21,6 +20,8 @@
   import SearchBar from "$lib/components/SearchBar.svelte";
   import PerPage from "$lib/components/UI/PerPage.svelte";
   import Search from "$lib/components/UI/Search.svelte";
+    import CardHolder from "$lib/components/CardHolder.svelte";
+    import { fade } from "svelte/transition";
 
   export let data: PageServerData;
   const urlParams = derived(
@@ -30,20 +31,10 @@
     },
   );
 
-  let chosenDescriptors: App.Descriptor[] = [];
-  let filteredDescriptors: App.Descriptor[];
-  let showFilterMenu = false;
   let searchInput: HTMLInputElement;
-  let searchInputDescriptor: HTMLInputElement;
-  let filterMenu: HTMLDivElement;
 
-  $: {
-    searchDescriptors($secondSearchTerm);
-  }
 
   onMount(() => {
-    filteredDescriptors = data.descriptors;
-
     currentPage.set(parseInt(data.urlParams.page));
     pageSize.set(parseInt(data.urlParams.pageSize));
     searchTerm.set(data.urlParams.search);
@@ -56,19 +47,16 @@
     };
   });
 
-  function searchDescriptors(term: string) {
-    filteredDescriptors = data.descriptors.filter((descriptor) =>
-      descriptor.name.toLowerCase().includes(term.toLowerCase()),
-    );
-  }
+  
 
   function reset() {
-    chosenDescriptors = [];
     searchTerm.set("");
   }
 
   async function searchIngredients() {
     currentPage.set(1);
+    dimmed = false;
+    searchTerm.set($secondSearchTerm);
     if ($searchTerm === "") {
       notification.set({ message: "Showing all ingredients", type: "info" });
     } else {
@@ -89,6 +77,30 @@
     currentPage.set(newPage);
   }
 
+
+  let foundInCommonName: App.IngredientBrowse[] = [];
+  let foundinOtherNames:App.IngredientBrowse[] = [];
+  let foundInCas: App.IngredientBrowse[] = [];
+  let foundInDescriptors: App.IngredientBrowse[] = [];
+
+  $:foundInCommonName = data.ingredients.results.filter(ingredient => {
+    return ingredient.common_name?.toLowerCase().includes($searchTerm.toLowerCase());
+});
+
+$:foundinOtherNames = data.ingredients.results.filter(ingredient => {
+    return ingredient.other_names?.toLowerCase().includes($searchTerm.toLowerCase());
+});
+
+$:foundInCas = data.ingredients.results.filter(ingredient => {
+    return ingredient.cas?.toLowerCase().includes($searchTerm.toLowerCase());
+});
+
+$:foundInDescriptors = data.ingredients.results.filter(ingredient => {
+    return ingredient.descriptors?.toLowerCase().includes($searchTerm.toLowerCase());
+});
+
+let dimmed = false;
+
   const description = "Browse perfume compounds. IFRA FIG.";
   const ogTitle = "BCF | Browse";
   const ogUrl = "https://bcfapp.app/browse";
@@ -102,26 +114,25 @@
 />
 
 <AppWrap>
+  {#if $searchTerm === "" || data.ingredients.count === 3100}
+    <h2 class="text-3xl font-bold font-quicksand my-4"
+    in:fade
+    >Showing all ingredients</h2>
+  {:else}
+    <h2 class="text-3xl font-bold font-quicksand my-4"
+    in:fade
+    
+    >Showing {data.ingredients.count} results for "{$searchTerm}"</h2>
+  {/if}
   <SearchBar>
-    {#if showFilterMenu}
       <Search
         value={secondSearchTerm}
-        on:input={() => searchDescriptors}
-        bind:searchInput={searchInputDescriptor}
-        on:blur={() => searchDescriptors}
-        placeholder="/ search descriptors..."
-      />
-    {:else}
-      <Search
-        value={searchTerm}
         on:input={(event) => event.key === "Enter" && searchIngredients()}
         bind:searchInput
+        on:focus={()=>dimmed=true}
         on:blur={searchIngredients}
       />
-    {/if}
     <PerPage />
-
-    <DescriptorToggle bind:showFilterMenu />
     <ResetButton on:reset={reset} />
     <Pagination
       on:nextPage={() => handleChangePage(1)}
@@ -131,59 +142,66 @@
 
   <div
     id="table-wrapper"
-    class="my-8 flex w-full flex-col items-center justify-center"
+    class:dimmed
+    class="my-8 flex w-full flex-col transition-all"
   >
     {#if data.ingredients.results.length === 0}
-      <!-- If there are no results, display a message -->
-      <p class="m-12 text-5xl">Hm. Try a different search?</p>
+      <p class="m-12 text-5xl font-bold font-quicksand">Hm. Try a different search?</p>
     {:else}
-      <div
-        id="filter"
-        class="mb-12 grid w-full items-center gap-4 border-b-2 border-gold-400 bg-white/20 py-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 dark:bg-stone-900/20"
-        class:hidden={!showFilterMenu}
-        bind:this={filterMenu}
-      >
-        {#if filteredDescriptors.length !== 0 && filteredDescriptors}
-          {#each filteredDescriptors as descriptor}
-            <div class="flex md:flex-col xl:flex-row">
-              <label
-                class="md:text-md sm:text-sm lg:text-base"
-                title={descriptor.description}
-              >
-                <input
-                  class="mx-2
-            size-4 rounded-full border-none text-navy-600/90 shadow transition-all checked:bg-navy-700/70 checked:ring-navy-700/30 hover:scale-110 hover:checked:bg-navy-600/80 focus:ring-navy-400/30"
-                  type="checkbox"
-                  id={descriptor.name}
-                  bind:group={chosenDescriptors}
-                  value={descriptor}
-                />
-                {descriptor.name}
-              </label>
-            </div>
-          {/each}
-        {:else}
-          <p>No descriptors found</p>
-        {/if}
-      </div>
 
-      <div
-        id="card-holder"
-        class="grid w-full grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
-        class:dimmed={showFilterMenu}
-      >
+    {#if $searchTerm === ""}
+      <CardHolder>
         {#each data.ingredients.results as ingredient}
-          {#if ingredient}
-            <BrowseCard {ingredient} />
-          {/if}
+          <BrowseCard {ingredient} />
         {/each}
-      </div>
+      </CardHolder>
+    {:else}
+    {#if foundInCommonName.length !== 0 || foundinOtherNames.length !== 0}
+    <h3 class="text-2xl font-medium font-quicksand my-2">Found in Names</h3>
+    <CardHolder>
+      {#each foundInCommonName as ingredient}
+      {#if ingredient}
+        <BrowseCard {ingredient} />            
+      {/if}
+    {/each}
+    {#each foundinOtherNames as ingredient}
+      {#if ingredient}
+        <BrowseCard {ingredient} />            
+      {/if}
+    {/each}
+    </CardHolder>
+    {/if}
+
+    
+    {#if foundInDescriptors.length !== 0}
+    
+    <h3 class="text-2xl font-medium font-quicksand my-2">Found in Descriptors</h3>
+    <CardHolder>
+      {#each foundInDescriptors as ingredient}
+      {#if ingredient}
+      <BrowseCard {ingredient} />            
+      {/if}
+      {/each}
+    </CardHolder>
+    
+    {#if foundInCas.length !== 0}
+    <h3 class="text-2xl font-medium font-quicksand my-2">Found in CAS</h3>
+    <CardHolder>
+      {#each foundInCas as ingredient}
+      {#if ingredient}
+        <BrowseCard {ingredient} />            
+      {/if}
+    {/each}
+    </CardHolder>
+    {/if}
+    {/if}    
+    {/if}
     {/if}
   </div>
 </AppWrap>
 
 <style>
-  #card-holder.dimmed {
+  .dimmed {
     filter: blur(1px);
     opacity: 80%;
   }

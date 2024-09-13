@@ -1,8 +1,5 @@
 <script lang="ts">
-
-  import Suggestion from "$lib/components/Suggestion.svelte";
-
-  import type { PageServerData, ActionData } from "./$types";
+  import type { PageServerData } from "./$types";
   export let showSuggestion = false;
   import { notification } from "$lib/stores";
 
@@ -35,10 +32,10 @@
   let volatility = ingredient.volatility || "Unknown";
   let useMessage =
     ingredient.use || "Nobody has told us how to use this ingredient yet";
-  let similarIngredients =
-    Array.isArray(ingredient.similar_ingredients) &&
-    ingredient.similar_ingredients.length > 0
-      ? ingredient.similar_ingredients
+  let relatedIngredients =
+    Array.isArray(ingredient.related_ingredients) &&
+    ingredient.related_ingredients.length > 0
+      ? ingredient.related_ingredients
       : "Nobody knows";
   let origin = ingredient.origin || "Earth";
   let otherNames = ingredient.other_names || "Nobody knows";
@@ -102,7 +99,7 @@
           <input type="hidden" name="use" bind:value={suggestion.use} />
           <input type="hidden" name="is_restricted" bind:value={suggestion.is_restricted} />
           <input type="hidden" name="origin" bind:value={suggestion.origin} />
-          <input type="hidden" name="similar_ingredients" bind:value={suggestion.similar_ingredients} />
+          <input type="hidden" name="similar_ingredients" bind:value={suggestion.related_ingredients} />
           <input type="hidden" name="other_names" bind:value={suggestion.other_names} />
           <input type="hidden" name="volatility" bind:value={suggestion.volatility} />
 
@@ -194,10 +191,10 @@
           </div>
         </div>
         <div>
-          <Label>similar to</Label>
+          <Label>related</Label>
           <VariableTextarea
-            text={similarIngredients}
-            bind:value={suggestion.similar_ingredients}
+            text={relatedIngredients}
+            bind:value={suggestion.related_ingredients}
           />
         </div>
         <div>

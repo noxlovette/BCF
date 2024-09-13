@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
+from itertools import chain
 from .serialisers import (
     IngredientSerialiser,
     SuggestedIngredientSerialiser,
@@ -20,36 +21,49 @@ class TotalBrowseView(generics.ListAPIView):
 
     queryset = Ingredient.objects.all().order_by("common_name")
     serializer_class = IngredientListSerialiser
+
 class BrowseView(APIView):
     """
-    the basic view for the browse page, search functionality in-built
-    accommodates search term and descriptors
+    View to handle ingredient browsing with prioritized searching.
+    Results are ordered by names, CAS, then descriptors.
     """
 
     def get(self, request):
-        # get the search term from the query string
+        # Get the search term from the query string
         search_term = request.query_params.get("search", None)
         page_size = request.query_params.get("page_size", 10)
-        descriptors = request.query_params.getlist("descriptors", None)
 
-        ingredients = Ingredient.objects.filter(
-            # Search in the common_name, other_names, and cas fields
-            Q(common_name__icontains=search_term)
-            | Q(other_names__icontains=search_term)
-            | Q(cas__icontains=search_term)
-        ).order_by("common_name")
+        # If no search term is provided, just return all ingredients, sorted by name
+        if not search_term:
+            ingredients = Ingredient.objects.all().order_by("common_name")
+        else:
+            # Prioritize the results based on the fields
+            search_term = search_term.lower()
 
-        if descriptors:
-            # Apply filter using the list of descriptors
-            ingredients = ingredients.filter(
-                Q(descriptor1__name__in=descriptors)
-                | Q(descriptor2__name__in=descriptors)
-                | Q(descriptor3__name__in=descriptors)
-            ).distinct()
+            # Search in common names and other names first
+            name_matches = Ingredient.objects.filter(
+                Q(common_name__icontains=search_term) | 
+                Q(other_names__icontains=search_term)
+            )
 
-        # a custom paginator to yield total_pages
+            # Search in CAS numbers second
+            cas_matches = Ingredient.objects.filter(
+                Q(cas__icontains=search_term)
+            )
+
+            # Search in descriptors last
+            descriptor_matches = Ingredient.objects.filter(
+                Q(descriptor1__name__icontains=search_term) |
+                Q(descriptor2__name__icontains=search_term) |
+                Q(descriptor3__name__icontains=search_term)
+            )
+
+            # Concatenate the querysets while preserving order
+            ingredients = list(chain(name_matches, descriptor_matches, cas_matches))
+
+        # Paginate the results
         paginator = CustomPageNumberPagination()
-        paginator.page_size = page_size  # set the page size
+        paginator.page_size = page_size  # Set the page size
         page_of_ingredients = paginator.paginate_queryset(ingredients, request)
 
         # Convert the page of ingredients to JSON
@@ -57,6 +71,7 @@ class BrowseView(APIView):
         ingredients_json = serializer.data
 
         return paginator.get_paginated_response(ingredients_json)
+
     
 class IngredientDetailView(APIView):
     """
@@ -84,7 +99,9 @@ class CustomPageNumberPagination(PageNumberPagination):
             {
                 "page": self.page.number,  # current page number
                 "total_pages": self.page.paginator.num_pages,  # total number of pages
+                "count": self.page.paginator.count,  # total number of items
                 "results": data,  # results for the current page
+                "search": self.request.query_params.get("search", None),  # search term
             }
         )
 

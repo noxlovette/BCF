@@ -6,8 +6,7 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
 
   const page = url.searchParams.get("page") || "1";
   const search = url.searchParams.get("search") || "";
-  const pageSize = url.searchParams.get("page_size") || "24";
-  const descriptors = url.searchParams.getAll("descriptors") || [];
+  const pageSize = url.searchParams.get("page_size") || "100";
 
   try {
     const cacheKeyIngredients = `browse-${page}-${search}-${pageSize}`;
@@ -30,27 +29,8 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
       );
     }
 
-    // Fetch and cache descriptors
-    const cacheKeyDescriptors = `browse-descriptors`;
-    let descriptors: App.Descriptor[];
-
-    const cachedDescriptors = await redis.get(cacheKeyDescriptors);
-    if (cachedDescriptors) {
-      descriptors = await JSON.parse(cachedDescriptors);
-    } else {
-      const response = await fetch(`${VITE_API_URL}/browse/api/descriptors/`);
-      descriptors = await response.json();
-      await redis.set(
-        cacheKeyDescriptors,
-        JSON.stringify(descriptors),
-        "EX",
-        7200,
-      );
-    }
-
     return {
       ingredients,
-      descriptors,
       urlParams: {
         page,
         search,

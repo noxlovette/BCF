@@ -15,12 +15,14 @@ declare global {
       other_names: string;
       use: string;
       volatility: string;
-      similar_ingredients: IngredientBrowse[];
+      related_ingredients: IngredientBrowse[];
       contributors: User[];
     }
 
     interface ResponseBrowse {
       page: number;
+      count: number;
+      search: string;
       total_pages: number;
       results: IngredientBrowse[];
     }

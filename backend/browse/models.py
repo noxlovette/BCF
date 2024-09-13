@@ -93,12 +93,8 @@ class Ingredient(models.Model):
         default=False, null=True, verbose_name="Restricted"
     )
     origin = models.TextField(null=True, blank=True, verbose_name="Origin")
-    constituents = models.ManyToManyField(
-        "self", verbose_name="Constituents", blank=True
-    )
-
     # arbitrary data. depends fully on use rcontributions
-    similar_ingredients = models.ManyToManyField(
+    related_ingredients = models.ManyToManyField(
         "self", verbose_name="Similar Ingredients", blank=True
     )
 
@@ -187,7 +183,7 @@ class SuggestedIngredient(models.Model):
     ingredient_type = models.CharField(
         max_length=15, null=True, verbose_name="Type", default="unchanged"
     )
-    use = models.TextField(null=True, blank=True, verbose_name="Use", default=1)
+    use = models.TextField(null=True, blank=True, verbose_name="Use", default="unchanged")
     volatility = models.CharField(
         max_length=20,
         null=True,
@@ -195,23 +191,20 @@ class SuggestedIngredient(models.Model):
         verbose_name="Volatility",
         default="unchanged",
     )
-    is_restricted = models.BooleanField(
-        null=True, verbose_name="Restricted", default=None
+    is_restricted = models.TextField(
+        null=True, verbose_name="Restricted", default="unchanged"
     )
     origin = models.TextField(
         null=True, blank=True, verbose_name="Origin", default="unchanged"
     )
-    constituents = models.TextField(
-        verbose_name="Constituents", blank=True, null=True, default="unchanged"
-    )
-    similar_ingredients = models.TextField(
+    related_ingredients = models.TextField(
         verbose_name="Similar Ingredients", blank=True, null=True, default=None
     )
     message = models.TextField(null=True, blank=True)
 
     # the system fills these out
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, default=None)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=10)
     date_suggested = models.DateTimeField(auto_now_add=True)
 
     status = models.CharField(

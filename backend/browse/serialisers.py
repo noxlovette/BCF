@@ -49,7 +49,7 @@ class IngredientSerialiser(serializers.ModelSerializer):
     """
 
     descriptors = serializers.SerializerMethodField()
-    constituents = serializers.StringRelatedField(many=True)
+    related_ingredients = serializers.StringRelatedField(many=True)
     contributors = serializers.StringRelatedField(many=True, read_only=True)
 
     def get_descriptors(self, obj):
@@ -64,22 +64,8 @@ class IngredientSerialiser(serializers.ModelSerializer):
         )
 
     class Meta:
-        fields = (
-            "id",
-            "slug",
-            "descriptors",
-            "common_name",
-            "other_names",
-            "cas",
-            "ingredient_type",
-            "use",
-            "volatility",
-            "is_restricted",
-            "origin",
-            "constituents",
-            "similar_ingredients",
-            "contributors",
-        )
+        fields = "__all__"
+        read_only_fields = ["slug", "contributors"]
         model = Ingredient
 
 

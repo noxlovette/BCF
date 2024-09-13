@@ -15,6 +15,10 @@
   function handleBlur() {
     dispatch("blur");
   }
+
+  function handleFocus() {
+    dispatch("focus");
+  }
 </script>
 
 <input
@@ -23,6 +27,7 @@
   bind:value={$value}
   bind:this={searchInput}
   on:change={handleSearch}
+  on:focus={handleFocus}
   on:blur={handleBlur}
   {placeholder}
   title="find an ingredient by CAS or the multiple names that it might have"
