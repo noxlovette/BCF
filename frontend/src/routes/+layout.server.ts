@@ -14,6 +14,11 @@ export const load: LayoutServerLoad = async ({ cookies, fetch, depends }) => {
     },
   });
 
+  if (response.status === 401) {
+    return { user: null };
+  }
+
+
   const user: App.User = await response.json();
   cookies.set("csrftoken", user.csrfToken, { path: "/" });
 
