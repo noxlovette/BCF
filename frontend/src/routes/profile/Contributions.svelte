@@ -1,37 +1,20 @@
 <script lang="ts">
-  import { listSuggestedIngredients } from "$lib/DjangoAPI";
-  import { onMount } from "svelte";
+  export let suggestedIngredients;
 
-  let ingredients = null;
-  let isLoading = true;
-  let error = null;
+  console.log(suggestedIngredients);
 
-  onMount(async () => {
-    try {
-      ingredients = await listSuggestedIngredients();
-    } catch (e) {
-      error = e.message;
-    } finally {
-      isLoading = false;
-    }
-  });
 </script>
 
 <div class="flex flex-col space-y-4">
   <h2 class="mb-4 text-4xl">contributions</h2>
-  {#if isLoading}
-    <p>Loading...</p>
-  {:else if error}
-    <p>Error: {error}</p>
-  {:else}
     <div
       class="flex flex-col items-start rounded bg-white p-4 dark:bg-stone-800"
     >
       <h3 class="font-bold">submitted ingredients</h3>
 
       <ul class="mt-2 items-start space-y-2">
-        {#if ingredients.length > 0}
-          {#each ingredients as ingredient}
+        {#if suggestedIngredients.length > 0}
+          {#each suggestedIngredients as ingredient}
             <li class="flex flex-row">
               {#if ingredient.status === "rejected"}
                 <svg
@@ -89,5 +72,4 @@
         {/if}
       </ul>
     </div>
-  {/if}
 </div>

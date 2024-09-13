@@ -1,14 +1,14 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import { writable } from "svelte/store";
+
   import { logOut } from "$lib/DjangoAPI";
-  import InformationIcon from "$lib/icons/InformationIcon.svelte";
+
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import Button from "$lib/components/UI/Button.svelte";
   import { user } from "$lib/stores";
-  import { CircleUser, InfoIcon, LogOutIcon } from "lucide-svelte";
+  import { CircleUser, InfoIcon } from "lucide-svelte";
 
   onMount(() => {
     user.subscribe((value) => {
@@ -108,14 +108,6 @@
             >
               <CircleUser />
             </a>
-            <button
-              id="logout"
-              on:mousedown={logout}
-              title="log out"
-              class="transition-all hover:text-gold-400"
-            >
-              <LogOutIcon />
-            </button>
           {:else}
             <a href="/auth/login" class="transition-all hover:text-gold-400"
               >login</a

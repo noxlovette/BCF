@@ -2,10 +2,7 @@
   import { updateUserProfile, deleteUserProfile } from "$lib/DjangoAPI";
 
   import { goto } from "$app/navigation";
-  import { notification } from "$lib/stores";
-
-  export let username;
-  export let email;
+  import { notification, user } from "$lib/stores";
 
   let newPassword = "";
   let oldPassword = "";
@@ -20,6 +17,10 @@
   let deleteWarning = false;
 
   let allValid = false;
+
+  let username = $user.username;
+  let email = $user.email;
+
 
   function toggleWarningDelete() {
     deleteWarning = !deleteWarning;
