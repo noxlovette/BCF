@@ -1,6 +1,5 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { signUp } from "$lib/DjangoAPI";
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import { onMount } from "svelte";
@@ -52,28 +51,7 @@
     agreeTerms = sessionStorage.getItem("terms") === "true";
   });
 
-  async function handleSignup() {
-    try {
-      let body = {
-        username: username,
-        email: email,
-        password: password,
-      };
-      const data = await signUp(body);
-      if (data.error) {
-        console.error("Server responded with an error:", data.error);
-        notification.set(data.error);
-      } else {
-        sessionStorage.setItem("username", data.username);
-        sessionStorage.setItem("is_authenticated", data.is_authenticated);
-        notification.set({ message: "Signup successful!", type: "success" });
-        goto("/collect/");
-      }
-    } catch (error) {
-      console.error("Failed to fetch:", error);
-      notification.set({ message: "Something went wrong", type: "error" });
-    }
-  }
+  
 </script>
 
 <svelte:head>
@@ -86,7 +64,6 @@
     class="m-10 flex flex-col items-center justify-center"
   >
     <form
-      on:submit|preventDefault={handleSignup}
       class="flex h-[600px] w-[380px] flex-col items-start justify-start rounded bg-white p-8 shadow dark:bg-stone-950"
       in:fade={{
         duration: 100,
