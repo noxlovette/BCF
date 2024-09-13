@@ -3,7 +3,7 @@
 import type { LayoutServerLoad } from "./$types";
 
 export const load: LayoutServerLoad = async ({ cookies, fetch, depends }) => {
-  const VITE_API_URL = import.meta.env.VITE_API_URL;
+  const VITE_API_URL = "http://backend:8000";
   const sessionid = cookies.get("sessionid");
   const endpoint = `${VITE_API_URL}/api/check-session/`;
 

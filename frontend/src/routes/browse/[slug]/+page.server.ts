@@ -4,7 +4,7 @@ import { error } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, params, depends }) => {
-  const VITE_API_URL = import.meta.env.VITE_API_URL;
+  const VITE_API_URL = "http://backend:8000";
   const { slug } = params;
 
   depends("browse:related");
@@ -51,7 +51,7 @@ export const load: PageServerLoad = async ({ fetch, params, depends }) => {
 
 export const actions = {
   add: async ({ cookies, request }) => {
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    const VITE_API_URL = "http://backend:8000";
     const sessionid = cookies.get("sessionid");
     const csrfToken = cookies.get("csrftoken");
     const data = await request.formData();
@@ -92,7 +92,7 @@ export const actions = {
     }
   },
   suggest: async ({ cookies, request }) => {
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    const VITE_API_URL = "http://backend:8000";
     const sessionid = cookies.get("sessionid");
     const csrfToken = cookies.get("csrftoken");
     const formData = await request.formData();

@@ -2,7 +2,7 @@ import redis from "$lib/redisClient";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, url }) => {
-  const VITE_API_URL = import.meta.env.VITE_API_URL;
+  const VITE_API_URL = "http://backend:8000";
 
   const page = url.searchParams.get("page") || "1";
   const search = url.searchParams.get("search") || "";

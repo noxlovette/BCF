@@ -4,7 +4,7 @@ import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
   try {
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    const VITE_API_URL = "http://backend:8000";
     const sessionid = cookies.get("sessionid");
     if (!sessionid) {
       throw error(401, "Unauthorized");
@@ -54,7 +54,7 @@ export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
 
 export const actions = {
   update: async ({ cookies, request }) => {
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    const VITE_API_URL = "http://backend:8000";
     const sessionid = cookies.get("sessionid");
     const csrfToken = cookies.get("csrftoken");
     const formData = await request.formData();
@@ -95,7 +95,7 @@ export const actions = {
     }
   },
   delete: async ({ cookies, request }) => {
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    const VITE_API_URL = "http://backend:8000";
     const sessionid = cookies.get("sessionid");
     const csrfToken = cookies.get("csrftoken");
     const formData = await request.formData();

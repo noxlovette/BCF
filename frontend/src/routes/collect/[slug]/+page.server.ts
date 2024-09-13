@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({
   cookies,
   depends,
 }) => {
-  const VITE_API_URL = import.meta.env.VITE_API_URL;
+  const VITE_API_URL = "http://backend:8000";
   const sessionid = cookies.get("sessionid");
   depends("collect:update");
   if (!sessionid) {
@@ -50,7 +50,7 @@ export const load: PageServerLoad = async ({
 
 export const actions = {
   update: async ({ cookies, request }) => {
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    const VITE_API_URL = "http://backend:8000";
     const sessionid = cookies.get("sessionid");
     const csrfToken = cookies.get("csrftoken");
     const formData = await request.formData();
@@ -104,7 +104,7 @@ export const actions = {
     }
   },
   delete: async ({ cookies, request }) => {
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    const VITE_API_URL = "http://backend:8000";
     const sessionid = cookies.get("sessionid");
     const csrfToken = cookies.get("csrftoken");
     const formData = await request.formData();

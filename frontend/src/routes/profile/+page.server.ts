@@ -3,7 +3,7 @@ import {error, redirect} from "@sveltejs/kit";
 import type { Actions } from "$lib/types";
 
 export const load: PageServerLoad = async ({ fetch, cookies, depends }) => {
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    const VITE_API_URL = "http://backend:8000";
     const sessionid = cookies.get("sessionid");
     depends("profile:update");
     if (!sessionid) {

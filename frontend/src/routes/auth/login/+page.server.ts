@@ -10,7 +10,7 @@ export const actions = {
     if (!username || !password) {
       return { success: false, error: "Username and password are required" };
     }
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
+    const VITE_API_URL = "http://backend:8000";
     const endpoint = `${VITE_API_URL}/api/login/`;
     try {
       const response = await fetch(endpoint, {
