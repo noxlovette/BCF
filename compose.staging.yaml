@@ -10,6 +10,7 @@ services:
       - NODE_ENV=staging
       - PORT=3000
       - HOST=0.0.0.0
+      - VITE_API_URL=http://backend:8000
     env_file:
       - ./frontend/.env
     restart: always

@@ -17,7 +17,8 @@ RUN bun run build
 FROM oven/bun:1-alpine as runtime
 
 # Set production environment
-ENV NODE_ENV production
+ENV NODE_ENV staging
+ENV VITE_API_URL=http://backend:8000
 
 WORKDIR /app
 
