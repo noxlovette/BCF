@@ -81,7 +81,6 @@ class UserLoginAPI(APIView):
     Check if user exists and login. Auth is handled by django.
     """
 
-    @method_decorator(ensure_csrf_cookie)
     def post(self, request, *args, **kwargs):
         data = request.data
         username = data.get("username")
