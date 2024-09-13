@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { updateUserProfile, deleteUserProfile } from "$lib/DjangoAPI";
+
 
   import { goto } from "$app/navigation";
   import { notification, user } from "$lib/stores";
@@ -27,7 +27,6 @@
   }
 
   function handleDelete() {
-    deleteUserProfile();
     goto("/auth/login");
   }
 
@@ -94,7 +93,6 @@
         oldPassword,
       });
       try {
-        await updateUserProfile(body);
         oldPassword = "";
         newPassword = "";
         confirmPassword = "";
