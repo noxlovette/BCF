@@ -16,9 +16,6 @@ RUN bun run build
 # Stage 2: Runtime environment
 FROM oven/bun:1-alpine as runtime
 
-# Set production environment
-ENV NODE_ENV staging
-
 WORKDIR /app
 
 # Install production dependencies
@@ -38,4 +35,4 @@ USER bunjs
 EXPOSE 3000
 
 # Command to start the application
-CMD ["bun", "build/index.js"]
+CMD ["bun", "run", "start"]

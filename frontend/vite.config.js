@@ -18,11 +18,9 @@ export default defineConfig({
     sveltekit(),
   ],
 
-  // this is the config for dev server
-
   server: {
     host: true,
-    port: process.env.NODE_ENV === "development" ? 5173 : 3000,
+    port: 3000,
   },
   
 });
