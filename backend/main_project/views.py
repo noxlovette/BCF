@@ -83,7 +83,7 @@ class UserLoginAPI(APIView):
 
     def post(self, request, *args, **kwargs):
         print(request.data)
-        logger.info(f"Received login request from: {request.META['REMOTE_ADDR']}")
+        
         data = request.data
         username = data.get("username")
         password = data.get("password")
