@@ -109,13 +109,12 @@
   let showDescriptors = true;
   let showCas = true;
 
-  const description = "Browse perfume compounds. IFRA FIG.";
+  const description = "Browse perfume compounds. IFRA FIG. 3100 ingredients.";
   const ogTitle = "BCF | Browse";
   const ogUrl = "https://bcfapp.app/browse";
-  const imageUrl = "https://bcfapp.app/assets/img/dalle-browse-4.webp";
 </script>
 
-<MetaData title={ogTitle} {description} {ogTitle} {ogUrl} ogImage={imageUrl} />
+<MetaData title={ogTitle} {description} {ogTitle} {ogUrl} />
 <svelte:window
   class="dark:text-stone-100"
   on:keydown={handleKeydown(searchInput, handleChangePage, $searchTerm)}

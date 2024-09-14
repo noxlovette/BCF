@@ -24,7 +24,7 @@
   <Header />
 
   <div
-    class="flex min-h-screen w-full max-w-[80vw] flex-col items-center
+    class="flex min-h-screen w-full max-w-[80vw] flex-col my-8 md:my-0 items-center
     justify-start
     overscroll-contain"
   >

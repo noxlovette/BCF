@@ -15,7 +15,6 @@
     if (result.data.success) {
       $user.is_authenticated = true;
       notification.set({ message: "Welcome back!", type: "success" });
-      invalidateAll();
       await goto("/collect/");
     } else {
       
@@ -40,7 +39,7 @@
       method="POST"
       action="?/login"
       use:enhance={() => handleLoginResult}
-      class="flex h-[475px] w-[300px] flex-col items-start justify-start rounded bg-white p-8 shadow dark:bg-stone-950"
+      class="flex h-[475px] w-[300px] flex-col items-start justify-start rounded bg-white p-8 shadow dark:bg-stone-900"
       in:fade={{
         duration: 100,
         easing: quintOut,

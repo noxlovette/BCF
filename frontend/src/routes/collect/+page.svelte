@@ -17,6 +17,7 @@
   import Search from "$lib/components/UI/Search.svelte";
   import { notification } from "$lib/stores";
   import { enhance } from "$app/forms";
+  import { fade } from "svelte/transition";
     import CardHolder from "$lib/components/CardHolder.svelte";
 
   export let data: PageServerData;
@@ -87,7 +88,16 @@
   on:keydown={handleKeydown(searchInput, handleChangePage, $searchTerm)}
 />
 
-<AppWrap>
+<AppWrap class="text-center md:text-left">
+  {#if $searchTerm === ""}
+    <h2 class="my-4 font-quicksand text-3xl font-bold" in:fade>
+      Showing all ingredients
+    </h2>
+  {:else}
+    <h2 class="my-4 font-quicksand text-3xl font-bold" in:fade>
+      Showing {totalItems} results for "{$searchTerm}"
+    </h2>
+  {/if}
   <SearchBar>
     <Search on:search={handleSearchCollection} bind:searchInput />
 
