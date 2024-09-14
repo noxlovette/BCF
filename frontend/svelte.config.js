@@ -9,6 +9,9 @@ const config = {
       precompress: false,
     }),
   },
+  csrf: {
+    checkOrigin: false
+  },
   preprocess: [vitePreprocess(), sveltePreprocess()],
 };
 
