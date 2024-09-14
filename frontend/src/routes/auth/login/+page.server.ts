@@ -32,6 +32,11 @@ export const actions = {
       }
 
       const userData = await response.json();
+      console.log('Full response:', response);
+console.log('Response headers:', response.headers);
+console.log('Response status:', response.status);
+const responseText = await response.text();
+console.log('Response body:', responseText);
 
       cookies.set("sessionid", userData.sessionid, { path: "/" });
 
