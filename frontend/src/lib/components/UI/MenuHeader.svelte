@@ -57,21 +57,21 @@
 			<ul class="space-y-2 flex flex-col">
 				<a
 					href="/browse"
-					on:click|preventDefault={() => navigateAndCloseMenu('/about')}
+					on:click|preventDefault={() => navigateAndCloseMenu('/browse')}
 					class="text-xl bg-stone-700 block p-2 text-stone-100 hover:bg-gold-400 hover:text-stone-800 rounded transition-colors"
 					>Browse</a
 				>
 
 				<a
 					href="/collect"
-					on:click|preventDefault={() => navigateAndCloseMenu('/conditions')}
+					on:click|preventDefault={() => navigateAndCloseMenu('/collect')}
 					class="text-xl bg-stone-700 block p-2 text-stone-100 hover:bg-gold-400 hover:text-stone-800 rounded transition-colors"
 					>Collect</a
 				>
 
 				<a
 					href="/formulate"
-					on:click|preventDefault={() => navigateAndCloseMenu('/letsgo')}
+					on:click|preventDefault={() => navigateAndCloseMenu('/formulate')}
 					class="text-xl bg-stone-700 block p-2 text-stone-100 hover:bg-gold-400 hover:text-stone-800 rounded transition-colors"
 					>Formulate</a
 				>
@@ -89,16 +89,19 @@
             <a
               id="profile"
               href="/profile"
+              on:click|preventDefault={() => navigateAndCloseMenu('/profile')}
               class="text-xl bg-stone-700 block p-2 text-stone-100 hover:bg-gold-400 hover:text-stone-800 rounded transition-colors"
             >
             Profile
             </a>
           {:else}
-            <a href="/auth/login" 
+            <a href="/auth/login"
+            on:click|preventDefault={() => navigateAndCloseMenu('/auth/login')}
             class="text-xl bg-stone-700 block p-2 text-stone-100 hover:bg-gold-400 hover:text-stone-800 rounded transition-colors"
               >login</a
             >
-            <a href="/auth/login" 
+            <a href="/auth/signup" 
+            on:click|preventDefault={() => navigateAndCloseMenu('/auth/signup')}
             class="text-xl bg-stone-700 block p-2 text-stone-100 hover:bg-gold-400 hover:text-stone-800 rounded transition-colors"
               >sign up</a
             >

@@ -62,7 +62,7 @@
         alt="Go to home page"
       />
   </a>
-    <div class="ml-4 md:m-8 size-full flex-col justify-center hidden sm:flex">
+    <div class="ml-4 md:m-8 size-full flex-col justify-center hidden md:flex">
       <div
         id="wider-part"
         class="flex h-2/3 flex-grow border-b-2 border-gold-900 xl:border-b-4 "
