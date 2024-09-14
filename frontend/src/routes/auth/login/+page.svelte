@@ -3,8 +3,9 @@
   import { enhance } from "$app/forms";
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
+ import { invalidateAll } from "$app/navigation";
 
-  import { notification, setUser, user } from "$lib/stores";
+  import { notification, user } from "$lib/stores";
 
   let username = "";
   let password = "";
@@ -14,6 +15,7 @@
     if (result.data.success) {
       $user.is_authenticated = true;
       notification.set({ message: "Welcome back!", type: "success" });
+      invalidateAll();
       await goto("/collect/");
     } else {
       

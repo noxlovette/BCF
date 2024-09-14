@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate, update_session_auth_hash, login
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from collection.models import NewCollectionIngredient
 
 import logging
 
@@ -53,9 +54,15 @@ class UserSignupAPI(APIView):
                 {"error": "Email already in use"}, status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Create new user
         try:
-            User.objects.create_user(username=username, email=email, password=password)
+            userInstance = User.objects.create_user(username=username, email=email, password=password)
+            
+            NewCollectionIngredient.objects.create(
+                user=userInstance,
+                common_name="Welcome!",
+                use= "This is your first ingredient. You can add more ingredients to your collection from the browse page.",
+                descriptors="Vanillic, Sweet, Warm",
+                )
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
@@ -64,6 +71,7 @@ class UserSignupAPI(APIView):
                     "username": user.username,
                     "is_authenticated": user.is_authenticated,
                     "email": user.email,
+                    "sessionid": request.session.session_key,
                 }
                 return Response(response_data, status=status.HTTP_201_CREATED)
             else:

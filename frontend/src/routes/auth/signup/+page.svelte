@@ -1,9 +1,13 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import { onMount } from "svelte";
+  import {user} from "$lib/stores";
   import { notification } from "$lib/stores";
+  import { goto } from "$app/navigation";
+    import { enhance } from "$app/forms";
+
+
   let username = "";
   let email = "";
   let password = "";
@@ -51,6 +55,22 @@
     agreeTerms = sessionStorage.getItem("terms") === "true";
   });
 
+  const handleLoginResult = async ({ result, update }) => {
+    if (result.data.success) {
+      $user.is_authenticated = true;
+      notification.set({ message: "Welcome on board!", type: "success" });
+      await goto("/collect/");
+    } else {
+      
+
+      notification.set({
+        message: result.data.error || "Signup failed",
+        type: "error",
+      });
+    }
+
+    update();
+  };
   
 </script>
 
@@ -69,6 +89,8 @@
         duration: 100,
         easing: quintOut,
       }}
+      method="POST"
+      use:enhance = {() => handleLoginResult}
     >
       <h1 class="border-b-2 text-6xl font-bold tracking-tighter">
         sign up<span class="text-gold-400">.</span>
@@ -76,6 +98,7 @@
 
       <input
         type="text"
+        name="username"
         class="my-2 mt-8 w-full rounded border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
         placeholder="username"
         required
@@ -85,6 +108,7 @@
       <div id="handle email" class="mb-4 flex items-center justify-center">
         <input
           type="email"
+          name="email"
           class="my-2 mr-auto w-[225] rounded border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
           placeholder="email"
           bind:value={email}
@@ -98,6 +122,7 @@
       <div id="handle pass" class="flex w-full items-center justify-center">
         <input
           type="password"
+          name="password"
           class="my-2 mr-auto w-[225] rounded border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
           placeholder="password"
           bind:value={password}
