@@ -1,0 +1,39 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - optimised
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install sshpass
+      run: sudo apt-get install sshpass
+
+    - name: Deploy to VPS
+      env:
+        HOST: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+      run: |
+        if [ -n "$SSH_PRIVATE_KEY" ]; then
+          echo "$SSH_PRIVATE_KEY" > private_key
+          chmod 600 private_key
+          ssh-keygen -p -P "$SSH_PASSPHRASE" -N "" -f private_key
+          ssh -o StrictHostKeyChecking=no -i private_key $USERNAME@$HOST << EOF
+        else
+          sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << EOF
+        fi
+          cd /apps/BCF/
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/github
+          git pull
+          docker-compose -f compose.staging.yaml up --build -d
+        EOF
