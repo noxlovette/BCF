@@ -121,7 +121,7 @@
   on:keydown={handleKeydown(searchInput, handleChangePage, $searchTerm)}
 />
 
-<AppWrap>
+<AppWrap class="text-center md:text-left">
   {#if $searchTerm === "" || data.ingredients.count === 3100}
     <h2 class="my-4 font-quicksand text-3xl font-bold" in:fade>
       Showing all ingredients

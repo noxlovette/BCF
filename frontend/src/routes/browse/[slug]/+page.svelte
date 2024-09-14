@@ -51,29 +51,29 @@
 />
 
 <AppWrap
-  class="select-text justify-between caret-aqua-700 selection:bg-aqua-700 selection:text-aqua-50"
+  class="select-text justify-between caret-navy-700 selection:bg-navy-700 selection:text-navy-50"
 >
   <div
     id="header"
-    class="flex w-full flex-row items-baseline justify-between border-b-2 border-stone-500 pb-4 font-medium xl:border-b-4"
+    class="flex w-full flex-col md:flex-row items-baseline justify-between border-b-2 border-navy-500 pb-4 font-medium xl:border-b-4 space-y-2 md:space-y-0"
   >
     <div class="w-full">
       <h1 class="">
         <VariableInput
           text={ingredient.common_name}
           bind:value={suggestion.common_name}
-          class="font-quicksand text-7xl font-medium"
+          class="font-quicksand text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold"
         />
       </h1>
     </div>
     <div
       id="controls"
-      class="flex flex-row items-baseline justify-end space-x-4 font-medium xl:text-2xl"
+      class="flex flex-row items-baseline justify-end space-x-2 lg:space-x-4 font-medium xl:text-2xl"
     >
       {#if $editing}
         <button
           type="submit"
-          class="rounded border-2 border-stone-500 px-6 py-2"
+          class="rounded border-2 border-stone-500 lg:px-6 lg:py-2 px-2 py-1 "
           on:click={() => editing.set(false)}
         >
           Cancel
@@ -92,7 +92,7 @@
 
           <button
             type="submit"
-            class="rounded border-2 border-stone-500 px-6 py-2"
+            class="rounded border-2 border-stone-500 lg:px-6 lg:py-2 px-2 py-1 "
           >
             Save
           </button>
@@ -108,13 +108,13 @@
             })}
         >
           <input type="hidden" name="id" value={ingredient.id} />
-          <button disabled={!$user.is_authenticated} class="rounded border-2 border-stone-500 px-6 py-2 disabled:text-stone-400 disabled:border-stone-300">
+          <button disabled={!$user.is_authenticated} class="rounded border-2 border-stone-500 lg:px-6 lg:py-2 px-2 py-1  disabled:text-stone-400 disabled:border-stone-300">
             Add
           </button>
         </form>
         <button disabled={!$user.is_authenticated}
           on:click={() => editing.set(!$editing)}
-          class="rounded border-2 border-stone-500 px-6 py-2 disabled:text-stone-400 disabled:border-stone-300"
+          class="rounded border-2 border-stone-500 lg:px-6 lg:py-2 px-2 py-1  disabled:text-stone-400 disabled:border-stone-300"
         >
           Edit
         </button>
@@ -122,9 +122,9 @@
     </div>
   </div>
 
-  <div id="center" class="flex flex-row justify-between py-4">
-    <div id="left-part" class="flex w-2/3 flex-col space-y-8 pr-8">
-      <div class="flex flex-row space-x-8">
+  <div id="center" class="flex md:flex-row flex-col justify-between py-4 space-y-4 md:space-y-0">
+    <div id="left-part" class="flex w-full md:w-2/3 flex-col space-y-8 pr-8">
+      <div class="flex md:flex-row md:space-x-8 flex-col space-y-4 md:space-y-0">
         <div>
           <Label>descriptors</Label>
           <VariableTextarea
@@ -151,7 +151,7 @@
         />
       </div>
       <div class="flex flex-col space-y-4">
-        <div class="flex w-full max-w-2xl space-x-8">
+        <div class="flex w-full flex-col md:flex-row max-w-2xl space-y-4 md:space-y-0 md:space-x-8">
           <div>
             <Label>volatility</Label>
             <VariableInput

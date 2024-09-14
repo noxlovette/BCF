@@ -21,6 +21,6 @@
   }
 </script>
 
-<RoundButton on:click={reset}>
+<RoundButton class="hidden md:block" on:click={reset}>
   <RotateCcw size="26" />
 </RoundButton>

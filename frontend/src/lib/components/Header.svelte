@@ -55,7 +55,7 @@
 </script>
 
 <header
-  class="group relative z-20 my-2 flex w-full flex-col items-center justify-center py-4 font-quicksand font-medium"
+  class="group relative z-20 my-2 flex w-full flex-col  items-center justify-center py-4 font-quicksand font-medium  px-8"
 >
   <div class="flex w-full max-w-7xl items-center justify-center">
     <a
@@ -70,7 +70,7 @@
         alt="Go to home page"
       />
     </a>
-    <div class="ml-8 size-full flex-col justify-center">
+    <div class="ml-4 md:m-8 size-full flex-col justify-center">
       <div
         id="wider-part"
         class="flex h-2/3 flex-grow border-b-2 border-gold-900 xl:border-b-4"
@@ -121,7 +121,7 @@
       >
         <nav
           id="navbar"
-          class="mt-2 flex flex-row"
+          class="md:mt-2 flex flex-row text-sm md:text-base"
           on:mouseenter={toggleDropdown}
         >
           <!-- Permanent placeholder or minimal content -->
