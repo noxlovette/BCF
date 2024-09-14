@@ -1,5 +1,6 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
+    import Credits from "./Credits.svelte";
 
   let legalOn = false;
 
@@ -8,21 +9,23 @@
   }
 </script>
 
+<div class="flex w-full max-w-[90vw]">
+<p class="text-4xl lg:text-7xl font-quicksand text-gold-400/80 text-left font-bold -mb-2">
+  BCF, the app for perfumers
+  </p>
+</div>
 <footer
-  class="relative z-10 flex w-full flex-col items-center justify-between bg-stone-300 py-8 shadow-inner dark:bg-stone-900 text-stone-600 "
+  class="z-10 flex w-full flex-col justify-between bg-stone-300 shadow-inner py-4 items-center dark:bg-stone-900 text-stone-600"
 >
-  <div class="flex w-full max-w-7xl items-center lg:justify-between font-bold ">
-    <div id="copyright" class="flex w-full items-center justify-end lg:justify-start px-4">
-      <p class="md:text-center opacity-60">© 2024 Danila Volkov</p>
-    </div>
-
-    <div id="paperwork" class="relative flex w-full lg:justify-end justify-start p-4 lg:p-0">
-      <ul class="flex lg:space-x-4 flex-col lg:flex-row space-y-4 lg:space-y-0">
+  <div class="flex flex-col w-[90vw]">
+    <Credits />
+    <div id="paperwork" class="flex w-full flex-col md:flex-row text-left space-y-4 md:space-y-0 md:justify-between">
+      <ul class="flex md:space-x-4 flex-col md:flex-row">
         
         <li>
           <a
             href="/paperwork/about"
-            class="transition-all hover:text-stone-500"
+            class="transition-all hover:underline"
           >
             about
           </a>
@@ -30,7 +33,7 @@
         <li>
           <a
             href="/paperwork/contact-us"
-            class="transition-all hover:text-stone-500"
+            class="transition-all hover:underline"
           >
             contact me
           </a>
@@ -38,7 +41,7 @@
         <li>
           <a
           href="/paperwork/terms-of-service"
-          class="transition-all hover:text-stone-500"
+          class="transition-all hover:underline"
           >
           terms of use
         </a>
@@ -46,21 +49,19 @@
       <li>
         <a
           href="/paperwork/privacy-policy"
-          class="transition-all hover:text-stone-500"
+          class="transition-all hover:underline"
         >
           privacy policy
         </a>
       </li>
-            <li>
-              <a
+      </ul>
+      <a
                   href="https://docs.bcfapp.app"
                   title="learn to use BCF"
-                  class=" transition-all text-stone-950 dark:text-stone-50 hover:text-stone-500 lg:ml-12"
+                  class=" transition-all text-stone-950 dark:text-stone-50 hover:underline lg:ml-12"
                 >
                 how to use this thing
                 </a>
-            </li>
-      </ul>
     </div>
   </div>
 </footer>

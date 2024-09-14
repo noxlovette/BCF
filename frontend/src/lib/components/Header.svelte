@@ -55,9 +55,9 @@
 </script>
 
 <header
-  class="group relative z-20 my-2 flex w-full flex-col  items-center justify-center py-4 font-quicksand font-medium  px-8"
+  class="group relative z-20 flex w-full flex-col  items-center justify-center font-quicksand font-medium"
 >
-  <div class="flex w-full max-w-7xl items-center justify-center">
+  <div class="flex w-full max-w-[90vw] items-center justify-center">
     <a
       href="/"
       class="z-15 size-16 flex-none items-center justify-center transition-all md:size-20"

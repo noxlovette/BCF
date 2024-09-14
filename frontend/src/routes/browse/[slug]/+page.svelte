@@ -55,9 +55,9 @@
 >
   <div
     id="header"
-    class="flex w-full flex-col md:flex-row items-baseline justify-between border-b-2 border-navy-500 pb-4 font-medium xl:border-b-4 space-y-2 md:space-y-0"
+    class="flex w-full flex-col-reverse md:flex-row items-baseline justify-between border-b-2 border-navy-500 md:pb-4 font-medium xl:border-b-4 space-y-2 md:space-y-0"
   >
-    <div class="w-full">
+    <div class="w-full my-4 md:my-0">
       <h1 class="">
         <VariableInput
           text={ingredient.common_name}
@@ -147,7 +147,7 @@
         <VariableTextarea
           text={useMessage}
           bind:value={suggestion.use}
-          class="min-h-36 font-medium xl:text-2xl"
+          class="md:min-h-36 min-h-24 font-medium xl:text-2xl"
         />
       </div>
       <div class="flex flex-col space-y-4">

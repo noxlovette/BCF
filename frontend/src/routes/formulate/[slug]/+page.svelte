@@ -1,7 +1,5 @@
 <script lang="ts">
   import AppWrap from "$lib/components/AppWrap.svelte";
-  import EditFormulate from "$lib/components/EditFormulate.svelte";
-
   import Label from "$lib/components/UI/Label.svelte";
   import { X } from "lucide-svelte";
   import VariableInput from "$lib/components/UI/VariableInput.svelte";

@@ -26,7 +26,7 @@
   <div
     class="flex min-h-screen w-full max-w-[80vw] flex-col items-center
     justify-start
-    overscroll-contain px-4 md:px-8"
+    overscroll-contain"
   >
     <slot />
   </div>
