@@ -209,7 +209,3 @@
     </div>
   </div>
 </AppWrap>
-
-{#if $editing}
-  <EditFormulate {formula} />
-{/if}
