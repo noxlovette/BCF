@@ -1,10 +1,10 @@
 import redis from "$lib/redisClient";
 import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
+const VITE_API_URL = "http://backend:8000";
 
 export const load: PageServerLoad = async ({ fetch, cookies }) => {
   try {
-    const VITE_API_URL = "http://backend:8000";
     const sessionid = cookies.get("sessionid");
 
     if (!sessionid) {
@@ -54,7 +54,6 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
 
 export const actions = {
   create: async ({ cookies, request }) => {
-    const VITE_API_URL = "http://backend:8000";
     const sessionid = cookies.get("sessionid");
     const csrfToken = cookies.get("csrftoken");
     const body = {

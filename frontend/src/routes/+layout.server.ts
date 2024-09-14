@@ -1,9 +1,9 @@
 // src/routes/+layout.server.ts
 
 import type { LayoutServerLoad } from "./$types";
+const VITE_API_URL = "http://backend:8000";
 
 export const load: LayoutServerLoad = async ({ cookies, fetch, depends }) => {
-  const VITE_API_URL = "http://backend:8000";
   const sessionid = cookies.get("sessionid");
   const endpoint = `${VITE_API_URL}/api/check-session/`;
 
