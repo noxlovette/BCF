@@ -13,7 +13,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install sshpass
-      run: sudo apt-get install sshpass
+      run: sudo apt-get install -y sshpass
 
     - name: Deploy to VPS
       env:
@@ -27,13 +27,19 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > private_key
           chmod 600 private_key
           ssh-keygen -p -P "$SSH_PASSPHRASE" -N "" -f private_key
-          ssh -o StrictHostKeyChecking=no -i private_key $USERNAME@$HOST << EOF
+          ssh -o StrictHostKeyChecking=no -i private_key $USERNAME@$HOST << 'EOF'
+            cd /apps/BCF/
+            eval "$(ssh-agent -s)"
+            ssh-add ~/.ssh/github
+            git pull
+            docker-compose -f compose.staging.yaml up --build -d
+EOF
         else
-          sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << EOF
+          sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << 'EOF'
+            cd /apps/BCF/
+            eval "$(ssh-agent -s)"
+            ssh-add ~/.ssh/github
+            git pull
+            docker-compose -f compose.staging.yaml up --build -d
+EOF
         fi
-          cd /apps/BCF/
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/github
-          git pull
-          docker-compose -f compose.staging.yaml up --build -d
-        EOF
