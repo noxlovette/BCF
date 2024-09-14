@@ -79,9 +79,5 @@
         don't have an account?</a
       >
     </form>
-
-    {#if form?.success === false}
-      <p class="error">{form.error}</p>
-    {/if}
   </div>
 </div>
