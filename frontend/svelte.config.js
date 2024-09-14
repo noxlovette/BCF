@@ -8,9 +8,9 @@ const config = {
       out: "build",
       precompress: false,
     }),
-  },
-  csrf: {
-    checkOrigin: false
+    csrf: {
+      checkOrigin: false
+    },
   },
   preprocess: [vitePreprocess(), sveltePreprocess()],
 };
