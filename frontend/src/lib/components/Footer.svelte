@@ -11,7 +11,7 @@
 
 <div class="flex w-full max-w-[90vw]">
 <p class="text-4xl lg:text-7xl font-quicksand text-gold-400/80 text-left font-bold -mb-2">
-  BCF, the app for perfumers
+  BCF. the app for perfumers
   </p>
 </div>
 <footer

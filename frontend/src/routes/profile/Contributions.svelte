@@ -1,8 +1,5 @@
 <script lang="ts">
   export let suggestedIngredients;
-
-  console.log(suggestedIngredients);
-
 </script>
 
 <div class="flex flex-col space-y-4">

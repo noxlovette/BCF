@@ -27,7 +27,6 @@ export const actions = {
       });
         
         if (!response.ok) {
-        response.json().then(data => console.log(data));
         throw error(400, "Signup failed");
       }
 
