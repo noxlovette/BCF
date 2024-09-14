@@ -9,37 +9,25 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: Checkout Repo
+      uses: actions/checkout@v3
 
-    - name: Install sshpass
-      run: sudo apt-get install -y sshpass
-
-    - name: Deploy to VPS
-      env:
-        HOST: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
-        PASSWORD: ${{ secrets.PASSWORD }}
+    - name: Set Up SSH
       run: |
-        if [ -n "$SSH_PRIVATE_KEY" ]; then
-          echo "$SSH_PRIVATE_KEY" > private_key
-          chmod 600 private_key
-          ssh-keygen -p -P "$SSH_PASSPHRASE" -N "" -f private_key
-          ssh -o StrictHostKeyChecking=no -i private_key $USERNAME@$HOST << 'EOF'
-            cd /apps/BCF/
-            eval "$(ssh-agent -s)"
-            ssh-add ~/.ssh/github
-            git pull
-            docker-compose -f compose.staging.yaml up --build -d
-EOF
-        else
-          sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << 'EOF'
-            cd /apps/BCF/
-            eval "$(ssh-agent -s)"
-            ssh-add ~/.ssh/github
-            git pull
-            docker-compose -f compose.staging.yaml up --build -d
-EOF
-        fi
+        env
+        mkdir -p ~/.ssh
+        echo "${{secrets.SSH_PRIVATE_KEY}} > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -p 22 ${{secrets.HOST}} >> ~/.known_hosts
+        sudo apt-get install sshpass
+
+    - name: Deploy to Server
+      run: |
+        sshpass -p '${{ secrets.PASSWORD }}' ssh -v -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} <<'ENDSSH'
+        cd /apps/BCF
+        eval "$(ssh-agent -s)"
+        ssh-add ~/.ssh/github
+        git pull
+        docker-compose compose.staging.yaml up --build
+        
+        ENDSSH
