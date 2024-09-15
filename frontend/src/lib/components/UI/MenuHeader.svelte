@@ -28,13 +28,13 @@
 <div class="flex md:hidden">
 	<button
 		on:click|stopPropagation={toggleMenu}
-		class="px-4 py-2 bg-stone-800 text-stone-100 hover:text-stone-800 rounded-lg hover:bg-gold-400 transition-colors duration-300"
+		class="px-4 py-2 dark:bg-stone-800 bg-stone-300 dark:hover:text-stone-800 rounded-lg hover:bg-gold-400 transition-colors duration-300"
 	>
 		<Menu class="size-8" />
 	</button>
 
 	<div
-		class="absolute rounded-lg right-0 top-0 bg-stone-900 shadow-lg
+		class="absolute rounded-lg right-0 top-0 dark:bg-stone-900 bg-stone-300 shadow-lg
     w-full px-8 py-12 space-y-4
     
     transform transition-transform duration-300 ease-in-out {isOpen
