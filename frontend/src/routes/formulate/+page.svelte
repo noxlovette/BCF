@@ -18,10 +18,6 @@
 <MetaData title="BCF | Formulate" />
 
 <AppWrap>
-  <div class="flex h-full items-center justify-center md:hidden">
-    <h1 class="text-xl font-bold">this page is desktop only :(</h1>
-  </div>
-
   <SearchBar>
     <Search placeholder="/ search formulas" />
     <form

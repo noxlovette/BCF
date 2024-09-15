@@ -84,7 +84,7 @@
     class="m-10 flex flex-col items-center justify-center"
   >
     <form
-      class="flex h-[600px] w-[380px] flex-col items-start justify-start rounded bg-white p-8 shadow dark:bg-stone-950"
+      class="flex h-[600px] w-[380px] flex-col items-start justify-start rounded bg-white p-8 shadow dark:bg-stone-900"
       in:fade={{
         duration: 100,
         easing: quintOut,

@@ -3,10 +3,10 @@
   import { fade } from "svelte/transition";
 
   import { page } from "$app/stores";
-  import { goto } from "$app/navigation";
   import Button from "$lib/components/UI/Button.svelte";
   import { user } from "$lib/stores";
   import { CircleUser, InfoIcon } from "lucide-svelte";
+  import MenuHeader from "./UI/MenuHeader.svelte";
 
   onMount(() => {
     user.subscribe((value) => {
@@ -14,32 +14,23 @@
       username = value.username;
     });
   });
+
+
   let is_authenticated = $user.is_authenticated;
+
   let username = $user.username;
 
-  async function logout() {
-    if (!is_authenticated) return;
-    try {
-      const response = await logOut();
-      goto("/");
-    } catch (error) {
-      console.error("Failed to log out");
-    }
-  }
-
   let isDropdownOpen = false;
-  let countdownTimer; // Variable to store the timer ID
+  let countdownTimer;
   function toggleDropdown() {
     isDropdownOpen = true;
     resetCountdown();
   }
 
-  // Function to start the countdown timer
   function startCountdown() {
     countdownTimer = setTimeout(closeDropdown, 3000);
   }
 
-  // Function to reset the countdown timer
   function resetCountdown() {
     clearTimeout(countdownTimer); // Clear the existing countdown timer
     startCountdown(); // Start a new countdown timer
@@ -52,15 +43,16 @@
 
   $: currentPath = $page.url.pathname;
   $: currentPage = currentPath.split("/")[1] || "welcome to bcf";
+
 </script>
 
 <header
-  class="group relative z-20 flex w-full flex-col my-2 items-center justify-center font-quicksand font-medium"
+  class="group relative z-20 flex w-full flex-col my-4 lg:my-0 items-center justify-center font-quicksand font-medium"
 >
-  <div class="flex w-full max-w-[90vw] items-center justify-center">
+  <div class="flex w-full max-w-[90vw] items-center justify-between">
     <a
       href="/"
-      class="z-15 size-16 flex-none items-center justify-center transition-all md:size-20"
+      class="z-15 size-16 flex-none items-center justify-center md:size-20"
       on:mouseenter={toggleDropdown}
     >
       <img
@@ -69,24 +61,24 @@
         src="/assets/img/bcf_logo_dark.png"
         alt="Go to home page"
       />
-    </a>
-    <div class="ml-4 md:m-8 size-full flex-col justify-center">
+  </a>
+    <div class="ml-4 md:m-8 size-full flex-col justify-center hidden md:flex">
       <div
         id="wider-part"
-        class="flex h-2/3 flex-grow border-b-2 border-gold-900 xl:border-b-4"
+        class="flex h-2/3 flex-grow border-b-2 border-gold-900 xl:border-b-4 "
       >
-        {#if currentPage}
+
           <p
             on:mouseenter={toggleDropdown}
-            class="m-2 text-3xl tracking-tighter"
+            class="m-2 text-3xl tracking-tighter "
           >
             {currentPage}
           </p>
-        {/if}
+
 
         <div
           id="user"
-          class="mb-auto ml-auto mt-auto flex flex-row items-center justify-center space-x-4"
+          class="mb-auto ml-auto mt-auto flex flex-row items-center justify-center space-x-4 "
         >
           {#if is_authenticated}
             <a
@@ -155,6 +147,7 @@
         </nav>
       </div>
     </div>
+    <MenuHeader />
   </div>
 </header>
 

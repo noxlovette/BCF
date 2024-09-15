@@ -3,32 +3,29 @@ services:
     build: 
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: frontend
+    container_name: frontend-production
     ports:
-      - 5173:3000"
+      - "5173:3000"
     environment:
       - NODE_ENV=production
+      - BACKEND_URL="http://backend:8000"
     env_file:
       - ./frontend/.env
-    restart: always
     depends_on:
       - backend
       - redis
 
   redis:
-    image: redis/redis-stack:latest
-    container_name: redis
+    image: redis/redis-stack-server:latest
+    container_name: redis-production
     ports:
-      - "6379:6379"
-      - "8001:8001"
+      - "6380:6379"
 
   backend:
     build: 
       context: ./backend
       dockerfile: Dockerfile
-    container_name: backend
-    ports:
-      - "8000:8000"
+    container_name: backend-production
     environment:
       - POSTGRES_DB=${PGNAME}
       - POSTGRES_USER=${PGUSER}
@@ -41,10 +38,10 @@ services:
       - db
 
   db:
-    image: postgres:16
+    image: postgres
     user: postgres
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data-production:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=${PGNAME:-bcf}
       - POSTGRES_USER=${PGUSER:-postgres}
@@ -52,7 +49,7 @@ services:
       - PGPORT=${PGPORT:-5432}
       - PGHOST=${PGHOST:-db}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     healthcheck:
       test: ["CMD", "pg_isready"]
       interval: 10s
@@ -60,4 +57,4 @@ services:
       retries: 5
 
 volumes:
-  db-data:
+  db-data-production:

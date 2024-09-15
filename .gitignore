@@ -67,7 +67,6 @@ backend/key.py
 backend/key-test.py
 backend/key-prod.py
 backend/key-dev.py
-/backend/browse/management/
 
 # Certificates and Keys
 *.crt

@@ -58,7 +58,7 @@
       <a
                   href="https://docs.bcfapp.app"
                   title="learn to use BCF"
-                  class=" transition-all text-stone-950 dark:text-stone-50 hover:underline lg:ml-12"
+                  class=" transition-all text-stone-900 dark:text-stone-400 hover:underline lg:ml-12"
                 >
                 how to use this thing
                 </a>

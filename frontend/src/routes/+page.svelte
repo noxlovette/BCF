@@ -1,10 +1,11 @@
 <script lang="ts">
-  import BigText from "$lib/components/BigText.svelte";
+  import AppWrap from "$lib/components/AppWrap.svelte";
+import BigText from "$lib/components/BigText.svelte";
   import Section from "$lib/components/UI/Section.svelte";
   const bigText = `Want to create your own <span class="text-gold-400"> perfume? </span>We've got you covered<span class="text-gold-400">.</span>`;
 </script>
 
-<div class="my-12 flex flex-col">
+<AppWrap>
   <BigText text={bigText} />
 
   <div
@@ -37,7 +38,7 @@
   <div class="text-6xl font-bold xl:text-[6rem]">
     <a
       href="/auth/signup"
-      class="button px-6 py-3 transition-all hover:text-gold-400">sign up</a
+      class="button transition-all hover:text-gold-400">sign up</a
     >
   </div>
-</div>
+</AppWrap>
