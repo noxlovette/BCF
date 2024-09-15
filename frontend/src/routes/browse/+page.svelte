@@ -28,7 +28,7 @@
   const urlParams = derived(
     [currentPage, pageSize],
     ([$currentPage, $pageSize]) => {
-      return `/browse?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`;
+      return `/browse?q=${$searchTerm}&p=${$currentPage}&s=${$pageSize}`;
     },
   );
 
@@ -48,27 +48,11 @@
     };
   });
 
-  function reset() {
-    searchTerm.set("");
-    secondSearchTerm.set("");
-  }
-
-  async function searchIngredients() {
-    currentPage.set(1);
-    dimmed = false;
-    searchTerm.set($secondSearchTerm);
-    if ($searchTerm === "") {
-      notification.set({ message: "Showing all ingredients", type: "info" });
-    } else {
-      await goto(`/browse?page=1&search=${$searchTerm}&page_size=${$pageSize}`);
-      notification.set({
-        message: `Searching for ${$searchTerm}...`,
-        type: "info",
-      });
-    }
-  }
-
   async function handleChangePage(increment: number) {
+    if (document.activeElement === searchInput) {
+      return;
+    }
+
     const newPage = await changePage(
       increment,
       data.ingredients.total_pages,
@@ -132,14 +116,12 @@
   {/if}
   <SearchBar>
     <Search
-      value={secondSearchTerm}
-      on:input={(event) => event.key === "Enter" && searchIngredients()}
+      value={searchTerm}
       bind:searchInput
-      on:focus={() => (dimmed = true)}
-      on:blur={searchIngredients}
     />
+
+
     <PerPage />
-    <ResetButton on:reset={reset} />
     <Pagination
       on:nextPage={() => handleChangePage(1)}
       on:prevPage={() => handleChangePage(-1)}

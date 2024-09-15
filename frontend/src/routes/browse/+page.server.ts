@@ -4,9 +4,9 @@ import type { PageServerLoad } from "./$types";
 const VITE_API_URL = "http://backend:8000";
 export const load: PageServerLoad = async ({ fetch, url }) => {
 
-  const page = url.searchParams.get("page") || "1";
-  const search = url.searchParams.get("search") || "";
-  const pageSize = url.searchParams.get("page_size") || "50";
+  const page = url.searchParams.get("p") || "1";
+  const search = url.searchParams.get("q") || "";
+  const pageSize = url.searchParams.get("s") || "50";
 
   try {
     const cacheKeyIngredients = `browse-${page}-${search}-${pageSize}`;
