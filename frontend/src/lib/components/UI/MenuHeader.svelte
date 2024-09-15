@@ -98,12 +98,12 @@
             <a href="/auth/login"
             on:click|preventDefault={() => navigateAndCloseMenu('/auth/login')}
             class="text-xl bg-stone-700 block p-2 text-stone-100 hover:bg-gold-400 hover:text-stone-800 rounded transition-colors"
-              >login</a
+              >Login</a
             >
             <a href="/auth/signup" 
             on:click|preventDefault={() => navigateAndCloseMenu('/auth/signup')}
             class="text-xl bg-stone-700 block p-2 text-stone-100 hover:bg-gold-400 hover:text-stone-800 rounded transition-colors"
-              >sign up</a
+              >Sign up</a
             >
             
           {/if}
