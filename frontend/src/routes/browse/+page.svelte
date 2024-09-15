@@ -19,10 +19,11 @@
   import PerPage from "$lib/components/UI/PerPage.svelte";
   import Search from "$lib/components/UI/Search.svelte";
   import CardHolder from "$lib/components/CardHolder.svelte";
-  import { draw, fade } from "svelte/transition";
+  import { fade } from "svelte/transition";
   import { ChevronDown } from "lucide-svelte";
 
   export let data: PageServerData;
+  
   const urlParams = derived(
     [currentPage, pageSize],
     ([$currentPage, $pageSize]) => {
@@ -60,32 +61,9 @@
     currentPage.set(newPage);
   }
 
-  let foundInCommonName: App.IngredientBrowse[] = [];
-  let foundinOtherNames: App.IngredientBrowse[] = [];
-  let foundInCas: App.IngredientBrowse[] = [];
-  let foundInDescriptors: App.IngredientBrowse[] = [];
-
-  $: foundInCommonName = data.ingredients.results.filter((ingredient) => {
-    return ingredient.common_name
-      ?.toLowerCase()
-      .includes($searchTerm.toLowerCase());
-  });
-
-  $: foundinOtherNames = data.ingredients.results.filter((ingredient) => {
-    return ingredient.other_names
-      ?.toLowerCase()
-      .includes($searchTerm.toLowerCase());
-  });
-
-  $: foundInCas = data.ingredients.results.filter((ingredient) => {
-    return ingredient.cas?.toLowerCase().includes($searchTerm.toLowerCase());
-  });
-
-  $: foundInDescriptors = data.ingredients.results.filter((ingredient) => {
-    return ingredient.descriptors
-      ?.toLowerCase()
-      .includes($searchTerm.toLowerCase());
-  });
+  let foundInNames: App.IngredientBrowse[] = data.ingredients.names;
+  let foundInCas: App.IngredientBrowse[] = data.ingredients.cas;
+  let foundInDescriptors: App.IngredientBrowse[] = data.ingredients.descriptors;
 
   let dimmed = false;
   let showNames = true;
@@ -110,7 +88,7 @@
     </h2>
   {:else}
     <h2 class="my-4 font-quicksand text-3xl font-bold" in:fade>
-      Showing {data.ingredients.count} results for "{$searchTerm}"
+      Showing {data.ingredients.cas.length + data.ingredients.descriptors.length + data.ingredients.names.length} results for "{$searchTerm}"
     </h2>
   {/if}
   <SearchBar>
@@ -132,18 +110,22 @@
     class:dimmed
     class="my-8 flex w-full flex-col transition-all"
   >
-    {#if data.ingredients.results.length === 0}
+
+    {#if data.ingredients.names.length === 0 && data.ingredients.descriptors.length === 0 && data.ingredients.cas.length === 0}
       <p class="m-12 font-quicksand text-5xl font-bold">
         Hm. Try a different search?
       </p>
-    {:else if $searchTerm === ""}
-      <CardHolder>
-        {#each data.ingredients.results as ingredient}
-          <BrowseCard {ingredient} />
-        {/each}
-      </CardHolder>
     {:else}
-      {#if foundInCommonName.length !== 0 || foundinOtherNames.length !== 0}
+
+      {#if $searchTerm === ""}
+          <CardHolder>
+            {#each data.ingredients.names as ingredient}
+              <BrowseCard {ingredient} />
+            {/each}
+          </CardHolder>
+      {/if}
+
+      {#if data.ingredients.names.length !== 0}
         <div class="flex items-center space-x-2">
           <h3 class="my-2 font-quicksand text-2xl font-medium">
             Found in Names
@@ -154,17 +136,14 @@
         </div>
         {#if showNames}
           <CardHolder>
-            {#each foundInCommonName as ingredient}
-              <BrowseCard {ingredient} />
-            {/each}
-            {#each foundinOtherNames as ingredient}
+            {#each data.ingredients.names as ingredient}
               <BrowseCard {ingredient} />
             {/each}
           </CardHolder>
         {/if}
       {/if}
 
-      {#if foundInDescriptors.length !== 0}
+      {#if data.ingredients.descriptors.length !== 0}
         <div class="flex items-center space-x-2">
           <h3 class="my-2 font-quicksand text-2xl font-medium">
             Found in Descriptors
@@ -178,14 +157,14 @@
         </div>
         {#if showDescriptors}
           <CardHolder>
-            {#each foundInDescriptors as ingredient}
+            {#each data.ingredients.descriptors as ingredient}
               <BrowseCard {ingredient} />
             {/each}
           </CardHolder>
         {/if}
       {/if}
 
-      {#if foundInCas.length !== 0}
+      {#if data.ingredients.cas.length !== 0}
         <div class="flex items-center space-x-2">
           <h3 class="my-2 font-quicksand text-2xl font-medium">Found in CAS</h3>
           <button on:click={() => (showCas = !showCas)} class:showCas>
@@ -194,13 +173,13 @@
         </div>
         {#if showCas}
           <CardHolder>
-            {#each foundInCas as ingredient}
+            {#each data.ingredients.cas as ingredient}
               <BrowseCard {ingredient} />
             {/each}
           </CardHolder>
         {/if}
       {/if}
-    {/if}
+      {/if}
   </div>
 </AppWrap>
 

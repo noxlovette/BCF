@@ -2,8 +2,9 @@ from rest_framework.exceptions import PermissionDenied
 from .models import Ingredient, SuggestedIngredient, Descriptor
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.db.models import Q
+from django.db.models import Q, F
 from rest_framework.pagination import PageNumberPagination
+from django.contrib.postgres.search import TrigramSimilarity
 from itertools import chain
 from .serialisers import (
     IngredientSerialiser,
@@ -23,54 +24,84 @@ class TotalBrowseView(generics.ListAPIView):
     serializer_class = IngredientListSerialiser
 
 class BrowseView(APIView):
-    """
-    View to handle ingredient browsing with prioritized searching.
-    Results are ordered by names, CAS, then descriptors.
-    """
-
     def get(self, request):
-        # Get the search term from the query string
         search_term = request.query_params.get("search", None)
-        page_size = request.query_params.get("page_size", 10)
+        page_size = int(request.query_params.get("page_size", 10))
 
-        # If no search term is provided, just return all ingredients, sorted by name
-        if not search_term:
-            ingredients = Ingredient.objects.all().order_by("common_name")
-        else:
-            # Prioritize the results based on the fields
+        # Initialize result sets
+        names_results = []
+        cas_results = []
+        descriptors_results = []
+
+        if search_term:
             search_term = search_term.lower()
 
-            # Search in common names and other names first
-            name_matches = Ingredient.objects.filter(
-                Q(common_name__icontains=search_term) | 
-                Q(other_names__icontains=search_term)
-            )
+            # Search in names
+            name_matches = Ingredient.objects.annotate(
+    common_name_similarity=TrigramSimilarity('common_name', search_term),
+    other_names_similarity=TrigramSimilarity('other_names', search_term)
+).annotate(
+    total_similarity=F('common_name_similarity') + F('other_names_similarity')
+).filter(
+    total_similarity__gt=0.3
+).order_by('-total_similarity')
 
-            # Search in CAS numbers second
+            # Search in CAS numbers
             cas_matches = Ingredient.objects.filter(
                 Q(cas__icontains=search_term)
             )
 
-            # Search in descriptors last
+            # Search in descriptors
             descriptor_matches = Ingredient.objects.filter(
                 Q(descriptor1__name__icontains=search_term) |
                 Q(descriptor2__name__icontains=search_term) |
                 Q(descriptor3__name__icontains=search_term)
             )
 
-            # Concatenate the querysets while preserving order
-            ingredients = list(chain(name_matches, descriptor_matches, cas_matches))
+
+            # Separate the results into categories
+            names_results = [i for i in name_matches]
+            cas_results = [i for i in cas_matches]
+            descriptors_results = [i for i in descriptor_matches]
+        else:
+            # No search term provided, just return all ingredients
+            ingredients = Ingredient.objects.all().order_by("common_name")
+
+            # Paginate the entire ingredient list
+            paginator = CustomPageNumberPagination()
+            paginator.page_size = page_size
+            paginated_ingredients = paginator.paginate_queryset(ingredients, request)
+
+            # Serialize the paginated results
+            serializer = IngredientSerialiser(paginated_ingredients, many=True)
+
+            ingredients_json = serializer.data
+
+            return paginator.get_paginated_response({
+                "names": ingredients_json,
+                "cas": [],
+                "descriptors": [],
+                "search": None,
+            })
 
         # Paginate the results
         paginator = CustomPageNumberPagination()
-        paginator.page_size = page_size  # Set the page size
-        page_of_ingredients = paginator.paginate_queryset(ingredients, request)
+        paginator.page_size = page_size
 
-        # Convert the page of ingredients to JSON
-        serializer = IngredientSerialiser(page_of_ingredients, many=True)
-        ingredients_json = serializer.data
+        paginated_names = paginator.paginate_queryset(names_results, request)
+        paginated_cas = paginator.paginate_queryset(cas_results, request)
+        paginated_descriptors = paginator.paginate_queryset(descriptors_results, request)
 
-        return paginator.get_paginated_response(ingredients_json)
+        # Serialize the paginated results
+        names_serializer = IngredientSerialiser(paginated_names, many=True)
+        cas_serializer = IngredientSerialiser(paginated_cas, many=True)
+        descriptors_serializer = IngredientSerialiser(paginated_descriptors, many=True)
+
+        return paginator.get_paginated_response({
+            "names": names_serializer.data,
+            "cas": cas_serializer.data,
+            "descriptors": descriptors_serializer.data,
+        })
 
     
 class IngredientDetailView(APIView):
@@ -97,11 +128,13 @@ class CustomPageNumberPagination(PageNumberPagination):
     def get_paginated_response(self, data):
         return Response(
             {
-                "page": self.page.number,  # current page number
-                "total_pages": self.page.paginator.num_pages,  # total number of pages
-                "count": self.page.paginator.count,  # total number of items
-                "results": data,  # results for the current page
-                "search": self.request.query_params.get("search", None),  # search term
+                "page": self.page.number,
+                "total_pages": self.page.paginator.num_pages,
+                "count": self.page.paginator.count,
+                "cas": data.get("cas", []),
+                "descriptors": data.get("descriptors", []),
+                "names": data.get("names", []),
+                "search": self.request.query_params.get("search", None),
             }
         )
 

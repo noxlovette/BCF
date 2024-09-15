@@ -27,7 +27,9 @@ declare global {
       count: number;
       search: string;
       total_pages: number;
-      results: IngredientBrowse[];
+      names: IngredientBrowse[];
+      cas: IngredientBrowse[];
+      descriptors: IngredientBrowse[];
     }
 
     interface Descriptor {

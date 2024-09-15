@@ -8,6 +8,7 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
   const search = url.searchParams.get("q") || "";
   const pageSize = url.searchParams.get("s") || "50";
 
+
   try {
     const cacheKeyIngredients = `browse-${page}-${search}-${pageSize}`;
     let ingredients: App.ResponseBrowse;
