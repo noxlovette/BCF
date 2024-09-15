@@ -40,15 +40,13 @@
 
   function updatePagination() {
     const urlParams = new URLSearchParams(window.location.search);
-    const pageFromUrl = parseInt(urlParams.get("page") || "1");
-    const searchFromUrl = urlParams.get("search") || "";
-    const pageSizeFromUrl = parseInt(urlParams.get("page_size") || "100");
+    const pageFromUrl = parseInt(urlParams.get("p") || "1");
+    const searchFromUrl = urlParams.get("q") || "";
+    const pageSizeFromUrl = parseInt(urlParams.get("s") || "50");
 
     currentPage.set(pageFromUrl);
     searchTerm.set(searchFromUrl);
     pageSize.set(pageSizeFromUrl);
-
-    handleSearchCollection();
   }
 
   async function updatePageSize() {
@@ -60,8 +58,7 @@
     currentPage.set(newPage);
   }
 
-  function handleSearchCollection() {
-    filteredCollection = collection.filter((ingredient) => {
+    $: filteredCollection = collection.filter((ingredient) => {
       const commonName = ingredient.common_name || "";
       const cas = ingredient.cas || "";
       return (
@@ -69,13 +66,6 @@
         cas.toLowerCase().includes($searchTerm.toLowerCase())
       );
     });
-    currentPage.set(1);
-  }
-
-  function updateUrl() {
-    const url = `/collect?page=${$currentPage}&search=${$searchTerm}&page_size=${$pageSize}`;
-    goto(url, { replaceState: true });
-  }
 </script>
 
 <MetaData
@@ -99,7 +89,7 @@
     </h2>
   {/if}
   <SearchBar>
-    <Search on:search={handleSearchCollection} bind:searchInput />
+    <Search bind:searchInput />
 
     <PerPage on:updatePageSize={updatePageSize} />
     <form

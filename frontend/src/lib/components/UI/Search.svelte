@@ -18,10 +18,6 @@
     goto(`?${params.toString()}`, { replaceState: true });
   }
 
-  function handleBlur() {
-    dispatch("blur");
-  }
-
   function handleFocus() {
     dispatch("focus");
   }
@@ -41,7 +37,7 @@ class="w-full rounded border-gold-400 bg-stone-50 shadow transition-all hover:sh
 name="q"
 bind:value={$value}
 bind:this={searchInput}
-on:input={debounce(handleSearch, 300)}
+on:input={debounce(handleSearch, 800)}
 on:focus={handleFocus}
 on:blur={handleSearch}
 {placeholder}

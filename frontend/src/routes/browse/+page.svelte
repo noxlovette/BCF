@@ -7,13 +7,11 @@
   import BrowseCard from "$lib/components/BrowseCard.svelte";
   import MetaData from "$lib/components/MetaData.svelte";
   import Pagination from "$lib/components/UI/Pagination.svelte";
-  import ResetButton from "$lib/components/UI/ResetButton.svelte";
 
   import {
     currentPage,
     pageSize,
     searchTerm,
-    notification,
     secondSearchTerm,
   } from "$lib/stores";
   import AppWrap from "$lib/components/AppWrap.svelte";
@@ -40,6 +38,7 @@
     searchTerm.set(data.urlParams.search);
     secondSearchTerm.set(data.urlParams.search);
 
+    
     const unsubscribe = urlParams.subscribe(async (url) => {
       await goto(url);
     });
