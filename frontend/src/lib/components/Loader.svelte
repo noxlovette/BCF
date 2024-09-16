@@ -75,7 +75,7 @@
         ballBottomRight="#FCD0A3"
         size="100"
       />
-      <p class="text-pretty text-2xl font-bold normal-case italic text-gold-50">
+      <p class="text-pretty lg:text-2xl font-bold normal-case italic text-gold-50 px-4">
         {chosenQuote}
       </p>
     </div>

@@ -19,7 +19,7 @@
 <MetaData />
 
 <main
-  class="min-w-screen flex min-h-screen overflow-hidden flex-col items-center justify-center hyphens-auto bg-stone-100 slashed-zero tabular-nums text-stone-800 antialiased dark:bg-stone-800 dark:text-stone-200"
+  class="min-w-screen flex min-h-screen overflow-hidden flex-col items-center justify-center bg-stone-100 slashed-zero tabular-nums text-stone-800 antialiased dark:bg-stone-800 dark:text-stone-200"
 >
   <Header />
 
