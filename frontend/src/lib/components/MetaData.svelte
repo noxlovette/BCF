@@ -5,7 +5,7 @@
   export let title = "BCF";
 
   export let keywords =
-    "perfume, formulation, fragrance, BCF, perfumers, browse, collect, formulate, ingredient, linalool, essential oil, absolute";
+    "perfume, formulation, fragrance, BCF, perfumers, browse, collect, formulate, ingredient, essential oil, absolute";
   export let robots = "index, follow";
   export let ogTitle = "BCF";
   export let ogUrl = "https://bcfapp.app";
@@ -19,6 +19,7 @@
   <meta name="description" content={description} />
   <meta name="keywords" content={keywords} />
   <meta name="robots" content={robots} />
+  <meta property="og:locale" content="en_GB" />
 
   <meta property="og:title" content={ogTitle} />
   <meta property="og:description" content={description} />

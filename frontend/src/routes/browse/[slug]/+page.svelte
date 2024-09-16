@@ -37,7 +37,7 @@
   let ifraStatus =
     ingredient.is_restricted === true ? "Restricted" : "Not restricted";
 
-  const description = `Discover ${ingredient.common_name}. ${ingredient.use}. Explore similar ingredients and fragrances at BCF.`;
+  const description = `Discover ${ingredient.common_name}. ${ingredient.descriptors}. Explore similar ingredients and fragrances at BCF.`;
   const keywords = `${ingredient.common_name}, ${ingredient.descriptors}, ${ingredient.other_names}, ${ingredient.cas}, ${ingredient.origin}, ${ingredient.volatility}, fragrance, BCF, ingredient, perfume, perfumery`;
 </script>
 
