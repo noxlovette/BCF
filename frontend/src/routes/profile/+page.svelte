@@ -6,8 +6,8 @@
   import type { PageServerData } from "./$types";
 
   import { user } from "$lib/stores";
-    import AppWrap from "$lib/components/AppWrap.svelte";
-    import BigText from "$lib/components/BigText.svelte";
+  import AppWrap from "$lib/components/AppWrap.svelte";
+  import BigText from "$lib/components/BigText.svelte";
 
   export let data: PageServerData;
 
@@ -29,7 +29,6 @@
       greeting.set("evening");
     }
   }
-
 </script>
 
 <svelte:head>
@@ -37,17 +36,20 @@
 </svelte:head>
 <AppWrap>
   <div
-      id="header"
-      class="flex w-full flex-row items-end justify-between border-b-2 border-stone-500 pb-4 font-medium xl:border-b-4"
+    id="header"
+    class="flex w-full flex-row items-end justify-between border-b-2 border-stone-500 pb-4 font-medium xl:border-b-4"
+  >
+    <button
+      class="font-quicksand text-7xl"
+      on:click={() => currentPage.set("")}
     >
-  <button  class="font-quicksand text-7xl" on:click={()=> currentPage.set('')}>
-Good <span class="text-gold-400">{$greeting}</span>
-  </button>
-  
-  <div
-  id="controls"
-  class="flex flex-row justify-end space-x-4 font-medium xl:text-2xl"
->
+      Good <span class="text-gold-400">{$greeting}</span>
+    </button>
+
+    <div
+      id="controls"
+      class="flex flex-row justify-end space-x-4 font-medium xl:text-2xl"
+    >
       <button
         class="rounded border-2 border-stone-500 px-6 py-2"
         on:mousedown={() => currentPage.set("settings")}
@@ -60,24 +62,20 @@ Good <span class="text-gold-400">{$greeting}</span>
       >
         Contributions
       </button>
-      <form method='post' action="?/logout">
-      <button
-      type="submit"
-        class="rounded border-2 border-stone-500 px-6 py-2"
-      >
-        Log Out
-      </button>
-    </form>
+      <form method="post" action="?/logout">
+        <button
+          type="submit"
+          class="rounded border-2 border-stone-500 px-6 py-2"
+        >
+          Log Out
+        </button>
+      </form>
+    </div>
   </div>
 
-  
-</div>
-  
-    {#if $currentPage === "settings"}
-      <Settings />
-    {:else if $currentPage === "contributions"}
-      <Contributions {suggestedIngredients} />
-    {/if}
-
-
+  {#if $currentPage === "settings"}
+    <Settings />
+  {:else if $currentPage === "contributions"}
+    <Contributions {suggestedIngredients} />
+  {/if}
 </AppWrap>

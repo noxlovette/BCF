@@ -3,7 +3,7 @@
   import { enhance } from "$app/forms";
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
- import { invalidateAll } from "$app/navigation";
+  import { invalidateAll } from "$app/navigation";
 
   import { notification, user } from "$lib/stores";
 
@@ -17,8 +17,6 @@
       notification.set({ message: "Welcome back!", type: "success" });
       await goto("/collect/");
     } else {
-      
-
       notification.set({
         message: result.data.error || "Login failed",
         type: "error",

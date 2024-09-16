@@ -1,10 +1,16 @@
 import redis from "$lib/redisClient";
 import getUnsplashURL from "$lib/unsplash";
 import { error } from "@sveltejs/kit";
+import axios from "axios";
 import type { Actions, PageServerLoad } from "./$types";
 const VITE_API_URL = "http://backend:8000";
+const token =
+  import.meta.env.VITE_TELEGRAM_BOT_TOKEN ||
+  process.env.VITE_TELEGRAM_BOT_TOKEN;
+const chatId =
+  import.meta.env.VITE_TELEGRAM_CHAT_ID || process.env.VITE_TELEGRAM_CHAT_ID;
 
-export const load: PageServerLoad = async ({ fetch, params, depends }) => {  
+export const load: PageServerLoad = async ({ fetch, params, depends }) => {
   const { slug } = params;
 
   depends("browse:related");
@@ -51,7 +57,6 @@ export const load: PageServerLoad = async ({ fetch, params, depends }) => {
 
 export const actions = {
   add: async ({ cookies, request }) => {
-
     const sessionid = cookies.get("sessionid");
     const csrfToken = cookies.get("csrftoken");
     const data = await request.formData();
@@ -92,7 +97,6 @@ export const actions = {
     }
   },
   suggest: async ({ cookies, request }) => {
-
     const sessionid = cookies.get("sessionid");
     const csrfToken = cookies.get("csrftoken");
     const formData = await request.formData();
@@ -131,6 +135,16 @@ export const actions = {
       );
 
       if (response.ok) {
+        const text = `
+        A new suggestion has been added for ${formData.get("common_name")}.
+        `;
+        const response = await axios.post(
+          `https://api.telegram.org/bot${token}/sendMessage`,
+          {
+            chat_id: chatId,
+            text: text,
+          },
+        );
         return { success: true };
       } else {
         return { success: false, error: response.error || "An error occurred" };

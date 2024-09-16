@@ -23,7 +23,7 @@
   import { ChevronDown } from "lucide-svelte";
 
   export let data: PageServerData;
-  
+
   const urlParams = derived(
     [currentPage, pageSize],
     ([$currentPage, $pageSize]) => {
@@ -39,7 +39,6 @@
     searchTerm.set(data.urlParams.search);
     secondSearchTerm.set(data.urlParams.search);
 
-    
     const unsubscribe = urlParams.subscribe(async (url) => {
       await goto(url);
     });
@@ -61,13 +60,18 @@
     currentPage.set(newPage);
   }
 
-
   let dimmed = false;
   let showNames = true;
   let showDescriptors = true;
   let showCas = true;
-  let totalResults = data.ingredients.cas.length + data.ingredients.descriptors.length + data.ingredients.names.length;
-  $: totalResults = data.ingredients.cas.length + data.ingredients.descriptors.length + data.ingredients.names.length;
+  let totalResults =
+    data.ingredients.cas.length +
+    data.ingredients.descriptors.length +
+    data.ingredients.names.length;
+  $: totalResults =
+    data.ingredients.cas.length +
+    data.ingredients.descriptors.length +
+    data.ingredients.names.length;
 
   const description = "Browse perfume compounds. IFRA FIG. 3100 ingredients.";
   const ogTitle = "BCF | Browse";
@@ -87,15 +91,12 @@
     </h2>
   {:else}
     <h2 class="my-4 font-quicksand text-3xl font-bold" in:fade>
-      Showing {totalResults} {totalResults === 1 ? 'result' : 'results'} for "{$searchTerm}"
+      Showing {totalResults}
+      {totalResults === 1 ? "result" : "results"} for "{$searchTerm}"
     </h2>
   {/if}
   <SearchBar>
-    <Search
-      value={searchTerm}
-      bind:searchInput
-    />
-
+    <Search value={searchTerm} bind:searchInput />
 
     <PerPage />
     <Pagination
@@ -109,19 +110,17 @@
     class:dimmed
     class="my-8 flex w-full flex-col transition-all"
   >
-
     {#if data.ingredients.names.length === 0 && data.ingredients.descriptors.length === 0 && data.ingredients.cas.length === 0}
       <p class="m-12 font-quicksand text-5xl font-bold">
         Hm. Try a different search?
       </p>
     {:else}
-
       {#if $searchTerm === ""}
-          <CardHolder>
-            {#each data.ingredients.names as ingredient}
-              <BrowseCard {ingredient} />
-            {/each}
-          </CardHolder>
+        <CardHolder>
+          {#each data.ingredients.names as ingredient}
+            <BrowseCard {ingredient} />
+          {/each}
+        </CardHolder>
       {/if}
 
       {#if data.ingredients.names.length !== 0}
@@ -178,7 +177,7 @@
           </CardHolder>
         {/if}
       {/if}
-      {/if}
+    {/if}
   </div>
 </AppWrap>
 

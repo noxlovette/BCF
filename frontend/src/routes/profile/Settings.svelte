@@ -1,6 +1,4 @@
 <script lang="ts">
-
-
   import { goto } from "$app/navigation";
   import { notification, user } from "$lib/stores";
 
@@ -20,7 +18,6 @@
 
   let username = $user.username;
   let email = $user.email;
-
 
   function toggleWarningDelete() {
     deleteWarning = !deleteWarning;
@@ -290,7 +287,7 @@
       />
       <label for="email-off">off</label>
     </div>
-    </div>
+  </div>
 </div>
 
 <style>

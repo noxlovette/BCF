@@ -15,7 +15,6 @@
     });
   });
 
-
   let is_authenticated = $user.is_authenticated;
 
   let username = $user.username;
@@ -43,11 +42,10 @@
 
   $: currentPath = $page.url.pathname;
   $: currentPage = currentPath.split("/")[1] || "welcome to bcf";
-
 </script>
 
 <header
-  class="group relative z-20 flex w-full flex-col my-4 lg:my-0 items-center justify-center font-quicksand font-medium"
+  class="group relative z-20 my-4 flex w-full flex-col items-center justify-center font-quicksand font-medium lg:my-0"
 >
   <div class="flex w-full max-w-[90vw] items-center justify-between">
     <a
@@ -61,24 +59,19 @@
         src="/assets/img/bcf_logo_dark.png"
         alt="Go to home page"
       />
-  </a>
-    <div class="ml-4 md:m-8 size-full flex-col justify-center hidden md:flex">
+    </a>
+    <div class="ml-4 hidden size-full flex-col justify-center md:m-8 md:flex">
       <div
         id="wider-part"
-        class="flex h-2/3 flex-grow border-b-2 border-gold-900 xl:border-b-4 "
+        class="flex h-2/3 flex-grow border-b-2 border-gold-900 xl:border-b-4"
       >
-
-          <p
-            on:mouseenter={toggleDropdown}
-            class="m-2 text-3xl tracking-tighter "
-          >
-            {currentPage}
-          </p>
-
+        <p on:mouseenter={toggleDropdown} class="m-2 text-3xl tracking-tighter">
+          {currentPage}
+        </p>
 
         <div
           id="user"
-          class="mb-auto ml-auto mt-auto flex flex-row items-center justify-center space-x-4 "
+          class="mb-auto ml-auto mt-auto flex flex-row items-center justify-center space-x-4"
         >
           {#if is_authenticated}
             <a
@@ -113,7 +106,7 @@
       >
         <nav
           id="navbar"
-          class="md:mt-2 flex flex-row text-sm md:text-base"
+          class="flex flex-row text-sm md:mt-2 md:text-base"
           on:mouseenter={toggleDropdown}
         >
           <!-- Permanent placeholder or minimal content -->
