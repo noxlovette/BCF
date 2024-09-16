@@ -46,28 +46,28 @@
   <form method="post" action="?/update" class="" use:enhance={handleEnhance}>
     <div
       id="header"
-      class="flex w-full md:flex-row flex-col-reverse
-space-y-2 md:space-y-0
-      items-baseline justify-between border-b-2 border-grapefruit-500 md:pb-4 font-medium xl:border-b-4"
+      class="flex w-full flex-col-reverse items-baseline
+justify-between space-y-2
+      border-b-2 border-grapefruit-500 font-medium md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
     >
-      <div class="w-full my-4 md:my-0">
+      <div class="my-4 w-full md:my-0">
         <h1 class="">
           <VariableInput
             text={ingredient.common_name}
             bind:value={$editedIngredient.common_name}
             name="common_name"
-            class="font-quicksand text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold"
+            class="font-quicksand text-3xl font-bold md:text-4xl lg:text-5xl xl:text-7xl"
           />
         </h1>
       </div>
       <div
         id="controls"
-        class="flex flex-row items-baseline justify-end space-x-2 lg:space-x-4 font-medium xl:text-2xl"
+        class="flex flex-row items-baseline justify-end space-x-2 font-medium lg:space-x-4 xl:text-2xl"
       >
         {#if $editing}
           <button
             type="submit"
-            class="rounded border-2 border-stone-500 lg:px-6 lg:py-2 px-2 py-1"
+            class="rounded border-2 border-stone-500 px-2 py-1 lg:px-6 lg:py-2"
             on:click={() => editing.set(false)}
           >
             Cancel
@@ -85,7 +85,7 @@ space-y-2 md:space-y-0
             <input type="hidden" name="id" value={ingredient.id} />
             <button
               disabled={!$user.is_authenticated}
-              class="rounded border-2 border-stone-500 lg:px-6 lg:py-2 px-2 py-1 disabled:border-stone-300 disabled:text-stone-400"
+              class="rounded border-2 border-stone-500 px-2 py-1 disabled:border-stone-300 disabled:text-stone-400 lg:px-6 lg:py-2"
             >
               Delete
             </button>
@@ -93,16 +93,15 @@ space-y-2 md:space-y-0
           <input type="hidden" name="id" value={ingredient.id} />
           <button
             type="submit"
-            class="rounded border-2 border-stone-500 lg:px-6 lg:py-2 px-2 py-1"
+            class="rounded border-2 border-stone-500 px-2 py-1 lg:px-6 lg:py-2"
           >
             Save
           </button>
-
         {:else}
           <button
             disabled={!$user.is_authenticated}
             on:click={() => editing.set(!$editing)}
-            class="rounded border-2 border-stone-500 lg:px-6 lg:py-2 px-2 py-1 disabled:border-stone-300 disabled:text-stone-400"
+            class="rounded border-2 border-stone-500 px-2 py-1 disabled:border-stone-300 disabled:text-stone-400 lg:px-6 lg:py-2"
           >
             Edit
           </button>
@@ -110,9 +109,14 @@ space-y-2 md:space-y-0
       </div>
     </div>
 
-    <div id="center" class="flex md:flex-row flex-col justify-between py-4 space-y-4 md:space-y-0">
-      <div id="left-part" class="flex w-full md:w-2/3 flex-col space-y-8 pr-8">
-        <div class="flex md:flex-row md:space-x-8 flex-col space-y-4 md:space-y-0">
+    <div
+      id="center"
+      class="flex flex-col justify-between space-y-4 py-4 md:flex-row md:space-y-0"
+    >
+      <div id="left-part" class="flex w-full flex-col space-y-8 pr-8 md:w-2/3">
+        <div
+          class="flex flex-col space-y-4 md:flex-row md:space-x-8 md:space-y-0"
+        >
           <div>
             <Label>descriptors</Label>
             <VariableTextarea
@@ -138,11 +142,13 @@ space-y-2 md:space-y-0
             text={useMessage}
             bind:value={$editedIngredient.use}
             name="use"
-            class="md:min-h-36 min-h-24 font-medium xl:text-2xl"
+            class="min-h-24 font-medium md:min-h-36 xl:text-2xl"
           />
         </div>
         <div class="flex flex-col space-y-4">
-          <div class="flex w-full flex-col md:flex-row max-w-2xl space-y-4 md:space-y-0 md:space-x-8">
+          <div
+            class="flex w-full max-w-2xl flex-col space-y-4 md:flex-row md:space-x-8 md:space-y-0"
+          >
             <div>
               <Label>volatility</Label>
               <VariableInput
@@ -184,7 +190,9 @@ space-y-2 md:space-y-0
         </div>
       </div>
       <div id="right-part" class="flex flex-1 flex-col space-y-8">
-        <div class="flex md:flex-row flex-col space-y-2 md:space-y-0 md:space-x-8">
+        <div
+          class="flex flex-col space-y-2 md:flex-row md:space-x-8 md:space-y-0"
+        >
           <div>
             <Label>colour</Label>
             <VariableInput
@@ -210,7 +218,7 @@ space-y-2 md:space-y-0
             text={impression}
             name="impression"
             bind:value={$editedIngredient.impression}
-            class="md:min-h-36 min-h-24 font-medium xl:text-2xl"
+            class="min-h-24 font-medium md:min-h-36 xl:text-2xl"
           />
         </div>
 
@@ -220,7 +228,7 @@ space-y-2 md:space-y-0
             text={ideas}
             name="ideas"
             bind:value={$editedIngredient.ideas}
-            class="md:min-h-36 min-h-24 font-medium xl:text-2xl"
+            class="min-h-24 font-medium md:min-h-36 xl:text-2xl"
           />
         </div>
       </div>

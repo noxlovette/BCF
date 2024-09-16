@@ -2,11 +2,10 @@
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import { onMount } from "svelte";
-  import {user} from "$lib/stores";
+  import { user } from "$lib/stores";
   import { notification } from "$lib/stores";
   import { goto } from "$app/navigation";
-    import { enhance } from "$app/forms";
-
+  import { enhance } from "$app/forms";
 
   let username = "";
   let email = "";
@@ -61,8 +60,6 @@
       notification.set({ message: "Welcome on board!", type: "success" });
       await goto("/collect/");
     } else {
-      
-
       notification.set({
         message: result.data.error || "Signup failed",
         type: "error",
@@ -71,7 +68,6 @@
 
     update();
   };
-  
 </script>
 
 <svelte:head>
@@ -90,7 +86,7 @@
         easing: quintOut,
       }}
       method="POST"
-      use:enhance = {() => handleLoginResult}
+      use:enhance={() => handleLoginResult}
     >
       <h1 class="border-b-2 text-6xl font-bold tracking-tighter">
         sign up<span class="text-gold-400">.</span>

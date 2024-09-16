@@ -3,10 +3,7 @@
   import { onDestroy } from "svelte";
 
   import { navigating } from "$app/stores";
-  import {
-    
-    Circle3,
-  } from "svelte-loading-spinners";
+  import { Circle3 } from "svelte-loading-spinners";
 
   let quotes = [
     "Perfume is the art that makes memory speak. — Francis Kurkdjian",
@@ -39,13 +36,13 @@
 
   $: {
     if ($navigating) {
-      if (intervalId === null) { // Ensure interval is set only once
+      if (intervalId === null) {
+        // Ensure interval is set only once
         intervalId = setInterval(() => {
           counter += 1;
         }, 300);
       }
     } else {
-
       if (intervalId !== null) {
         clearInterval(intervalId);
         intervalId = null;
@@ -59,7 +56,6 @@
       clearInterval(intervalId);
     }
   });
-
 </script>
 
 {#if $navigating && counter > 1}
@@ -75,7 +71,9 @@
         ballBottomRight="#FCD0A3"
         size="100"
       />
-      <p class="text-pretty lg:text-2xl font-bold normal-case italic text-gold-50 px-4">
+      <p
+        class="text-pretty px-4 font-bold normal-case italic text-gold-50 lg:text-2xl"
+      >
         {chosenQuote}
       </p>
     </div>

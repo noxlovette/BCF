@@ -18,7 +18,7 @@
   import { notification } from "$lib/stores";
   import { enhance } from "$app/forms";
   import { fade } from "svelte/transition";
-    import CardHolder from "$lib/components/CardHolder.svelte";
+  import CardHolder from "$lib/components/CardHolder.svelte";
 
   export let data: PageServerData;
   let collection = data.collection;
@@ -58,14 +58,14 @@
     currentPage.set(newPage);
   }
 
-    $: filteredCollection = collection.filter((ingredient) => {
-      const commonName = ingredient.common_name || "";
-      const cas = ingredient.cas || "";
-      return (
-        commonName.toLowerCase().includes($searchTerm.toLowerCase()) ||
-        cas.toLowerCase().includes($searchTerm.toLowerCase())
-      );
-    });
+  $: filteredCollection = collection.filter((ingredient) => {
+    const commonName = ingredient.common_name || "";
+    const cas = ingredient.cas || "";
+    return (
+      commonName.toLowerCase().includes($searchTerm.toLowerCase()) ||
+      cas.toLowerCase().includes($searchTerm.toLowerCase())
+    );
+  });
 </script>
 
 <MetaData
@@ -120,10 +120,9 @@
     {:else}
       <CardHolder>
         {#each paginatedCollection as ingredient}
-            <CollectCard {ingredient} />
+          <CollectCard {ingredient} />
         {/each}
       </CardHolder>
-
     {/if}
   </div>
 

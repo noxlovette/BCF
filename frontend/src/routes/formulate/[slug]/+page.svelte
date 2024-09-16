@@ -67,28 +67,28 @@
   <div
     id="header"
     class="
-    flex w-full md:flex-row flex-col-reverse
-    space-y-2 md:space-y-0
-    items-baseline
-    justify-between border-b-2 border-aqua-700 md:pb-4 font-medium xl:border-b-4"
+    flex w-full flex-col-reverse items-baseline
+    justify-between space-y-2
+    border-b-2
+    border-aqua-700 font-medium md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
   >
-  <div class="w-full my-4 md:my-0">
+    <div class="my-4 w-full md:my-0">
       <h1 class="">
         <VariableInput
           text={formula.name}
           bind:value={$editedFormula.name}
-          class="font-quicksand text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold"
+          class="font-quicksand text-3xl font-bold md:text-4xl lg:text-5xl xl:text-7xl"
         />
       </h1>
     </div>
     <div
       id="controls"
-      class="flex flex-row items-baseline justify-between md:justify-end space-x-4 xl:text-2xl"
+      class="flex flex-row items-baseline justify-between space-x-4 md:justify-end xl:text-2xl"
     >
       {#if $editing}
         <button
           type="submit"
-          class="rounded border-2 border-stone-500 lg:px-6 lg:py-2 px-2 py-1"
+          class="rounded border-2 border-stone-500 px-2 py-1 lg:px-6 lg:py-2"
           on:click={() => editing.set(false)}
         >
           Cancel
@@ -97,7 +97,7 @@
           <input type="hidden" name="id" value={formula.id} />
           <button
             type="submit"
-            class="rounded border-2 border-stone-500 lg:px-6 lg:py-2 px-2 py-1"
+            class="rounded border-2 border-stone-500 px-2 py-1 lg:px-6 lg:py-2"
           >
             Delete
           </button>
@@ -112,7 +112,7 @@
           <input type="hidden" name="fullData" bind:value={$jsonFullData} />
           <button
             type="submit"
-            class="rounded border-2 border-stone-500 lg:px-6 lg:py-2 px-2 py-1"
+            class="rounded border-2 border-stone-500 px-2 py-1 lg:px-6 lg:py-2"
           >
             Save
           </button>
@@ -120,7 +120,7 @@
       {:else}
         <Label>Showing</Label>
         <select
-          class="col-start-1 row-start-1 rounded border-2 border-stone-500 bg-transparent  px-4 py-1 lg:px-8 lg:py-2  ring-0 focus:border-stone-500 focus:ring-0 xl:text-2xl dark:bg-stone-800"
+          class="col-start-1 row-start-1 rounded border-2 border-stone-500 bg-transparent px-4 py-1 ring-0 focus:border-stone-500 focus:ring-0 lg:px-8 lg:py-2 xl:text-2xl dark:bg-stone-800"
           bind:value={multiplier}
         >
           <option value="1">1 kg</option>
@@ -135,7 +135,7 @@
         </select>
         <button
           on:click={() => editing.set(!$editing)}
-          class="rounded border-2 border-stone-500 lg:px-6 lg:py-2 px-2 py-1"
+          class="rounded border-2 border-stone-500 px-2 py-1 lg:px-6 lg:py-2"
         >
           Edit
         </button>
@@ -145,7 +145,7 @@
 
   <div
     id="center"
-    class="mb-12 grid w-full grid-cols-1 md:grid-cols-2 md:grid-rows-5 items-baseline gap-4 gap-x-8 py-4"
+    class="mb-12 grid w-full grid-cols-1 items-baseline gap-4 gap-x-8 py-4 md:grid-cols-2 md:grid-rows-5"
   >
     {#each $editedFormula.ingredients as ingredient, i}
       <div class="flex flex-row justify-between">
@@ -184,7 +184,7 @@
     {/each}
     {#if $editing}
       <button
-        class="md:col-span-2 items-center justify-center rounded border-2 border-stone-500 py-2 text-center font-bold xl:border-4"
+        class="items-center justify-center rounded border-2 border-stone-500 py-2 text-center font-bold md:col-span-2 xl:border-4"
         on:click|preventDefault={addIngredient}
       >
         Add Ingredient
@@ -192,7 +192,10 @@
     {/if}
   </div>
 
-  <div id="footer" class="grid w-full md:grid-cols-2 grid-cols-1 gap-4 md:gap-x-8">
+  <div
+    id="footer"
+    class="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-8"
+  >
     <div>
       <Label>description</Label>
       <VariableTextarea

@@ -1,4 +1,4 @@
-import {error} from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import type { Actions } from "./$types";
 
 export const actions = {
@@ -25,15 +25,14 @@ export const actions = {
         body: body,
         credentials: "include",
       });
-        
-        if (!response.ok) {
+
+      if (!response.ok) {
         throw error(400, "Signup failed");
       }
 
       const userData = await response.json();
 
       cookies.set("sessionid", userData.sessionid, { path: "/" });
-      
 
       return {
         success: true,
@@ -44,7 +43,6 @@ export const actions = {
         },
       };
     } catch (error) {
-
       return {
         success: false,
         error:

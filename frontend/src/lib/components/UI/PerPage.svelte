@@ -9,7 +9,7 @@
 </script>
 
 <label
-  class="group hidden md:flex items-center space-x-2 opacity-80 transition-opacity hover:opacity-100"
+  class="group hidden items-center space-x-2 opacity-80 transition-opacity hover:opacity-100 md:flex"
   aria-label="Items per page"
 >
   <input

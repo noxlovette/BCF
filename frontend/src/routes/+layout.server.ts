@@ -14,7 +14,6 @@ export const load: LayoutServerLoad = async ({ cookies, fetch, depends }) => {
     },
   });
 
-
   let user: App.User | null = null;
   if (response.status === 401) {
     return { user: null };
