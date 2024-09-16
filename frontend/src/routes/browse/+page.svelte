@@ -61,14 +61,13 @@
     currentPage.set(newPage);
   }
 
-  let foundInNames: App.IngredientBrowse[] = data.ingredients.names;
-  let foundInCas: App.IngredientBrowse[] = data.ingredients.cas;
-  let foundInDescriptors: App.IngredientBrowse[] = data.ingredients.descriptors;
 
   let dimmed = false;
   let showNames = true;
   let showDescriptors = true;
   let showCas = true;
+  let totalResults = data.ingredients.cas.length + data.ingredients.descriptors.length + data.ingredients.names.length;
+  $: totalResults = data.ingredients.cas.length + data.ingredients.descriptors.length + data.ingredients.names.length;
 
   const description = "Browse perfume compounds. IFRA FIG. 3100 ingredients.";
   const ogTitle = "BCF | Browse";
@@ -88,7 +87,7 @@
     </h2>
   {:else}
     <h2 class="my-4 font-quicksand text-3xl font-bold" in:fade>
-      Showing {data.ingredients.cas.length + data.ingredients.descriptors.length + data.ingredients.names.length} results for "{$searchTerm}"
+      Showing {totalResults} {totalResults === 1 ? 'result' : 'results'} for "{$searchTerm}"
     </h2>
   {/if}
   <SearchBar>

@@ -2,7 +2,7 @@ from rest_framework.exceptions import PermissionDenied
 from .models import Ingredient, SuggestedIngredient, Descriptor
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.db.models import Q, F
+from django.db.models import Q, F, Case, When, IntegerField, Value
 from rest_framework.pagination import PageNumberPagination
 from django.contrib.postgres.search import TrigramSimilarity
 from itertools import chain
@@ -38,13 +38,20 @@ class BrowseView(APIView):
 
             # Search in names
             name_matches = Ingredient.objects.annotate(
-    common_name_similarity=TrigramSimilarity('common_name', search_term),
-    other_names_similarity=TrigramSimilarity('other_names', search_term)
-).annotate(
-    total_similarity=F('common_name_similarity') + F('other_names_similarity')
-).filter(
-    total_similarity__gt=0.3
-).order_by('-total_similarity')
+                common_name_similarity=TrigramSimilarity('common_name', search_term),
+                other_names_similarity=TrigramSimilarity('other_names', search_term),
+                total_similarity=F('common_name_similarity') + F('other_names_similarity'),
+                exact_match=Case(
+                    When(Q(common_name__icontains=search_term) | Q(other_names__icontains=search_term), then=Value(1)),
+                    default=Value(0),
+                    output_field=IntegerField()
+                )
+            ).filter(
+                Q(total_similarity__gt=0.3) | Q(exact_match=1)
+            ).order_by(
+                '-exact_match',        # Prioritize exact matches
+                '-total_similarity'    # Then prioritize by similarity
+            )
 
             # Search in CAS numbers
             cas_matches = Ingredient.objects.filter(
