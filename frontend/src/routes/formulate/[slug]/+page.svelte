@@ -160,6 +160,20 @@
             bind:value={ingredient.common_name}
             class="font-medium xl:text-2xl"
           />
+          {#if $editing}
+  <input
+    type="text"
+    bind:value={ingredient.common_name}
+    placeholder={ingredient.common_name}
+    class="rounded border-none border-stone-500 bg-transparent p-0 ring-0 focus:border-stone-500 focus:ring-0 dark:bg-stone-800
+  font-medium xl:text-2xl
+  "
+  />
+{:else}
+  <a href='/collect/{ingredient.counterpart}' class="font-medium xl:text-2xl ">
+    {ingredient.common_name}
+  </a>
+{/if}
         </div>
 
         <div id="right-part" class="grid w-36 grid-cols-2 text-right">

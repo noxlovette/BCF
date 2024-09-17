@@ -6,17 +6,17 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('browse', '0004_alter_ingredient_slug'),
+        ("browse", "0004_alter_ingredient_slug"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='ingredient',
-            old_name='similar_ingredients',
-            new_name='related_ingredients',
+            model_name="ingredient",
+            old_name="similar_ingredients",
+            new_name="related_ingredients",
         ),
         migrations.RemoveField(
-            model_name='ingredient',
-            name='constituents',
+            model_name="ingredient",
+            name="constituents",
         ),
     ]

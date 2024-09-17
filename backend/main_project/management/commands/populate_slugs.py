@@ -2,8 +2,9 @@ from django.core.management.base import BaseCommand
 from browse.models import Ingredient
 from django.utils.text import slugify
 
+
 class Command(BaseCommand):
-    help = 'Populate slugs and ensure uniqueness'
+    help = "Populate slugs and ensure uniqueness"
 
     def handle(self, *args, **kwargs):
         slugs = {}
@@ -20,4 +21,6 @@ class Command(BaseCommand):
             ingredient.slug = slug
             ingredient.save()
 
-        self.stdout.write(self.style.SUCCESS('Successfully populated slugs and ensured uniqueness'))
+        self.stdout.write(
+            self.style.SUCCESS("Successfully populated slugs and ensured uniqueness")
+        )

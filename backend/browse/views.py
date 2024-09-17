@@ -23,6 +23,7 @@ class TotalBrowseView(generics.ListAPIView):
     queryset = Ingredient.objects.all().order_by("common_name")
     serializer_class = IngredientListSerialiser
 
+
 class BrowseView(APIView):
     def get(self, request):
         search_term = request.query_params.get("search", None)
@@ -37,34 +38,42 @@ class BrowseView(APIView):
             search_term = search_term.lower()
 
             # Search in names
-            name_matches = Ingredient.objects.annotate(
-                common_name_similarity=TrigramSimilarity('common_name', search_term),
-                other_names_similarity=TrigramSimilarity('other_names', search_term),
-                total_similarity=F('common_name_similarity') + F('other_names_similarity'),
-                exact_match=Case(
-                    When(Q(common_name__icontains=search_term) | Q(other_names__icontains=search_term), then=Value(1)),
-                    default=Value(0),
-                    output_field=IntegerField()
+            name_matches = (
+                Ingredient.objects.annotate(
+                    common_name_similarity=TrigramSimilarity(
+                        "common_name", search_term
+                    ),
+                    other_names_similarity=TrigramSimilarity(
+                        "other_names", search_term
+                    ),
+                    total_similarity=F("common_name_similarity")
+                    + F("other_names_similarity"),
+                    exact_match=Case(
+                        When(
+                            Q(common_name__icontains=search_term)
+                            | Q(other_names__icontains=search_term),
+                            then=Value(1),
+                        ),
+                        default=Value(0),
+                        output_field=IntegerField(),
+                    ),
                 )
-            ).filter(
-                Q(total_similarity__gt=0.3) | Q(exact_match=1)
-            ).order_by(
-                '-exact_match',        # Prioritize exact matches
-                '-total_similarity'    # Then prioritize by similarity
+                .filter(Q(total_similarity__gt=0.3) | Q(exact_match=1))
+                .order_by(
+                    "-exact_match",  # Prioritize exact matches
+                    "-total_similarity",  # Then prioritize by similarity
+                )
             )
 
             # Search in CAS numbers
-            cas_matches = Ingredient.objects.filter(
-                Q(cas__icontains=search_term)
-            )
+            cas_matches = Ingredient.objects.filter(Q(cas__icontains=search_term))
 
             # Search in descriptors
             descriptor_matches = Ingredient.objects.filter(
-                Q(descriptor1__name__icontains=search_term) |
-                Q(descriptor2__name__icontains=search_term) |
-                Q(descriptor3__name__icontains=search_term)
+                Q(descriptor1__name__icontains=search_term)
+                | Q(descriptor2__name__icontains=search_term)
+                | Q(descriptor3__name__icontains=search_term)
             )
-
 
             # Separate the results into categories
             names_results = [i for i in name_matches]
@@ -84,12 +93,14 @@ class BrowseView(APIView):
 
             ingredients_json = serializer.data
 
-            return paginator.get_paginated_response({
-                "names": ingredients_json,
-                "cas": [],
-                "descriptors": [],
-                "search": None,
-            })
+            return paginator.get_paginated_response(
+                {
+                    "names": ingredients_json,
+                    "cas": [],
+                    "descriptors": [],
+                    "search": None,
+                }
+            )
 
         # Paginate the results
         paginator = CustomPageNumberPagination()
@@ -97,20 +108,24 @@ class BrowseView(APIView):
 
         paginated_names = paginator.paginate_queryset(names_results, request)
         paginated_cas = paginator.paginate_queryset(cas_results, request)
-        paginated_descriptors = paginator.paginate_queryset(descriptors_results, request)
+        paginated_descriptors = paginator.paginate_queryset(
+            descriptors_results, request
+        )
 
         # Serialize the paginated results
         names_serializer = IngredientSerialiser(paginated_names, many=True)
         cas_serializer = IngredientSerialiser(paginated_cas, many=True)
         descriptors_serializer = IngredientSerialiser(paginated_descriptors, many=True)
 
-        return paginator.get_paginated_response({
-            "names": names_serializer.data,
-            "cas": cas_serializer.data,
-            "descriptors": descriptors_serializer.data,
-        })
+        return paginator.get_paginated_response(
+            {
+                "names": names_serializer.data,
+                "cas": cas_serializer.data,
+                "descriptors": descriptors_serializer.data,
+            }
+        )
 
-    
+
 class IngredientDetailView(APIView):
     """
     This view returns detailed information about a single ingredient
@@ -121,12 +136,11 @@ class IngredientDetailView(APIView):
             ingredient = Ingredient.objects.get(slug=slug)
         except Ingredient.DoesNotExist:
             return Response({"error": "Ingredient not found"}, status=404)
-        
+
         serializer = IngredientSerialiser(ingredient)
         return Response(serializer.data)
-            
-            
-            
+
+
 class CustomPageNumberPagination(PageNumberPagination):
     """
     defines a custom pagination class that returns the current page number and the total number of pages in the response

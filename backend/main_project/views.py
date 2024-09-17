@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate, update_session_auth_hash, login
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from collection.models import NewCollectionIngredient
+from collection.models import CollectionIngredient
 
 import logging
 
@@ -55,14 +55,16 @@ class UserSignupAPI(APIView):
             )
 
         try:
-            userInstance = User.objects.create_user(username=username, email=email, password=password)
-            
-            NewCollectionIngredient.objects.create(
+            userInstance = User.objects.create_user(
+                username=username, email=email, password=password
+            )
+
+            CollectionIngredient.objects.create(
                 user=userInstance,
                 common_name="Welcome!",
-                use= "This is your first ingredient. You can add more ingredients to your collection from the browse page.",
+                use="This is your first ingredient. You can add more ingredients to your collection from the browse page.",
                 descriptors="Vanillic, Sweet, Warm",
-                )
+            )
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
@@ -91,7 +93,7 @@ class UserLoginAPI(APIView):
 
     def post(self, request, *args, **kwargs):
         print(request.data)
-        
+
         data = request.data
         username = data.get("username")
         password = data.get("password")
@@ -228,11 +230,10 @@ class CheckSessionAPI(APIView):
     """
     Check if the user is authenticated.
     """
+
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            csrf_token = get_token(
-        request
-    )
+            csrf_token = get_token(request)
             return Response(
                 {
                     "is_authenticated": request.user.is_authenticated,

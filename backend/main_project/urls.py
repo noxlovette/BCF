@@ -21,5 +21,7 @@ urlpatterns = [
         name="api-profile-update",
     ),
     path("api/profile/delete/", views.UserDeleteAPI.as_view(), name="api-delete"),
-    path("api/check-session/", views.CheckSessionAPI.as_view(), name="api-check-session"),
+    path(
+        "api/check-session/", views.CheckSessionAPI.as_view(), name="api-check-session"
+    ),
 ]

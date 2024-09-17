@@ -16,32 +16,87 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='NewCollectionIngredient',
+            name="NewCollectionIngredient",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('common_name', models.CharField(default='New Ingredient', max_length=100, verbose_name='Common Name')),
-                ('cas', models.CharField(default='0000-00-0', max_length=100, verbose_name='CAS')),
-                ('volatility', models.CharField(blank=True, max_length=100, null=True, verbose_name='Volatility')),
-                ('use', models.TextField(blank=True, null=True, verbose_name='Use')),
-                ('descriptors', models.CharField(default='New Ingredient', max_length=100, verbose_name='Descriptors')),
-                ('other_names', models.TextField(blank=True, null=True, verbose_name='Other Names')),
-                ('is_restricred', models.BooleanField(default=False, verbose_name='Restricted')),
-                ('origin', models.CharField(blank=True, max_length=100, null=True, verbose_name='Origin')),
-                ('amount', models.FloatField(default=0, verbose_name='Amount')),
-                ('unit', models.CharField(default='g', max_length=50, verbose_name='Unit')),
-                ('is_collection', models.BooleanField(default=False, verbose_name='In Collection')),
-                ('encrypted_impression', models.BinaryField(blank=True, null=True)),
-                ('encrypted_colour', models.BinaryField(blank=True, null=True)),
-                ('encrypted_associations', models.BinaryField(blank=True, null=True)),
-                ('encrypted_ideas', models.BinaryField(blank=True, null=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "common_name",
+                    models.CharField(
+                        default="New Ingredient",
+                        max_length=100,
+                        verbose_name="Common Name",
+                    ),
+                ),
+                (
+                    "cas",
+                    models.CharField(
+                        default="0000-00-0", max_length=100, verbose_name="CAS"
+                    ),
+                ),
+                (
+                    "volatility",
+                    models.CharField(
+                        blank=True, max_length=100, null=True, verbose_name="Volatility"
+                    ),
+                ),
+                ("use", models.TextField(blank=True, null=True, verbose_name="Use")),
+                (
+                    "descriptors",
+                    models.CharField(
+                        default="New Ingredient",
+                        max_length=100,
+                        verbose_name="Descriptors",
+                    ),
+                ),
+                (
+                    "other_names",
+                    models.TextField(blank=True, null=True, verbose_name="Other Names"),
+                ),
+                (
+                    "is_restricred",
+                    models.BooleanField(default=False, verbose_name="Restricted"),
+                ),
+                (
+                    "origin",
+                    models.CharField(
+                        blank=True, max_length=100, null=True, verbose_name="Origin"
+                    ),
+                ),
+                ("amount", models.FloatField(default=0, verbose_name="Amount")),
+                (
+                    "unit",
+                    models.CharField(default="g", max_length=50, verbose_name="Unit"),
+                ),
+                (
+                    "is_collection",
+                    models.BooleanField(default=False, verbose_name="In Collection"),
+                ),
+                ("encrypted_impression", models.BinaryField(blank=True, null=True)),
+                ("encrypted_colour", models.BinaryField(blank=True, null=True)),
+                ("encrypted_associations", models.BinaryField(blank=True, null=True)),
+                ("encrypted_ideas", models.BinaryField(blank=True, null=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Collection Ingredient',
-                'verbose_name_plural': 'Collection Ingredients',
-                'db_table': 'collection_ingredients',
-                'ordering': ['user', 'common_name'],
-                'unique_together': {('user', 'id')},
+                "verbose_name": "Collection Ingredient",
+                "verbose_name_plural": "Collection Ingredients",
+                "db_table": "collection_ingredients",
+                "ordering": ["user", "common_name"],
+                "unique_together": {("user", "id")},
             },
         ),
     ]

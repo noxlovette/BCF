@@ -35,19 +35,23 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware"
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
-CSRF_TRUSTED_ORIGINS = ["http://frontend", "http://localhost", "https://test.bcfapp.app"]
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+CSRF_TRUSTED_ORIGINS = [
+    "http://frontend",
+    "http://localhost",
+    "https://test.bcfapp.app",
+]
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
-SESSION_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_DOMAIN = "test.bcfapp.app"
 SESSION_COOKIE_SECURE = False
 

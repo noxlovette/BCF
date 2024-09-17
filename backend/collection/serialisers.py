@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from .models import NewCollectionIngredient
+from .models import CollectionIngredient
 
 
-class NewCollectionSerializer(serializers.ModelSerializer):
+class CollectionSerializer(serializers.ModelSerializer):
     impression = serializers.CharField(
         allow_null=True, allow_blank=True, source="_impression", required=False
     )
@@ -15,21 +15,25 @@ class NewCollectionSerializer(serializers.ModelSerializer):
     colour = serializers.CharField(
         allow_null=True, allow_blank=True, source="_colour", required=False
     )
+
     def create(self, validated_data):
-        request = self.context.get('request')
-        if request and hasattr(request, 'user'):
-            return NewCollectionIngredient.objects.create(user=request.user, **validated_data)
-        raise serializers.ValidationError("User must be authenticated to create an ingredient.")
-    
-    def update(self, instance, validated_data): 
-        request = self.context.get('request')
-        if request and hasattr(request, 'user'):
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            return CollectionIngredient.objects.create(
+                user=request.user, **validated_data
+            )
+        raise serializers.ValidationError(
+            "User must be authenticated to create an ingredient."
+        )
+
+    def update(self, instance, validated_data):
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
             instance.user = request.user
 
         return super().update(instance, validated_data)
 
-    
     class Meta:
-        model = NewCollectionIngredient
+        model = CollectionIngredient
         fields = "__all__"
-        read_only_fields = ['user']
+        read_only_fields = ["user"]

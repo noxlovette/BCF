@@ -11,10 +11,12 @@ class DateTimeSerializer(serializers.DateTimeField):
         formatted_datetime = value.strftime("%d.%m.%Y, %I:%M%p")
         return formatted_datetime
 
+
 class RelatedIngredientSerialiser(serializers.ModelSerializer):
     class Meta:
         fields = ("slug", "common_name")
         model = Ingredient
+
 
 class IngredientListSerialiser(serializers.ModelSerializer):
     descriptors = serializers.SerializerMethodField()
@@ -41,9 +43,6 @@ class IngredientListSerialiser(serializers.ModelSerializer):
             "related_ingredients",
         )
         model = Ingredient
-
-
-
 
 
 class IngredientSerialiser(serializers.ModelSerializer):

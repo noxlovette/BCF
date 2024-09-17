@@ -5,22 +5,22 @@ app_name = "collection"
 urlpatterns = [
     path(
         "new/api/collection/",
-        views.NewCollectionAPI.as_view(),
+        views.CollectionAPI.as_view(),
     ),
     re_path(
         r"^new/api/ingredient/(?P<pk>[0-9a-f-]+)/$",
-        views.NewIngredientDetailView.as_view(),
+        views.IngredientDetailView.as_view(),
     ),
     re_path(
         r"^new/api/ingredient/update/(?P<pk>[0-9a-f-]+)/$",
-        views.NewIngredientUpdateView.as_view(),
+        views.IngredientUpdateView.as_view(),
     ),
     path(
         "new/api/ingredient/create/",
-        views.NewIngredientCreateView.as_view(),
+        views.IngredientCreateView.as_view(),
     ),
     re_path(
         r"^new/api/ingredient/delete/(?P<pk>[0-9a-f-]+)/$",
-        views.NewIngredientDeleteView.as_view(),
+        views.IngredientDeleteView.as_view(),
     ),
 ]

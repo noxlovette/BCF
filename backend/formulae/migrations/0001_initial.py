@@ -12,66 +12,149 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('collection', '0001_initial'),
+        ("collection", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='NewFormula',
+            name="NewFormula",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('encrypted_name', models.BinaryField(blank=True, null=True)),
-                ('encrypted_description', models.BinaryField(blank=True, null=True)),
-                ('encrypted_notes', models.BinaryField(blank=True, null=True)),
-                ('solvent', models.CharField(blank=True, default='Ethanol', max_length=100, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        unique=True,
+                    ),
+                ),
+                ("encrypted_name", models.BinaryField(blank=True, null=True)),
+                ("encrypted_description", models.BinaryField(blank=True, null=True)),
+                ("encrypted_notes", models.BinaryField(blank=True, null=True)),
+                (
+                    "solvent",
+                    models.CharField(
+                        blank=True, default="Ethanol", max_length=100, null=True
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': "User's Formula",
-                'verbose_name_plural': "User's Formulas",
-                'db_table': 'formulas',
-                'ordering': ['user', '-updated_at'],
+                "verbose_name": "User's Formula",
+                "verbose_name_plural": "User's Formulas",
+                "db_table": "formulas",
+                "ordering": ["user", "-updated_at"],
             },
         ),
         migrations.CreateModel(
-            name='NewFormulaIngredient',
+            name="NewFormulaIngredient",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('common_name', models.CharField(default='New Ingredient', max_length=100, verbose_name='Common Name')),
-                ('amount', models.IntegerField(default=0, verbose_name='Amount')),
-                ('unit', models.CharField(default='g', max_length=50, verbose_name='Unit')),
-                ('volatility', models.CharField(default='Top', max_length=50, verbose_name='Volatility')),
-                ('percentage', models.FloatField(default=10, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(100)], verbose_name='Percentage')),
-                ('counterpart', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='collection.newcollectioningredient')),
-                ('formula', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ingredients', to='formulae.newformula')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        unique=True,
+                    ),
+                ),
+                (
+                    "common_name",
+                    models.CharField(
+                        default="New Ingredient",
+                        max_length=100,
+                        verbose_name="Common Name",
+                    ),
+                ),
+                ("amount", models.IntegerField(default=0, verbose_name="Amount")),
+                (
+                    "unit",
+                    models.CharField(default="g", max_length=50, verbose_name="Unit"),
+                ),
+                (
+                    "volatility",
+                    models.CharField(
+                        default="Top", max_length=50, verbose_name="Volatility"
+                    ),
+                ),
+                (
+                    "percentage",
+                    models.FloatField(
+                        default=10,
+                        validators=[
+                            django.core.validators.MinValueValidator(0),
+                            django.core.validators.MaxValueValidator(100),
+                        ],
+                        verbose_name="Percentage",
+                    ),
+                ),
+                (
+                    "counterpart",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="collection.newcollectioningredient",
+                    ),
+                ),
+                (
+                    "formula",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="ingredients",
+                        to="formulae.newformula",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'New Ingredient in Formula',
-                'verbose_name_plural': 'New Ingredients in Formula',
-                'db_table': 'new_formula_ingredients',
-                'ordering': ['formula', 'volatility'],
+                "verbose_name": "New Ingredient in Formula",
+                "verbose_name_plural": "New Ingredients in Formula",
+                "db_table": "new_formula_ingredients",
+                "ordering": ["formula", "volatility"],
             },
         ),
         migrations.CreateModel(
-            name='Tag',
+            name="Tag",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, unique=True)),
-                ('user_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, unique=True)),
+                (
+                    "user_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Tag',
-                'verbose_name_plural': 'Tags',
-                'db_table': 'tags',
-                'ordering': ['name'],
+                "verbose_name": "Tag",
+                "verbose_name_plural": "Tags",
+                "db_table": "tags",
+                "ordering": ["name"],
             },
         ),
         migrations.AddField(
-            model_name='newformula',
-            name='tags',
-            field=models.ManyToManyField(blank=True, to='formulae.tag'),
+            model_name="newformula",
+            name="tags",
+            field=models.ManyToManyField(blank=True, to="formulae.tag"),
         ),
     ]

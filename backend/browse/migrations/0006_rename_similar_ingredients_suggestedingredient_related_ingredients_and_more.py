@@ -6,22 +6,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('browse', '0005_rename_similar_ingredients_ingredient_related_ingredients_and_more'),
+        (
+            "browse",
+            "0005_rename_similar_ingredients_ingredient_related_ingredients_and_more",
+        ),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='suggestedingredient',
-            old_name='similar_ingredients',
-            new_name='related_ingredients',
+            model_name="suggestedingredient",
+            old_name="similar_ingredients",
+            new_name="related_ingredients",
         ),
         migrations.RemoveField(
-            model_name='suggestedingredient',
-            name='constituents',
+            model_name="suggestedingredient",
+            name="constituents",
         ),
         migrations.AlterField(
-            model_name='suggestedingredient',
-            name='is_restricted',
-            field=models.TextField(default='False', null=True, verbose_name='Restricted'),
+            model_name="suggestedingredient",
+            name="is_restricted",
+            field=models.TextField(
+                default="False", null=True, verbose_name="Restricted"
+            ),
         ),
     ]

@@ -100,7 +100,7 @@ class Ingredient(models.Model):
 
     # this field represents the users that have contributed to the ingredient
     contributors = models.ManyToManyField(User, related_name="contributors")
-    
+
     slug = models.SlugField(blank=True, max_length=255, unique=True)
 
     def clean(self):
@@ -143,7 +143,7 @@ class Ingredient(models.Model):
         ]:
             descriptors += [str(d) for d in descriptor]
         return ", ".join(descriptors) if descriptors else "No descriptors found"
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.common_name)
@@ -183,7 +183,9 @@ class SuggestedIngredient(models.Model):
     ingredient_type = models.CharField(
         max_length=15, null=True, verbose_name="Type", default="unchanged"
     )
-    use = models.TextField(null=True, blank=True, verbose_name="Use", default="unchanged")
+    use = models.TextField(
+        null=True, blank=True, verbose_name="Use", default="unchanged"
+    )
     volatility = models.CharField(
         max_length=20,
         null=True,

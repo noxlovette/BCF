@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 from collection.models import (
-    NewCollectionIngredient,
+    CollectionIngredient,
 )
 from main_project.encryption import decrypt_field, encrypt_field
 
@@ -25,8 +25,11 @@ class Tag(models.Model):
         verbose_name_plural = "Tags"
         ordering = ["name"]
 
-class NewFormula(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, primary_key=True)
+
+class Formula(models.Model):
+    id = models.UUIDField(
+        default=uuid.uuid4, unique=True, editable=False, primary_key=True
+    )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     encrypted_name = models.BinaryField(null=True, blank=True, editable=False)
@@ -37,7 +40,6 @@ class NewFormula(models.Model):
     solvent = models.CharField(max_length=100, blank=True, null=True, default="Ethanol")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -96,15 +98,22 @@ class NewFormula(models.Model):
         db_table = "formulas"
         ordering = ["user", "-updated_at"]
 
-class NewFormulaIngredient(models.Model):
+
+class FormulaIngredient(models.Model):
     formula = models.ForeignKey(
-        NewFormula, on_delete=models.CASCADE, related_name="ingredients"
+        Formula, on_delete=models.CASCADE, related_name="ingredients"
     )
-    id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, primary_key=True)
-    common_name = models.CharField(max_length=100, verbose_name="Common Name", default="New Ingredient")
+    id = models.UUIDField(
+        default=uuid.uuid4, unique=True, editable=False, primary_key=True
+    )
+    common_name = models.CharField(
+        max_length=100, verbose_name="Common Name", default="New Ingredient"
+    )
     amount = models.IntegerField(default=0, verbose_name="Amount")
     unit = models.CharField(max_length=50, default="g", verbose_name="Unit")
-    volatility = models.CharField(max_length=50, default="Top", verbose_name="Volatility")
+    volatility = models.CharField(
+        max_length=50, default="Top", verbose_name="Volatility"
+    )
     percentage = models.FloatField(
         default=10,
         validators=[MinValueValidator(0), MaxValueValidator(100)],
@@ -112,12 +121,15 @@ class NewFormulaIngredient(models.Model):
     )
 
     counterpart = models.ForeignKey(
-        NewCollectionIngredient, on_delete=models.SET_NULL, null=True, blank=True
+        CollectionIngredient,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="counterpart",
     )
-        
 
     class Meta:
-        db_table = "new_formula_ingredients"
-        verbose_name = "New Ingredient in Formula"
-        verbose_name_plural = "New Ingredients in Formula"
+        db_table = "formula_ingredients"
+        verbose_name = "Ingredient in Formula"
+        verbose_name_plural = "Ingredients in Formula"
         ordering = ["formula", "volatility"]
