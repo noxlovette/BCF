@@ -154,26 +154,23 @@
             text={ingredient.volatility}
             bind:value={ingredient.volatility}
           />
-
-          <VariableInput
-            text={ingredient.common_name}
-            bind:value={ingredient.common_name}
-            class="font-medium xl:text-2xl"
-          />
           {#if $editing}
-  <input
-    type="text"
-    bind:value={ingredient.common_name}
-    placeholder={ingredient.common_name}
-    class="rounded border-none border-stone-500 bg-transparent p-0 ring-0 focus:border-stone-500 focus:ring-0 dark:bg-stone-800
-  font-medium xl:text-2xl
+            <input
+              type="text"
+              bind:value={ingredient.common_name}
+              placeholder={ingredient.common_name}
+              class="rounded border-none border-stone-500 bg-transparent p-0 font-medium ring-0 focus:border-stone-500 focus:ring-0
+  xl:text-2xl dark:bg-stone-800
   "
-  />
-{:else}
-  <a href='/collect/{ingredient.counterpart}' class="font-medium xl:text-2xl ">
-    {ingredient.common_name}
-  </a>
-{/if}
+            />
+          {:else}
+            <a
+              href="/collect/{ingredient.counterpart}"
+              class="font-medium transition-colors hover:text-aqua-700 xl:text-2xl"
+            >
+              {ingredient.common_name}
+            </a>
+          {/if}
         </div>
 
         <div id="right-part" class="grid w-36 grid-cols-2 text-right">

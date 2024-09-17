@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import CollectionIngredient
+from formulae.models import Formula
+from formulae.serialisers import FormulaSerializer
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -15,6 +17,16 @@ class CollectionSerializer(serializers.ModelSerializer):
     colour = serializers.CharField(
         allow_null=True, allow_blank=True, source="_colour", required=False
     )
+    related_formulas = serializers.SerializerMethodField()
+
+    def get_related_formulas(self, obj):
+        # Access the counterpart set from CollectionIngredient via FormulaIngredient
+        # Retrieve unique formula IDs by iterating through the related FormulaIngredient instances
+        formulas = Formula.objects.filter(ingredients__counterpart=obj).distinct()
+        for formula in formulas:
+            formula.prepare_for_serialization()
+
+        return FormulaSerializer(formulas, many=True).data
 
     def create(self, validated_data):
         request = self.context.get("request")

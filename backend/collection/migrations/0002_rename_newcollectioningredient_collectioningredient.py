@@ -7,14 +7,14 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('collection', '0001_initial'),
-        ('formulae', '0002_rename_newformula_formula_formulaingredient_and_more'),
+        ("collection", "0001_initial"),
+        ("formulae", "0002_rename_newformula_formula_formulaingredient_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='NewCollectionIngredient',
-            new_name='CollectionIngredient',
+            old_name="NewCollectionIngredient",
+            new_name="CollectionIngredient",
         ),
     ]

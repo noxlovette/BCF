@@ -57,6 +57,7 @@ declare global {
       use: string;
       volatility: string;
       associations: string;
+      related_formulas: Formula[];
     }
 
     interface Formula {

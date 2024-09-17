@@ -10,18 +10,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('collection', '0001_initial'),
-        ('formulae', '0001_initial'),
+        ("collection", "0001_initial"),
+        ("formulae", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='NewFormula',
-            new_name='Formula',
+            old_name="NewFormula",
+            new_name="Formula",
         ),
         migrations.RenameModel(
-            old_name='NewFormulaIngredient',
-            new_name='FormulaIngredient',
+            old_name="NewFormulaIngredient",
+            new_name="FormulaIngredient",
         ),
     ]

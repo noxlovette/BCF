@@ -111,7 +111,7 @@ justify-between space-y-2
 
     <div
       id="center"
-      class="flex flex-col justify-between space-y-4 py-4 md:flex-row md:space-y-0"
+      class="flex flex-col justify-between space-y-4 divide-x-4 py-4 md:flex-row md:space-y-0"
     >
       <div id="left-part" class="flex w-full flex-col space-y-8 pr-8 md:w-2/3">
         <div
@@ -189,7 +189,7 @@ justify-between space-y-2
           </div>
         </div>
       </div>
-      <div id="right-part" class="flex flex-1 flex-col space-y-8">
+      <div id="right-part" class="flex flex-1 flex-col space-y-8 pl-4">
         <div
           class="flex flex-col space-y-2 md:flex-row md:space-x-8 md:space-y-0"
         >
@@ -228,8 +228,25 @@ justify-between space-y-2
             text={ideas}
             name="ideas"
             bind:value={$editedIngredient.ideas}
-            class="min-h-24 font-medium md:min-h-36 xl:text-2xl"
+            class="font-medium xl:text-2xl"
           />
+        </div>
+        <div>
+          {#if ingredient.related_formulas.length > 0}
+            <Label>I use it in:</Label>
+            <ul>
+              {#each ingredient.related_formulas as formula}
+                <li>
+                  <a
+                    href="/formulate/{formula.id}"
+                    class="font-medium transition-colors hover:text-grapefruit-500 xl:text-2xl"
+                  >
+                    {formula.name}
+                  </a>
+                </li>
+              {/each}
+            </ul>
+          {/if}
         </div>
       </div>
     </div>

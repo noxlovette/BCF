@@ -8,24 +8,35 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('browse', '0006_rename_similar_ingredients_suggestedingredient_related_ingredients_and_more'),
+        (
+            "browse",
+            "0006_rename_similar_ingredients_suggestedingredient_related_ingredients_and_more",
+        ),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='suggestedingredient',
-            name='is_restricted',
-            field=models.TextField(default='unchanged', null=True, verbose_name='Restricted'),
+            model_name="suggestedingredient",
+            name="is_restricted",
+            field=models.TextField(
+                default="unchanged", null=True, verbose_name="Restricted"
+            ),
         ),
         migrations.AlterField(
-            model_name='suggestedingredient',
-            name='use',
-            field=models.TextField(blank=True, default='unchanged', null=True, verbose_name='Use'),
+            model_name="suggestedingredient",
+            name="use",
+            field=models.TextField(
+                blank=True, default="unchanged", null=True, verbose_name="Use"
+            ),
         ),
         migrations.AlterField(
-            model_name='suggestedingredient',
-            name='user',
-            field=models.ForeignKey(default=10, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="suggestedingredient",
+            name="user",
+            field=models.ForeignKey(
+                default=10,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]
