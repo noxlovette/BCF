@@ -18,7 +18,6 @@
   const editing = writable(false);
   const editedIngredient = writable(ingredient);
 
-  let ifraStatus = ingredient.is_restricted ? "Restricted" : "Not restricted";
   let otherNames = ingredient.other_names || "Unknown";
   let volatility = ingredient.volatility || "Unknown";
   let useMessage =
@@ -155,15 +154,6 @@ justify-between space-y-2
                 text={volatility}
                 name="volatility"
                 bind:value={$editedIngredient.volatility}
-                class="font-medium xl:text-2xl"
-              />
-            </div>
-            <div>
-              <Label>restricted</Label>
-              <VariableInput
-                text={ifraStatus}
-                name="is_restricted"
-                bind:value={$editedIngredient.is_restricted}
                 class="font-medium xl:text-2xl"
               />
             </div>

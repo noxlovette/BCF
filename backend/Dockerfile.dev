@@ -14,24 +14,10 @@ WORKDIR /app
 # Install system dependencies including compilers.
 RUN apt-get update && apt-get install -y gcc python3-dev
 
-# Create a non-privileged user.
-ARG UID=10001
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    appuser
-
 # Install Python dependencies.
 COPY requirements.txt .
 RUN python -m pip install --upgrade pip
 RUN python -m pip install -r requirements.txt
-
-# Switch to the non-privileged user.
-USER appuser
 
 # Copy the project files into the container.
 COPY . .

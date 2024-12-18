@@ -11,7 +11,7 @@
   import { setContext } from "svelte";
   import { writable, derived } from "svelte/store";
   import { enhance } from "$app/forms";
-    import MetaData from "../../../lib/components/MetaData.svelte";
+  import MetaData from "../../../lib/components/MetaData.svelte";
 
   export let data: PageServerData;
   let multiplier: number;
@@ -62,7 +62,7 @@
   }
 </script>
 
-<MetaData title={formula.title}  />
+<MetaData title={formula.name} />
 
 <AppWrap
   class="select-text justify-between caret-aqua-700 selection:bg-aqua-700 selection:text-aqua-50"
@@ -186,6 +186,7 @@
             number={ingredient.percentage}
             bind:value={ingredient.percentage}
             text="%"
+            max=100
             class="mt-auto flex-shrink-0 opacity-60"
           />
         </div>

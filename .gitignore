@@ -8,6 +8,8 @@ db.sqlite3
 *.sql
 backup.sh
 
+myenv/
+
 # Environment Variables
 .env
 .env.*

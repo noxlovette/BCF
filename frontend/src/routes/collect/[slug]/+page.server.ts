@@ -66,7 +66,6 @@ export const actions = {
       impression: formData.get("impression"),
       volatility: formData.get("volatility"),
       colour: formData.get("colour"),
-      is_restricted: formData.get("is_restricted"),
       descriptors: formData.get("descriptors"),
       id: id,
     };
@@ -78,7 +77,7 @@ export const actions = {
       const response = await fetch(
         `${VITE_API_URL}/collection/new/api/ingredient/update/${id}/`,
         {
-          method: "PUT",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             "X-CSRFToken": csrfToken,

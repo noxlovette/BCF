@@ -30,14 +30,12 @@ services:
       context: ./backend
       dockerfile: Dockerfile.dev
     container_name: backend
-    ports:
-      - "8000:8000"
     volumes:
       - ./backend:/app
     environment:
-      - POSTGRES_DB=${PGNAME:-defaultdb}
-      - POSTGRES_USER=${PGUSER:-postgres}
-      - POSTGRES_PASSWORD=${PGPASSWORD:-changeme}
+      - POSTGRES_DB=bcf-development
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=changeme
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
       - NODE_ENV=development
@@ -54,8 +52,8 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=${PGNAME:-defaultdb}
-      - POSTGRES_PASSWORD=${PGPASSWORD:-changeme}
+      - POSTGRES_DB=bcf-development
+      - POSTGRES_PASSWORD=changeme
     ports:
       - "5432:5432"
     healthcheck:

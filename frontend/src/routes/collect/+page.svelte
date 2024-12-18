@@ -60,10 +60,12 @@
 
   $: filteredCollection = collection.filter((ingredient) => {
     const commonName = ingredient.common_name || "";
+    const otherNames = ingredient.other_names || "";
     const cas = ingredient.cas || "";
     return (
       commonName.toLowerCase().includes($searchTerm.toLowerCase()) ||
-      cas.toLowerCase().includes($searchTerm.toLowerCase())
+      cas.toLowerCase().includes($searchTerm.toLowerCase()) ||
+      otherNames.toLowerCase().includes($searchTerm.toLowerCase())
     );
   });
 </script>

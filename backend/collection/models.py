@@ -9,7 +9,7 @@ class CollectionIngredient(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     common_name = models.CharField(
-        max_length=100, verbose_name="Common Name", default="New Ingredient"
+        max_length=255, verbose_name="Common Name", default="New Ingredient"
     )
     cas = models.CharField(max_length=100, verbose_name="CAS", default="0000-00-0")
     volatility = models.CharField(
@@ -23,8 +23,8 @@ class CollectionIngredient(models.Model):
 
     other_names = models.TextField(verbose_name="Other Names", null=True, blank=True)
     is_restricred = models.BooleanField(default=False, verbose_name="Restricted")
-    origin = models.CharField(
-        max_length=100, verbose_name="Origin", null=True, blank=True
+    origin = models.TextField(
+        verbose_name="Origin", null=True, blank=True
     )
 
     amount = models.FloatField(default=0, verbose_name="Amount")
