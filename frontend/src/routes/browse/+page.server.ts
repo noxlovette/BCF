@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
     const cacheKeyIngredients = `browse-${page}-${search}-${pageSize}`;
     let ingredients: App.ResponseBrowse;
 
-    const cachedIngredients = null; // await redis.get(cacheKeyIngredients);
+    const cachedIngredients = await redis.get(cacheKeyIngredients);
     if (cachedIngredients) {
       ingredients = await JSON.parse(cachedIngredients);
     } else {

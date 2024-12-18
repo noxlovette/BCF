@@ -11,6 +11,7 @@
   import { setContext } from "svelte";
   import { writable, derived } from "svelte/store";
   import { enhance } from "$app/forms";
+    import MetaData from "../../../lib/components/MetaData.svelte";
 
   export let data: PageServerData;
   let multiplier: number;
@@ -60,6 +61,8 @@
     notification.set({ message: "Formula Updated", type: "success" });
   }
 </script>
+
+<MetaData title={formula.title}  />
 
 <AppWrap
   class="select-text justify-between caret-aqua-700 selection:bg-aqua-700 selection:text-aqua-50"
