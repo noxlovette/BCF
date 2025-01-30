@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import type { IngredientCollection } from "$lib/types";
   import Card from "./Card.svelte";
 
-  export let ingredient: App.IngredientCollection;
+  export let ingredient: IngredientCollection;
 </script>
 
 <Card

@@ -43,16 +43,16 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 CSRF_TRUSTED_ORIGINS = [
-    "http://frontend",
     "http://localhost",
+    "http://localhost:5173",
     "https://test.bcfapp.app",
+    "https://bcfapp.app"
 ]
-CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_DOMAIN = "test.bcfapp.app"
 SESSION_COOKIE_SECURE = False
 
 
@@ -65,7 +65,6 @@ INTERNAL_IPS = [
 WSGI_APPLICATION = "main_project.wsgi.application"
 AUTH_USER_MODEL = "auth.User"
 
-# Database
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -78,9 +77,9 @@ DATABASES = {
 }
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_COOKIE_AGE = 3600 * 12  # 12 hours
+SESSION_COOKIE_AGE = 3600 * 24 * 30
 
-# Password validation
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",

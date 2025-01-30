@@ -4,9 +4,9 @@
   import Input from "./UI/Input.svelte";
   import Textarea from "./UI/Textarea.svelte";
   import { invalidate } from "$app/navigation";
+  import type { IngredientCollection } from "$lib/types";
 
-  export let ingredient: App.IngredientCollection;
-
+  export let ingredient: IngredientCollection;
   export let editing: boolean;
 
   function handleEnhance() {
@@ -22,19 +22,19 @@
   use:enhance={handleEnhance}
 >
   <div class="flex flex-row items-baseline justify-between">
-    <h1 class="border-b-2 border-grapefruit-600 text-5xl">
+    <h1 class="border-grapefruit-600 border-b-2 text-5xl">
       Editing {ingredient.common_name}
     </h1>
     <button
       type="submit"
-      class="w-[100px] rounded border-gold-700 bg-gold-400 p-2 text-center text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:border-gold-900 dark:hover:bg-stone-700"
+      class="border-gold-700 bg-gold-400 hover:text-gold-400 dark:border-gold-900 w-[100px] rounded p-2 text-center text-stone-900 shadow transition-all hover:bg-stone-50 dark:hover:bg-stone-700"
     >
       Submit
     </button>
 
     <button
       on:click|preventDefault={() => (editing = false)}
-      class="w-[100px] rounded border-gold-700 bg-gold-400 p-2 text-center text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:border-gold-900 dark:hover:bg-stone-700"
+      class="border-gold-700 bg-gold-400 hover:text-gold-400 dark:border-gold-900 w-[100px] rounded p-2 text-center text-stone-900 shadow transition-all hover:bg-stone-50 dark:hover:bg-stone-700"
     >
       Cancel
     </button>
@@ -50,7 +50,7 @@
       <input type="hidden" name="id" value={ingredient.id} />
       <button
         type="submit"
-        class="w-[100px] rounded border-peach-700 bg-peach-400 p-2 text-center text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-peach-400 dark:border-peach-900 dark:hover:bg-stone-700"
+        class="border-peach-700 bg-peach-400 hover:text-peach-400 dark:border-peach-900 w-[100px] rounded p-2 text-center text-stone-900 shadow transition-all hover:bg-stone-50 dark:hover:bg-stone-700"
       >
         Delete
       </button>

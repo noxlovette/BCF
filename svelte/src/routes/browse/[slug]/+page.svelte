@@ -4,6 +4,7 @@
   import MetaData from "$lib/components/MetaData.svelte";
   import AppWrap from "$lib/components/AppWrap.svelte";
   import { enhance } from "$app/forms";
+  import type { IngredientBrowse } from "$lib/types";
 
   import { writable } from "svelte/store";
 
@@ -18,11 +19,14 @@
   const editing = writable(false);
   setContext("editing", editing);
 
-  let ingredient: App.IngredientBrowse = data.ingredient;
-  let suggestion: App.IngredientBrowse = ingredient;
+  let ingredient: IngredientBrowse = data.ingredient;
+  let suggestion: IngredientBrowse = ingredient;
 
   const unsplashData = data.photo;
-  const href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
+  let href = "https://unsplash.com";
+  if (data.photo) {
+    href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
+  }
 
   let volatility = ingredient.volatility || "Unknown";
   let useMessage =
@@ -49,11 +53,11 @@
 />
 
 <AppWrap
-  class="select-text justify-between caret-navy-700 selection:bg-navy-700 selection:text-navy-50"
+  class="caret-navy-700 selection:bg-navy-700 selection:text-navy-50 select-text justify-between"
 >
   <div
     id="header"
-    class="flex w-full flex-col-reverse items-baseline justify-between space-y-2 border-b-2 border-navy-500 font-medium md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
+    class="border-navy-500 flex w-full flex-col-reverse items-baseline justify-between space-y-2 border-b-2 md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
   >
     <div class="my-4 w-full md:my-0">
       <h1 class="">
@@ -66,7 +70,7 @@
     </div>
     <div
       id="controls"
-      class="flex flex-row items-baseline justify-end space-x-2 font-medium lg:space-x-4 xl:text-2xl"
+      class="flex flex-row items-baseline justify-end space-x-2 lg:space-x-4 xl:text-2xl"
     >
       {#if $editing}
         <button
@@ -162,7 +166,7 @@
           <VariableTextarea
             text={ingredient.descriptors}
             bind:value={suggestion.descriptors}
-            class="font-medium xl:text-2xl"
+            class=" xl:text-2xl"
           />
         </div>
         <div>
@@ -170,7 +174,7 @@
           <VariableInput
             text={ingredient.cas}
             bind:value={suggestion.cas}
-            class="font-medium xl:text-2xl"
+            class=" xl:text-2xl"
           />
         </div>
       </div>
@@ -179,7 +183,7 @@
         <VariableTextarea
           text={useMessage}
           bind:value={suggestion.use}
-          class="min-h-24 font-medium md:min-h-36 xl:text-2xl"
+          class="min-h-24  md:min-h-36 xl:text-2xl"
         />
       </div>
       <div class="flex flex-col space-y-4">
@@ -191,7 +195,7 @@
             <VariableInput
               text={volatility}
               bind:value={suggestion.is_restricted}
-              class="font-medium xl:text-2xl"
+              class=" xl:text-2xl"
             />
           </div>
           <div>
@@ -199,7 +203,7 @@
             <VariableInput
               text={ifraStatus}
               bind:value={suggestion.is_restricted}
-              class="font-medium xl:text-2xl"
+              class=" xl:text-2xl"
             />
           </div>
           <div>
@@ -207,7 +211,7 @@
             <VariableInput
               text={origin}
               bind:value={suggestion.origin}
-              class="font-medium xl:text-2xl"
+              class=" xl:text-2xl"
             />
           </div>
         </div>
@@ -218,13 +222,13 @@
               type="text"
               bind:value={suggestion.related_ingredients}
               placeholder="related ingredients"
-              class="rounded border-none border-stone-500 bg-transparent p-0 font-medium ring-0 focus:border-stone-500 focus:ring-0 xl:text-2xl dark:bg-stone-800
+              class="rounded border-none border-stone-500 bg-transparent p-0 ring-0 focus:border-stone-500 focus:ring-0 xl:text-2xl dark:bg-stone-800
           "
             />
           {:else}
             {#each relatedIngredients as related}
               <a
-                class="font-medium transition-colors hover:text-aqua-700 xl:text-2xl"
+                class="hover:text-aqua-700 transition-colors xl:text-2xl"
                 href="/browse/{related.slug}"
                 data-sveltekit-reload
               >

@@ -4,16 +4,7 @@
   import Notification from "$lib/components/Notification.svelte";
   import "../app.css";
   import MetaData from "$lib/components/MetaData.svelte";
-  import type { LayoutData } from "./$types";
-  import { setUser } from "$lib/stores";
-  import { onMount } from "svelte";
   import Loader from "$lib/components/Loader.svelte";
-
-  export let data: LayoutData;
-
-  onMount(() => {
-    setUser(data.user);
-  });
 </script>
 
 <MetaData />

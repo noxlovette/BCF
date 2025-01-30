@@ -2,7 +2,7 @@ import { error } from "@sveltejs/kit";
 import type { Actions } from "./$types";
 
 export const actions = {
-  default: async ({ request, cookies }) => {
+  default: async ({ request, cookies, fetch }) => {
     const data = await request.formData();
     const csrfToken = cookies.get("csrftoken");
     const username = data.get("username");
@@ -14,7 +14,7 @@ export const actions = {
       return { success: false, error: "Username and password are required" };
     }
 
-    const endpoint = `django/api/signup/`;
+    const endpoint = `/django/api/signup/`;
     try {
       const response = await fetch(endpoint, {
         method: "POST",

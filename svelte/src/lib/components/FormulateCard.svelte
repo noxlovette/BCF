@@ -1,7 +1,8 @@
 <script lang="ts">
   import Card from "./Card.svelte";
+  import type { Formula } from "$lib/types";
 
-  export let formula: App.Formula;
+  export let formula: Formula;
 </script>
 
 <Card

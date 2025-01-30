@@ -1,5 +1,6 @@
 import redis from "$lib/redisClient";
 import type { PageServerLoad } from "./$types";
+import type { ResponseBrowse } from "$lib/types";
 
 
 export const load: PageServerLoad = async ({ fetch, url }) => {
@@ -9,14 +10,14 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
 
   try {
     const cacheKeyIngredients = `browse-${page}-${search}-${pageSize}`;
-    let ingredients: App.ResponseBrowse;
+    let ingredients: ResponseBrowse;
 
     const cachedIngredients = await redis.get(cacheKeyIngredients);
     if (cachedIngredients) {
       ingredients = await JSON.parse(cachedIngredients);
     } else {
       const response = await fetch(
-        `django/browse/api/ingredients?page=${page}&search=${search}&page_size=${pageSize}`,
+        `/django/browse/api/ingredients?page=${page}&search=${search}&page_size=${pageSize}`,
       );
       ingredients = await response.json();
       await redis.set(

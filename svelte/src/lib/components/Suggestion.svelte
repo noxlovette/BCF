@@ -3,8 +3,9 @@
   import { notification } from "$lib/stores";
   import Input from "./UI/Input.svelte";
   import Textarea from "./UI/Textarea.svelte";
+  import type { IngredientBrowse } from "$lib/types";
 
-  export let ingredient: App.IngredientBrowse;
+  export let ingredient: IngredientBrowse;
 
   let suggestion = {
     common_name: ingredient.common_name,
@@ -64,7 +65,7 @@
   <div class="col-span-2 flex justify-center p-4">
     <button
       type="submit"
-      class="w-[100px] rounded border-gold-700 bg-gold-400 p-2 text-center text-stone-900 shadow transition-all hover:bg-stone-50 hover:text-gold-400 dark:border-gold-900 dark:hover:bg-stone-700"
+      class="border-gold-700 bg-gold-400 hover:text-gold-400 dark:border-gold-900 w-[100px] rounded p-2 text-center text-stone-900 shadow transition-all hover:bg-stone-50 dark:hover:bg-stone-700"
     >
       Submit
     </button>

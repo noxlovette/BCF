@@ -1,5 +1,6 @@
 <script lang="ts">
-  export let ingredient: App.IngredientBrowse;
+  import type { IngredientBrowse } from "$lib/types";
+  export let ingredient: IngredientBrowse;
   import Card from "./Card.svelte";
 </script>
 

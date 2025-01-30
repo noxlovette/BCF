@@ -65,15 +65,15 @@
 <MetaData title={formula.name} />
 
 <AppWrap
-  class="select-text justify-between caret-aqua-700 selection:bg-aqua-700 selection:text-aqua-50"
+  class="caret-aqua-700 selection:bg-aqua-700 selection:text-aqua-50 select-text justify-between"
 >
   <div
     id="header"
     class="
-    flex w-full flex-col-reverse items-baseline
-    justify-between space-y-2
-    border-b-2
-    border-aqua-700 font-medium md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
+    border-aqua-700 flex w-full flex-col-reverse
+    items-baseline justify-between
+    space-y-2
+    border-b-2 md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
   >
     <div class="my-4 w-full md:my-0">
       <h1 class="">
@@ -162,14 +162,14 @@
               type="text"
               bind:value={ingredient.common_name}
               placeholder={ingredient.common_name}
-              class="rounded border-none border-stone-500 bg-transparent p-0 font-medium ring-0 focus:border-stone-500 focus:ring-0
+              class="rounded border-none border-stone-500 bg-transparent p-0 ring-0 focus:border-stone-500 focus:ring-0
   xl:text-2xl dark:bg-stone-800
   "
             />
           {:else}
             <a
               href="/collect/{ingredient.counterpart}"
-              class="font-medium transition-colors hover:text-aqua-700 xl:text-2xl"
+              class=" hover:text-aqua-700 transition-colors xl:text-2xl"
             >
               {ingredient.common_name}
             </a>
@@ -186,7 +186,7 @@
             number={ingredient.percentage}
             bind:value={ingredient.percentage}
             text="%"
-            max=100
+            max="100"
             class="mt-auto flex-shrink-0 opacity-60"
           />
         </div>
@@ -216,7 +216,7 @@
       <VariableTextarea
         text={formula.description}
         bind:value={$editedFormula.description}
-        class="font-medium xl:text-2xl"
+        class=" xl:text-2xl"
       />
     </div>
     <div>
@@ -224,7 +224,7 @@
       <VariableTextarea
         text={formula.notes}
         bind:value={$editedFormula.notes}
-        class="font-medium xl:text-2xl"
+        class=" xl:text-2xl"
       />
     </div>
   </div>

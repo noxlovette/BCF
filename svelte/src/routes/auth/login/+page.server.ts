@@ -1,11 +1,10 @@
-import { error } from "@sveltejs/kit";
+import { error, fail } from "@sveltejs/kit";
 import type { Actions } from "./$types";
 
 export const actions = {
-  login: async ({ request, cookies }) => {
+  login: async ({ request, cookies, fetch }) => {
     const data = await request.formData();
-    const csrfToken = cookies.get("csrftoken");
-    const sessionid = cookies.get("sessionid");
+
     const username = data.get("username");
     const password = data.get("password");
 
@@ -13,17 +12,12 @@ export const actions = {
       return { success: false, error: "Username and password are required" };
     }
 
-    const endpoint = `django/api/login/`;
+    const endpoint = `/django/api/login/`;
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-          Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
-        },
         body: JSON.stringify({ username, password }),
-        credentials: "include",
+
       });
 
       if (!response.ok) {

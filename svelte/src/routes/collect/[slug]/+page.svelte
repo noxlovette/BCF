@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PageServerData } from "./$types";
+  import type { IngredientCollection } from "$lib/types";
 
   import MetaData from "$lib/components/MetaData.svelte";
   import AppWrap from "$lib/components/AppWrap.svelte";
@@ -14,7 +15,7 @@
   import { enhance } from "$app/forms";
 
   export let data: PageServerData;
-  let ingredient: App.IngredientCollection = data.ingredient;
+  let ingredient: IngredientCollection = data.ingredient;
   const editing = writable(false);
   const editedIngredient = writable(ingredient);
 
@@ -40,14 +41,14 @@
 <MetaData title={ingredient.common_name} robots="noindex, nofollow" />
 
 <AppWrap
-  class="select-text justify-between caret-grapefruit-700 selection:bg-grapefruit-700 selection:text-grapefruit-50"
+  class="caret-grapefruit-700 selection:bg-grapefruit-700 selection:text-grapefruit-50 select-text justify-between"
 >
   <form method="post" action="?/update" class="" use:enhance={handleEnhance}>
     <div
       id="header"
-      class="flex w-full flex-col-reverse items-baseline
-justify-between space-y-2
-      border-b-2 border-grapefruit-500 font-medium md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
+      class="border-grapefruit-500 flex w-full flex-col-reverse
+items-baseline justify-between
+      space-y-2 border-b-2 md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
     >
       <div class="my-4 w-full md:my-0">
         <h1 class="">
@@ -61,7 +62,7 @@ justify-between space-y-2
       </div>
       <div
         id="controls"
-        class="flex flex-row items-baseline justify-end space-x-2 font-medium lg:space-x-4 xl:text-2xl"
+        class="flex flex-row items-baseline justify-end space-x-2 lg:space-x-4 xl:text-2xl"
       >
         {#if $editing}
           <button
@@ -122,7 +123,7 @@ justify-between space-y-2
               text={ingredient.descriptors}
               bind:value={$editedIngredient.descriptors}
               name="descriptors"
-              class="font-medium xl:text-2xl"
+              class=" xl:text-2xl"
             />
           </div>
           <div>
@@ -131,7 +132,7 @@ justify-between space-y-2
               text={ingredient.cas}
               name="cas"
               bind:value={$editedIngredient.cas}
-              class="font-medium xl:text-2xl"
+              class=" xl:text-2xl"
             />
           </div>
         </div>
@@ -141,7 +142,7 @@ justify-between space-y-2
             text={useMessage}
             bind:value={$editedIngredient.use}
             name="use"
-            class="min-h-24 font-medium md:min-h-36 xl:text-2xl"
+            class="min-h-24  md:min-h-36 xl:text-2xl"
           />
         </div>
         <div class="flex flex-col space-y-4">
@@ -154,7 +155,7 @@ justify-between space-y-2
                 text={volatility}
                 name="volatility"
                 bind:value={$editedIngredient.volatility}
-                class="font-medium xl:text-2xl"
+                class=" xl:text-2xl"
               />
             </div>
             <div>
@@ -163,7 +164,7 @@ justify-between space-y-2
                 text={origin}
                 name="origin"
                 bind:value={$editedIngredient.origin}
-                class="font-medium xl:text-2xl"
+                class=" xl:text-2xl"
               />
             </div>
           </div>
@@ -189,7 +190,7 @@ justify-between space-y-2
               text={colour}
               name="colour"
               bind:value={$editedIngredient.colour}
-              class="font-medium xl:text-2xl"
+              class=" xl:text-2xl"
             />
           </div>
           <div>
@@ -198,7 +199,7 @@ justify-between space-y-2
               text={associations}
               name="associations"
               bind:value={$editedIngredient.associations}
-              class="font-medium xl:text-2xl"
+              class=" xl:text-2xl"
             />
           </div>
         </div>
@@ -208,7 +209,7 @@ justify-between space-y-2
             text={impression}
             name="impression"
             bind:value={$editedIngredient.impression}
-            class="min-h-24 font-medium md:min-h-36 xl:text-2xl"
+            class="min-h-24  md:min-h-36 xl:text-2xl"
           />
         </div>
 
@@ -218,7 +219,7 @@ justify-between space-y-2
             text={ideas}
             name="ideas"
             bind:value={$editedIngredient.ideas}
-            class="font-medium xl:text-2xl"
+            class=" xl:text-2xl"
           />
         </div>
         <div>
@@ -229,7 +230,7 @@ justify-between space-y-2
                 <li>
                   <a
                     href="/formulate/{formula.id}"
-                    class="font-medium transition-colors hover:text-grapefruit-500 xl:text-2xl"
+                    class="hover:text-grapefruit-500 transition-colors xl:text-2xl"
                   >
                     {formula.name}
                   </a>

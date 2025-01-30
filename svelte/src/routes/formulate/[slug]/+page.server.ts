@@ -1,6 +1,7 @@
 import redis from "$lib/redisClient";
 import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
+import type { Formula } from "$lib/types";
 
 
 export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
@@ -17,7 +18,7 @@ export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
         formulae: JSON.parse(value),
       };
     }
-    const endpoint = `django/formulae/api/new/formula/${slug}/`;
+    const endpoint = `/django/formulae/api/new/formula/${slug}/`;
 
     const response = await fetch(endpoint, {
       method: "GET",
@@ -35,7 +36,7 @@ export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
       }
     }
 
-    const formula: App.Formula = await response.json();
+    const formula: Formula = await response.json();
     await redis.set(
       `formula-${sessionid}-${slug}`,
       JSON.stringify(formula),
@@ -53,7 +54,7 @@ export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
 };
 
 export const actions = {
-  update: async ({ cookies, request }) => {
+  update: async ({ cookies, request, fetch }) => {
     const sessionid = cookies.get("sessionid");
     const csrfToken = cookies.get("csrftoken");
     const formData = await request.formData();
@@ -66,7 +67,7 @@ export const actions = {
     }
     try {
       const response = await fetch(
-        `django/formulae/api/new/formula/${id}/`,
+        `/django/formulae/api/new/formula/${id}/`,
         {
           method: "PUT",
           headers: {
@@ -93,14 +94,14 @@ export const actions = {
       throw error(500, "Failed to edit the formula");
     }
   },
-  delete: async ({ cookies, request }) => {
+  delete: async ({ cookies, request, fetch }) => {
     const sessionid = cookies.get("sessionid");
     const csrfToken = cookies.get("csrftoken");
     const formData = await request.formData();
     const id = formData.get("id");
 
     const response = await fetch(
-      `django/formulae/api/formula/delete/${id}/`,
+      `/django/formulae/api/formula/delete/${id}/`,
       {
         method: "DELETE",
         headers: {

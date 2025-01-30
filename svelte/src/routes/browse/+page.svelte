@@ -79,18 +79,14 @@
 </script>
 
 <MetaData title={ogTitle} {description} {ogTitle} {ogUrl} />
-<svelte:window
-  class="dark:text-stone-100"
-  on:keydown={handleKeydown(searchInput, handleChangePage, $searchTerm)}
-/>
 
 <AppWrap class="text-center md:text-left">
   {#if $searchTerm === "" || data.ingredients.count === 3100}
-    <h2 class="my-4 font-quicksand text-3xl font-bold" in:fade>
+    <h2 class="font-quicksand my-4 text-3xl font-bold" in:fade>
       Showing all ingredients
     </h2>
   {:else}
-    <h2 class="my-4 font-quicksand text-3xl font-bold" in:fade>
+    <h2 class="font-quicksand my-4 text-3xl font-bold" in:fade>
       Showing {totalResults}
       {totalResults === 1 ? "result" : "results"} for "{$searchTerm}"
     </h2>
@@ -111,7 +107,7 @@
     class="my-8 flex w-full flex-col transition-all"
   >
     {#if data.ingredients.names.length === 0 && data.ingredients.descriptors.length === 0 && data.ingredients.cas.length === 0}
-      <p class="m-12 font-quicksand text-5xl font-bold">
+      <p class="font-quicksand m-12 text-5xl font-bold">
         Hm. Try a different search?
       </p>
     {:else}
@@ -125,9 +121,7 @@
 
       {#if data.ingredients.names.length !== 0}
         <div class="flex items-center space-x-2">
-          <h3 class="my-2 font-quicksand text-2xl font-medium">
-            Found in Names
-          </h3>
+          <h3 class="font-quicksand my-2 text-2xl">Found in Names</h3>
           <button on:click={() => (showNames = !showNames)} class:showNames>
             <ChevronDown class="size-8"></ChevronDown>
           </button>
@@ -143,9 +137,7 @@
 
       {#if data.ingredients.descriptors.length !== 0}
         <div class="flex items-center space-x-2">
-          <h3 class="my-2 font-quicksand text-2xl font-medium">
-            Found in Descriptors
-          </h3>
+          <h3 class="font-quicksand my-2 text-2xl">Found in Descriptors</h3>
           <button
             on:click={() => (showDescriptors = !showDescriptors)}
             class:showDescriptors
@@ -164,7 +156,7 @@
 
       {#if data.ingredients.cas.length !== 0}
         <div class="flex items-center space-x-2">
-          <h3 class="my-2 font-quicksand text-2xl font-medium">Found in CAS</h3>
+          <h3 class="font-quicksand my-2 text-2xl">Found in CAS</h3>
           <button on:click={() => (showCas = !showCas)} class:showCas>
             <ChevronDown class="size-8"></ChevronDown>
           </button>
@@ -181,7 +173,7 @@
   </div>
 </AppWrap>
 
-<style>
+<style lang="postcss">
   .dimmed {
     filter: blur(1px);
     opacity: 80%;

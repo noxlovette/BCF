@@ -2,6 +2,7 @@
   import MetaData from "$lib/components/MetaData.svelte";
   import type { PageServerData } from "../$types";
   import FormulateCard from "$lib/components/FormulateCard.svelte";
+  import type { Formula } from "$lib/types";
 
   import AppWrap from "$lib/components/AppWrap.svelte";
   import SearchBar from "$lib/components/SearchBar.svelte";
@@ -12,7 +13,7 @@
 
   export let data: PageServerData;
 
-  let formulae: App.Formula[] = data.formulae;
+  let formulae: Formula[] = data.formulae;
 </script>
 
 <MetaData title="BCF | Formulate" />

@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ fetch, cookies, depends }) => {
   }
 
   try {
-    const endpoint = `django/browse/api/suggested-ingredients/`;
+    const endpoint = `/django/browse/api/suggested-ingredients/`;
     const response = await fetch(endpoint, {
       method: "GET",
       headers: {

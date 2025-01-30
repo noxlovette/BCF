@@ -85,39 +85,84 @@ class UserSignupAPI(APIView):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+import logging
+from django.contrib.auth import authenticate, login
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.middleware.csrf import get_token
+
+logger = logging.getLogger(__name__)
+
 class UserLoginAPI(APIView):
-    # TODO CAPTCHA, verify email
     """
     Check if user exists and login. Auth is handled by django.
     """
-
+    
     def post(self, request, *args, **kwargs):
-        print(request.data)
-
-        data = request.data
-        username = data.get("username")
-        password = data.get("password")
-
-        user = authenticate(username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            return Response(
-                {
+        # Log request metadata
+        logger.info("=== Login Attempt Details ===")
+        logger.info(f"Request Method: {request.method}")
+        logger.info(f"Content Type: {request.content_type}")
+        logger.info(f"Request Headers: {dict(request.headers)}")
+        
+        # Log CSRF related information
+        logger.info("=== CSRF Details ===")
+        logger.info(f"CSRF Cookie: {request.COOKIES.get('csrftoken')}")
+        logger.info(f"CSRF Header: {request.headers.get('X-CSRFToken')}")
+        logger.info(f"Session ID: {request.COOKIES.get('sessionid')}")
+        
+        # Log request body
+        logger.info("=== Request Data ===")
+        logger.info(f"Raw Data: {request.data}")
+        
+        try:
+            data = request.data
+            username = data.get("username")
+            password = data.get("password")
+            
+            # Log authentication attempt (careful with passwords!)
+            logger.info(f"Attempting authentication for username: {username}")
+            
+            user = authenticate(username=username, password=password)
+            
+            if user is not None:
+                logger.info(f"Authentication successful for user: {username}")
+                login(request, user)
+                
+                # Log session details after login
+                logger.info("=== Session Details After Login ===")
+                logger.info(f"New Session ID: {request.session.session_key}")
+                logger.info(f"Session Data: {dict(request.session)}")
+                
+                response_data = {
                     "username": user.username,
                     "is_authenticated": user.is_authenticated,
                     "email": user.email,
                     "sessionid": request.session.session_key,
+                    "csrftoken": get_token(request),  # Include new CSRF token
                 }
-            )
-        else:
+                
+                logger.info("=== Response Data ===")
+                logger.info(f"Response: {response_data}")
+                
+                response = Response(response_data)
+                return response
+            else:
+                logger.warning(f"Authentication failed for username: {username}")
+                return Response(
+                    {
+                        "error": "Invalid username or password",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+                
+        except Exception as e:
+            logger.error(f"Unexpected error in login process: {str(e)}", exc_info=True)
             return Response(
-                {
-                    "error": "Invalid username or password",
-                },
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": "Server error occurred"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-
 
 class UserLogoutAPI(APIView):
     """

@@ -1,9 +1,10 @@
 import redis from "$lib/redisClient";
 import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
+import type { IngredientCollection } from "$lib/types";
 
 
-export const load: PageServerLoad = async ({ cookies }) => {
+export const load: PageServerLoad = async ({ cookies, fetch }) => {
   try {
     const sessionid = cookies.get("sessionid");
 
@@ -19,7 +20,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
       };
     }
 
-    const endpoint = `django/collection/new/api/collection/`;
+    const endpoint = `/django/collection/new/api/collection/`;
 
     const response = await fetch(endpoint, {
       method: "GET",
@@ -37,7 +38,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
       }
     }
 
-    const data: App.IngredientCollection[] = await response.json();
+    const data: IngredientCollection[] = await response.json();
 
     // Cache the result
     await redis.set(cacheKey, JSON.stringify(data), "EX", 1800);
@@ -64,7 +65,7 @@ export const actions = {
     }
 
     const response = await fetch(
-      `django/collection/new/api/ingredient/create/`,
+      `/django/collection/new/api/ingredient/create/`,
       {
         method: "POST",
         headers: {

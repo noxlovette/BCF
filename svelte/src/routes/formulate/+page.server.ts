@@ -1,6 +1,7 @@
 import redis from "$lib/redisClient";
 import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
+import type { Formula } from "$lib/types";
 
 
 export const load: PageServerLoad = async ({ fetch, cookies }) => {
@@ -18,7 +19,7 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
       };
     }
 
-    const endpoint = `django/formulae/api/new/formula/list/`;
+    const endpoint = `/django/formulae/api/new/formula/list/`;
 
     const response = await fetch(endpoint, {
       method: "GET",
@@ -35,7 +36,7 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
         throw error(response.status, "Failed to fetch formulae data");
       }
     }
-    const formulae: App.Formula[] = await response.json();
+    const formulae: Formula[] = await response.json();
     await redis.set(
       `formulas-${sessionid}`,
       JSON.stringify(formulae),
@@ -53,7 +54,7 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
 };
 
 export const actions = {
-  create: async ({ cookies, request }) => {
+  create: async ({ cookies, fetch }) => {
     const sessionid = cookies.get("sessionid");
     const csrfToken = cookies.get("csrftoken");
     const body = {
@@ -68,7 +69,7 @@ export const actions = {
       throw error(401, "Unauthorized");
     }
 
-    const response = await fetch(`django/formulae/api/formula/new/`, {
+    const response = await fetch(`/django/formulae/api/formula/new/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

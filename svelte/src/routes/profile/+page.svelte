@@ -37,7 +37,7 @@
 <AppWrap>
   <div
     id="header"
-    class="flex w-full flex-row items-end justify-between border-b-2 border-stone-500 pb-4 font-medium xl:border-b-4"
+    class="flex w-full flex-row items-end justify-between border-b-2 border-stone-500 pb-4 xl:border-b-4"
   >
     <button
       class="font-quicksand text-7xl"
@@ -46,10 +46,7 @@
       Good <span class="text-gold-400">{$greeting}</span>
     </button>
 
-    <div
-      id="controls"
-      class="flex flex-row justify-end space-x-4 font-medium xl:text-2xl"
-    >
+    <div id="controls" class="flex flex-row justify-end space-x-4 xl:text-2xl">
       <button
         class="rounded border-2 border-stone-500 px-6 py-2"
         on:mousedown={() => currentPage.set("settings")}

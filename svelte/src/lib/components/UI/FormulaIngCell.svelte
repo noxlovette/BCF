@@ -4,9 +4,10 @@
   import VariableLabel from "./VariableLabel.svelte";
   import VariableNumericInput from "./VariableNumericInput.svelte";
   import { getContext } from "svelte";
+  import type { FormulaIngredient } from "$lib/types";
 
   import { editedFormula } from "$lib/stores";
-  export let ingredient: App.FormulaIngredient;
+  export let ingredient: FormulaIngredient;
   export let i: number;
   export let multiplier = 1;
 

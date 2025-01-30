@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({
         ingredient: JSON.parse(value),
       };
     }
-    const endpoint = `django/collection/new/api/ingredient/${slug}/`;
+    const endpoint = `/django/collection/new/api/ingredient/${slug}/`;
 
     const response = await fetch(endpoint, {
       method: "GET",
@@ -75,7 +75,7 @@ export const actions = {
     }
     try {
       const response = await fetch(
-        `django/collection/new/api/ingredient/update/${id}/`,
+        `/django/collection/new/api/ingredient/update/${id}/`,
         {
           method: "PATCH",
           headers: {
@@ -107,7 +107,7 @@ export const actions = {
     const id = formData.get("id");
 
     const response = await fetch(
-      `django/collection/new/api/ingredient/delete/${id}/`,
+      `/django/collection/new/api/ingredient/delete/${id}/`,
       {
         method: "DELETE",
         headers: {

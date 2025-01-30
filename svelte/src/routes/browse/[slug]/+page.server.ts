@@ -1,28 +1,30 @@
 import redis from "$lib/redisClient";
-import getUnsplashURL from "$lib/unsplash";
+import getUnsplashURL from "$lib/server/unsplash";
 import { error } from "@sveltejs/kit";
 import axios from "axios";
+import type { IngredientBrowse } from "$lib/types";
 import type { Actions, PageServerLoad } from "./$types";
+import { env } from "$env/dynamic/private";
+import { fail } from "@sveltejs/kit";
 
 const token =
-  import.meta.env.VITE_TELEGRAM_BOT_TOKEN ||
-  process.env.VITE_TELEGRAM_BOT_TOKEN;
+  env.VITE_TELEGRAM_BOT_TOKEN
 const chatId =
-  import.meta.env.VITE_TELEGRAM_CHAT_ID || process.env.VITE_TELEGRAM_CHAT_ID;
+  env.VITE_TELEGRAM_CHAT_ID;
 
 export const load: PageServerLoad = async ({ fetch, params, depends }) => {
   const { slug } = params;
 
   depends("browse:related");
   try {
-    let ingredient: App.IngredientBrowse | null = null;
+    let ingredient: IngredientBrowse | null = null;
     let cachedIngredient = await redis.get(slug);
     let photo = null;
 
     if (cachedIngredient !== null) {
       ingredient = JSON.parse(cachedIngredient);
     } else {
-      const endpoint = `django/browse/api/ingredients/${slug}/`;
+      const endpoint = `/django/browse/api/ingredients/${slug}/`;
       const response = await fetch(endpoint);
       if (!response.ok) {
         throw new Error("Failed to fetch ingredient data from API");
@@ -68,7 +70,7 @@ export const actions = {
 
     try {
       const response = await fetch(
-        `django/collection/new/api/collection/`,
+        `/django/collection/new/api/collection/`,
         {
           method: "POST",
           headers: {
@@ -121,7 +123,7 @@ export const actions = {
 
     try {
       const response = await fetch(
-        `django/browse/api/suggested-ingredients/new/`,
+        `/django/browse/api/suggested-ingredients/new/`,
         {
           method: "POST",
           headers: {

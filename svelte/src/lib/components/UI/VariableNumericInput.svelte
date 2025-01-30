@@ -4,8 +4,8 @@
   export let number = 0;
   export let text = "";
   export let value: any;
-  export let max = 1000
-  export let min = 0
+  export let max = 1000;
+  export let min = 0;
   const editing = getContext("editing");
 </script>
 
@@ -13,13 +13,13 @@
   <input
     type="number"
     placeholder={text}
-    max={max}
-    min={min}
+    {max}
+    {min}
     bind:value
-    class="border-none bg-transparent p-0 font-medium ring-0 focus:ring-0 xl:text-2xl dark:bg-stone-800 {$$props.class}"
+    class="border-none bg-transparent p-0 ring-0 focus:ring-0 xl:text-2xl dark:bg-stone-800 {$$props.class}"
   />
 {:else}
-  <p class="{$$props.class} text-base font-medium xl:text-2xl">
+  <p class="{$$props.class} text-base xl:text-2xl">
     {number}
     {text}
   </p>
