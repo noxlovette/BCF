@@ -47,7 +47,7 @@ package-lock.json
 frontend/build/
 
 # Svelte
-/.svelte-kit/
+.svelte-kit/
 frontend/.svelte-kit/
 
 # Packages

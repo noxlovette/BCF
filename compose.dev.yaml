@@ -1,22 +1,19 @@
-services:
-  frontend:
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    container_name: frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend/static:/app/static
-      - ./frontend/src:/app/src
-    environment:
-      - NODE_ENV=development
-      - BACKEND_URL="http://backend:8000"
-    env_file:
-      - ./frontend/.env
+name: bcf-dev
 
+services:
+  svelte:
+    container_name: svelte-bcf-dev
+    build:
+      context: ./svelte
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5174:3000"
+    volumes:
+      - ./svelte:/app
+    env_file:
+      - ./svelte/.env
     depends_on:
-      - backend
+      - django
 
   redis:
     image: redis/redis-stack:latest
@@ -25,42 +22,36 @@ services:
       - "6379:6379"
       - "8001:8001"
 
-  backend:
-    build: 
-      context: ./backend
+  django:
+    container_name: django-bcf-dev
+    build:
+      context: ./django
       dockerfile: Dockerfile.dev
-    container_name: backend
     volumes:
-      - ./backend:/app
-    environment:
-      - POSTGRES_DB=bcf-development
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=changeme
-      - POSTGRES_HOST=db
-      - POSTGRES_PORT=5432
-      - NODE_ENV=development
+      - ./django:/app
     env_file:
-      - ./backend/.env
+      - ./django/.env
     command: python manage.py runserver 0.0.0.0:8000
     depends_on:
       - db
 
   db:
     image: postgres
+    container_name: pg-bcf-dev
     restart: always
     user: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=bcf-development
+      - POSTGRES_DB=pg-bcf-dev
       - POSTGRES_PASSWORD=changeme
-    ports:
-      - "5432:5432"
+
     healthcheck:
-      test: ["CMD", "pg_isready"]
+      test: [ "CMD", "pg_isready" ]
       interval: 10s
       timeout: 5s
       retries: 5
 
 volumes:
   db-data:
+    name: db-bcf-dev
