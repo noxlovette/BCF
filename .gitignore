@@ -86,3 +86,7 @@ frontend/vite.config.ts.timestamp-*
 
 # other
 /frontend/download_page.js
+
+
+# Rust
+target/
