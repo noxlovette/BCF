@@ -5,7 +5,6 @@ __pycache__/
 # Databases
 db.sqlite3
 /db/
-*.sql
 backup.sh
 
 myenv/
