@@ -15,7 +15,7 @@ pub async fn fetch_user(
     let user = sqlx::query_as!(
         User,
         r#"
-        SELECT username, email, role, id, name, pass, verified
+        SELECT username, email, id, name, pass, verified
         FROM "user"
         WHERE id = $1
         "#,
@@ -41,7 +41,7 @@ pub async fn delete_user(
         r#"
         DELETE FROM "user"
         WHERE id = $1
-        RETURNING username, email, role, id, name, pass, verified
+        RETURNING username, email, id, name, pass, verified
         "#,
         claims.sub
     )
@@ -78,16 +78,14 @@ pub async fn update_user(
             username = COALESCE($2, username),
             email = COALESCE($3, email),
             pass = COALESCE($4, pass),
-            role = COALESCE($5, role),
-            verified = COALESCE($6, verified)
-        WHERE id = $7
-        RETURNING username, email, role, id, name, pass, verified 
+            verified = COALESCE($5, verified)
+        WHERE id = $6
+        RETURNING username, email, id, name, pass, verified 
         "#,
         payload.name,
         payload.username,
         payload.email,
         hashed_pass,
-        payload.role,
         payload.verified,
         claims.sub
     )

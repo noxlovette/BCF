@@ -29,10 +29,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let protected_routes = Router::new()
         .nest("/browse", rust::api::routes::browse_routes::browse_routes())
-       // .nest(
-       //     "/collect",
-       //     rust::api::routes::collect_routes::collect_routes(),
-       // )
+       .nest(
+           "/collect",
+           rust::api::routes::collect_routes::collect_routes(),
+       )
        // .nest(
        //     "/formulate",
        //     rust::api::routes::lesson_routes::formulate_routes(),
