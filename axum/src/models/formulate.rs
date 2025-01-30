@@ -102,7 +102,7 @@ pub struct FormulaPayload {
     pub description: Option<String>,
     pub notes: Option<String>,
     pub solvent: Option<String>,
-    pub ingredients: Vec<FormulaIngredient>,
+    pub ingredients: Vec<FormulaIngredientUpdate>,
 }
 
 #[derive(Debug, Deserialize)]

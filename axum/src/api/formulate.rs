@@ -82,9 +82,10 @@ pub async fn update_formula(
         Formula,
         r#"
         UPDATE formulas 
-        SET title = $1,
-            description = $2,
-            solvent = $3
+        SET 
+            title = COALESCE($1, title),
+            description = COALESCE($2, description),
+            solvent = COALESCE($3, solvent)
         WHERE id = $4 AND user_id = $5
         RETURNING *
         "#,
@@ -99,57 +100,57 @@ pub async fn update_formula(
 
     // Transform ingredients data
     let (ids, f_ids, names, amounts, units, vols, percs): (
-        Vec<String>,
-        Vec<String>,
-        Vec<String>,
-        Vec<i32>,
-        Vec<String>,
-        Vec<String>,
-        Vec<f64>
-    ) = payload.ingredients
+        Vec<Option<String>>,
+        Vec<Option<String>>, 
+        Vec<Option<String>>,
+        Vec<Option<f64>>,
+        Vec<Option<String>>,
+        Vec<Option<String>>,
+        Vec<Option<f32>>
+     ) = payload.ingredients
         .into_iter()
         .map(|i| (
-            if i.id.is_empty() { nanoid::nanoid!() } else { i.id },
-            formula.id.clone(),
+            Some(i.id.filter(|id| !id.is_empty()).unwrap_or_else(|| nanoid::nanoid!())),
+            Some(formula.id.clone()),
             i.name,
-            i.amount as i32,
+            i.amount,
             i.unit,
             i.volatility,
-            i.percentage as f64
+            i.percentage
         ))
         .unzip_n_vec();
 
-    // Batch upsert ingredients
-    sqlx::query!(
-        r#"
-        INSERT INTO formula_ingredients
-        (id, formula_id, name, amount, unit, volatility, percentage)
-        SELECT * FROM UNNEST(
-            $1::varchar[],
-            $2::varchar[],
-            $3::varchar[],
-            $4::int[],
-            $5::varchar[],
-            $6::varchar[],
-            $7::double precision[]
-        )
-        ON CONFLICT (id) DO UPDATE
-        SET name = EXCLUDED.name,
-            amount = EXCLUDED.amount,
-            unit = EXCLUDED.unit,
-            volatility = EXCLUDED.volatility,
-            percentage = EXCLUDED.percentage
-        "#,
-        &ids,
-        &f_ids,
-        &names,
-        &amounts,
-        &units,
-        &vols,
-        &percs
-    )
-    .execute(&mut *tx)
-    .await?;
+        sqlx::query!(
+            r#"
+            INSERT INTO formula_ingredients
+            (id, formula_id, name, amount, unit, volatility, percentage)
+            SELECT * FROM UNNEST(
+                $1::varchar[],
+                $2::varchar[],
+                $3::varchar[],
+                $4::double precision[],
+                $5::varchar[],
+                $6::varchar[],
+                $7::real[]
+            )
+            ON CONFLICT (id) DO UPDATE
+            SET 
+                name = COALESCE(EXCLUDED.name, formula_ingredients.name),
+                amount = COALESCE(EXCLUDED.amount, formula_ingredients.amount),
+                unit = COALESCE(EXCLUDED.unit, formula_ingredients.unit),
+                volatility = COALESCE(EXCLUDED.volatility, formula_ingredients.volatility),
+                percentage = COALESCE(EXCLUDED.percentage, formula_ingredients.percentage)
+            "#,
+            &ids.iter().map(|x| x.clone().unwrap_or_default()).collect::<Vec<_>>(),
+            &f_ids.iter().map(|x| x.clone().unwrap_or_default()).collect::<Vec<_>>(),
+            &names.iter().map(|x| x.clone().unwrap_or_default()).collect::<Vec<_>>(),
+            &amounts.iter().map(|x| x.unwrap_or_default()).collect::<Vec<_>>(),
+            &units.iter().map(|x| x.clone().unwrap_or_default()).collect::<Vec<_>>(),
+            &vols.iter().map(|x| x.clone().unwrap_or_default()).collect::<Vec<_>>(),
+            &percs.iter().map(|x| x.unwrap_or_default()).collect::<Vec<_>>()
+            )
+            .execute(&mut *tx)
+            .await?;
 
     tx.commit().await?;
     Ok(Json(formula))
