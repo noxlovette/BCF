@@ -49,7 +49,6 @@ pub struct User {
     pub username: String,
     pub email: String,
     pub pass: String,
-    pub role: String,
     pub verified: bool,
 }
 

@@ -24,7 +24,6 @@ pub fn generate_token(user: &User) -> Result<String, AuthError> {
         name: user.name.clone(),
         username: user.username.clone(),
         email: user.email.clone(),
-        role: user.role.clone(),
         sub: user.id.clone().to_string(),
         exp,
         iat: now,

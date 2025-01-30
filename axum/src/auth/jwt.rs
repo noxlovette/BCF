@@ -100,7 +100,6 @@ pub struct Claims {
     pub sub: String,
     pub name: String,
     pub username: String,
-    pub role: String,
     pub email: String,
     pub exp: usize,
     pub iat: usize,      // Issued at timestamp

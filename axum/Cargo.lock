@@ -113,39 +113,6 @@ checksum = "ace50bade8e6234aa140d9a2f552bbee1db4d353f69b8217bc503490fc1a9f26"
 
 [[package]]
 name = "axum"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "argon2",
- "axum 0.8.1",
- "axum-extra",
- "base64 0.22.1",
- "chrono",
- "csv",
- "dotenvy",
- "hyper",
- "jsonwebtoken",
- "log",
- "nanoid",
- "once_cell",
- "regex",
- "serde",
- "serde_json",
- "serde_with",
- "sqlx",
- "thiserror",
- "time",
- "tokio",
- "tower",
- "tower-http",
- "tracing",
- "tracing-subscriber",
- "uuid",
- "validator",
-]
-
-[[package]]
-name = "axum"
 version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6d6fd624c75e18b3b4c6b9caf42b1afe24437daaee904069137d8bab077be8b8"
@@ -205,7 +172,7 @@ version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "460fc6f625a1f7705c6cf62d0d070794e94668988b1c38111baeec177c715f7b"
 dependencies = [
- "axum 0.8.1",
+ "axum",
  "axum-core",
  "bytes",
  "cookie",
@@ -1698,6 +1665,39 @@ dependencies = [
  "spki",
  "subtle",
  "zeroize",
+]
+
+[[package]]
+name = "rust"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "argon2",
+ "axum",
+ "axum-extra",
+ "base64 0.22.1",
+ "chrono",
+ "csv",
+ "dotenvy",
+ "hyper",
+ "jsonwebtoken",
+ "log",
+ "nanoid",
+ "once_cell",
+ "regex",
+ "serde",
+ "serde_json",
+ "serde_with",
+ "sqlx",
+ "thiserror",
+ "time",
+ "tokio",
+ "tower",
+ "tower-http",
+ "tracing",
+ "tracing-subscriber",
+ "uuid",
+ "validator",
 ]
 
 [[package]]
