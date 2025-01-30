@@ -33,10 +33,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
            "/collect",
            rust::api::routes::collect_routes::collect_routes(),
        )
-       // .nest(
-       //     "/formulate",
-       //     rust::api::routes::lesson_routes::formulate_routes(),
-       // )
+       .nest(
+           "/formulate",
+           rust::api::routes::formulate_routes::formulate_routes(),
+       )
         .nest("/auth", rust::api::routes::auth_routes::auth_routes())
         .layer(axum::middleware::from_fn(validate_api_key));
 

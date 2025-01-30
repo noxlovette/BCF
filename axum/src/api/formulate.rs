@@ -1,30 +1,63 @@
 use axum::{extract::State, Json};
-use crate::models::formulate::{Formula, FormulaPayload};
+use axum::extract::Path;
+use crate::models::formulate::{Formula, FormulaPayload, FormulaFull, FormulaCreatePayload};
 use crate::db::init::AppState;
 use crate::auth::jwt::Claims;
 use crate::db::error::DbError;
 
-pub async fn upsert_formula(
+
+pub async fn fetch_formula(
     State(pool): State<AppState>,
-    claims: Claims, 
-    formula_id: Option<String>,
-    Json(payload): Json<FormulaPayload>,
- ) -> Result<Json<Formula>, DbError> {
+    claims: Claims,
+    Path(formula_id): Path<String>,
+) -> Result<Json<FormulaFull>, DbError> {
+    let formula = sqlx::query_as!(
+        FormulaFull,
+        r#"
+        SELECT f.*, 
+            COALESCE(
+                jsonb_agg(
+                    jsonb_build_object(
+                        'id', fi.id,
+                        'name', fi.name,
+                        'amount', fi.amount,
+                        'unit', fi.unit,
+                        'volatility', fi.volatility,
+                        'percentage', fi.percentage
+                    )
+                ) FILTER (WHERE fi.id IS NOT NULL),
+                '[]'::jsonb
+            ) as "ingredients!"
+        FROM formulas f
+        LEFT JOIN formula_ingredients fi ON f.id = fi.formula_id
+        WHERE f.id = $1 AND f.user_id = $2
+        GROUP BY f.id
+        "#,
+        formula_id,
+        claims.sub
+    )
+    .fetch_one(&pool.db)
+    .await?
+    .with_parsed_ingredients().unwrap();
+
+    Ok(Json(formula))
+}
+
+pub async fn create_formula(
+    State(pool): State<AppState>,
+    claims: Claims,
+    Json(payload): Json<FormulaCreatePayload>,
+) -> Result<Json<Formula>, DbError> {
     let mut tx = pool.db.begin().await?;
     
-    // Insert/update formula
     let formula = sqlx::query_as!(
         Formula,
         r#"
         INSERT INTO formulas (id, user_id, title, description, solvent)
         VALUES ($1, $2, $3, $4, $5)
-        ON CONFLICT (id) DO UPDATE 
-        SET title = EXCLUDED.title,
-            description = EXCLUDED.description,
-            solvent = EXCLUDED.solvent
         RETURNING *
         "#,
-        formula_id.unwrap_or_else(|| nanoid::nanoid!()),
+        nanoid::nanoid!(),
         claims.sub,
         payload.title,
         payload.description,
@@ -32,15 +65,46 @@ pub async fn upsert_formula(
     )
     .fetch_one(&mut *tx)
     .await?;
- 
+
+    tx.commit().await?;
+    Ok(Json(formula))
+}
+
+pub async fn update_formula(
+    State(pool): State<AppState>,
+    claims: Claims,
+    Path(formula_id): Path<String>,
+    Json(payload): Json<FormulaPayload>,
+) -> Result<Json<Formula>, DbError> {
+    let mut tx = pool.db.begin().await?;
+
+    let formula = sqlx::query_as!(
+        Formula,
+        r#"
+        UPDATE formulas 
+        SET title = $1,
+            description = $2,
+            solvent = $3
+        WHERE id = $4 AND user_id = $5
+        RETURNING *
+        "#,
+        payload.title,
+        payload.description,
+        payload.solvent.unwrap_or_else(|| "Ethanol".to_string()),
+        formula_id,
+        claims.sub
+    )
+    .fetch_one(&mut *tx)
+    .await?;
+
     // Transform ingredients data
     let (ids, f_ids, names, amounts, units, vols, percs): (
-        Vec<String>, 
+        Vec<String>,
         Vec<String>,
         Vec<String>,
         Vec<i32>,
         Vec<String>,
-        Vec<String>, 
+        Vec<String>,
         Vec<f64>
     ) = payload.ingredients
         .into_iter()
@@ -55,11 +119,10 @@ pub async fn upsert_formula(
         ))
         .unzip_n_vec();
 
- 
     // Batch upsert ingredients
     sqlx::query!(
         r#"
-        INSERT INTO formula_ingredients 
+        INSERT INTO formula_ingredients
         (id, formula_id, name, amount, unit, volatility, percentage)
         SELECT * FROM UNNEST(
             $1::varchar[],
@@ -78,7 +141,7 @@ pub async fn upsert_formula(
             percentage = EXCLUDED.percentage
         "#,
         &ids,
-        &f_ids, 
+        &f_ids,
         &names,
         &amounts,
         &units,
@@ -87,16 +150,16 @@ pub async fn upsert_formula(
     )
     .execute(&mut *tx)
     .await?;
- 
+
     tx.commit().await?;
     Ok(Json(formula))
- }
+}
 
 trait UnzipN<T1, T2, T3, T4, T5, T6, T7> {
     fn unzip_n_vec(self) -> (Vec<T1>, Vec<T2>, Vec<T3>, Vec<T4>, Vec<T5>, Vec<T6>, Vec<T7>);
 }
 
-impl<I, T1, T2, T3, T4, T5, T6, T7> UnzipN<T1, T2, T3, T4, T5, T6, T7> for I 
+impl<I, T1, T2, T3, T4, T5, T6, T7> UnzipN<T1, T2, T3, T4, T5, T6, T7> for I
 where
     I: Iterator<Item = (T1, T2, T3, T4, T5, T6, T7)>
 {
@@ -108,7 +171,7 @@ where
         let mut t5 = Vec::new();
         let mut t6 = Vec::new();
         let mut t7 = Vec::new();
-
+        
         self.for_each(|(x1, x2, x3, x4, x5, x6, x7)| {
             t1.push(x1);
             t2.push(x2);
@@ -118,7 +181,7 @@ where
             t6.push(x6);
             t7.push(x7);
         });
-
+        
         (t1, t2, t3, t4, t5, t6, t7)
     }
 }

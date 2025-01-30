@@ -47,6 +47,38 @@ pub struct Formula {
     pub updated_at: OffsetDateTime,
 }
 
+#[derive(sqlx::FromRow, Serialize, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
+#[serde_with::serde_as]
+pub struct FormulaFull {
+    pub id: String,
+    pub user_id: String,
+    pub title: Option<String>,
+    pub description: Option<String>,
+    pub solvent: Option<String>,
+    #[serde_as(as = "Rfc3339")]
+    pub created_at: OffsetDateTime,
+    #[serde_as(as = "Rfc3339")]
+    pub updated_at: OffsetDateTime,
+    #[sqlx(rename = "ingredients")]
+    #[serde(default)]
+    pub ingredients: Option<serde_json::Value>
+}
+
+impl FormulaFull {
+    pub fn with_parsed_ingredients(self) -> Result<Self, serde_json::Error> {
+        let ingredients: Vec<FormulaIngredient> = if let Some(json) = self.ingredients {
+            serde_json::from_value(json)?
+        } else {
+            Vec::new()
+        };
+        
+        Ok(Self {
+            ingredients: Some(serde_json::to_value(ingredients)?),
+            ..self
+        })
+    }
+}
 
 #[serde_with::serde_as]
 #[derive(Serialize, Deserialize, Debug)]
@@ -71,4 +103,12 @@ pub struct FormulaPayload {
     pub notes: Option<String>,
     pub solvent: Option<String>,
     pub ingredients: Vec<FormulaIngredient>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct FormulaCreatePayload {
+    pub title: Option<String>,
+    pub description: Option<String>,
+    pub notes: Option<String>,
+    pub solvent: Option<String>,
 }
