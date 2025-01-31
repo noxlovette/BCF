@@ -6,7 +6,7 @@ import type { User } from "$lib/types";
 
 export const load: LayoutServerLoad = async ({ cookies, fetch, depends }) => {
     const sessionid = cookies.get("sessionid");
-    const endpoint = `/django/api/check-session/`;
+    const endpoint = `/axum/api/check-session/`;
 
     const response = await fetch(endpoint, {
         method: "GET",

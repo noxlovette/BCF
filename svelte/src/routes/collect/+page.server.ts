@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ cookies, fetch }) => {
       };
     }
 
-    const endpoint = `/django/collection/new/api/collection/`;
+    const endpoint = `/axum/collection/new/api/collection/`;
 
     const response = await fetch(endpoint, {
       method: "GET",
@@ -65,7 +65,7 @@ export const actions = {
     }
 
     const response = await fetch(
-      `/django/collection/new/api/ingredient/create/`,
+      `/axum/collection/new/api/ingredient/create/`,
       {
         method: "POST",
         headers: {

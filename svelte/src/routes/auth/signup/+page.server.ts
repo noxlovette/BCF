@@ -14,7 +14,7 @@ export const actions = {
       return { success: false, error: "Username and password are required" };
     }
 
-    const endpoint = `/django/api/signup/`;
+    const endpoint = `/axum/api/signup/`;
     try {
       const response = await fetch(endpoint, {
         method: "POST",

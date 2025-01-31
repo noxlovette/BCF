@@ -15,7 +15,7 @@ export const actions = {
 
 
 
-    const endpoint = `/django/api/login/`;
+    const endpoint = `/axum/api/login/`;
     try {
       const response = await fetch(endpoint, {
         method: "POST",

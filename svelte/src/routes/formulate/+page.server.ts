@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
       };
     }
 
-    const endpoint = `/django/formulae/api/new/formula/list/`;
+    const endpoint = `/axum/formulae/api/new/formula/list/`;
 
     const response = await fetch(endpoint, {
       method: "GET",
@@ -69,7 +69,7 @@ export const actions = {
       throw error(401, "Unauthorized");
     }
 
-    const response = await fetch(`/django/formulae/api/formula/new/`, {
+    const response = await fetch(`/axum/formulae/api/formula/new/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

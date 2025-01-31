@@ -1,10 +1,9 @@
-use axum::{extract::State, Json};
-use axum::extract::Path;
-use crate::models::formulate::{Formula, FormulaPayload, FormulaFull, FormulaCreatePayload};
-use crate::db::init::AppState;
 use crate::auth::jwt::Claims;
 use crate::db::error::DbError;
-
+use crate::db::init::AppState;
+use crate::models::formulate::{Formula, FormulaCreatePayload, FormulaFull, FormulaPayload};
+use axum::extract::Path;
+use axum::{extract::State, Json};
 
 pub async fn fetch_formula(
     State(pool): State<AppState>,
@@ -38,7 +37,8 @@ pub async fn fetch_formula(
     )
     .fetch_one(&pool.db)
     .await?
-    .with_parsed_ingredients().unwrap();
+    .with_parsed_ingredients()
+    .unwrap();
 
     Ok(Json(formula))
 }
@@ -49,7 +49,7 @@ pub async fn create_formula(
     Json(payload): Json<FormulaCreatePayload>,
 ) -> Result<Json<Formula>, DbError> {
     let mut tx = pool.db.begin().await?;
-    
+
     let formula = sqlx::query_as!(
         Formula,
         r#"
@@ -101,27 +101,33 @@ pub async fn update_formula(
     // Transform ingredients data
     let (ids, f_ids, names, amounts, units, vols, percs): (
         Vec<Option<String>>,
-        Vec<Option<String>>, 
+        Vec<Option<String>>,
         Vec<Option<String>>,
         Vec<Option<f64>>,
         Vec<Option<String>>,
         Vec<Option<String>>,
-        Vec<Option<f32>>
-     ) = payload.ingredients
+        Vec<Option<f32>>,
+    ) = payload
+        .ingredients
         .into_iter()
-        .map(|i| (
-            Some(i.id.filter(|id| !id.is_empty()).unwrap_or_else(|| nanoid::nanoid!())),
-            Some(formula.id.clone()),
-            i.name,
-            i.amount,
-            i.unit,
-            i.volatility,
-            i.percentage
-        ))
+        .map(|i| {
+            (
+                Some(
+                    i.id.filter(|id| !id.is_empty())
+                        .unwrap_or_else(|| nanoid::nanoid!()),
+                ),
+                Some(formula.id.clone()),
+                i.name,
+                i.amount,
+                i.unit,
+                i.volatility,
+                i.percentage,
+            )
+        })
         .unzip_n_vec();
 
-        sqlx::query!(
-            r#"
+    sqlx::query!(
+        r#"
             INSERT INTO formula_ingredients
             (id, formula_id, name, amount, unit, volatility, percentage)
             SELECT * FROM UNNEST(
@@ -141,30 +147,70 @@ pub async fn update_formula(
                 volatility = COALESCE(EXCLUDED.volatility, formula_ingredients.volatility),
                 percentage = COALESCE(EXCLUDED.percentage, formula_ingredients.percentage)
             "#,
-            &ids.iter().map(|x| x.clone().unwrap_or_default()).collect::<Vec<_>>(),
-            &f_ids.iter().map(|x| x.clone().unwrap_or_default()).collect::<Vec<_>>(),
-            &names.iter().map(|x| x.clone().unwrap_or_default()).collect::<Vec<_>>(),
-            &amounts.iter().map(|x| x.unwrap_or_default()).collect::<Vec<_>>(),
-            &units.iter().map(|x| x.clone().unwrap_or_default()).collect::<Vec<_>>(),
-            &vols.iter().map(|x| x.clone().unwrap_or_default()).collect::<Vec<_>>(),
-            &percs.iter().map(|x| x.unwrap_or_default()).collect::<Vec<_>>()
-            )
-            .execute(&mut *tx)
-            .await?;
+        &ids.iter()
+            .map(|x| x.clone().unwrap_or_default())
+            .collect::<Vec<_>>(),
+        &f_ids
+            .iter()
+            .map(|x| x.clone().unwrap_or_default())
+            .collect::<Vec<_>>(),
+        &names
+            .iter()
+            .map(|x| x.clone().unwrap_or_default())
+            .collect::<Vec<_>>(),
+        &amounts
+            .iter()
+            .map(|x| x.unwrap_or_default())
+            .collect::<Vec<_>>(),
+        &units
+            .iter()
+            .map(|x| x.clone().unwrap_or_default())
+            .collect::<Vec<_>>(),
+        &vols
+            .iter()
+            .map(|x| x.clone().unwrap_or_default())
+            .collect::<Vec<_>>(),
+        &percs
+            .iter()
+            .map(|x| x.unwrap_or_default())
+            .collect::<Vec<_>>()
+    )
+    .execute(&mut *tx)
+    .await?;
 
     tx.commit().await?;
     Ok(Json(formula))
 }
 
 trait UnzipN<T1, T2, T3, T4, T5, T6, T7> {
-    fn unzip_n_vec(self) -> (Vec<T1>, Vec<T2>, Vec<T3>, Vec<T4>, Vec<T5>, Vec<T6>, Vec<T7>);
+    fn unzip_n_vec(
+        self,
+    ) -> (
+        Vec<T1>,
+        Vec<T2>,
+        Vec<T3>,
+        Vec<T4>,
+        Vec<T5>,
+        Vec<T6>,
+        Vec<T7>,
+    );
 }
 
 impl<I, T1, T2, T3, T4, T5, T6, T7> UnzipN<T1, T2, T3, T4, T5, T6, T7> for I
 where
-    I: Iterator<Item = (T1, T2, T3, T4, T5, T6, T7)>
+    I: Iterator<Item = (T1, T2, T3, T4, T5, T6, T7)>,
 {
-    fn unzip_n_vec(self) -> (Vec<T1>, Vec<T2>, Vec<T3>, Vec<T4>, Vec<T5>, Vec<T6>, Vec<T7>) {
+    fn unzip_n_vec(
+        self,
+    ) -> (
+        Vec<T1>,
+        Vec<T2>,
+        Vec<T3>,
+        Vec<T4>,
+        Vec<T5>,
+        Vec<T6>,
+        Vec<T7>,
+    ) {
         let mut t1 = Vec::new();
         let mut t2 = Vec::new();
         let mut t3 = Vec::new();
@@ -172,7 +218,7 @@ where
         let mut t5 = Vec::new();
         let mut t6 = Vec::new();
         let mut t7 = Vec::new();
-        
+
         self.for_each(|(x1, x2, x3, x4, x5, x6, x7)| {
             t1.push(x1);
             t2.push(x2);
@@ -182,7 +228,46 @@ where
             t6.push(x6);
             t7.push(x7);
         });
-        
+
         (t1, t2, t3, t4, t5, t6, t7)
     }
+}
+
+pub async fn delete_formula(
+    State(state): State<AppState>,
+    claims: Claims,
+    Path(collect_id): Path<String>,
+) -> Result<Json<Formula>, DbError> {
+    let formula = sqlx::query_as!(
+        Formula,
+        r#"
+        DELETE FROM formulas
+        WHERE id = $1 AND user_id = $2
+        RETURNING *
+        "#,
+        collect_id,
+        claims.sub
+    )
+    .fetch_one(&state.db)
+    .await?;
+
+    Ok(Json(formula))
+}
+
+pub async fn list_formulas(
+    State(state): State<AppState>,
+    claims: Claims,
+) -> Result<Json<Vec<Formula>>, DbError> {
+    let formulas = sqlx::query_as!(
+        Formula,
+        r#"
+        SELECT * FROM formulas
+        WHERE user_id = $1
+        "#,
+        claims.sub
+    )
+    .fetch_all(&state.db)
+    .await?;
+
+    Ok(Json(formulas))
 }

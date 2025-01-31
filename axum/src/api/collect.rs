@@ -6,10 +6,11 @@ use axum::extract::Json;
 use axum::extract::Path;
 use axum::extract::State;
 
+//todo add restriction to cas and user id
 pub async fn upsert_collect_ing(
     State(state): State<AppState>,
     claims: Claims,
-    Json(payload): Json<CollectIngredientUpdate>,
+    Json(payload): Json<CollectIngredient>,
 ) -> Result<Json<CollectIngredient>, DbError> {
     let note = sqlx::query_as!(
         CollectIngredient,
@@ -36,6 +37,41 @@ pub async fn upsert_collect_ing(
     .await?;
 
     Ok(Json(note))
+}
+
+pub async fn update_ingredient(
+    State(state): State<AppState>,
+    claims: Claims,
+    Path(collect_id): Path<String>,
+    Json(payload): Json<CollectIngredientUpdate>,
+) -> Result<Json<CollectIngredient>, DbError> {
+    let collect_ing = sqlx::query_as!(
+        CollectIngredient,
+        r#"
+    UPDATE collection_ingredients
+    SET 
+        common_name = COALESCE($3, common_name),
+        markdown = COALESCE($4, markdown),
+        amount = COALESCE($5, amount),
+        unit = COALESCE($6, unit),
+        cas = COALESCE($7, cas),
+        other_names = COALESCE($8, other_names)
+    WHERE id = $1 AND user_id = $2
+    RETURNING *
+    "#,
+        collect_id,
+        claims.sub,
+        payload.common_name,
+        payload.markdown,
+        payload.amount,
+        payload.unit,
+        payload.cas,
+        payload.other_names
+    )
+    .fetch_one(&state.db)
+    .await?;
+
+    Ok(Json(collect_ing))
 }
 
 pub async fn fetch_collect_ing(

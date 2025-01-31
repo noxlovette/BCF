@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ fetch, cookies, params }) => {
         formulae: JSON.parse(value),
       };
     }
-    const endpoint = `/django/formulae/api/new/formula/${slug}/`;
+    const endpoint = `/axum/formulae/api/new/formula/${slug}/`;
 
     const response = await fetch(endpoint, {
       method: "GET",
@@ -67,7 +67,7 @@ export const actions = {
     }
     try {
       const response = await fetch(
-        `/django/formulae/api/new/formula/${id}/`,
+        `/axum/formulae/api/new/formula/${id}/`,
         {
           method: "PUT",
           headers: {
@@ -101,7 +101,7 @@ export const actions = {
     const id = formData.get("id");
 
     const response = await fetch(
-      `/django/formulae/api/formula/delete/${id}/`,
+      `/axum/formulae/api/formula/delete/${id}/`,
       {
         method: "DELETE",
         headers: {

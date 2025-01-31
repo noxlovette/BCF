@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ fetch, params, depends }) => {
     if (cachedIngredient !== null) {
       ingredient = JSON.parse(cachedIngredient);
     } else {
-      const endpoint = `/django/browse/api/ingredients/${slug}/`;
+      const endpoint = `/axum/browse/api/ingredients/${slug}/`;
       const response = await fetch(endpoint);
       if (!response.ok) {
         throw new Error("Failed to fetch ingredient data from API");
@@ -70,7 +70,7 @@ export const actions = {
 
     try {
       const response = await fetch(
-        `/django/collection/new/api/collection/`,
+        `/axum/collection/new/api/collection/`,
         {
           method: "POST",
           headers: {
@@ -123,7 +123,7 @@ export const actions = {
 
     try {
       const response = await fetch(
-        `/django/browse/api/suggested-ingredients/new/`,
+        `/axum/browse/api/suggested-ingredients/new/`,
         {
           method: "POST",
           headers: {

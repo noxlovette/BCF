@@ -1,6 +1,6 @@
 use crate::db::error::DbError;
 use crate::db::init::AppState;
-use crate::models::browse::{BrowseIngredient, BrowseQuery, PaginatedResponse};
+use crate::models::browse::{BrowseIngredient, BrowseQuery};
 use axum::extract::{Json, Path, Query, State};
 
 pub async fn fetch_browse(
