@@ -3,7 +3,6 @@ use crate::db::init::AppState;
 use axum::routing::{get, post};
 use axum::Router;
 
-// watch out - uses lessonIDs associated with the note
 pub fn formulate_routes() -> Router<AppState> {
     Router::new()
         .route(
