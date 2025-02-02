@@ -6,47 +6,22 @@ import type { Actions, PageServerLoad } from "./$types";
 import { env } from "$env/dynamic/private";
 
 const token =
-  env.VITE_TELEGRAM_BOT_TOKEN
+  env.TELEGRAM_BOT_TOKEN
 const chatId =
-  env.VITE_TELEGRAM_CHAT_ID;
+  env.TELEGRAM_CHAT_ID;
 
-export const load: PageServerLoad = async ({ fetch, params, depends }) => {
+export const load: PageServerLoad = async ({ fetch, params }) => {
   const { slug } = params;
-
-  depends("browse:related");
   try {
-    let ingredient: IngredientBrowse | null = null;
-    let cachedIngredient = await redis.get(slug);
-    let photo = null;
-
-    if (cachedIngredient !== null) {
-      ingredient = JSON.parse(cachedIngredient);
-    } else {
-      const endpoint = `/axum/browse/${slug}/`;
-      const response = await fetch(endpoint);
-      if (!response.ok) {
-        throw new Error("Failed to fetch ingredient data from API");
-      }
-      ingredient = await response.json();
-      await redis.set(slug, JSON.stringify(ingredient), "EX", 3600);
+    const endpoint = `/axum/browse/${slug}`;
+    const response = await fetch(endpoint);
+    if (!response.ok) {
+      throw new Error("Failed to fetch ingredient data from API");
     }
-
-    const query = ingredient.descriptors;
-    let cachedPhoto = await redis.get(`${query}-photo`);
-
-    if (cachedPhoto !== null) {
-      photo = JSON.parse(cachedPhoto);
-    } else {
-      const unsplashURL = getUnsplashURL(query);
-      const unsplashResponse = await fetch(unsplashURL);
-      if (!unsplashResponse.ok) {
-        throw new Error("Failed to fetch photo from Unsplash");
-      }
-      photo = await unsplashResponse.json();
-      await redis.set(`${query}-photo`, JSON.stringify(photo), "EX", 3600);
-    }
-
-    return { ingredient, photo };
+    const ingredient: IngredientBrowse = await response.json();
+    await redis.set(slug, JSON.stringify(ingredient), "EX", 3600);
+    console.log(ingredient)
+    return { ingredient };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {

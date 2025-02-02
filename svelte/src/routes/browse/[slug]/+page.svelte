@@ -14,16 +14,17 @@
   import { setContext } from "svelte";
   import { user } from "$lib/stores";
 
-  export let data: PageServerData;
-
   const editing = writable(false);
   setContext("editing", editing);
 
+  let { data } = $props();
   let ingredient: IngredientBrowse = data.ingredient;
   let suggestion: IngredientBrowse = ingredient;
 
+  console.log(data);
+
   const unsplashData = data.photo;
-  let href = "https://unsplash.com";
+  let href = $state("https://unsplash.com");
   if (data.photo) {
     href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
   }
@@ -32,28 +33,28 @@
   let useMessage =
     ingredient.use || "Nobody has told us how to use this ingredient yet";
   let relatedIngredients =
-    Array.isArray(ingredient.related_ingredients) &&
-    ingredient.related_ingredients.length > 0
-      ? ingredient.related_ingredients
-      : [{ common_name: "Nobody knows", slug: "" }];
+    Array.isArray(ingredient.relatedIngredients) &&
+    ingredient.relatedIngredients.length > 0
+      ? ingredient.relatedIngredients
+      : [{ commonName: "Nobody knows", slug: "" }];
   let origin = ingredient.origin || "Earth";
-  let otherNames = ingredient.other_names || "Nobody knows";
+  let otherNames = ingredient.otherNames || "Nobody knows";
   let ifraStatus =
-    ingredient.is_restricted === true ? "Restricted" : "Not restricted";
+    ingredient.isRestricted === true ? "Restricted" : "Not restricted";
 
-  const description = `Discover ${ingredient.common_name}. ${ingredient.descriptors}. Explore similar ingredients and fragrances at BCF.`;
-  const keywords = `${ingredient.common_name}, ${ingredient.descriptors}, ${ingredient.other_names}, ${ingredient.cas}, ${ingredient.origin}, ${ingredient.volatility}, fragrance, BCF, ingredient, perfume, perfumery`;
+  const description = `Discover ${ingredient.commonName}. ${ingredient.descriptors}. Explore similar ingredients and fragrances at BCF.`;
+  const keywords = `${ingredient.commonName}, ${ingredient.descriptors}, ${ingredient.otherNames}, ${ingredient.cas}, ${ingredient.origin}, ${volatility}, fragrance, BCF, ingredient, perfume, perfumery`;
 </script>
 
 <MetaData
-  title={ingredient.common_name}
+  title={ingredient.commonName}
   {description}
   {keywords}
   ogUrl={`https://bcfapp.app/browse/${ingredient.slug}`}
 />
 
 <AppWrap
-  class="caret-navy-700 selection:bg-navy-700 selection:text-navy-50 select-text justify-between"
+  class="caret-navy-700 selection:bg-navy-700 selection:text-navy-50 justify-between select-text"
 >
   <div
     id="header"
@@ -62,8 +63,8 @@
     <div class="my-4 w-full md:my-0">
       <h1 class="">
         <VariableInput
-          text={ingredient.common_name}
-          bind:value={suggestion.common_name}
+          text={ingredient.commonName}
+          bind:value={suggestion.commonName}
           class="font-quicksand text-3xl font-bold md:text-4xl lg:text-5xl xl:text-7xl"
         />
       </h1>
@@ -76,7 +77,7 @@
         <button
           type="submit"
           class="rounded border-2 border-stone-500 px-2 py-1 lg:px-6 lg:py-2"
-          on:click={() => editing.set(false)}
+          onclick={() => editing.set(false)}
         >
           Cancel
         </button>
@@ -90,26 +91,26 @@
           <input type="hidden" name="ingredient" value={suggestion.id} />
           <input
             type="hidden"
-            name="common_name"
-            bind:value={suggestion.common_name}
+            name="commonName"
+            bind:value={suggestion.commonName}
           />
           <input type="hidden" name="cas" bind:value={suggestion.cas} />
           <input type="hidden" name="use" bind:value={suggestion.use} />
           <input
             type="hidden"
-            name="is_restricted"
-            bind:value={suggestion.is_restricted}
+            name="isRestricted"
+            bind:value={suggestion.isRestricted}
           />
           <input type="hidden" name="origin" bind:value={suggestion.origin} />
           <input
             type="hidden"
             name="similar_ingredients"
-            bind:value={suggestion.related_ingredients}
+            bind:value={suggestion.relatedIngredients}
           />
           <input
             type="hidden"
-            name="other_names"
-            bind:value={suggestion.other_names}
+            name="otherNames"
+            bind:value={suggestion.otherNames}
           />
           <input
             type="hidden"
@@ -144,7 +145,7 @@
         </form>
         <button
           disabled={!$user.is_authenticated}
-          on:click={() => editing.set(!$editing)}
+          onclick={() => editing.set(!$editing)}
           class="rounded border-2 border-stone-500 px-2 py-1 disabled:border-stone-300 disabled:text-stone-400 lg:px-6 lg:py-2"
         >
           Edit
@@ -159,7 +160,7 @@
   >
     <div id="left-part" class="flex w-full flex-col space-y-8 pr-8 md:w-2/3">
       <div
-        class="flex flex-col space-y-4 md:flex-row md:space-x-8 md:space-y-0"
+        class="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-8"
       >
         <div>
           <Label>descriptors</Label>
@@ -188,13 +189,13 @@
       </div>
       <div class="flex flex-col space-y-4">
         <div
-          class="flex w-full max-w-2xl flex-col space-y-4 md:flex-row md:space-x-8 md:space-y-0"
+          class="flex w-full max-w-2xl flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-8"
         >
           <div>
             <Label>volatility</Label>
             <VariableInput
               text={volatility}
-              bind:value={suggestion.is_restricted}
+              bind:value={suggestion.isRestricted}
               class=" xl:text-2xl"
             />
           </div>
@@ -202,7 +203,7 @@
             <Label>restricted</Label>
             <VariableInput
               text={ifraStatus}
-              bind:value={suggestion.is_restricted}
+              bind:value={suggestion.isRestricted}
               class=" xl:text-2xl"
             />
           </div>
@@ -220,7 +221,7 @@
           {#if $editing}
             <input
               type="text"
-              bind:value={suggestion.related_ingredients}
+              bind:value={suggestion.relatedIngredients}
               placeholder="related ingredients"
               class="rounded border-none border-stone-500 bg-transparent p-0 ring-0 focus:border-stone-500 focus:ring-0 xl:text-2xl dark:bg-stone-800
           "
@@ -232,7 +233,7 @@
                 href="/browse/{related.slug}"
                 data-sveltekit-reload
               >
-                {related.common_name};
+                {related.commonName};
               </a>
             {/each}
           {/if}
@@ -241,7 +242,7 @@
           <Label>also known as</Label>
           <VariableTextarea
             text={otherNames}
-            bind:value={suggestion.other_names}
+            bind:value={suggestion.otherNames}
             class=""
           />
         </div>
@@ -251,12 +252,12 @@
     <div id="right-part" class="relative flex-1 overflow-hidden">
       {#if unsplashData}
         <img
-          alt={ingredient.common_name}
+          alt={ingredient.commonName}
           src={unsplashData.urls.regular}
           class="aspect-square h-full w-full rounded object-cover"
         />
         <p
-          class="absolute bottom-2 right-2 rounded bg-stone-50 px-2 py-1 text-sm italic text-stone-900 bg-blend-screen"
+          class="absolute right-2 bottom-2 rounded bg-stone-50 px-2 py-1 text-sm text-stone-900 italic bg-blend-screen"
         >
           Photo by <a {href}>{unsplashData.user.name}</a> on
           <a href="https://unsplash.com/?utm_source=bcf&utm_medium=referral"

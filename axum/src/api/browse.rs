@@ -5,16 +5,16 @@ use axum::extract::{Json, Path, Query, State};
 
 pub async fn fetch_browse(
     State(state): State<AppState>,
-    Path(id): Path<String>,
+    Path(slug): Path<String>,
 ) -> Result<Json<Option<BrowseIngredient>>, DbError> {
     let lesson = sqlx::query_as!(
         BrowseIngredient,
         r#"
         SELECT *
         FROM ingredients
-        WHERE id = $1
+        WHERE slug = $1
         "#,
-        id,
+        slug,
     )
     .fetch_optional(&state.db)
     .await?;
