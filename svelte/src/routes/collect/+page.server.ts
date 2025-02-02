@@ -1,100 +1,50 @@
-import redis from "$lib/redisClient";
 import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import type { IngredientCollection } from "$lib/types";
 
 
-export const load: PageServerLoad = async ({ cookies, fetch }) => {
+export const load: PageServerLoad = async ({ fetch }) => {
   try {
-    const sessionid = cookies.get("sessionid");
 
-    if (!sessionid) {
-      throw error(401, "Unauthorized");
-    }
-
-    const cacheKey = `collection-${sessionid}`;
-    const value = await redis.get(cacheKey);
-    if (value !== null) {
-      return {
-        collection: JSON.parse(value),
-      };
-    }
-
-    const endpoint = `/axum/collection/new/api/collection/`;
+    const endpoint = `/axum/collect`;
 
     const response = await fetch(endpoint, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: `sessionid=${sessionid}`,
-      },
     });
 
     if (!response.ok) {
-      if (response.status === 403) {
-        throw error(403, "Forbidden"); // Properly throw the 403 error
-      } else {
-        throw error(response.status, "Failed to fetch collection data");
-      }
+      throw error(response.status, "Failed to fetch collection data");
     }
 
     const data: IngredientCollection[] = await response.json();
-
-    // Cache the result
-    await redis.set(cacheKey, JSON.stringify(data), "EX", 1800);
 
     return {
       collection: data,
     };
   } catch (err: any) {
-    // Ensure all thrown errors are caught
     if (err.status) {
       throw error(err.status, err.body);
     }
-    throw error(500, "Internal Server Error"); // Catch any unexpected errors
+    throw error(500, "Internal Server Error");
   }
 };
 
 export const actions = {
-  create: async ({ cookies, request }) => {
-    const sessionid = cookies.get("sessionid");
-    const csrfToken = cookies.get("csrftoken");
-
-    if (!sessionid) {
-      throw error(401, "Unauthorized");
-    }
+  create: async ({ fetch }) => {
 
     const response = await fetch(
-      `/axum/collection/new/api/ingredient/create/`,
+      `/axum/collect`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-          Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
-        },
-        credentials: "include",
       },
     );
 
     if (response.ok) {
-      redis.del(`collection-${sessionid}`);
-      const data = await response.json();
-      redirect(301, data.url);
+      const newIngredient = await response.json();
+      redirect(301, `/collect/${newIngredient.id}`);
     } else {
-      const errorData = await response.json();
 
-      return { success: false, error: response.error || "An error occurred" };
+      return error(500);
     }
-  },
-  reset: async ({ cookies }) => {
-    const sessionid = cookies.get("sessionid");
-
-    if (!sessionid) {
-      throw error(401, "Unauthorized");
-    }
-
-    redis.del(`collection-${sessionid}`);
-    redirect(301, "/collect");
-  },
+  }
 } satisfies Actions;

@@ -8,17 +8,6 @@
   import { CircleUser, InfoIcon } from "lucide-svelte";
   import MenuHeader from "./UI/MenuHeader.svelte";
 
-  onMount(() => {
-    user.subscribe((value) => {
-      is_authenticated = value.is_authenticated;
-      username = value.username;
-    });
-  });
-
-  let is_authenticated = $user.is_authenticated;
-
-  let username = $user.username;
-
   $: currentPath = $page.url.pathname;
   $: currentPage = currentPath.split("/")[1] || "welcome to bcf";
 </script>
@@ -49,26 +38,29 @@
 
         <div
           id="user"
-          class="mb-auto ml-auto mt-auto flex flex-row items-center justify-center space-x-4"
+          class="mt-auto mb-auto ml-auto flex flex-row items-center justify-center space-x-4"
         >
-          {#if is_authenticated}
-            <a
-              href="https://docs.bcfapp.app"
-              title="learn to use BCF"
-              class=" hover:text-gold-400 transition-all"
-            >
-              <InfoIcon />
-            </a>
+          {#if $user.username}
+            <div class="hidden w-1/6 min-w-fit items-center space-x-4 md:flex">
+              <p class="flex-shrink text-sm">
+                {$user.username}
+              </p>
+              <a
+                href="https://docs.bcfapp.app"
+                title="learn to use BCF"
+                class=" hover:text-gold-400 transition-all"
+              >
+                <InfoIcon />
+              </a>
 
-            <a
-              id="profile"
-              href="/profile"
-              aria-label={username}
-              title="{username}'s profile"
-              class="hover:text-gold-400 transition-all"
-            >
-              <CircleUser />
-            </a>
+              <a
+                id="profile"
+                href="/profile"
+                class="hover:text-gold-400 transition-all"
+              >
+                <CircleUser />
+              </a>
+            </div>
           {:else}
             <a href="/auth/login" class="hover:text-gold-400 transition-all"
               >login</a
@@ -83,27 +75,17 @@
         role="banner"
       >
         <nav id="navbar" class="flex flex-row text-sm md:mt-2 md:text-base">
-          <!-- Permanent placeholder or minimal content -->
-
-          <div
-            in:fade={{ duration: 500 }}
-            out:fade={{ duration: 200 }}
-            role="button"
-            tabindex="0"
-            class="z-10"
-          >
-            <ul class="flex space-x-5">
-              <li class="hover:text-navy-700 transition-all">
-                <a href="/browse"> browse </a>
-              </li>
-              <li class=" hover:text-grapefruit-700 transition-all">
-                <a href="/collect">collect</a>
-              </li>
-              <li class=" hover:text-aqua-700 transition-all">
-                <a href="/formulate">formulate</a>
-              </li>
-            </ul>
-          </div>
+          <ul class="flex space-x-5">
+            <li class="hover:text-navy-700 transition-all">
+              <a href="/browse"> browse </a>
+            </li>
+            <li class=" hover:text-grapefruit-700 transition-all">
+              <a href="/collect">collect</a>
+            </li>
+            <li class=" hover:text-aqua-700 transition-all">
+              <a href="/formulate">formulate</a>
+            </li>
+          </ul>
         </nav>
       </div>
     </div>

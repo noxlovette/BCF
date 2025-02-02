@@ -40,10 +40,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 
 export const handleFetch: HandleFetch = async ({ request, event, fetch }) => {
+
   const url = new URL(request.url);
+  const searchParams = url.searchParams.toString();
   if (url.pathname.startsWith('/axum/')) {
     const cleanPath = url.pathname.replace('/axum/', '/');
     const newUrl = new URL(cleanPath, env.BACKEND_URL);
+    newUrl.search = searchParams;
     request = new Request(newUrl, request);
   }
 

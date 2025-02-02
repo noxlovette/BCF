@@ -178,7 +178,7 @@
         {/if}
       {/if}
       <div class="mt-4 flex flex-row items-center justify-center">
-        <h3 class="mr-auto mt-4 flex text-sm opacity-60">email change</h3>
+        <h3 class="mt-4 mr-auto flex text-sm opacity-60">email change</h3>
         {#if email}
           <span
             class:valid={validEmail}
@@ -195,7 +195,7 @@
       />
 
       <div class="mt-4 flex flex-row items-center justify-center">
-        <h3 class="mr-auto mt-4 text-sm opacity-60">username change</h3>
+        <h3 class="mt-4 mr-auto text-sm opacity-60">username change</h3>
         {#if username}
           <span
             class:valid={validUsername}
@@ -289,9 +289,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  .valid {
-    @apply text-aqua-600/60;
-  }
-</style>
