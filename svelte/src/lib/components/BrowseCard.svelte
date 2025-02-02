@@ -5,7 +5,7 @@
 </script>
 
 <Card
-  header={ingredient.common_name}
+  header={ingredient.commonName}
   body={ingredient.cas}
   href={`/browse/${ingredient.slug}`}
 />

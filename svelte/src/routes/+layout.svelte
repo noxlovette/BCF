@@ -5,6 +5,8 @@
   import "../app.css";
   import MetaData from "$lib/components/MetaData.svelte";
   import Loader from "$lib/components/Loader.svelte";
+
+  let { children } = $props();
 </script>
 
 <MetaData />
@@ -19,7 +21,7 @@
     overscroll-contain
     md:my-0"
   >
-    <slot />
+    {@render children()}
   </div>
   <Loader />
   <Notification />

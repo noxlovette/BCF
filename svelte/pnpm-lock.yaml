@@ -32,9 +32,6 @@ importers:
       jose:
         specifier: ^5.9.6
         version: 5.9.6
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
       lucide-svelte:
         specifier: ^0.474.0
         version: 0.474.0(svelte@5.19.6)

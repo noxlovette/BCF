@@ -2,17 +2,17 @@ export interface IngredientBrowse {
     id: number;
     slug?: string;
     cas: string;
-    common_name: string;
+    commonName: string;
     descriptors: string;
-    ingredient_type?: string;
-    is_restricted?: boolean;
+    ingredientType?: string;
+    isRestricted?: boolean;
     origin?: string;
-    other_names: string;
+    otherNames: string;
     use: string;
-    similar_ingredients: IngredientBrowse[];
+    similarIngredients: IngredientBrowse[];
     volatility: string;
-    related_ingredients: {
-        common_name: string;
+    relatedIngredients: {
+        commonName: string;
         slug: string;
     };
     contributors: User[];
