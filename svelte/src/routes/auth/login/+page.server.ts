@@ -1,55 +1,51 @@
 import { error, fail } from "@sveltejs/kit";
 import type { Actions } from "./$types";
+import { parseCookieOptions } from "$lib/server/cookies";
+import { ValidateAccess } from "$lib/server/refresh";
 
 export const actions = {
-  login: async ({ request, cookies, fetch }) => {
+  default: async ({ request, fetch, cookies }) => {
     const data = await request.formData();
-    const csrfToken = cookies.get("csrftoken");
-    const sessionid = cookies.get("sessionid");
     const username = data.get("username");
-    const password = data.get("password");
+    const pass = data.get("password");
 
-    if (!username || !password) {
-      return { success: false, error: "Username and password are required" };
+    if (!username || !pass) {
+      return fail(422, { message: "Username, anyone?" });
     }
 
-
-
-    const endpoint = `/axum/api/login/`;
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch('/axum/auth/signin', {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-          Cookie: `sessionid=${sessionid}; csrftoken=${csrfToken}`,
-        },
-        body: JSON.stringify({ username, password }),
-        credentials: "include",
+        body: JSON.stringify({ username, pass }),
       });
       if (!response.ok) {
-        throw error(401, "Login failed");
+        return error(500, "Login failed");
       }
 
-      const userData = await response.json();
+      response.headers.getSetCookie().forEach((cookie) => {
+        const [fullCookie, ...opts] = cookie.split(';');
+        const [name, value] = fullCookie.split('=');
 
-      cookies.set("sessionid", userData.sessionid, { path: "/" });
+        const cookieOptions = parseCookieOptions(opts);
+        cookies.set(name, value, cookieOptions);
+      });
+
+      const { accessToken } = await response.json();
+      const user = await ValidateAccess(accessToken);
+
+      if (!user) {
+        return fail(401, {
+          message: 'Invalid access token'
+        });
+      }
 
       return {
         success: true,
-        user: {
-          username: userData.username,
-          email: userData.email,
-          isAuthenticated: true,
-        },
+        user
       };
     } catch (error) {
-      console.error("Error logging in:", error);
-      return {
-        success: false,
-        error:
-          error instanceof Error ? error.message : "An unknown error occurred",
-      };
+      console.error(error);
+      return error(500, { message: "An unknown error occurred" })
     }
   },
 } satisfies Actions;

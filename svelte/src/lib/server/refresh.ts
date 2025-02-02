@@ -8,6 +8,8 @@ export async function ValidateAccess(jwt: string) {
     const alg = env.alg || 'RS256';
     const publicKey = await importSPKI(spki, alg);
 
+    console.log(publicKey)
+
     const { payload } = await jwtVerify(jwt, publicKey, {
         issuer: 'auth:auth'
     });

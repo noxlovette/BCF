@@ -1,5 +1,6 @@
 // src/stores.ts
 import { writable } from "svelte/store";
+import type { Toast } from "./types";
 
 // Define the individual stores
 export let isAuthenticated = writable(false);
@@ -30,10 +31,6 @@ export function clearUser() {
   }));
 }
 
-export const notification = writable({
-  message: "",
-  type: "none",
-});
 
 export const editedFormula = writable({
   id: "",
@@ -43,3 +40,16 @@ export const editedFormula = writable({
   notes: "",
   ingredients: [],
 });
+
+
+export const notification = writable<Toast>({
+  message: null,
+  type: null
+});
+
+export function clearNotification() {
+  notification.update(() => ({
+    message: null,
+    type: null
+  }));
+}

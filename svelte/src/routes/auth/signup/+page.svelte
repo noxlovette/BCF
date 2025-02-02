@@ -80,7 +80,7 @@
     class="m-10 flex flex-col items-center justify-center"
   >
     <form
-      class="flex h-[600px] w-[380px] flex-col items-start justify-start rounded bg-white p-8 shadow dark:bg-stone-900"
+      class="mt-8 max-w-md space-y-6 rounded-lg bg-white p-3 dark:bg-stone-900"
       in:fade={{
         duration: 100,
         easing: quintOut,
@@ -95,17 +95,17 @@
       <input
         type="text"
         name="username"
-        class="my-2 mt-8 w-full rounded border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
+        class="focus:ring-gold-300 mt-8 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
         placeholder="username"
         required
         bind:value={username}
       />
 
-      <div id="handle email" class="mb-4 flex items-center justify-center">
+      <div id="handle email" class="flex items-center justify-center">
         <input
           type="email"
           name="email"
-          class="my-2 mr-auto w-[225] rounded border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
+          class="focus:ring-gold-300 rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
           placeholder="email"
           bind:value={email}
         />
@@ -119,13 +119,13 @@
         <input
           type="password"
           name="password"
-          class="my-2 mr-auto w-[225] rounded border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
+          class="focus:ring-gold-300 mr-auto rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
           placeholder="password"
           bind:value={password}
         />
         <span
           class:valid={validCase}
-          class="mx-4 size-[40px] rounded bg-stone-50 p-2 normal-case text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+          class="mx-4 size-[40px] rounded bg-stone-50 p-2 text-stone-900/60 normal-case shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
         >
           aZ
         </span>
@@ -139,7 +139,7 @@
       <div class="flex items-center justify-center" id="handle 2nd pass">
         <input
           type="password"
-          class="my-2 mr-auto w-[225] rounded border-none bg-stone-50 shadow-inner focus:ring-2 focus:ring-gold-300 dark:bg-stone-800"
+          class="focus:ring-gold-300 rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
           placeholder="repeat"
           bind:value={confirmPassword}
         />
@@ -156,37 +156,30 @@
       </div>
       <div
         id="paperwork"
-        class="my-4 flex flex-row items-center justify-between space-x-4"
+        class="flex flex-row items-center justify-between space-x-4"
       >
         <a
           href="/paperwork/terms-of-service"
           on:mousedown={() => sessionStorage.setItem("terms", "true")}
-          class="text-stone-900/80 hover:text-gold-400 dark:text-stone-50/80"
+          class="hover:text-gold-400 text-stone-900/80 dark:text-stone-50/80"
           >agree to the terms</a
         >
         <input
           type="checkbox"
           bind:checked={agreeTerms}
-          class="shadow-inline size-4 rounded border-none bg-stone-50 text-aqua-500 ring-2 ring-stone-300/50 transition-all checked:bg-aqua-500 checked:ring-gold-300 hover:scale-110 hover:checked:bg-gold-300 focus:ring-aqua-700 active:scale-90 dark:bg-stone-800"
+          class="shadow-inline text-aqua-500 checked:bg-aqua-500 checked:ring-gold-300 hover:checked:bg-gold-300 focus:ring-aqua-700 size-4 rounded border-none bg-stone-50 ring-2 ring-stone-300/50 transition-all hover:scale-110 active:scale-90 dark:bg-stone-800"
         />
       </div>
       <button
         type="submit"
-        class="text-5xl font-bold tracking-tighter hover:text-gold-400 active:scale-90 disabled:text-stone-400/70"
+        class="hover:text-gold-400 text-5xl font-bold tracking-tighter active:scale-90 disabled:text-stone-400/70"
         disabled={!allValid}>go</button
       >
       <a
         href="/auth/login"
-        class="mt-auto flex text-sm opacity-60 transition-all hover:text-gold-400 hover:opacity-100"
+        class="hover:text-gold-400 mt-auto flex text-sm opacity-60 transition-all hover:opacity-100"
         >have an account? sign in</a
       >
     </form>
   </div>
 </div>
-
-<style>
-  .valid {
-    @apply text-aqua-50;
-    @apply bg-aqua-500;
-  }
-</style>

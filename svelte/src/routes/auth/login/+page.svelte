@@ -1,40 +1,46 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import { enhance } from "$app/forms";
   import { fade } from "svelte/transition";
-  import { quintOut } from "svelte/easing";
-  import { notification, user } from "$lib/stores";
+  import { notification, setUser } from "$lib/stores";
+  import { redirect } from "@sveltejs/kit";
+  import { goto } from "$app/navigation";
 
-  let username = "";
-  let password = "";
-
-  const handleLoginResult = async ({ result, update }) => {
-    if (result.type === "success") {
-      $user.is_authenticated = true;
-      localStorage.setItem("user", result.data.user);
-      notification.set({ message: "Welcome back!", type: "success" });
-      await goto("/collect/");
-    } else {
-      notification.set({
-        message: result.data.error || "Login failed",
-        type: "error",
-      });
-    }
-    update();
-  };
+  let username = $state("");
+  let password = $state("");
+  let isSubmitting = $state(false);
 </script>
 
 <div class="mx-auto xl:max-w-7xl">
   <div id="authentification" class="m-10 flex flex-col items-center p-10">
     <form
       method="POST"
-      action="?/login"
-      use:enhance={() => handleLoginResult}
-      class="flex flex-col items-start justify-start rounded bg-white p-8 shadow dark:bg-stone-900"
-      in:fade={{
-        duration: 100,
-        easing: quintOut,
+      use:enhance={() => {
+        isSubmitting = true;
+
+        return async ({ result }) => {
+          isSubmitting = false;
+
+          if (result.type === "success" && result.data) {
+            const { user } = result.data;
+            setUser(user);
+            localStorage.setItem("user", JSON.stringify(user));
+            notification.set({ message: "Welcome home", type: "success" });
+            goto("/");
+          } else if (result.type === "failure") {
+            notification.set({
+              message: String(result.data?.message) || "Something's off",
+              type: "info",
+            });
+          } else if (result.type === "error") {
+            notification.set({
+              message: String(result.error?.message) || "Something's off",
+              type: "error",
+            });
+          }
+        };
       }}
+      class="mt-8 max-w-md space-y-6 rounded-lg bg-white p-3 dark:bg-stone-900"
+      in:fade
     >
       <h1 class="mb-8 border-b-2 text-6xl font-bold tracking-tighter">
         sign in<span class="text-gold-400">.</span>

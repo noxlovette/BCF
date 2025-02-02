@@ -1,6 +1,7 @@
 import type { Handle, HandleFetch } from "@sveltejs/kit";
 import { env } from '$env/dynamic/private';
 import { handleTokenRefresh, ValidateAccess } from "$lib/server/refresh";
+import type { JWTPayload } from "jose";
 import { redirect } from '@sveltejs/kit';
 
 const PROTECTED_PATHS = new Set(['/collect/', '/formulate/']);
@@ -20,7 +21,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   const accessToken = event.cookies.get('accessToken');
-  let user = null;
+  let user: JWTPayload;
   if (accessToken) {
     try {
       user = await ValidateAccess(accessToken);

@@ -85,3 +85,8 @@ export interface FormulaIngredient {
     unit: string;
     counterpart?: IngredientCollection;
 }
+
+export interface Toast {
+    message: string | null;
+    type: 'success' | 'error' | 'info' | null;
+}
