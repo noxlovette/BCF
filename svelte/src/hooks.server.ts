@@ -3,8 +3,9 @@ import { env } from '$env/dynamic/private';
 import { handleTokenRefresh, ValidateAccess } from "$lib/server/refresh";
 import type { JWTPayload } from "jose";
 import { redirect } from '@sveltejs/kit';
+import { RefreshCcwDotIcon } from "lucide-svelte";
 
-const PROTECTED_PATHS = new Set(['/collect/', '/formulate/']);
+const PROTECTED_PATHS = new Set(['/collect', '/formulate']);
 
 function isProtectedPath(path: string): boolean {
   return (
@@ -21,6 +22,9 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   const accessToken = event.cookies.get('accessToken');
+
+  console.log("TOKEN FROM HANDLE", accessToken)
+
   let user: JWTPayload;
   if (accessToken) {
     try {

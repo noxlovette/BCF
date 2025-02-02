@@ -8,12 +8,9 @@ export async function ValidateAccess(jwt: string) {
     const alg = env.alg || 'RS256';
     const publicKey = await importSPKI(spki, alg);
 
-    console.log(publicKey)
-
     const { payload } = await jwtVerify(jwt, publicKey, {
         issuer: 'auth:auth'
     });
-
 
     const EXPIRY_BUFFER = 30;
     if (payload.exp && typeof payload.exp === 'number') {
@@ -47,11 +44,14 @@ export async function handleTokenRefresh(event: RequestEvent) {
             }
         });
 
+        console.debug("THE FYCJUING REFRESH REQUEST", refreshRes)
+
         if (!refreshRes.ok) {
             throw new Error('Refresh failed');
         }
 
         const newAccessToken = event.cookies.get('accessToken');
+        console.log(newAccessToken)
         if (newAccessToken) {
             return await ValidateAccess(newAccessToken);
         }

@@ -12,10 +12,6 @@
 
   let { data } = $props();
 
-  searchTerm.set(page.url.searchParams.get("search"));
-  pageSize.set(Number(page.url.searchParams.get("page_size")));
-  currentPage.set(Number(page.url.searchParams.get("page")));
-
   $effect(() => {
     goto(
       `/browse?search=${$searchTerm}&page_size=${$pageSize}&page=${$currentPage}`,

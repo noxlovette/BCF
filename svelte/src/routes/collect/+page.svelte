@@ -2,13 +2,13 @@
   import { onMount } from "svelte";
   import { goto, invalidateAll } from "$app/navigation";
   import CreateButton from "$lib/components/UI/CreateButton.svelte";
-  import { changePage } from "$lib/utils";
+
   import CollectCard from "$lib/components/CollectCard.svelte";
   import MetaData from "$lib/components/MetaData.svelte";
   import PerPage from "$lib/components/UI/PerPage.svelte";
 
   import ResetButton from "$lib/components/UI/ResetButton.svelte";
-  import { handleKeydown } from "$lib/utils";
+
   import { currentPage, pageSize, searchTerm } from "$lib/stores";
   import type { PageServerData } from "../$types";
   import Pagination from "$lib/components/UI/Pagination.svelte";
@@ -33,30 +33,7 @@
   $: endIndex = Math.min(startIndex + $pageSize, totalItems);
   $: paginatedCollection = filteredCollection.slice(startIndex, endIndex);
 
-  onMount(() => {
-    filteredCollection = collection;
-    updatePagination();
-  });
-
-  function updatePagination() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const pageFromUrl = parseInt(urlParams.get("p") || "1");
-    const searchFromUrl = urlParams.get("q") || "";
-    const pageSizeFromUrl = parseInt(urlParams.get("s") || "50");
-
-    currentPage.set(pageFromUrl);
-    searchTerm.set(searchFromUrl);
-    pageSize.set(pageSizeFromUrl);
-  }
-
-  async function updatePageSize() {
-    currentPage.set(1);
-  }
-
-  async function handleChangePage(increment: number) {
-    const newPage = await changePage(increment, totalPages, $currentPage);
-    currentPage.set(newPage);
-  }
+  filteredCollection = collection;
 
   $: filteredCollection = collection.filter((ingredient) => {
     const commonName = ingredient.common_name || "";
@@ -76,24 +53,21 @@
   description="Collect perfume ingredients. Leave comments, manage your laboratory."
   ogUrl="https://bcfapp.app/collect"
 />
-<svelte:window
-  on:keydown={handleKeydown(searchInput, handleChangePage, $searchTerm)}
-/>
 
 <AppWrap class="text-center md:text-left">
   {#if $searchTerm === ""}
-    <h2 class="my-4 font-quicksand text-3xl font-bold" in:fade>
+    <h2 class="font-quicksand my-4 text-3xl font-bold" in:fade>
       Showing all ingredients
     </h2>
   {:else}
-    <h2 class="my-4 font-quicksand text-3xl font-bold" in:fade>
+    <h2 class="font-quicksand my-4 text-3xl font-bold" in:fade>
       Showing {totalItems} results for "{$searchTerm}"
     </h2>
   {/if}
   <SearchBar>
-    <Search bind:searchInput />
+    <Search />
 
-    <PerPage on:updatePageSize={updatePageSize} />
+    <PerPage />
     <form
       method="post"
       action="?/create"
@@ -110,10 +84,7 @@
       <ResetButton />
     </form>
 
-    <Pagination
-      on:nextPage={() => handleChangePage(1)}
-      on:prevPage={() => handleChangePage(-1)}
-    />
+    <Pagination />
   </SearchBar>
 
   <div id="table-wrapper" class="my-8 flex w-full items-center justify-center">
