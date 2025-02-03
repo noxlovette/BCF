@@ -28,7 +28,7 @@
   robots="noindex, nofollow"
 />
 
-<div class="">
+<div class="flex size-full flex-col">
   <div
     class="border-peach-500 flex w-full flex-col-reverse items-baseline justify-between space-y-2 border-b-2 md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
   >

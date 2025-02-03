@@ -1,26 +1,33 @@
 <script lang="ts">
+  import { fade } from "svelte/transition";
+
   export let header: string;
   export let body: string;
   export let href: string;
+
+  const isSpecial = body === "0000-00-0" || header === "New Formula";
 </script>
 
 <a
   id="card-small"
-  class="font- group border-gold-400 font-quicksand hover:bg-gold-700 hover:text-gold-50 dark:border-gold-900 dark:hover:bg-gold-800 flex flex-col items-start justify-between space-y-2 overflow-clip rounded border bg-zinc-50 p-4 text-left shadow transition-all hover:scale-105 hover:shadow-lg dark:bg-zinc-800
-{$$props.class} {body === '0000-00-0' ? 'bg-peach-400' : ''} {header ===
-  'New Formula'
-    ? 'bg-peach-400'
-    : ''}
-  "
   {href}
+  class="group flex flex-col justify-between rounded-lg border-2 p-5
+         {isSpecial
+    ? 'bg-peach-400 border-peach-500'
+    : 'border-gold-400 dark:border-gold-900 bg-zinc-50 dark:bg-zinc-800'}
+         hover:bg-gold-700 hover:border-gold-600 hover:text-gold-50 shadow-sm transition-all
+         duration-300 hover:scale-102 hover:shadow-md"
   tabindex="0"
+  transition:fade
 >
-  <h1
-    class="text-gold-800 group-hover:text-gold-50 text-2xl tracking-tighter hyphens-auto"
+  <h2
+    class="group-hover:text-gold-50 mb-2 text-xl font-semibold tracking-tight
+           {isSpecial ? 'text-peach-900' : 'text-gold-800'}"
   >
     {header}
-  </h1>
-  <p class="group-hover:text-gold-50 min-w-fit text-clip opacity-60">
+  </h2>
+
+  <p class="group-hover:text-gold-50 text-sm opacity-80 group-hover:opacity-90">
     {body}
   </p>
 </a>

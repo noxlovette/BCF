@@ -6,7 +6,6 @@
   import Search from "$lib/components/UI/Search.svelte";
   import CardHolder from "$lib/components/CardHolder.svelte";
   import { searchTerm, pageSize, currentPage, notification } from "$lib/stores";
-  import { page } from "$app/state";
   import Pagination from "$lib/components/UI/Pagination.svelte";
   import { goto } from "$app/navigation";
 

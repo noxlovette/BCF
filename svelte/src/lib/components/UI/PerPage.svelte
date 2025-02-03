@@ -1,20 +1,19 @@
 <script lang="ts">
   import { pageSize } from "$lib/stores";
+
+  const pageSizeOptions = [10, 20, 50, 100];
 </script>
 
-<label
-  class="group hidden items-center space-x-2 opacity-80 transition-opacity hover:opacity-100 md:flex"
-  aria-label="Items per page"
->
-  <input
-    type="number"
-    class="border-gold-400 focus:border-gold-400 focus:ring-gold-400/70 dark:border-gold-900 dark:focus:border-gold-400 dark:focus:ring-gold-400/70 w-16 rounded border bg-zinc-50 px-2 py-2 shadow-sm transition-all duration-300 focus:ring-2 dark:bg-zinc-800"
-    min="1"
+<div class="group relative inline-block">
+  <select
     bind:value={$pageSize}
-    aria-describedby="page-size-tooltip"
-    placeholder="10"
-  />
-  <span class="md:text-md text-sm text-zinc-700 dark:text-zinc-300"
-    >per page</span
+    class="border-gold-400 focus:ring-gold-400/70 dark:border-gold-900 dark:focus:border-gold-400 w-36 appearance-none rounded-lg border-2
+           bg-zinc-50 px-3 py-2 shadow-sm transition-all
+           duration-300 focus:ring-2 dark:bg-zinc-800"
+    aria-label="Items per page"
   >
-</label>
+    {#each pageSizeOptions as size}
+      <option value={size}>{size} per page</option>
+    {/each}
+  </select>
+</div>

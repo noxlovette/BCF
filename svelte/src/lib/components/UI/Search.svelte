@@ -1,26 +1,52 @@
 <script lang="ts">
   import { searchTerm, currentPage } from "$lib/stores";
-  let value = $state($searchTerm);
 
+  let value = $state($searchTerm);
   let { placeholder = "Search Ingredients..." } = $props();
+  let focused = $state(false);
 
   function handleSearch() {
     searchTerm.set(value);
     currentPage.set(1);
+  }
+  function handleFocus() {
+    focused = true;
+  }
+
+  function handleBlur() {
+    focused = false;
   }
 </script>
 
 <form
   id="search-bar"
   action="?search={$searchTerm}"
-  class="flex w-full md:w-1/2"
+  class="relative flex w-full md:w-1/2"
 >
   <input
     type="text"
-    class="border-gold-400 focus:border-gold-200 focus:ring-gold-700/60 dark:border-gold-900 w-full rounded bg-zinc-50 shadow transition-all hover:shadow-lg focus:ring-2 dark:bg-zinc-900"
+    class="border-gold-400 w-full rounded-lg border-2 bg-zinc-50 px-4 py-3
+           shadow transition-all duration-300
+           {focused
+      ? 'ring-gold-700/60 border-gold-200 ring-2'
+      : 'hover:border-gold-300'}
+           dark:border-gold-900 dark:bg-zinc-900 dark:placeholder-zinc-500"
     bind:value
     oninput={handleSearch}
+    onfocus={handleFocus}
+    onblur={handleBlur}
     {placeholder}
-    title="find an ingredient by CAS or the multiple names that it might have"
+    title="Find an ingredient by CAS or name"
   />
+  {#if value}
+    <button
+      type="button"
+      class="absolute top-1/2 right-3 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:text-zinc-600 dark:hover:text-zinc-400"
+      onclick={() => {
+        searchTerm.set("");
+      }}
+    >
+      ×
+    </button>
+  {/if}
 </form>

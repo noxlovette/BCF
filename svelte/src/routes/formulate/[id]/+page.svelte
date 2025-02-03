@@ -1,219 +1,114 @@
 <script lang="ts">
-  import AppWrap from "$lib/components/AppWrap.svelte";
   import Label from "$lib/components/UI/Label.svelte";
-  import { X } from "lucide-svelte";
-  import VariableInput from "$lib/components/UI/VariableInput.svelte";
-  import VariableLabel from "$lib/components/UI/VariableLabel.svelte";
-  import VariableNumericInput from "$lib/components/UI/VariableNumericInput.svelte";
-  import VariableTextarea from "$lib/components/UI/VariableTextarea.svelte";
-  import { editedFormula, notification } from "$lib/stores";
   import type { PageServerData } from "./$types";
-  import { setContext } from "svelte";
-  import { writable, derived } from "svelte/store";
-  import { enhance } from "$app/forms";
   import MetaData from "../../../lib/components/MetaData.svelte";
 
   export let data: PageServerData;
-  let multiplier: number;
+  let multiplier = 1;
   let formula = data.formula;
-
-  const editing = writable(false);
-  setContext("editing", editing);
-
-  editedFormula.set(formula);
-
-  const jsonFullData = derived(editedFormula, ($editedFormula) =>
-    JSON.stringify($editedFormula),
-  );
-
-  function addIngredient() {
-    editedFormula.update((formula) => {
-      return {
-        ...formula,
-        ingredients: [
-          ...formula.ingredients,
-          {
-            commonName: "",
-            amount: 0,
-            percentage: 0,
-            volatility: "heart",
-            formula_id: formula.id,
-            id: null,
-            unit: "g",
-          },
-        ],
-      };
-    });
-  }
-
-  function removeIngredient(index: number) {
-    editedFormula.update((formula) => {
-      return {
-        ...formula,
-        ingredients: formula.ingredients.filter((_, i) => i !== index),
-      };
-    });
-  }
-
-  function handleEnhance() {
-    editing.set(false);
-    formula = $editedFormula;
-    notification.set({ message: "Formula Updated", type: "success" });
-  }
 </script>
 
-<MetaData title={formula.name} />
+<MetaData title={formula.title} />
 
-<div
-  id="header"
-  class="
-    border-aqua-700 flex w-full flex-col-reverse
-    items-baseline justify-between
-    space-y-2
-    border-b-2 md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
->
-  <div class="my-4 w-full md:my-0">
-    <h1 class="">
-      <VariableInput
-        text={formula.name}
-        bind:value={$editedFormula.name}
-        class="font-quicksand text-3xl font-bold md:text-4xl lg:text-5xl xl:text-7xl"
-      />
-    </h1>
-  </div>
+<div class="flex size-full flex-col">
   <div
-    id="controls"
-    class="flex flex-row items-baseline justify-between space-x-4 md:justify-end xl:text-2xl"
+    class="border-aqua-700 flex w-full flex-col-reverse items-baseline justify-between space-y-2 border-b-2 md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
   >
-    {#if $editing}
-      <button
-        type="submit"
-        class="rounded border-2 border-zinc-500 px-2 py-1 lg:px-6 lg:py-2"
-        on:click={() => editing.set(false)}
+    <div class="my-4 w-full md:my-0">
+      <h1
+        class="font-quicksand text-3xl font-bold md:text-4xl lg:text-5xl xl:text-7xl"
       >
-        Cancel
-      </button>
-      <form method="post" action="?/delete" use:enhance>
-        <input type="hidden" name="id" value={formula.id} />
-        <button
-          type="submit"
-          class="rounded border-2 border-zinc-500 px-2 py-1 lg:px-6 lg:py-2"
-        >
-          Delete
-        </button>
-      </form>
-      <form
-        method="post"
-        action="?/update"
-        class=""
-        use:enhance={handleEnhance}
-      >
-        <input type="hidden" name="id" value={$editedFormula.id} />
-        <input type="hidden" name="fullData" bind:value={$jsonFullData} />
-        <button
-          type="submit"
-          class="rounded border-2 border-zinc-500 px-2 py-1 lg:px-6 lg:py-2"
-        >
-          Save
-        </button>
-      </form>
-    {:else}
-      <Label>Showing</Label>
+        {formula.title}
+      </h1>
+    </div>
+
+    <div class="flex flex-row items-center space-x-4">
+      <Label>Quantity</Label>
       <select
-        class="col-start-1 row-start-1 rounded border-2 border-zinc-500 bg-transparent px-4 py-1 ring-0 focus:border-zinc-500 focus:ring-0 lg:px-8 lg:py-2 xl:text-2xl dark:bg-zinc-800"
+        class="rounded border-2 border-zinc-500 bg-transparent px-4 py-1 ring-0 focus:border-zinc-500 focus:ring-0 lg:px-8 lg:py-2"
         bind:value={multiplier}
       >
-        <option value="1">1 kg</option>
-        <option value="2">2 kg</option>
-        <option value="3">3 kg</option>
-        <option value="4">4 kg</option>
-        <option value="5">5 kg</option>
-        <option value="6">6 kg</option>
-        <option value="7">7 kg</option>
-        <option value="8">8 kg</option>
-        <option value="9">9 kg</option>
+        {#each Array(9) as _, i}
+          <option value={i + 1}>{i + 1} kg</option>
+        {/each}
       </select>
-      <button
-        on:click={() => editing.set(!$editing)}
-        class="rounded border-2 border-zinc-500 px-2 py-1 lg:px-6 lg:py-2"
-      >
-        Edit
-      </button>
-    {/if}
-  </div>
-</div>
-
-<div
-  id="center"
-  class="mb-12 grid w-full grid-cols-1 items-baseline gap-4 gap-x-8 py-4 md:grid-cols-2 md:grid-rows-5"
->
-  {#each $editedFormula.ingredients as ingredient, i}
-    <div class="flex flex-row justify-between">
-      <div id="left-part" class="flex flex-col tracking-tight">
-        <VariableLabel
-          text={ingredient.volatility}
-          bind:value={ingredient.volatility}
-        />
-        {#if $editing}
-          <input
-            type="text"
-            bind:value={ingredient.commonName}
-            placeholder={ingredient.commonName}
-            class="rounded border-none border-zinc-500 bg-transparent p-0 ring-0 focus:border-zinc-500 focus:ring-0
-  xl:text-2xl dark:bg-zinc-800
-  "
-          />
-        {:else}
-          <a
-            href="/collect/{ingredient.counterpart}"
-            class=" hover:text-aqua-700 transition-colors xl:text-2xl"
-          >
-            {ingredient.commonName}
-          </a>
-        {/if}
-      </div>
-
-      <div id="right-part" class="grid w-36 grid-cols-2 text-right">
-        <VariableNumericInput
-          number={ingredient.amount * multiplier}
-          bind:value={ingredient.amount}
-          class="mt-auto flex-shrink-0"
-        />
-        <VariableNumericInput
-          number={ingredient.percentage}
-          bind:value={ingredient.percentage}
-          text="%"
-          max="100"
-          class="mt-auto flex-shrink-0 opacity-60"
-        />
-      </div>
-      {#if $editing}
-        <button on:click|preventDefault={() => removeIngredient(i)}>
-          <X class="h-6 w-6" />
-        </button>
-      {/if}
     </div>
-  {/each}
-  {#if $editing}
-    <button
-      class="items-center justify-center rounded border-2 border-zinc-500 py-2 text-center font-bold md:col-span-2 xl:border-4"
-      on:click|preventDefault={addIngredient}
-    >
-      Add Ingredient
-    </button>
-  {/if}
-</div>
+  </div>
 
-<div
-  id="footer"
-  class="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-8"
->
-  <div>
+  <!-- Ingredients List -->
+  <div class="mt-8 rounded-lg bg-white p-6 shadow-sm">
+    <h2 class="mb-6 text-xl font-semibold">Ingredients</h2>
+    <div class="space-y-4">
+      {#each formula.ingredients as ingredient}
+        <div
+          class="flex items-center justify-between rounded-lg bg-gray-50 p-4"
+        >
+          <div class="flex flex-col">
+            <span class="text-sm text-gray-600 capitalize"
+              >{ingredient.volatility}</span
+            >
+            <a
+              href="/collect/{ingredient.counterpart}"
+              class="hover:text-aqua-700 text-lg transition-colors"
+            >
+              {ingredient.commonName}
+            </a>
+          </div>
+
+          <div class="flex space-x-6 text-right">
+            <div class="flex flex-col">
+              <span class="text-sm text-gray-600">Amount</span>
+              <span class="text-lg font-medium">
+                {(ingredient.amount * multiplier).toFixed(2)}g
+              </span>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-sm text-gray-600">Percentage</span>
+              <span class="text-lg text-gray-600">
+                {ingredient.percentage.toFixed(2)}%
+              </span>
+            </div>
+          </div>
+        </div>
+      {/each}
+
+      <!-- Totals -->
+      <div
+        class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4"
+      >
+        <span class="font-semibold">Total</span>
+        <div class="flex space-x-6">
+          <div class="text-right">
+            <span class="text-lg font-medium">
+              {(
+                formula.ingredients.reduce((sum, ing) => sum + ing.amount, 0) *
+                multiplier
+              ).toFixed(2)}g
+            </span>
+          </div>
+          <div class="w-20 text-right">
+            <span class="text-lg text-gray-600">
+              {formula.ingredients
+                .reduce((sum, ing) => sum + ing.percentage, 0)
+                .toFixed(2)}%
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="mt-8 rounded-lg bg-white p-6 shadow-sm">
     <Label>Description</Label>
-    <VariableTextarea
-      text={formula.description}
-      bind:value={$editedFormula.description}
-      class=" xl:text-2xl"
-    />
+    <p class="mt-2 text-lg text-gray-700">
+      {formula.description || "No description available"}
+    </p>
   </div>
 </div>
+
+<style>
+  :global(.prose) {
+    max-width: none;
+  }
+</style>

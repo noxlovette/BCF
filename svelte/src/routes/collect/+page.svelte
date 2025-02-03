@@ -37,9 +37,6 @@
 />
 
 <AppWrap class="text-center md:text-left">
-  <h2 class="font-quicksand my-4 text-3xl font-bold" in:fade>
-    Showing your Collection
-  </h2>
   <SearchBar>
     <Search />
 

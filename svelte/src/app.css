@@ -4,18 +4,18 @@
   --font-sans: "Quicksand", system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 
-  /* Gold Colors */
-  --color-gold-50: oklch(0.97 0.05 85.9);
-  --color-gold-100: oklch(0.94 0.08 85.9);
-  --color-gold-200: oklch(0.89 0.15 85.9);
-  --color-gold-300: oklch(0.84 0.18 85.9);
-  --color-gold-400: oklch(0.82 0.19 85.9);
-  --color-gold-500: oklch(0.77 0.17 85.9);
-  --color-gold-600: oklch(0.7 0.15 85.9);
-  --color-gold-700: oklch(0.65 0.13 85.9);
-  --color-gold-800: oklch(0.58 0.11 85.9);
-  --color-gold-900: oklch(0.45 0.08 85.9);
-  --color-gold-950: oklch(0.25 0.04 85.9);
+  /* Gold Colors - Refined */
+  --color-gold-50: oklch(0.98 0.03 85.9);
+  --color-gold-100: oklch(0.95 0.05 85.9);
+  --color-gold-200: oklch(0.91 0.08 85.9);
+  --color-gold-300: oklch(0.87 0.10 85.9);
+  --color-gold-400: oklch(0.83 0.12 85.9);
+  --color-gold-500: oklch(0.79 0.11 85.9);
+  --color-gold-600: oklch(0.73 0.09 85.9);
+  --color-gold-700: oklch(0.67 0.08 85.9);
+  --color-gold-800: oklch(0.61 0.07 85.9);
+  --color-gold-900: oklch(0.48 0.05 85.9);
+  --color-gold-950: oklch(0.28 0.03 85.9);
 
   /* Peach Colors */
   --color-peach-50: oklch(0.96 0.04 45.5);
