@@ -12,7 +12,7 @@
 <MetaData />
 
 <main
-  class="flex min-h-screen min-w-screen flex-col items-center justify-center overflow-hidden bg-stone-100 text-stone-800 slashed-zero tabular-nums antialiased dark:bg-stone-800 dark:text-stone-200"
+  class="flex min-h-screen min-w-screen flex-col items-center justify-center overflow-hidden bg-zinc-100 text-zinc-800 slashed-zero tabular-nums antialiased dark:bg-zinc-800 dark:text-zinc-200"
 >
   <Header />
 

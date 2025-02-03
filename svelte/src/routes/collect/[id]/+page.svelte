@@ -1,136 +1,97 @@
 <script lang="ts">
-  import type { PageServerData } from "./$types";
   import type { IngredientCollection } from "$lib/types";
-
   import MetaData from "$lib/components/MetaData.svelte";
-  import AppWrap from "$lib/components/AppWrap.svelte";
-  import { user } from "$lib/stores";
 
-  import { notification } from "$lib/stores";
-  import Label from "$lib/components/UI/Label.svelte";
-  import VariableInput from "$lib/components/UI/VariableInput.svelte";
-  import VariableTextarea from "$lib/components/UI/VariableTextarea.svelte";
-  import { writable } from "svelte/store";
-  import { setContext } from "svelte";
-  import { enhance } from "$app/forms";
-
-  export let data: PageServerData;
+  let { data } = $props();
   let ingredient: IngredientCollection = data.ingredient;
-  const editing = writable(false);
-  const editedIngredient = writable(ingredient);
 
-  let otherNames = ingredient.otherNames || "Unknown";
-  setContext("editing", editing);
-
-  function handleEnhance() {
-    editing.set(false);
-    ingredient = $editedIngredient;
-    notification.set({ message: "Ingredient Updated", type: "success" });
+  function formatValue(
+    value: string | null | undefined,
+    defaultText = "Not available",
+  ): string {
+    return value?.trim() || defaultText;
   }
+
+  const otherNames = formatValue(
+    ingredient.otherNames,
+    "No alternative names available",
+  );
+  const description = formatValue(
+    ingredient.markdown,
+    "No description available",
+  );
+  const casNumber = formatValue(ingredient.cas, "CAS number not available");
 </script>
 
-<MetaData title={ingredient.commonName} robots="noindex, nofollow" />
+<MetaData
+  title={formatValue(ingredient.commonName)}
+  robots="noindex, nofollow"
+/>
 
-<AppWrap
-  class="caret-grapefruit-700 selection:bg-grapefruit-700 selection:text-grapefruit-50 justify-between select-text"
->
-  <form method="post" action="?/update" class="" use:enhance={handleEnhance}>
-    <div
-      id="header"
-      class="border-grapefruit-500 flex w-full flex-col-reverse
-items-baseline justify-between
-      space-y-2 border-b-2 md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
+<div class="">
+  <div
+    class="border-peach-500 flex w-full flex-col-reverse items-baseline justify-between space-y-2 border-b-2 md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
+  >
+    <h1
+      class="text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl"
     >
-      <div class="my-4 w-full md:my-0">
-        <h1 class="">
-          <VariableInput
-            text={ingredient.commonName}
-            bind:value={$editedIngredient.commonName}
-            name="commonName"
-            class="font-quicksand text-3xl font-bold md:text-4xl lg:text-5xl xl:text-7xl"
-          />
-        </h1>
-      </div>
-      <div
-        id="controls"
-        class="flex flex-row items-baseline justify-end space-x-2 lg:space-x-4 xl:text-2xl"
-      >
-        {#if $editing}
-          <button
-            type="submit"
-            class="rounded border-2 border-stone-500 px-2 py-1 lg:px-6 lg:py-2"
-            onclick={() => editing.set(false)}
-          >
-            Cancel
-          </button>
+      {formatValue(ingredient.commonName, "Unnamed Ingredient")}
+    </h1>
 
-          <button
-            formaction="?/delete"
-            class="rounded border-2 border-stone-500 px-2 py-1 disabled:border-stone-300 disabled:text-stone-400 lg:px-6 lg:py-2"
-          >
-            Delete
-          </button>
-          <input type="hidden" name="id" value={ingredient.id} />
-          <button
-            type="submit"
-            class="rounded border-2 border-stone-500 px-2 py-1 lg:px-6 lg:py-2"
-          >
-            Save
-          </button>
-        {:else}
-          <button
-            onclick={() => editing.set(!$editing)}
-            class="rounded border-2 border-stone-500 px-2 py-1 disabled:border-stone-300 disabled:text-stone-400 lg:px-6 lg:py-2"
-          >
-            Edit
-          </button>
-        {/if}
+    <a
+      href="{ingredient.id}/edit"
+      class="bg-peach-600 hover:bg-peach-700 focus:ring-peach-500 inline-flex items-center self-start rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none sm:self-center"
+    >
+      Edit Ingredient
+    </a>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
+    <!-- Left Column - Main Info -->
+    <div class="lg:col-span-2">
+      <!-- CAS Number Card -->
+      <div class="mb-6 rounded-lg bg-white p-6 shadow-sm">
+        <h2 class="mb-3 text-xl font-semibold text-zinc-900">CAS Number</h2>
+        <p class="font-mono text-lg text-zinc-700">
+          {casNumber}
+        </p>
+      </div>
+
+      <!-- Description Card -->
+      <div class="mb-6 rounded-lg bg-white p-6 shadow-sm">
+        <h2 class="mb-3 text-xl font-semibold text-zinc-900">Description</h2>
+        <div class="prose prose-lg max-w-none text-zinc-700">
+          {description}
+        </div>
       </div>
     </div>
 
-    <div
-      id="center"
-      class="flex flex-col justify-between space-y-4 divide-x-4 py-4 md:flex-row md:space-y-0"
-    >
-      <div id="left-part" class="flex w-full flex-col space-y-8 pr-8 md:w-2/3">
-        <div
-          class="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-8"
-        >
-          <div>
-            <Label>CAS</Label>
-            <VariableInput
-              text={ingredient.cas}
-              name="cas"
-              bind:value={$editedIngredient.cas}
-              class=" xl:text-2xl"
-            />
-          </div>
-        </div>
-        <div>
-          <Label>how to use it</Label>
-          <VariableTextarea
-            text={$editedIngredient.markdown}
-            bind:value={$editedIngredient.markdown}
-            name="use"
-            class="min-h-24  md:min-h-36 xl:text-2xl"
-          />
-        </div>
-        <div class="flex flex-col space-y-4">
-          <div
-            class="flex w-full max-w-2xl flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-8"
-          >
-            <div>
-              <Label>also known as</Label>
-              <VariableTextarea
-                text={otherNames}
-                name="other_names"
-                bind:value={$editedIngredient.otherNames}
-                class=""
-              />
-            </div>
-          </div>
+    <!-- Right Column - Additional Info -->
+    <div class="lg:col-span-1">
+      <!-- Also Known As Card -->
+      <div class="rounded-lg bg-white p-6 shadow-sm">
+        <h2 class="mb-3 text-xl font-semibold text-zinc-900">Also Known As</h2>
+        <div class="space-y-2">
+          {#if otherNames !== "No alternative names available"}
+            {#each otherNames.split(",") as name}
+              <div
+                class="mr-2 mb-2 inline-block rounded-full bg-zinc-100 px-4 py-2 text-sm text-zinc-700"
+              >
+                {name.trim()}
+              </div>
+            {/each}
+          {:else}
+            <p class="text-zinc-500 italic">{otherNames}</p>
+          {/if}
         </div>
       </div>
     </div>
-  </form>
-</AppWrap>
+  </div>
+</div>
+
+<style>
+  :global(.prose) {
+    max-width: none;
+  }
+</style>

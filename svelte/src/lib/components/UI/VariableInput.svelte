@@ -13,7 +13,7 @@
     {name}
     bind:value
     placeholder={text}
-    class="rounded border-none border-stone-500 bg-transparent p-0 ring-0 focus:border-stone-500 focus:ring-0 dark:bg-stone-800
+    class="rounded border-none border-zinc-500 bg-transparent p-0 ring-0 focus:border-zinc-500 focus:ring-0 dark:bg-zinc-800
   {$$props.class}
   "
   />

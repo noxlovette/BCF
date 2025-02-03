@@ -2,7 +2,7 @@
   Made with 💛 by{" "}
   <a
     href="https://noxlovette.com"
-    class="transition-colors hover:text-stone-500"
+    class="transition-colors hover:text-zinc-500"
   >
     Danila Volkov
   </a>

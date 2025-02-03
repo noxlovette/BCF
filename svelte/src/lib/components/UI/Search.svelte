@@ -17,7 +17,7 @@
 >
   <input
     type="text"
-    class="border-gold-400 focus:border-gold-200 focus:ring-gold-700/60 dark:border-gold-900 w-full rounded bg-stone-50 shadow transition-all hover:shadow-lg focus:ring-2 dark:bg-stone-900"
+    class="border-gold-400 focus:border-gold-200 focus:ring-gold-700/60 dark:border-gold-900 w-full rounded bg-zinc-50 shadow transition-all hover:shadow-lg focus:ring-2 dark:bg-zinc-900"
     bind:value
     oninput={handleSearch}
     {placeholder}

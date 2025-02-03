@@ -89,7 +89,7 @@
 <div class="relative">
   <input
     type="text"
-    class="text-aqua-700 flex w-5/6 rounded border-none p-1 focus:ring-0 dark:bg-stone-800 dark:text-stone-50"
+    class="text-aqua-700 flex w-5/6 rounded border-none p-1 focus:ring-0 dark:bg-zinc-800 dark:text-zinc-50"
     bind:value={searchTerm}
     bind:this={searchInput}
     placeholder="something new"

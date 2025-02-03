@@ -1,0 +1,1 @@
+edit page for collect

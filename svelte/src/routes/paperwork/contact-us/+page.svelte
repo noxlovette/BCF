@@ -21,7 +21,7 @@
           Telegram
         </h2>
         <p
-          class="text-pretty transition-all group-hover:text-stone-800 dark:group-hover:text-stone-300"
+          class="text-pretty transition-all group-hover:text-zinc-800 dark:group-hover:text-zinc-300"
         >
           Send feedback, swear, say what you want. I can take it all. Quick
           response, fast results.
@@ -41,7 +41,7 @@
           Email
         </h2>
         <p
-          class="text-pretty transition-all group-hover:text-stone-800 dark:group-hover:text-stone-300"
+          class="text-pretty transition-all group-hover:text-zinc-800 dark:group-hover:text-zinc-300"
         >
           Not as quick... not as good... but if you're old-school, sure, be my
           guest.
@@ -58,7 +58,7 @@
           GitHub
         </h2>
         <p
-          class="text-pretty transition-all group-hover:text-stone-800 dark:group-hover:text-stone-300"
+          class="text-pretty transition-all group-hover:text-zinc-800 dark:group-hover:text-zinc-300"
         >
           To talk about the code, documentation, and the license, as well as
           unit-testing...

@@ -16,7 +16,7 @@
     {max}
     {min}
     bind:value
-    class="border-none bg-transparent p-0 ring-0 focus:ring-0 xl:text-2xl dark:bg-stone-800 {$$props.class}"
+    class="border-none bg-transparent p-0 ring-0 focus:ring-0 xl:text-2xl dark:bg-zinc-800 {$$props.class}"
   />
 {:else}
   <p class="{$$props.class} text-base xl:text-2xl">

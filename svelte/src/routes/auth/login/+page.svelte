@@ -39,7 +39,7 @@
           }
         };
       }}
-      class="mt-8 max-w-md space-y-6 rounded-lg bg-white p-3 dark:bg-stone-900"
+      class="mt-8 max-w-md space-y-6 rounded-lg bg-white p-3 dark:bg-zinc-900"
       in:fade
     >
       <h1 class="mb-8 border-b-2 text-6xl font-bold tracking-tighter">
@@ -50,7 +50,7 @@
         id="username-field"
         type="text"
         name="username"
-        class="focus:ring-gold-300 my-4 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
+        class="focus:ring-gold-300 my-4 w-full rounded border-none bg-zinc-50 p-2 shadow-inner focus:ring-2 dark:bg-zinc-800"
         placeholder="username"
         bind:value={username}
         required
@@ -59,7 +59,7 @@
         id="password-field"
         type="password"
         name="password"
-        class="focus:ring-gold-300 my-2 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
+        class="focus:ring-gold-300 my-2 w-full rounded border-none bg-zinc-50 p-2 shadow-inner focus:ring-2 dark:bg-zinc-800"
         placeholder="password"
         bind:value={password}
         required

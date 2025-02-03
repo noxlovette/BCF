@@ -5,7 +5,7 @@
 
 <div
   id="pagination"
-  class="border-gold-400 bg-gold-700 text-gold-50 hover:text-gold-700 dark:border-gold-900 flex w-[80px] items-center justify-between rounded-full border p-2 shadow transition-colors hover:bg-white active:shadow-none dark:hover:bg-stone-800 dark:hover:text-stone-50
+  class="border-gold-400 bg-gold-700 text-gold-50 hover:text-gold-700 dark:border-gold-900 flex w-[80px] items-center justify-between rounded-full border p-2 shadow transition-colors hover:bg-white active:shadow-none dark:hover:bg-zinc-800 dark:hover:text-zinc-50
       "
 >
   <button

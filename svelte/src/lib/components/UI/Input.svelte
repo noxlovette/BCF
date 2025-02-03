@@ -16,7 +16,7 @@
     id={label.toLowerCase().replace(/\s+/g, "-")}
     name={name.toLowerCase().replace(/\s+/g, "-")}
     class="
-    border-gold-400 focus:border-gold-400 focus:ring-gold-400/70 dark:border-gold-900 dark:focus:border-gold-400 dark:focus:ring-gold-400/70 rounded border shadow-sm focus:ring-2 dark:bg-stone-800
+    border-gold-400 focus:border-gold-400 focus:ring-gold-400/70 dark:border-gold-900 dark:focus:border-gold-400 dark:focus:ring-gold-400/70 rounded border shadow-sm focus:ring-2 dark:bg-zinc-800
 		{$$props.class}"
     bind:value
   />

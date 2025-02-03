@@ -8,13 +8,13 @@
 >
   <input
     type="number"
-    class="border-gold-400 focus:border-gold-400 focus:ring-gold-400/70 dark:border-gold-900 dark:focus:border-gold-400 dark:focus:ring-gold-400/70 w-16 rounded border bg-stone-50 px-2 py-2 shadow-sm transition-all duration-300 focus:ring-2 dark:bg-stone-800"
+    class="border-gold-400 focus:border-gold-400 focus:ring-gold-400/70 dark:border-gold-900 dark:focus:border-gold-400 dark:focus:ring-gold-400/70 w-16 rounded border bg-zinc-50 px-2 py-2 shadow-sm transition-all duration-300 focus:ring-2 dark:bg-zinc-800"
     min="1"
     bind:value={$pageSize}
     aria-describedby="page-size-tooltip"
     placeholder="10"
   />
-  <span class="md:text-md text-sm text-stone-700 dark:text-stone-300"
+  <span class="md:text-md text-sm text-zinc-700 dark:text-zinc-300"
     >per page</span
   >
 </label>

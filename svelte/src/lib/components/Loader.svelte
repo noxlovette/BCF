@@ -59,7 +59,7 @@
 
 {#if $navigating && counter > 1}
   <div
-    class="bg-opacity-40 fixed top-0 left-0 z-30 flex h-full w-full items-center justify-center bg-stone-950 backdrop-blur"
+    class="bg-opacity-40 fixed top-0 left-0 z-30 flex h-full w-full items-center justify-center bg-zinc-950 backdrop-blur"
     transition:fade={{ duration: 300 }}
   >
     <div class="relative flex max-w-[400px] flex-col space-y-2">

@@ -19,7 +19,7 @@
 <button
   on:mousedown|preventDefault={toggleFilterMenu}
   title="filter by descriptors"
-  class="border-gold-400 bg-gold-700 text-gold-50 hover:text-gold-700 dark:border-gold-900 hidden rounded-full border p-2 text-center shadow transition-colors hover:bg-white hover:shadow-lg active:shadow-none md:flex dark:hover:bg-stone-800 dark:hover:text-stone-50"
+  class="border-gold-400 bg-gold-700 text-gold-50 hover:text-gold-700 dark:border-gold-900 hidden rounded-full border p-2 text-center shadow transition-colors hover:bg-white hover:shadow-lg active:shadow-none md:flex dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
 >
   {#if showFilterMenu}
     <Squares />
