@@ -1,18 +1,13 @@
 <script lang="ts">
-  import type { PageServerData } from "./$types";
-  import { notification } from "$lib/stores";
-  import { enhance } from "$app/forms";
   import type { IngredientBrowse } from "$lib/types";
-  import { user } from "$lib/stores";
-
   import { Label, MetaData } from "$lib/components";
 
   let { data } = $props();
   let ingredient: IngredientBrowse = data.ingredient;
 
-  // Default values for optional fields
   let volatility = ingredient.volatility || "Unknown";
-  let useMessage = ingredient.use || "No usage information available";
+  let useMessage =
+    ingredient.ingDescription || "No usage information available";
   let relatedIngredients =
     Array.isArray(ingredient.relatedIngredients) &&
     ingredient.relatedIngredients.length > 0
@@ -35,38 +30,14 @@
 />
 
 <div class="flex size-full flex-col">
-  <!-- Header Section -->
   <div
-    class="border-navy-500 flex w-full flex-col-reverse items-baseline justify-between space-y-2 border-b-2 md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
+    class="border-navy-500 flex w-full flex-col-reverse items-baseline justify-between space-y-2 border-b-2 md:flex-row md:space-y-0 md:py-2 xl:border-b-4"
   >
-    <div class="my-4 w-full md:my-0">
-      <h1
-        class="font-quicksand text-3xl font-bold md:text-4xl lg:text-5xl xl:text-7xl"
-      >
-        {ingredient.commonName}
-      </h1>
-    </div>
-    <div
-      class="flex flex-row items-baseline justify-end space-x-2 lg:space-x-4 xl:text-2xl"
+    <h1
+      class="font-manrope w-full text-center text-3xl font-bold md:text-4xl lg:text-5xl xl:text-7xl"
     >
-      <form
-        method="post"
-        action="?/add"
-        use:enhance={() =>
-          notification.set({
-            message: "Added to your collection",
-            type: "success",
-          })}
-      >
-        <input type="hidden" name="id" value={ingredient.id} />
-        <button
-          disabled={!$user.is_authenticated}
-          class="rounded border-2 border-stone-500 px-2 py-1 disabled:border-stone-300 disabled:text-stone-400 lg:px-6 lg:py-2"
-        >
-          Add to Collection
-        </button>
-      </form>
-    </div>
+      {ingredient.commonName}
+    </h1>
   </div>
 
   <!-- Main Content -->
@@ -141,9 +112,9 @@
         <Label>Also Known As</Label>
         <div class="mt-2">
           {#if otherNames !== "No alternative names"}
-            {#each otherNames.split(",") as name}
+            {#each otherNames.split(";") as name}
               <span
-                class="mr-2 mb-2 inline-block rounded-full bg-gray-100 px-4 py-2 text-sm text-gray-700"
+                class="mr-2 mb-2 inline-block rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-700"
               >
                 {name.trim()}
               </span>

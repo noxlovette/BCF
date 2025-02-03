@@ -1,5 +1,6 @@
 <script lang="ts">
   import { searchTerm, currentPage } from "$lib/stores";
+  import { X } from "lucide-svelte";
 
   let value = $state($searchTerm);
   let { placeholder = "Search Ingredients..." } = $props();
@@ -44,9 +45,10 @@
       class="absolute top-1/2 right-3 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:text-zinc-600 dark:hover:text-zinc-400"
       onclick={() => {
         searchTerm.set("");
+        value = "";
       }}
     >
-      ×
+      <X />
     </button>
   {/if}
 </form>

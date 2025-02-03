@@ -8,7 +8,7 @@ export interface IngredientBrowse {
   isRestricted?: boolean;
   origin?: string;
   otherNames: string;
-  use: string;
+  ingDescription: string;
   similarIngredients: IngredientBrowse[];
   volatility: string;
   relatedIngredients: {

@@ -54,11 +54,6 @@
             privacy policy
           </a>
         </li>
-        <li>
-          <a href="https:x.com/app_bcf" class="transition-all hover:underline">
-            twitter
-          </a>
-        </li>
       </ul>
       <a
         href="https://docs.bcfapp.app"

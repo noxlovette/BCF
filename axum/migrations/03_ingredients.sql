@@ -19,3 +19,17 @@ CREATE TRIGGER set_timestamp
     BEFORE UPDATE ON ingredients
     FOR EACH ROW
     EXECUTE FUNCTION trigger_set_timestamp();
+
+
+CREATE TABLE related_ingredients (
+    ingredient_id VARCHAR(21) REFERENCES ingredients(id) ON DELETE CASCADE,
+    related_ingredient_id VARCHAR(21) REFERENCES ingredients(id) ON DELETE CASCADE,
+    PRIMARY KEY (ingredient_id, related_ingredient_id),
+    CHECK (ingredient_id != related_ingredient_id)
+);
+
+CREATE TABLE ingredient_contributors (
+    ingredient_id VARCHAR(21) REFERENCES ingredients(id) ON DELETE CASCADE,
+    user_id VARCHAR(21) REFERENCES "user"(id) ON DELETE CASCADE,
+    PRIMARY KEY (ingredient_id, user_id)
+);
