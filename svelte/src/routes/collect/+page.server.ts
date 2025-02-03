@@ -3,29 +3,28 @@ import type { Actions, PageServerLoad } from "./$types";
 import type { IngredientCollection } from "$lib/types";
 
 
-export const load: PageServerLoad = async ({ fetch }) => {
+export const load: PageServerLoad = async ({ fetch, url }) => {
+  let page = url.searchParams.get("page") || "1";
+  let pageSize = url.searchParams.get("page_size") || "10";
+  const search = url.searchParams.get("search") || "";
+  if (Number(page) < 1) {
+    page = "1"
+  }
+  if (Number(pageSize) < 1) {
+    pageSize = "10"
+  }
   try {
-
-    const endpoint = `/axum/collect`;
-
+    const endpoint = `/axum/collect?page=${page}&search=${search}&page_size=${pageSize}`;
     const response = await fetch(endpoint, {
       method: "GET",
     });
 
-    if (!response.ok) {
-      throw error(response.status, "Failed to fetch collection data");
-    }
-
-    const data: IngredientCollection[] = await response.json();
-
+    let collection: IngredientCollection[] = await response.json();
     return {
-      collection: data,
+      collection,
     };
-  } catch (err: any) {
-    if (err.status) {
-      throw error(err.status, err.body);
-    }
-    throw error(500, "Internal Server Error");
+  } catch (error) {
+    return error(500, "Failed to Fetch Collection");
   }
 };
 

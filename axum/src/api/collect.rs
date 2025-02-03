@@ -1,10 +1,9 @@
 use crate::auth::jwt::Claims;
 use crate::db::error::DbError;
 use crate::db::init::AppState;
+use crate::models::browse::BrowseQuery;
 use crate::models::collect::{CollectIngredient, CollectIngredientUpdate};
-use axum::extract::Json;
-use axum::extract::Path;
-use axum::extract::State;
+use axum::extract::{Json, Path, Query, State};
 
 //todo add restriction to cas and user id
 pub async fn upsert_collect_ing(
@@ -96,18 +95,46 @@ pub async fn fetch_collect_ing(
 
 pub async fn list_collect_ings(
     State(state): State<AppState>,
+    Query(query): Query<BrowseQuery>,
     claims: Claims,
 ) -> Result<Json<Vec<CollectIngredient>>, DbError> {
-    let collect_ings = sqlx::query_as!(
-        CollectIngredient,
-        r#"
-        SELECT * FROM collection_ingredients
-        WHERE user_id = $1
-        "#,
-        claims.sub
-    )
-    .fetch_all(&state.db)
-    .await?;
+    let page_size = query.page_size.unwrap_or(10);
+    let page = query.page.unwrap_or(1);
+    let offset = (page - 1) * page_size;
+
+    let collect_ings = if let Some(search) = query.search {
+        sqlx::query_as!(
+            CollectIngredient,
+            r#"
+            SELECT *
+            FROM collection_ingredients
+            WHERE user_id = $4
+            AND (
+                common_name ILIKE $1
+                OR other_names ILIKE $1
+                OR cas ILIKE $1
+            )
+            ORDER BY common_name
+            LIMIT $2 OFFSET $3
+            "#,
+            format!("%{}%", search),
+            page_size as i32,
+            offset as i32,
+            claims.sub
+        )
+        .fetch_all(&state.db)
+        .await?
+    } else {
+        sqlx::query_as!(
+            CollectIngredient,
+            "SELECT * FROM collection_ingredients WHERE user_id = $3 ORDER BY common_name LIMIT $1 OFFSET $2",
+            page_size as i32,
+            offset as i32,
+            claims.sub
+        )
+        .fetch_all(&state.db)
+        .await?
+    };
 
     Ok(Json(collect_ings))
 }

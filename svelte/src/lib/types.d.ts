@@ -44,23 +44,13 @@ export interface Descriptor {
 
 export interface IngredientCollection {
     id: number;
-    amount: number;
+    commonName: string;
     cas: string;
-    descriptors: string;
     origin: string;
-    other_names: string;
-    colour?: string;
-    common_name: string;
-    date_added: string;
-    impression?: string;
-    ideas?: string;
-    is_collection: boolean;
-    is_restricted: boolean;
-    type: string;
+    otherNames: string;
+    markdown: string;
+    amount: number;
     unit: string;
-    use: string;
-    volatility: string;
-    associations: string;
     related_formulas: Formula[];
 }
 

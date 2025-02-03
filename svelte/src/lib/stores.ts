@@ -3,7 +3,7 @@ import { writable } from "svelte/store";
 import type { Toast } from "./types";
 
 function createPageStore() {
-  const { subscribe, set, update } = writable(0);
+  const { subscribe, set, update } = writable(1);
 
   return {
     subscribe,
@@ -18,7 +18,6 @@ export const currentPage = createPageStore();
 
 export let pageSize = writable(50);
 export let searchTerm = writable("");
-export let secondSearchTerm = writable("");
 export const isLoading = writable(false);
 
 export const user = writable({
