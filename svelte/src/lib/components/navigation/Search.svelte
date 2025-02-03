@@ -26,12 +26,12 @@
 >
   <input
     type="text"
-    class="border-gold-400 w-full rounded-lg border-2 bg-zinc-50 px-4 py-3
+    class="border-gold-400 w-full rounded-lg border-2 bg-stone-50 px-4 py-3
            shadow transition-all duration-300
            {focused
       ? 'ring-gold-700/60 border-gold-200 ring-2'
       : 'hover:border-gold-300'}
-           dark:border-gold-900 dark:bg-zinc-900 dark:placeholder-zinc-500"
+           dark:border-gold-900 dark:bg-stone-900 dark:placeholder-stone-500"
     bind:value
     oninput={handleSearch}
     onfocus={handleFocus}
@@ -42,7 +42,7 @@
   {#if value}
     <button
       type="button"
-      class="absolute top-1/2 right-3 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:text-zinc-600 dark:hover:text-zinc-400"
+      class="absolute top-1/2 right-3 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:text-stone-600 dark:hover:text-stone-400"
       onclick={() => {
         searchTerm.set("");
         value = "";

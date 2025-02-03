@@ -19,7 +19,7 @@
 </script>
 
 <button
-  class="bg-opacity-80 fixed inset-0 z-40 bg-zinc-900 backdrop-blur-lg transition-all duration-300 ease-in-out md:hidden {isOpen
+  class="bg-opacity-80 fixed inset-0 z-40 bg-stone-900 backdrop-blur-lg transition-all duration-300 ease-in-out md:hidden {isOpen
     ? 'pointer-events-auto opacity-100'
     : 'pointer-events-none opacity-0'}"
   on:click|self={toggleMenu}
@@ -28,16 +28,16 @@
 <div class="flex md:hidden">
   <button
     on:click|stopPropagation={toggleMenu}
-    class="hover:bg-gold-400 rounded-lg bg-zinc-300 px-4 py-2 transition-colors duration-300 dark:bg-zinc-800 dark:hover:text-zinc-800"
+    class="hover:bg-gold-400 rounded-lg bg-stone-300 px-4 py-2 transition-colors duration-300 dark:bg-stone-800 dark:hover:text-stone-800"
   >
     <Menu class="size-8" />
   </button>
 
   <div
     class="absolute top-0 right-0 w-full transform space-y-4 rounded-lg
-    bg-zinc-300 px-8 py-12 shadow-lg
+    bg-stone-300 px-8 py-12 shadow-lg
     
-    transition-transform duration-300 ease-in-out dark:bg-zinc-900 {isOpen
+    transition-transform duration-300 ease-in-out dark:bg-stone-900 {isOpen
       ? 'visible translate-x-0'
       : 'invisible translate-x-full'} z-50"
   >
@@ -52,21 +52,21 @@
         <a
           href="/browse"
           on:click|preventDefault={() => navigateAndCloseMenu("/browse")}
-          class="hover:bg-gold-400 block rounded bg-zinc-700 p-2 text-xl text-zinc-100 transition-colors hover:text-zinc-800"
+          class="hover:bg-gold-400 block rounded bg-stone-700 p-2 text-xl text-stone-100 transition-colors hover:text-stone-800"
           >Browse</a
         >
 
         <a
           href="/collect"
           on:click|preventDefault={() => navigateAndCloseMenu("/collect")}
-          class="hover:bg-gold-400 block rounded bg-zinc-700 p-2 text-xl text-zinc-100 transition-colors hover:text-zinc-800"
+          class="hover:bg-gold-400 block rounded bg-stone-700 p-2 text-xl text-stone-100 transition-colors hover:text-stone-800"
           >Collect</a
         >
 
         <a
           href="/formulate"
           on:click|preventDefault={() => navigateAndCloseMenu("/formulate")}
-          class="hover:bg-gold-400 block rounded bg-zinc-700 p-2 text-xl text-zinc-100 transition-colors hover:text-zinc-800"
+          class="hover:bg-gold-400 block rounded bg-stone-700 p-2 text-xl text-stone-100 transition-colors hover:text-stone-800"
           >Formulate</a
         >
       </ul>
@@ -75,7 +75,7 @@
           <a
             href="https://docs.bcfapp.app"
             title="learn to use BCF"
-            class="hover:bg-gold-400 block rounded bg-zinc-700 p-2 text-xl text-zinc-100 transition-colors hover:text-zinc-800"
+            class="hover:bg-gold-400 block rounded bg-stone-700 p-2 text-xl text-stone-100 transition-colors hover:text-stone-800"
           >
             How To
           </a>
@@ -84,7 +84,7 @@
             id="profile"
             href="/profile"
             on:click|preventDefault={() => navigateAndCloseMenu("/profile")}
-            class="hover:bg-gold-400 block rounded bg-zinc-700 p-2 text-xl text-zinc-100 transition-colors hover:text-zinc-800"
+            class="hover:bg-gold-400 block rounded bg-stone-700 p-2 text-xl text-stone-100 transition-colors hover:text-stone-800"
           >
             Profile
           </a>
@@ -92,13 +92,13 @@
           <a
             href="/auth/login"
             on:click|preventDefault={() => navigateAndCloseMenu("/auth/login")}
-            class="hover:bg-gold-400 block rounded bg-zinc-700 p-2 text-xl text-zinc-100 transition-colors hover:text-zinc-800"
+            class="hover:bg-gold-400 block rounded bg-stone-700 p-2 text-xl text-stone-100 transition-colors hover:text-stone-800"
             >Login</a
           >
           <a
             href="/auth/signup"
             on:click|preventDefault={() => navigateAndCloseMenu("/auth/signup")}
-            class="hover:bg-gold-400 block rounded bg-zinc-700 p-2 text-xl text-zinc-100 transition-colors hover:text-zinc-800"
+            class="hover:bg-gold-400 block rounded bg-stone-700 p-2 text-xl text-stone-100 transition-colors hover:text-stone-800"
             >Sign up</a
           >
         {/if}

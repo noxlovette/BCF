@@ -30,26 +30,26 @@
       <!-- Common Name -->
       <div class="flex space-x-4 rounded-lg bg-white p-6 shadow-sm">
         <div>
-          <label class="text-xl font-semibold text-zinc-900" for="commonName"
+          <label class="text-xl font-semibold text-stone-900" for="commonName"
             >Common Name</label
           >
           <input
             name="commonName"
             type="text"
             value={ingredient.commonName}
-            class="focus:border-peach-500 focus:ring-peach-500 mt-2 w-full rounded-md border-zinc-300 p-3 text-lg text-zinc-700 shadow-sm"
+            class="focus:border-peach-500 focus:ring-peach-500 mt-2 w-full rounded-md border-stone-300 p-3 text-lg text-stone-700 shadow-sm"
             placeholder="Enter ingredient name..."
           />
         </div>
         <div>
-          <label class="text-xl font-semibold text-zinc-900" for="cas"
+          <label class="text-xl font-semibold text-stone-900" for="cas"
             >CAS Number</label
           >
           <input
             name="cas"
             type="text"
             value={ingredient.cas}
-            class="focus:border-peach-500 focus:ring-peach-500 mt-2 w-full rounded-md border-zinc-300 p-3 text-lg text-zinc-700 shadow-sm"
+            class="focus:border-peach-500 focus:ring-peach-500 mt-2 w-full rounded-md border-stone-300 p-3 text-lg text-stone-700 shadow-sm"
             placeholder="Enter CAS Number..."
           />
         </div>
@@ -57,14 +57,14 @@
 
       <!-- Description -->
       <div class="rounded-lg bg-white p-6 shadow-sm">
-        <label class="text-xl font-semibold text-zinc-900" for="description"
+        <label class="text-xl font-semibold text-stone-900" for="description"
           >Description</label
         >
         <textarea
           name="markdown"
           value={ingredient.markdown}
           rows="5"
-          class="focus:border-peach-500 focus:ring-peach-500 mt-2 w-full rounded-md border-zinc-300 p-3 text-lg text-zinc-700 shadow-sm"
+          class="focus:border-peach-500 focus:ring-peach-500 mt-2 w-full rounded-md border-stone-300 p-3 text-lg text-stone-700 shadow-sm"
           placeholder="Enter description..."
         ></textarea>
       </div>
@@ -74,14 +74,14 @@
     <div class="lg:col-span-1">
       <!-- Also Known As -->
       <div class="rounded-lg bg-white p-6 shadow-sm">
-        <label class="text-xl font-semibold text-zinc-900" for="otherNames"
+        <label class="text-xl font-semibold text-stone-900" for="otherNames"
           >Also Known As</label
         >
         <input
           name="otherNames"
           type="text"
           value={ingredient.otherNames}
-          class="focus:border-peach-500 focus:ring-peach-500 mt-2 w-full rounded-md border-zinc-300 p-3 text-lg text-zinc-700 shadow-sm"
+          class="focus:border-peach-500 focus:ring-peach-500 mt-2 w-full rounded-md border-stone-300 p-3 text-lg text-stone-700 shadow-sm"
           placeholder="Comma-separated alternative names..."
         />
       </div>
@@ -92,7 +92,7 @@
   <div class="mt-8 flex justify-end space-x-4">
     <a
       href="."
-      class="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm transition-colors duration-200 hover:bg-zinc-100 focus:ring-2 focus:ring-zinc-500"
+      class="rounded-md border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 shadow-sm transition-colors duration-200 hover:bg-stone-100 focus:ring-2 focus:ring-stone-500"
     >
       Cancel
     </a>

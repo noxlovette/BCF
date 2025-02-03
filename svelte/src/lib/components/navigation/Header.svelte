@@ -7,7 +7,7 @@
   const isActive = (route: string) => page.url.pathname.startsWith(route);
 </script>
 
-<header class="font-manrope w-full bg-white shadow-md dark:bg-zinc-900">
+<header class="font-manrope w-full bg-white shadow-md dark:bg-stone-900">
   <div class="mx-auto max-w-7xl px-4">
     <div class="flex grid h-16 w-full grid-cols-3 items-center">
       <div class="flex items-center">
@@ -53,7 +53,7 @@
           <div class="hidden items-center space-x-4 md:flex" transition:fade>
             <a
               href="https://docs.bcfapp.app"
-              class="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
+              class="text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-200"
               title="Documentation"
             >
               <InfoIcon class="h-5 w-5" />
@@ -61,7 +61,7 @@
             <span class="text-sm">{$user.username}</span>
             <a
               href="/profile"
-              class="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
+              class="text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-200"
             >
               <CircleUser class="h-5 w-5" />
             </a>
@@ -70,7 +70,7 @@
           <div class="hidden md:flex md:items-center md:space-x-4">
             <a
               href="/auth/login"
-              class="text-sm text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100"
+              class="text-sm text-stone-700 hover:text-stone-900 dark:text-stone-300 dark:hover:text-stone-100"
             >
               Log in
             </a>
@@ -79,7 +79,7 @@
         {/if}
 
         <button
-          class="rounded p-1 hover:bg-zinc-100 md:hidden dark:hover:bg-zinc-800"
+          class="rounded p-1 hover:bg-stone-100 md:hidden dark:hover:bg-stone-800"
           aria-label="Menu"
         >
           <Menu class="h-6 w-6" />

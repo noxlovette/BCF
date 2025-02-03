@@ -80,7 +80,7 @@
     class="m-10 flex flex-col items-center justify-center"
   >
     <form
-      class="mt-8 max-w-md space-y-6 rounded-lg bg-white p-3 dark:bg-zinc-900"
+      class="mt-8 max-w-md space-y-6 rounded-lg bg-white p-3 dark:bg-stone-900"
       in:fade={{
         duration: 100,
         easing: quintOut,
@@ -95,7 +95,7 @@
       <input
         type="text"
         name="username"
-        class="focus:ring-gold-300 mt-8 w-full rounded border-none bg-zinc-50 p-2 shadow-inner focus:ring-2 dark:bg-zinc-800"
+        class="focus:ring-gold-300 mt-8 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
         placeholder="username"
         required
         bind:value={username}
@@ -105,13 +105,13 @@
         <input
           type="email"
           name="email"
-          class="focus:ring-gold-300 rounded border-none bg-zinc-50 p-2 shadow-inner focus:ring-2 dark:bg-zinc-800"
+          class="focus:ring-gold-300 rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
           placeholder="email"
           bind:value={email}
         />
         <span
           class:valid={validEmail}
-          class="ml-4 h-[40px] w-[96px] rounded bg-zinc-50 p-2 text-left text-zinc-900/60 shadow-inner dark:bg-zinc-800 dark:text-zinc-50/60"
+          class="ml-4 h-[40px] w-[96px] rounded bg-stone-50 p-2 text-left text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
           >valid</span
         >
       </div>
@@ -119,19 +119,19 @@
         <input
           type="password"
           name="password"
-          class="focus:ring-gold-300 mr-auto rounded border-none bg-zinc-50 p-2 shadow-inner focus:ring-2 dark:bg-zinc-800"
+          class="focus:ring-gold-300 mr-auto rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
           placeholder="password"
           bind:value={password}
         />
         <span
           class:valid={validCase}
-          class="mx-4 size-[40px] rounded bg-zinc-50 p-2 text-zinc-900/60 normal-case shadow-inner dark:bg-zinc-800 dark:text-zinc-50/60"
+          class="mx-4 size-[40px] rounded bg-stone-50 p-2 text-stone-900/60 normal-case shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
         >
           aZ
         </span>
         <span
           class:valid={validLength}
-          class="text-baseline size-[40px] rounded bg-zinc-50 p-2 text-zinc-900/60 shadow-inner dark:bg-zinc-800 dark:text-zinc-50/60"
+          class="text-baseline size-[40px] rounded bg-stone-50 p-2 text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
         >
           8+
         </span>
@@ -139,18 +139,18 @@
       <div class="flex items-center justify-center" id="handle 2nd pass">
         <input
           type="password"
-          class="focus:ring-gold-300 rounded border-none bg-zinc-50 p-2 shadow-inner focus:ring-2 dark:bg-zinc-800"
+          class="focus:ring-gold-300 rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
           placeholder="repeat"
           bind:value={confirmPassword}
         />
         <span
           class:valid={validDuplicate}
-          class="mx-4 size-[40px] rotate-90 rounded bg-zinc-50 p-2 text-center text-zinc-900/60 shadow-inner dark:bg-zinc-800 dark:text-zinc-50/60"
+          class="mx-4 size-[40px] rotate-90 rounded bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
           >||</span
         >
         <span
           class:valid={validSpecial}
-          class="size-[40px] rounded bg-zinc-50 p-2 text-center text-zinc-900/60 shadow-inner dark:bg-zinc-800 dark:text-zinc-50/60"
+          class="size-[40px] rounded bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
           >&~</span
         >
       </div>
@@ -161,18 +161,18 @@
         <a
           href="/paperwork/terms-of-service"
           on:mousedown={() => sessionStorage.setItem("terms", "true")}
-          class="hover:text-gold-400 text-zinc-900/80 dark:text-zinc-50/80"
+          class="hover:text-gold-400 text-stone-900/80 dark:text-stone-50/80"
           >agree to the terms</a
         >
         <input
           type="checkbox"
           bind:checked={agreeTerms}
-          class="shadow-inline text-aqua-500 checked:bg-aqua-500 checked:ring-gold-300 hover:checked:bg-gold-300 focus:ring-aqua-700 size-4 rounded border-none bg-zinc-50 ring-2 ring-zinc-300/50 transition-all hover:scale-110 active:scale-90 dark:bg-zinc-800"
+          class="shadow-inline text-aqua-500 checked:bg-aqua-500 checked:ring-gold-300 hover:checked:bg-gold-300 focus:ring-aqua-700 size-4 rounded border-none bg-stone-50 ring-2 ring-stone-300/50 transition-all hover:scale-110 active:scale-90 dark:bg-stone-800"
         />
       </div>
       <button
         type="submit"
-        class="hover:text-gold-400 text-5xl font-bold tracking-tighter active:scale-90 disabled:text-zinc-400/70"
+        class="hover:text-gold-400 text-5xl font-bold tracking-tighter active:scale-90 disabled:text-stone-400/70"
         disabled={!allValid}>go</button
       >
       <a

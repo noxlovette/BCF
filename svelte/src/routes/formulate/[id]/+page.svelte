@@ -25,7 +25,7 @@
     <div class="flex flex-row items-center space-x-4">
       <Label>Quantity</Label>
       <select
-        class="rounded border-2 border-zinc-500 bg-transparent px-4 py-1 ring-0 focus:border-zinc-500 focus:ring-0 lg:px-8 lg:py-2"
+        class="rounded border-2 border-stone-500 bg-transparent px-4 py-1 ring-0 focus:border-stone-500 focus:ring-0 lg:px-8 lg:py-2"
         bind:value={multiplier}
       >
         {#each Array(9) as _, i}

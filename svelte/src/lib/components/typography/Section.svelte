@@ -15,10 +15,10 @@
 
 <section
   id={href}
-  class="size-full rounded text-pretty ring ring-2 ring-zinc-400/20"
+  class="size-full rounded text-pretty ring ring-2 ring-stone-400/20"
 >
   <div
-    class="group flex size-full flex-col rounded bg-white/70 p-4 backdrop-blur-lg transition-all hover:bg-white hover:shadow-lg lg:p-8 dark:bg-zinc-900/70 dark:hover:bg-zinc-800"
+    class="group flex size-full flex-col rounded bg-white/70 p-4 backdrop-blur-lg transition-all hover:bg-white hover:shadow-lg lg:p-8 dark:bg-stone-900/70 dark:hover:bg-stone-800"
   >
     <a href="/{href}" class="">
       <h2

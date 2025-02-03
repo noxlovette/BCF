@@ -8,7 +8,7 @@
 <div
   id="pagination"
   class="border-gold-400 dark:border-gold-900 flex items-center space-x-4 rounded-lg border-2 bg-white p-2
-         shadow-sm transition-all duration-300 dark:bg-zinc-900"
+         shadow-sm transition-all duration-300 dark:bg-stone-900"
 >
   <button
     id="prevPage"

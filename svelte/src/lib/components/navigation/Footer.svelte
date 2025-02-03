@@ -16,7 +16,7 @@
   </p>
 </div>
 <footer
-  class="z-10 flex w-full flex-col items-center justify-between bg-zinc-300 py-4 text-zinc-600 shadow-inner dark:bg-zinc-900"
+  class="z-10 flex w-full flex-col items-center justify-between bg-stone-300 py-4 text-stone-600 shadow-inner dark:bg-stone-900"
 >
   <div class="flex w-[90vw] flex-col">
     <Credits />
@@ -58,7 +58,7 @@
       <a
         href="https://docs.bcfapp.app"
         title="learn to use BCF"
-        class=" text-zinc-900 transition-all hover:underline lg:ml-12 dark:text-zinc-400"
+        class=" text-stone-900 transition-all hover:underline lg:ml-12 dark:text-stone-400"
       >
         how to use this thing
       </a>

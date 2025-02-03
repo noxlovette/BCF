@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { IngredientBrowse } from "$lib/types";
   import { Label, MetaData } from "$lib/components";
+  import { enhance } from "$app/forms";
 
   let { data } = $props();
   let { ingredient, unsplashData } = data;
@@ -10,17 +11,12 @@
     href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
   }
 
-  let volatility = ingredient.volatility || "Unknown";
-  let useMessage =
+  const volatility = ingredient.volatility || "Unknown";
+  const useMessage =
     ingredient.ingDescription || "No usage information available";
-  let relatedIngredients =
-    Array.isArray(ingredient.relatedIngredients) &&
-    ingredient.relatedIngredients.length > 0
-      ? ingredient.relatedIngredients
-      : [{ commonName: "No related ingredients", slug: "" }];
-  let origin = ingredient.origin || "Not specified";
-  let otherNames = ingredient.otherNames || "No alternative names";
-  let ifraStatus =
+  const otherNames = ingredient.otherNames || "No alternative names";
+  const origin = ingredient.origin || "Not Specified";
+  const ifraStatus =
     ingredient.isRestricted === true ? "Restricted" : "Not restricted";
 
   const description = `Discover ${ingredient.commonName}. ${ingredient.descriptors}. Explore similar ingredients and fragrances.`;
@@ -55,10 +51,10 @@
           <div>
             <Label>Descriptors</Label>
             <div
-              class="flex flex-wrap items-center gap-2 text-lg text-zinc-600 md:gap-4 md:text-xl xl:text-2xl"
+              class="flex flex-wrap items-center gap-2 text-lg text-stone-600 md:gap-4 md:text-xl xl:text-2xl"
             >
               {#each ingredient.descriptors as descriptor}
-                <span class="rounded-md bg-zinc-100 px-3 py-1 shadow-sm"
+                <span class="rounded-md bg-stone-100 px-3 py-1 shadow-sm"
                   >{descriptor}</span
                 >
               {/each}
@@ -67,9 +63,9 @@
           <div>
             <Label>CAS Number</Label>
             <div
-              class="flex flex-wrap items-center gap-2 text-lg text-zinc-600 md:gap-4 md:text-xl xl:text-2xl"
+              class="flex flex-wrap items-center gap-2 text-lg text-stone-600 md:gap-4 md:text-xl xl:text-2xl"
             >
-              <span class="rounded-md bg-zinc-100 px-3 py-1 shadow-sm">
+              <span class="rounded-md bg-stone-100 px-3 py-1 shadow-sm">
                 {ingredient.cas || "Not available"}
               </span>
             </div>
@@ -80,7 +76,7 @@
       <!-- Usage Information -->
       <div class="rounded-lg bg-white p-6 shadow-sm">
         <Label>How to Use</Label>
-        <p class="mt-2 min-h-24 text-lg text-zinc-700 md:min-h-36">
+        <p class="mt-2 min-h-24 text-lg text-stone-700 md:min-h-36">
           {useMessage}
         </p>
       </div>
@@ -90,15 +86,15 @@
         <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div>
             <Label>Volatility</Label>
-            <p class="mt-2 text-lg text-zinc-700">{volatility}</p>
+            <p class="mt-2 text-lg text-stone-700">{volatility}</p>
           </div>
           <div>
             <Label>IFRA Status</Label>
-            <p class="mt-2 text-lg text-zinc-700">{ifraStatus}</p>
+            <p class="mt-2 text-lg text-stone-700">{ifraStatus}</p>
           </div>
           <div>
             <Label>Origin</Label>
-            <p class="mt-2 text-lg text-zinc-700">{origin}</p>
+            <p class="mt-2 text-lg text-stone-700">{origin}</p>
           </div>
         </div>
       </div>
@@ -135,18 +131,25 @@
           {#if otherNames !== "No alternative names"}
             {#each otherNames.split(";") as name}
               <span
-                class="mr-2 mb-2 inline-block rounded-lg bg-zinc-100 px-4 py-2 text-sm text-zinc-700"
+                class="mr-2 mb-2 inline-block rounded-lg bg-stone-100 px-4 py-2 text-sm text-stone-700"
               >
                 {name.trim()}
               </span>
             {/each}
           {:else}
-            <p class="text-zinc-500 italic">{otherNames}</p>
+            <p class="text-stone-500 italic">{otherNames}</p>
           {/if}
         </div>
       </div>
     </div>
   </div>
+  <form id="controls" class="mt-4 flex flex-row" method="POST" use:enhance>
+    <input type="hidden" value={ingredient.commonName} name="commonName" />
+    <input type="hidden" value={ingredient.cas} name="cas" />
+    <input type="hidden" value={ingredient.ingDescription} name="markdown" />
+    <button type="submit" class="px-3 py-1"> Add to Collection </button>
+    <a href="{ingredient.slug}/suggest" class="px-3 py-1">Suggest a Change </a>
+  </form>
 </div>
 
 <style>

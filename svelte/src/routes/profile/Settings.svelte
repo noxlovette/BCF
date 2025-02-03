@@ -113,12 +113,12 @@
   <div id="mini-header" class="flex flex-row">
     <h1 class="mb-4 text-4xl">settings</h1>
     <button
-      class="hover:text-gold-400/60 ml-4 disabled:text-zinc-400/70"
+      class="hover:text-gold-400/60 ml-4 disabled:text-stone-400/70"
       disabled={!allValid}
       on:mousedown={handleSaveChanges}>apply changes</button
     >
     <button
-      class="hover:text-gold-400/60 ml-4 disabled:text-zinc-400/70"
+      class="hover:text-gold-400/60 ml-4 disabled:text-stone-400/70"
       disabled={!allValid}
       on:mousedown={revertChanges}>revert changes</button
     >
@@ -126,7 +126,7 @@
 
   <div
     id="grid"
-    class="grid grid-cols-1 gap-4 *:w-full *:rounded *:bg-white *:p-4 *:shadow lg:grid-cols-2 xl:grid-cols-3 xl:gap-8 *:dark:bg-zinc-800/80"
+    class="grid grid-cols-1 gap-4 *:w-full *:rounded *:bg-white *:p-4 *:shadow lg:grid-cols-2 xl:grid-cols-3 xl:gap-8 *:dark:bg-stone-800/80"
   >
     <div id="account settings" class="flex flex-col">
       <h2 class="mb-8 font-bold">account settings</h2>
@@ -134,14 +134,14 @@
       <input
         type="password"
         bind:value={oldPassword}
-        class="focus:ring-gold-700/70 flex w-full rounded border-none bg-zinc-50/20 p-2 shadow-inner focus:ring-2 dark:bg-zinc-950/20"
+        class="focus:ring-gold-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
         placeholder="old password"
       />
       {#if oldPassword}
         <input
           type="password"
           bind:value={newPassword}
-          class="focus:ring-gold-700/70 flex w-full rounded border-none bg-zinc-50/20 p-2 shadow-inner focus:ring-2 dark:bg-zinc-950/20"
+          class="focus:ring-gold-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
           placeholder="new password"
         />
 
@@ -169,7 +169,7 @@
         <input
           type="password"
           bind:value={confirmPassword}
-          class="focus:ring-gold-700/70 flex w-full rounded border-none bg-zinc-50/20 p-2 shadow-inner focus:ring-2 dark:bg-zinc-950/20"
+          class="focus:ring-gold-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
           placeholder="confirm password"
         />
         {#if confirmPassword}
@@ -190,7 +190,7 @@
       <input
         type="email"
         bind:value={email}
-        class="focus:ring-gold-700/70 flex w-full rounded border-none bg-zinc-50/20 p-2 shadow-inner focus:ring-2 dark:bg-zinc-950/20"
+        class="focus:ring-gold-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
         placeholder="new email"
       />
 
@@ -206,7 +206,7 @@
       <input
         type="text"
         bind:value={username}
-        class="focus:ring-gold-700/70 flex w-full rounded border-none bg-zinc-50/20 p-2 shadow-inner focus:ring-2 dark:bg-zinc-950/20"
+        class="focus:ring-gold-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
         placeholder="new username"
       />
       <h3 class="mt-4 font-normal">2FA</h3>
@@ -230,7 +230,7 @@
           </div>
         {:else}
           <button
-            class="invisible rounded bg-zinc-400 p-2 transition-all group-hover:visible"
+            class="invisible rounded bg-stone-400 p-2 transition-all group-hover:visible"
             on:mousedown={toggleWarningDelete}>erase me</button
           >
         {/if}

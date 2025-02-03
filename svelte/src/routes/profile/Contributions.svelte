@@ -4,7 +4,7 @@
 
 <div class="flex flex-col space-y-4">
   <h2 class="mb-4 text-4xl">contributions</h2>
-  <div class="flex flex-col items-start rounded bg-white p-4 dark:bg-zinc-800">
+  <div class="flex flex-col items-start rounded bg-white p-4 dark:bg-stone-800">
     <h3 class="font-bold">submitted ingredients</h3>
 
     <ul class="mt-2 items-start space-y-2">
