@@ -1,15 +1,12 @@
 <script lang="ts">
   import BigText from "$lib/components/typography/BigText.svelte";
   import Section from "$lib/components/typography/Section.svelte";
-  const bigText = `Want to create your own <span class="text-gold-400"> perfume? </span>We've got you covered<span class="text-gold-400">.</span>`;
+  const bigText = `We make perfume here<span class="text-gold-400">.</span>`;
 </script>
 
 <BigText text={bigText} />
 
-<div
-  id="blabla"
-  class="my-12 flex max-w-md flex-col space-y-8 sm:max-w-2xl md:my-4 md:max-w-3xl md:py-8 lg:max-w-4xl xl:max-w-5xl"
->
+<div class="grid grid-cols-3 gap-2">
   <Section
     href="browse"
     color="navy"
@@ -33,8 +30,10 @@
   />
 </div>
 
-<div class="text-6xl font-bold xl:text-[6rem]">
-  <a href="/auth/signup" class="button hover:text-gold-400 transition-all"
-    >sign up</a
+<div class="my-4 text-6xl font-bold xl:text-[6rem]">
+  <a
+    href="/auth/signup"
+    class="button hover:text-gold-700 text-gold-400 font-manrope tracking-tighter transition-all"
+    >Sign up</a
   >
 </div>

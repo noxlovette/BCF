@@ -29,12 +29,16 @@
 </SearchBar>
 
 <div id="table-wrapper" class="my-8 flex w-full items-center justify-center">
-  <div
-    id="card-holder"
-    class="grid w-full grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
-  >
-    {#each formulas as formula}
-      <FormulateCard {formula} />
-    {/each}
-  </div>
+  {#if formulas.length === 0}
+    <p class="m-12 text-5xl">Looks Lonely Here</p>
+  {:else}
+    <div
+      id="card-holder"
+      class="grid w-full grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+    >
+      {#each formulas as formula}
+        <FormulateCard {formula} />
+      {/each}
+    </div>
+  {/if}
 </div>

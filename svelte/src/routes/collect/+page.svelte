@@ -60,7 +60,7 @@
 
 <div id="table-wrapper" class="my-8 flex w-full items-center justify-center">
   {#if collection.length === 0}
-    <p class="m-12 text-5xl">Hm. Try a different search?</p>
+    <p class="m-12 text-5xl">Looks Lonely Here</p>
   {:else}
     <CardHolder>
       {#each collection as ingredient}

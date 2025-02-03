@@ -5,8 +5,9 @@
   let { data } = $props();
   let { ingredient, unsplashData } = data;
 
+  let href = $state("");
   if (unsplashData) {
-    const href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
+    href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
   }
 
   let volatility = ingredient.volatility || "Unknown";
