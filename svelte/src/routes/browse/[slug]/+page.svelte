@@ -3,7 +3,11 @@
   import { Label, MetaData } from "$lib/components";
 
   let { data } = $props();
-  let ingredient: IngredientBrowse = data.ingredient;
+  let { ingredient, unsplashData } = data;
+
+  if (unsplashData) {
+    const href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
+  }
 
   let volatility = ingredient.volatility || "Unknown";
   let useMessage =
@@ -31,10 +35,10 @@
 
 <div class="flex size-full flex-col">
   <div
-    class="border-navy-500 flex w-full flex-col-reverse items-baseline justify-between space-y-2 border-b-2 md:flex-row md:space-y-0 md:py-2 xl:border-b-4"
+    class="border-navy-500 flex w-full flex-col items-center space-y-2 border-b-2 py-4 md:border-b-3 md:py-6 xl:border-b-4"
   >
     <h1
-      class="font-manrope w-full text-center text-3xl font-bold md:text-4xl lg:text-5xl xl:text-7xl"
+      class="font-manrope text-center text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl xl:text-7xl"
     >
       {ingredient.commonName}
     </h1>
@@ -49,15 +53,25 @@
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
             <Label>Descriptors</Label>
-            <p class="mt-2 text-lg text-gray-700">
-              {ingredient.descriptors || "No descriptors available"}
-            </p>
+            <div
+              class="flex flex-wrap items-center gap-2 text-lg text-zinc-600 md:gap-4 md:text-xl xl:text-2xl"
+            >
+              {#each ingredient.descriptors as descriptor}
+                <span class="rounded-md bg-zinc-100 px-3 py-1 shadow-sm"
+                  >{descriptor}</span
+                >
+              {/each}
+            </div>
           </div>
           <div>
             <Label>CAS Number</Label>
-            <p class="mt-2 font-mono text-lg text-gray-700">
-              {ingredient.cas || "Not available"}
-            </p>
+            <div
+              class="flex flex-wrap items-center gap-2 text-lg text-zinc-600 md:gap-4 md:text-xl xl:text-2xl"
+            >
+              <span class="rounded-md bg-zinc-100 px-3 py-1 shadow-sm">
+                {ingredient.cas || "Not available"}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -65,7 +79,7 @@
       <!-- Usage Information -->
       <div class="rounded-lg bg-white p-6 shadow-sm">
         <Label>How to Use</Label>
-        <p class="mt-2 min-h-24 text-lg text-gray-700 md:min-h-36">
+        <p class="mt-2 min-h-24 text-lg text-zinc-700 md:min-h-36">
           {useMessage}
         </p>
       </div>
@@ -75,15 +89,15 @@
         <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div>
             <Label>Volatility</Label>
-            <p class="mt-2 text-lg text-gray-700">{volatility}</p>
+            <p class="mt-2 text-lg text-zinc-700">{volatility}</p>
           </div>
           <div>
             <Label>IFRA Status</Label>
-            <p class="mt-2 text-lg text-gray-700">{ifraStatus}</p>
+            <p class="mt-2 text-lg text-zinc-700">{ifraStatus}</p>
           </div>
           <div>
             <Label>Origin</Label>
-            <p class="mt-2 text-lg text-gray-700">{origin}</p>
+            <p class="mt-2 text-lg text-zinc-700">{origin}</p>
           </div>
         </div>
       </div>
@@ -91,20 +105,26 @@
 
     <!-- Right Column - Additional Info -->
     <div class="space-y-6 lg:col-span-1">
-      <!-- Related Ingredients -->
-      <div class="rounded-lg bg-white p-6 shadow-sm">
-        <Label>Related Ingredients</Label>
-        <div class="mt-2 space-y-2">
-          {#each relatedIngredients as related}
+      <!-- Related Ingredients / PHOTO -->
+      <div
+        class="relative aspect-square overflow-hidden rounded-lg bg-white shadow-sm"
+      >
+        {#if unsplashData}
+          <img
+            alt={ingredient.commonName}
+            src={unsplashData.urls.regular}
+            class="h-full w-full object-cover"
+          />
+          <p
+            class="bg-opacity-75 absolute right-2 bottom-2 rounded bg-stone-50 px-2 py-1 text-sm text-stone-900 italic"
+          >
+            Photo by <a {href} class="underline">{unsplashData.user.name}</a> on
             <a
-              class="hover:text-navy-700 block text-lg transition-colors"
-              href="/browse/{related.slug}"
-              data-sveltekit-reload
+              href="https://unsplash.com/?utm_source=bcf&utm_medium=referral"
+              class="underline">Unsplash</a
             >
-              {related.commonName}
-            </a>
-          {/each}
-        </div>
+          </p>
+        {/if}
       </div>
 
       <!-- Alternative Names -->
@@ -114,13 +134,13 @@
           {#if otherNames !== "No alternative names"}
             {#each otherNames.split(";") as name}
               <span
-                class="mr-2 mb-2 inline-block rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-700"
+                class="mr-2 mb-2 inline-block rounded-lg bg-zinc-100 px-4 py-2 text-sm text-zinc-700"
               >
                 {name.trim()}
               </span>
             {/each}
           {:else}
-            <p class="text-gray-500 italic">{otherNames}</p>
+            <p class="text-zinc-500 italic">{otherNames}</p>
           {/if}
         </div>
       </div>

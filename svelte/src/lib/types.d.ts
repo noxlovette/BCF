@@ -3,7 +3,6 @@ export interface IngredientBrowse {
   slug?: string;
   cas: string;
   commonName: string;
-  descriptors: string;
   ingredientType?: string;
   isRestricted?: boolean;
   origin?: string;
@@ -11,6 +10,8 @@ export interface IngredientBrowse {
   ingDescription: string;
   similarIngredients: IngredientBrowse[];
   volatility: string;
+  descriptors: string[];
+  colours: string[];
   relatedIngredients: {
     commonName: string;
     slug: string;

@@ -9,13 +9,15 @@ pub struct BrowseIngredient {
     pub id: String,
     pub common_name: String,
     pub other_names: Option<String>,
+    pub slug: String,
     pub cas: Option<String>,
     pub ing_type: Option<String>,
     pub ing_description: Option<String>,
     pub volatility: Option<String>,
     pub restricted: Option<bool>,
     pub origin: Option<String>,
-    pub slug: String,
+    pub colours: Option<Vec<String>>,
+    pub descriptors: Option<Vec<String>>,
     #[serde_as(as = "Rfc3339")]
     pub created_at: OffsetDateTime,
     #[serde_as(as = "Rfc3339")]

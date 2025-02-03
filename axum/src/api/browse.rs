@@ -7,22 +7,30 @@ pub async fn fetch_browse(
     State(state): State<AppState>,
     Path(slug): Path<String>,
 ) -> Result<Json<Option<BrowseIngredient>>, DbError> {
-    let lesson = sqlx::query_as!(
+    let ingredient = sqlx::query_as!(
         BrowseIngredient,
         r#"
-        SELECT *
-        FROM ingredients
-        WHERE slug = $1
+        WITH descriptor_info AS (
+            SELECT 
+                i.*, 
+                array_remove(array_agg (DISTINCT d.name), NULL) as descriptors,
+                array_remove(array_agg (DISTINCT d.colour), NULL) as colours
+            FROM ingredients i
+            LEFT JOIN ingredient_descriptors id ON i.id = id.ingredient_id 
+            LEFT JOIN descriptors d ON id.descriptor_id = d.id
+            WHERE i.slug = $1
+            GROUP BY i.id
+        )
+        SELECT * FROM descriptor_info
         "#,
         slug,
     )
     .fetch_optional(&state.db)
     .await?;
 
-    Ok(Json(lesson))
+    Ok(Json(ingredient))
 }
 
-// Using PostgreSQL's built-in full-text search
 pub async fn list_browse(
     State(state): State<AppState>,
     Query(query): Query<BrowseQuery>,
@@ -35,14 +43,22 @@ pub async fn list_browse(
         sqlx::query_as!(
             BrowseIngredient,
             r#"
-            SELECT *
-            FROM ingredients
-            WHERE 
-                common_name ILIKE $1 
-                OR other_names ILIKE $1 
-                OR cas ILIKE $1
-            ORDER BY common_name
-            LIMIT $2 OFFSET $3
+            WITH descriptor_info AS (
+                SELECT 
+                    i.*,
+                    array_remove(array_agg (DISTINCT d.name), NULL) as descriptors,
+                    array_remove(array_agg (DISTINCT d.colour), NULL) as colours
+                FROM ingredients i
+                LEFT JOIN ingredient_descriptors id ON i.id = id.ingredient_id
+                LEFT JOIN descriptors d ON id.descriptor_id = d.id
+                WHERE i.common_name ILIKE $1 
+                    OR i.other_names ILIKE $1 
+                    OR i.cas ILIKE $1
+                GROUP BY i.id
+                ORDER BY i.common_name
+                LIMIT $2 OFFSET $3
+            )
+            SELECT * FROM descriptor_info
             "#,
             format!("%{}%", search),
             page_size as i32,
@@ -53,7 +69,21 @@ pub async fn list_browse(
     } else {
         sqlx::query_as!(
             BrowseIngredient,
-            "SELECT * FROM ingredients ORDER BY common_name LIMIT $1 OFFSET $2",
+            r#"
+            WITH descriptor_info AS (
+                SELECT 
+                    i.*,
+                    array_agg(DISTINCT d.name) as descriptors,
+                    array_agg(DISTINCT d.colour) as colours
+                FROM ingredients i
+                LEFT JOIN ingredient_descriptors id ON i.id = id.ingredient_id
+                LEFT JOIN descriptors d ON id.descriptor_id = d.id
+                GROUP BY i.id
+                ORDER BY i.common_name
+                LIMIT $1 OFFSET $2
+            )
+            SELECT * FROM descriptor_info
+            "#,
             page_size as i32,
             offset as i32
         )

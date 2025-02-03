@@ -1,9 +1,12 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
 
-  export let header: string;
-  export let body: string;
-  export let href: string;
+  let {
+    header = "Card",
+    body = "Very Gut Karte!",
+    href = ".",
+    style = "",
+  } = $props();
 
   const isSpecial = body === "0000-00-0" || header === "New Formula";
 </script>
@@ -18,6 +21,7 @@
          hover:bg-gold-700 hover:border-gold-600 hover:text-gold-50 shadow-sm transition-all
          duration-300 hover:scale-102 hover:shadow-md"
   tabindex="0"
+  {style}
   transition:fade
 >
   <h2

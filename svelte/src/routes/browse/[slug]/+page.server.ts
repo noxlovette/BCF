@@ -1,4 +1,5 @@
 import { env } from "$env/dynamic/private";
+import { getUnsplashURL } from "$lib/server/unsplash"
 import redis from "$lib/redisClient";
 import type { IngredientBrowse } from "$lib/types";
 import { error } from "@sveltejs/kit";
@@ -17,8 +18,19 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
     }
     const ingredient: IngredientBrowse = await response.json();
     await redis.set(slug, JSON.stringify(ingredient), "EX", 3600);
-    console.log(ingredient);
-    return { ingredient };
+
+    // const query = ingredient.descriptors[0]; // WATCH OUT – ONLY THE FIRST DESCRIPTOR!
+    // const unsplashURL = getUnsplashURL(query);
+
+    let unsplashData;
+    // const unsplashResponse = await fetch(unsplashURL);
+    // if (!unsplashResponse.ok) {
+    // unsplashData = null
+    // }
+    // unsplashData = await unsplashResponse.json();
+
+
+    return { ingredient, unsplashData };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
