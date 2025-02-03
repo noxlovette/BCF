@@ -48,7 +48,7 @@
         type: "success",
       })}
   >
-    <CreateButton on:create />
+    <CreateButton />
   </form>
 
   <form method="post" action="?/reset" use:enhance>

@@ -28,22 +28,15 @@
   robots="noindex, nofollow"
 />
 
-<div class="flex size-full flex-col">
+<div class="my-4 flex size-full flex-col">
   <div
-    class="border-peach-500 flex w-full flex-col-reverse items-baseline justify-between space-y-2 border-b-2 md:flex-row md:space-y-0 md:pb-4 xl:border-b-4"
+    class="border-peach-500 flex w-full flex-col items-center space-y-2 border-b-2 py-4 md:border-b-3 md:py-6 xl:border-b-4"
   >
     <h1
-      class="text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl"
+      class="font-manrope text-center text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl xl:text-7xl"
     >
       {formatValue(ingredient.commonName, "Unnamed Ingredient")}
     </h1>
-
-    <a
-      href="{ingredient.id}/edit"
-      class="bg-peach-600 hover:bg-peach-700 focus:ring-peach-500 inline-flex items-center self-start rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none sm:self-center"
-    >
-      Edit Ingredient
-    </a>
   </div>
 
   <!-- Main Content Grid -->
@@ -88,6 +81,15 @@
       </div>
     </div>
   </div>
+  <a
+    href="{ingredient.id}/edit"
+    class="bg-peach-600 hover:bg-peach-700
+    focus:ring-peach-500 text-peach-50 inline-flex items-center
+    self-start rounded-md border border-transparent px-4 py-2 text-sm font-medium shadow-sm
+    transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none sm:self-center lg:text-2xl"
+  >
+    Edit
+  </a>
 </div>
 
 <style>
