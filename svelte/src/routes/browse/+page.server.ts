@@ -1,6 +1,5 @@
-import redis from "$lib/redisClient";
-import type { PageServerLoad } from "./$types";
 import type { IngredientBrowse } from "$lib/types";
+import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, url }) => {
   let page = url.searchParams.get("page") || "1";
@@ -8,11 +7,11 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
   const search = url.searchParams.get("search") || "";
 
   if (Number(page) < 1) {
-    page = "1"
+    page = "1";
   }
 
   if (Number(pageSize) < 1) {
-    pageSize = "10"
+    pageSize = "10";
   }
 
   try {
@@ -22,7 +21,7 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
 
     let ingredients: IngredientBrowse[] = await response.json();
     return {
-      ingredients
+      ingredients,
     };
   } catch (error) {
     return {

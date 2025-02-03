@@ -6,7 +6,7 @@
 </script>
 
 <Card
-  header={formula.name}
+  header={formula.title}
   body={formula.description}
   href={`/formulate/${formula.id}`}
 />

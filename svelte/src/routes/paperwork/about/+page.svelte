@@ -19,7 +19,7 @@
   </div>
 
   <div
-    class="mx-auto grid max-w-4xl grid-cols-1 items-start gap-8 text-pretty px-4 py-8 pb-12 sm:px-6 md:py-16 lg:grid lg:gap-x-8 lg:px-8 lg:py-24 xl:grid-cols-2 xl:gap-x-24 xl:gap-y-12"
+    class="mx-auto grid max-w-4xl grid-cols-1 items-start gap-8 px-4 py-8 pb-12 text-pretty sm:px-6 md:py-16 lg:grid lg:gap-x-8 lg:px-8 lg:py-24 xl:grid-cols-2 xl:gap-x-24 xl:gap-y-12"
   >
     <Section
       sectionBigText={sectionBigTextWhat}

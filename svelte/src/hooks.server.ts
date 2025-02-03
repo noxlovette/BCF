@@ -1,11 +1,10 @@
-import type { Handle, HandleFetch } from "@sveltejs/kit";
-import { env } from '$env/dynamic/private';
+import { env } from "$env/dynamic/private";
 import { handleTokenRefresh, ValidateAccess } from "$lib/server/refresh";
+import type { Handle, HandleFetch } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import type { JWTPayload } from "jose";
-import { redirect } from '@sveltejs/kit';
-import { RefreshCcwDotIcon } from "lucide-svelte";
 
-const PROTECTED_PATHS = new Set(['/collect', '/formulate']);
+const PROTECTED_PATHS = new Set(["/collect", "/formulate"]);
 
 function isProtectedPath(path: string): boolean {
   return (
@@ -21,9 +20,9 @@ export const handle: Handle = async ({ event, resolve }) => {
     return resolve(event);
   }
 
-  const accessToken = event.cookies.get('accessToken');
+  const accessToken = event.cookies.get("accessToken");
 
-  console.log("TOKEN FROM HANDLE", accessToken)
+  console.log("TOKEN FROM HANDLE", accessToken);
 
   let user: JWTPayload;
   if (accessToken) {
@@ -32,34 +31,32 @@ export const handle: Handle = async ({ event, resolve }) => {
     } catch (error) {
       user = await handleTokenRefresh(event);
     }
-  } else if (event.cookies.get('refreshToken')) {
+  } else if (event.cookies.get("refreshToken")) {
     user = await handleTokenRefresh(event);
   } else {
-    throw redirect(302, '/auth/login');
+    throw redirect(302, "/auth/login");
   }
 
   const response = await resolve(event);
   return response;
 };
 
-
 export const handleFetch: HandleFetch = async ({ request, event, fetch }) => {
-
   const url = new URL(request.url);
   const searchParams = url.searchParams.toString();
-  if (url.pathname.startsWith('/axum/')) {
-    const cleanPath = url.pathname.replace('/axum/', '/');
+  if (url.pathname.startsWith("/axum/")) {
+    const cleanPath = url.pathname.replace("/axum/", "/");
     const newUrl = new URL(cleanPath, env.BACKEND_URL);
     newUrl.search = searchParams;
     request = new Request(newUrl, request);
   }
 
-  request.headers.set('X-API-KEY', env.API_KEY);
-  request.headers.set('Content-Type', 'application/json');
+  request.headers.set("X-API-KEY", env.API_KEY);
+  request.headers.set("Content-Type", "application/json");
 
-  const accessToken = event.cookies.get('accessToken');
+  const accessToken = event.cookies.get("accessToken");
   if (accessToken) {
-    request.headers.set('Authorization', `Bearer ${accessToken}`);
+    request.headers.set("Authorization", `Bearer ${accessToken}`);
   }
 
   return fetch(request);

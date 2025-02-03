@@ -25,7 +25,6 @@ export interface User {
     csrfToken: string;
 }
 
-
 export interface ResponseBrowse {
     page: number;
     count: number;
@@ -56,13 +55,19 @@ export interface IngredientCollection {
 
 export interface Formula {
     id: string;
-    name: string;
-    created?: string;
-    updated?: string;
-    notes: string;
+    title: string;
+    createdAt?: string;
+    updatedAt?: string;
     description: string;
     solvent: string;
     ingredients: FormulaIngredient[];
+}
+
+export interface FormulaIngredient {
+    commonName: string,
+    id: string,
+    amount: number,
+    unit: string
 }
 
 export interface FormulaIngredient {
@@ -78,5 +83,5 @@ export interface FormulaIngredient {
 
 export interface Toast {
     message: string | null;
-    type: 'success' | 'error' | 'info' | null;
+    type: "success" | "error" | "info" | null;
 }

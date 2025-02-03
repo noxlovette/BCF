@@ -1,7 +1,7 @@
-import { error, fail } from "@sveltejs/kit";
-import type { Actions } from "./$types";
 import { parseCookieOptions } from "$lib/server/cookies";
 import { ValidateAccess } from "$lib/server/refresh";
+import { error, fail } from "@sveltejs/kit";
+import type { Actions } from "./$types";
 
 export const actions = {
   default: async ({ request, fetch, cookies }) => {
@@ -14,7 +14,7 @@ export const actions = {
     }
 
     try {
-      const response = await fetch('/axum/auth/signin', {
+      const response = await fetch("/axum/auth/signin", {
         method: "POST",
         body: JSON.stringify({ username, pass }),
       });
@@ -23,8 +23,8 @@ export const actions = {
       }
 
       response.headers.getSetCookie().forEach((cookie) => {
-        const [fullCookie, ...opts] = cookie.split(';');
-        const [name, value] = fullCookie.split('=');
+        const [fullCookie, ...opts] = cookie.split(";");
+        const [name, value] = fullCookie.split("=");
 
         const cookieOptions = parseCookieOptions(opts);
         cookies.set(name, value, cookieOptions);
@@ -35,17 +35,17 @@ export const actions = {
 
       if (!user) {
         return fail(401, {
-          message: 'Invalid access token'
+          message: "Invalid access token",
         });
       }
 
       return {
         success: true,
-        user
+        user,
       };
     } catch (error) {
       console.error(error);
-      return error(500, { message: "An unknown error occurred" })
+      return error(500, { message: "An unknown error occurred" });
     }
   },
 } satisfies Actions;

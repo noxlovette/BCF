@@ -11,21 +11,21 @@
   import CreateButton from "$lib/components/UI/CreateButton.svelte";
   import Search from "$lib/components/UI/Search.svelte";
 
-  export let data: PageServerData;
+  let { data } = $props();
 
-  let formulae: Formula[] = data.formulae;
+  let { formulas } = data;
 </script>
 
 <MetaData title="BCF | Formulate" />
 
 <AppWrap>
   <SearchBar>
-    <Search placeholder="/ search formulas" />
+    <Search placeholder="Search for Formulas " />
     <form
       method="post"
       action="?/create"
       use:enhance={() =>
-        notification.set({ message: "Formula Created", type: "Success" })}
+        notification.set({ message: "Formula Created", type: "success" })}
     >
       <CreateButton />
     </form>
@@ -36,7 +36,7 @@
       id="card-holder"
       class="grid w-full grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
     >
-      {#each formulae as formula}
+      {#each formulas as formula}
         <FormulateCard {formula} />
       {/each}
     </div>

@@ -36,7 +36,7 @@
   </div>
 
   <div class="text-6xl font-bold xl:text-[6rem]">
-    <a href="/auth/signup" class="button transition-all hover:text-gold-400"
+    <a href="/auth/signup" class="button hover:text-gold-400 transition-all"
       >sign up</a
     >
   </div>

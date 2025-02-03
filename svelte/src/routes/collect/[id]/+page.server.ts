@@ -1,15 +1,9 @@
-import redis from "$lib/redisClient";
 import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
-
-export const load: PageServerLoad = async ({
-  fetch,
-  params,
-}) => {
+export const load: PageServerLoad = async ({ fetch, params }) => {
   const { id } = params;
   try {
-
     const endpoint = `/axum/collect/ci/${id}`;
 
     const response = await fetch(endpoint, {
@@ -17,7 +11,11 @@ export const load: PageServerLoad = async ({
     });
     const ingredient = await response.json();
 
-    return { ingredient };
+    console.log(ingredient);
+
+    return {
+      ingredient,
+    };
   } catch (error) {
     return {
       error: "Failed to fetch browse data",
@@ -26,8 +24,7 @@ export const load: PageServerLoad = async ({
 };
 
 export const actions = {
-  update: async ({ request }) => {
-
+  update: async ({ request, fetch }) => {
     const formData = await request.formData();
     const id = formData.get("id");
 
@@ -47,35 +44,29 @@ export const actions = {
     };
 
     try {
-      const response = await fetch(
-        `/axum/collect/ci/${id}`,
-        {
-          method: "PATCH",
-          body: JSON.stringify(body),
-        },
-      );
+      const response = await fetch(`/axum/collect/ci/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(body),
+      });
 
       const _ = await response.json();
 
       if (response.ok) {
         return { success: true };
       } else {
-        return error(500)
+        return error(500);
       }
     } catch (err: any) {
       throw error(500, "Failed to edit the ingredient");
     }
   },
-  delete: async ({ cookies, request }) => {
+  delete: async ({ fetch, request }) => {
     const formData = await request.formData();
     const id = formData.get("id");
 
-    const response = await fetch(
-      `/axum/collect/ci/${id}`, {
-
-      method: "DELETE"
-    },
-    );
+    const response = await fetch(`/axum/collect/ci/${id}`, {
+      method: "DELETE",
+    });
 
     if (response.ok) {
       redirect(301, "/collect");

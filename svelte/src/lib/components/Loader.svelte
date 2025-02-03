@@ -59,13 +59,13 @@
 
 {#if $navigating && counter > 1}
   <div
-    class="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-stone-950 bg-opacity-40 backdrop-blur"
+    class="bg-opacity-40 fixed top-0 left-0 z-30 flex h-full w-full items-center justify-center bg-stone-950 backdrop-blur"
     transition:fade={{ duration: 300 }}
   >
     <div class="relative flex max-w-[400px] flex-col space-y-2">
       <Loader2 class="animate-spin"></Loader2>
       <p
-        class="text-gold-50 text-pretty px-4 font-bold normal-case italic lg:text-2xl"
+        class="text-gold-50 px-4 font-bold text-pretty normal-case italic lg:text-2xl"
       >
         {chosenQuote}
       </p>

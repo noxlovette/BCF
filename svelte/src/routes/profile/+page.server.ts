@@ -3,7 +3,6 @@ import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, cookies, depends }) => {
-
   const sessionid = cookies.get("sessionid");
   depends("profile:update");
   if (!sessionid) {

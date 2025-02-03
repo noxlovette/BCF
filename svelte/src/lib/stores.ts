@@ -8,9 +8,9 @@ function createPageStore() {
   return {
     subscribe,
     set,
-    increase: () => update(n => n + 1),
-    decrease: () => update(n => n > 1 ? n - 1 : 1),
-    reset: () => set(1)
+    increase: () => update((n) => n + 1),
+    decrease: () => update((n) => (n > 1 ? n - 1 : 1)),
+    reset: () => set(1),
   };
 }
 
@@ -41,7 +41,6 @@ export function clearUser() {
   }));
 }
 
-
 export const editedFormula = writable({
   id: "",
   name: "",
@@ -51,15 +50,14 @@ export const editedFormula = writable({
   ingredients: [],
 });
 
-
 export const notification = writable<Toast>({
   message: null,
-  type: null
+  type: null,
 });
 
 export function clearNotification() {
   notification.update(() => ({
     message: null,
-    type: null
+    type: null,
   }));
 }

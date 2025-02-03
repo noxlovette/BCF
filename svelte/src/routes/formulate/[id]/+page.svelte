@@ -33,7 +33,7 @@
         ingredients: [
           ...formula.ingredients,
           {
-            common_name: "",
+            commonName: "",
             amount: 0,
             percentage: 0,
             volatility: "heart",
@@ -65,7 +65,7 @@
 <MetaData title={formula.name} />
 
 <AppWrap
-  class="caret-aqua-700 selection:bg-aqua-700 selection:text-aqua-50 select-text justify-between"
+  class="caret-aqua-700 selection:bg-aqua-700 selection:text-aqua-50 justify-between select-text"
 >
   <div
     id="header"
@@ -160,8 +160,8 @@
           {#if $editing}
             <input
               type="text"
-              bind:value={ingredient.common_name}
-              placeholder={ingredient.common_name}
+              bind:value={ingredient.commonName}
+              placeholder={ingredient.commonName}
               class="rounded border-none border-stone-500 bg-transparent p-0 ring-0 focus:border-stone-500 focus:ring-0
   xl:text-2xl dark:bg-stone-800
   "
@@ -171,7 +171,7 @@
               href="/collect/{ingredient.counterpart}"
               class=" hover:text-aqua-700 transition-colors xl:text-2xl"
             >
-              {ingredient.common_name}
+              {ingredient.commonName}
             </a>
           {/if}
         </div>
@@ -212,18 +212,10 @@
     class="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-8"
   >
     <div>
-      <Label>description</Label>
+      <Label>Description</Label>
       <VariableTextarea
         text={formula.description}
         bind:value={$editedFormula.description}
-        class=" xl:text-2xl"
-      />
-    </div>
-    <div>
-      <Label>notes</Label>
-      <VariableTextarea
-        text={formula.notes}
-        bind:value={$editedFormula.notes}
         class=" xl:text-2xl"
       />
     </div>

@@ -10,7 +10,6 @@ export default defineConfig({
         project: "bcf-frontend",
         authToken: process.env.SENTRY_AUTH_TOKEN,
         url: "https://danila-volkov.sentry.io/",
-
       },
     }),
     sveltekit(),
@@ -20,5 +19,4 @@ export default defineConfig({
     host: true,
     port: 3000,
   },
-
 });

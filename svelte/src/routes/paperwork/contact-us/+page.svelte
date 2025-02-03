@@ -16,7 +16,7 @@
     >
       <div class="lg:ml-8 xl:ml-12">
         <h2
-          class="text-pretty text-3xl font-bold transition-all group-hover:text-gold-400"
+          class="group-hover:text-gold-400 text-3xl font-bold text-pretty transition-all"
         >
           Telegram
         </h2>
@@ -36,7 +36,7 @@
     >
       <div class="lg:ml-8 xl:ml-12">
         <h2
-          class="text-pretty text-3xl font-bold transition-all group-hover:text-gold-400"
+          class="group-hover:text-gold-400 text-3xl font-bold text-pretty transition-all"
         >
           Email
         </h2>
@@ -53,7 +53,7 @@
     <a href="https://github.com/noxlovette" class="flex flex-row items-center">
       <div class="lg:ml-8 xl:ml-12">
         <h2
-          class="text-pretty text-3xl font-bold transition-all group-hover:text-gold-400"
+          class="group-hover:text-gold-400 text-3xl font-bold text-pretty transition-all"
         >
           GitHub
         </h2>

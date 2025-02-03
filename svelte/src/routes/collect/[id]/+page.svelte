@@ -19,16 +19,7 @@
   const editing = writable(false);
   const editedIngredient = writable(ingredient);
 
-  let otherNames = ingredient.other_names || "Unknown";
-  let volatility = ingredient.volatility || "Unknown";
-  let useMessage =
-    ingredient.use || "Nobody has added a use for this ingredient yet";
-  let colour = ingredient.colour || "No colour";
-  let impression =
-    ingredient.impression || "You haven't recorded an impression yet";
-  let associations = ingredient.associations || "None";
-  let ideas = ingredient.ideas || "You haven't recorded any ideas yet";
-  let origin = ingredient.origin || "Earth";
+  let otherNames = ingredient.otherNames || "Unknown";
   setContext("editing", editing);
 
   function handleEnhance() {
@@ -38,10 +29,10 @@
   }
 </script>
 
-<MetaData title={ingredient.common_name} robots="noindex, nofollow" />
+<MetaData title={ingredient.commonName} robots="noindex, nofollow" />
 
 <AppWrap
-  class="caret-grapefruit-700 selection:bg-grapefruit-700 selection:text-grapefruit-50 select-text justify-between"
+  class="caret-grapefruit-700 selection:bg-grapefruit-700 selection:text-grapefruit-50 justify-between select-text"
 >
   <form method="post" action="?/update" class="" use:enhance={handleEnhance}>
     <div
@@ -53,9 +44,9 @@ items-baseline justify-between
       <div class="my-4 w-full md:my-0">
         <h1 class="">
           <VariableInput
-            text={ingredient.common_name}
-            bind:value={$editedIngredient.common_name}
-            name="common_name"
+            text={ingredient.commonName}
+            bind:value={$editedIngredient.commonName}
+            name="commonName"
             class="font-quicksand text-3xl font-bold md:text-4xl lg:text-5xl xl:text-7xl"
           />
         </h1>
@@ -68,28 +59,17 @@ items-baseline justify-between
           <button
             type="submit"
             class="rounded border-2 border-stone-500 px-2 py-1 lg:px-6 lg:py-2"
-            on:click={() => editing.set(false)}
+            onclick={() => editing.set(false)}
           >
             Cancel
           </button>
 
-          <form
-            method="post"
-            action="?/delete"
-            use:enhance={() =>
-              notification.set({
-                message: `Deleted ${ingredient.common_name}`,
-                type: "success",
-              })}
+          <button
+            formaction="?/delete"
+            class="rounded border-2 border-stone-500 px-2 py-1 disabled:border-stone-300 disabled:text-stone-400 lg:px-6 lg:py-2"
           >
-            <input type="hidden" name="id" value={ingredient.id} />
-            <button
-              disabled={!$user.is_authenticated}
-              class="rounded border-2 border-stone-500 px-2 py-1 disabled:border-stone-300 disabled:text-stone-400 lg:px-6 lg:py-2"
-            >
-              Delete
-            </button>
-          </form>
+            Delete
+          </button>
           <input type="hidden" name="id" value={ingredient.id} />
           <button
             type="submit"
@@ -99,8 +79,7 @@ items-baseline justify-between
           </button>
         {:else}
           <button
-            disabled={!$user.is_authenticated}
-            on:click={() => editing.set(!$editing)}
+            onclick={() => editing.set(!$editing)}
             class="rounded border-2 border-stone-500 px-2 py-1 disabled:border-stone-300 disabled:text-stone-400 lg:px-6 lg:py-2"
           >
             Edit
@@ -115,17 +94,8 @@ items-baseline justify-between
     >
       <div id="left-part" class="flex w-full flex-col space-y-8 pr-8 md:w-2/3">
         <div
-          class="flex flex-col space-y-4 md:flex-row md:space-x-8 md:space-y-0"
+          class="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-8"
         >
-          <div>
-            <Label>descriptors</Label>
-            <VariableTextarea
-              text={ingredient.descriptors}
-              bind:value={$editedIngredient.descriptors}
-              name="descriptors"
-              class=" xl:text-2xl"
-            />
-          </div>
           <div>
             <Label>CAS</Label>
             <VariableInput
@@ -139,105 +109,26 @@ items-baseline justify-between
         <div>
           <Label>how to use it</Label>
           <VariableTextarea
-            text={useMessage}
-            bind:value={$editedIngredient.use}
+            text={$editedIngredient.markdown}
+            bind:value={$editedIngredient.markdown}
             name="use"
             class="min-h-24  md:min-h-36 xl:text-2xl"
           />
         </div>
         <div class="flex flex-col space-y-4">
           <div
-            class="flex w-full max-w-2xl flex-col space-y-4 md:flex-row md:space-x-8 md:space-y-0"
+            class="flex w-full max-w-2xl flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-8"
           >
             <div>
-              <Label>volatility</Label>
-              <VariableInput
-                text={volatility}
-                name="volatility"
-                bind:value={$editedIngredient.volatility}
-                class=" xl:text-2xl"
-              />
-            </div>
-            <div>
-              <Label>origin</Label>
-              <VariableInput
-                text={origin}
-                name="origin"
-                bind:value={$editedIngredient.origin}
-                class=" xl:text-2xl"
+              <Label>also known as</Label>
+              <VariableTextarea
+                text={otherNames}
+                name="other_names"
+                bind:value={$editedIngredient.otherNames}
+                class=""
               />
             </div>
           </div>
-
-          <div>
-            <Label>also known as</Label>
-            <VariableTextarea
-              text={otherNames}
-              name="other_names"
-              bind:value={$editedIngredient.other_names}
-              class=""
-            />
-          </div>
-        </div>
-      </div>
-      <div id="right-part" class="flex flex-1 flex-col space-y-8 pl-4">
-        <div
-          class="flex flex-col space-y-2 md:flex-row md:space-x-8 md:space-y-0"
-        >
-          <div>
-            <Label>colour</Label>
-            <VariableInput
-              text={colour}
-              name="colour"
-              bind:value={$editedIngredient.colour}
-              class=" xl:text-2xl"
-            />
-          </div>
-          <div>
-            <Label>associations</Label>
-            <VariableInput
-              text={associations}
-              name="associations"
-              bind:value={$editedIngredient.associations}
-              class=" xl:text-2xl"
-            />
-          </div>
-        </div>
-        <div>
-          <Label>my impression</Label>
-          <VariableTextarea
-            text={impression}
-            name="impression"
-            bind:value={$editedIngredient.impression}
-            class="min-h-24  md:min-h-36 xl:text-2xl"
-          />
-        </div>
-
-        <div>
-          <Label>ideas</Label>
-          <VariableTextarea
-            text={ideas}
-            name="ideas"
-            bind:value={$editedIngredient.ideas}
-            class=" xl:text-2xl"
-          />
-        </div>
-        <div>
-          {#if ingredient.related_formulas.length > 0}
-            <Label>I use it in:</Label>
-            <ul>
-              {#each ingredient.related_formulas as formula}
-                <li>
-                  <a
-                    href="/formulate/{formula.id}"
-                    class="hover:text-grapefruit-500 transition-colors xl:text-2xl"
-                  >
-                    {formula.name}
-                  </a>
-                </li>
-              {/each}
-            </ul>
-          {/if}
         </div>
       </div>
     </div>

@@ -5,14 +5,14 @@
 </script>
 
 <div
-  class="text-pretty py-12 text-justify sm:py-8 md:py-12 lg:py-14 xl:py-12 2xl:py-28"
+  class="py-12 text-justify text-pretty sm:py-8 md:py-12 lg:py-14 xl:py-12 2xl:py-28"
 >
   <div class="lowercase">
     <BigText text={bigText} />
   </div>
 
   <div
-    class="mx-auto grid max-w-4xl grid-cols-1 items-start gap-8 text-pretty px-4 py-8 pb-12 sm:px-6 md:py-16 lg:grid lg:gap-x-8 lg:px-8 lg:py-24 xl:gap-x-24 xl:gap-y-12"
+    class="mx-auto grid max-w-4xl grid-cols-1 items-start gap-8 px-4 py-8 pb-12 text-pretty sm:px-6 md:py-16 lg:grid lg:gap-x-8 lg:px-8 lg:py-24 xl:gap-x-24 xl:gap-y-12"
   >
     <Section
       sectionBigText="Acceptance of Terms"
