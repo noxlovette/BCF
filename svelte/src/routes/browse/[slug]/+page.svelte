@@ -1,12 +1,11 @@
 <script lang="ts">
   import type { PageServerData } from "./$types";
   import { notification } from "$lib/stores";
-  import MetaData from "$lib/components/MetaData.svelte";
-  import AppWrap from "$lib/components/AppWrap.svelte";
   import { enhance } from "$app/forms";
   import type { IngredientBrowse } from "$lib/types";
   import { user } from "$lib/stores";
-  import Label from "$lib/components/UI/Label.svelte";
+
+  import { Label, MetaData } from "$lib/components";
 
   let { data } = $props();
   let ingredient: IngredientBrowse = data.ingredient;

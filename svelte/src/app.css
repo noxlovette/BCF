@@ -1,14 +1,58 @@
 @import "tailwindcss";
 
+@layer base {
+  .font-inter {
+    font-family: "Inter", var(--font-sans);
+    color: #111827;
+    /* Dark gray */
+  }
+
+  .font-quicksand {
+    font-family: "Quicksand", var(--font-sans);
+    color: #4f46e5;
+    /* Indigo */
+  }
+
+  .font-manrope {
+    font-family: "Manrope", var(--font-sans);
+    color: #10b981;
+    /* Emerald */
+  }
+
+  .font-nunito {
+    font-family: "Nunito", var(--font-sans);
+    color: #f59e0b;
+    /* Amber */
+  }
+
+  .font-outfit {
+    font-family: "Outfit", var(--font-sans);
+    color: #ef4444;
+    /* Red */
+  }
+
+  .font-poppins {
+    font-family: "Poppins", var(--font-sans);
+    color: #6366f1;
+    /* Blue-violet */
+  }
+
+  .font-urbanist {
+    font-family: "Urbanist", var(--font-sans);
+    color: #d946ef;
+    /* Pinkish purple */
+  }
+}
+
 @theme {
-  --font-sans: "Quicksand", system-ui, -apple-system, BlinkMacSystemFont,
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 
   /* Gold Colors - Refined */
   --color-gold-50: oklch(0.98 0.03 85.9);
   --color-gold-100: oklch(0.95 0.05 85.9);
   --color-gold-200: oklch(0.91 0.08 85.9);
-  --color-gold-300: oklch(0.87 0.10 85.9);
+  --color-gold-300: oklch(0.87 0.1 85.9);
   --color-gold-400: oklch(0.83 0.12 85.9);
   --color-gold-500: oklch(0.79 0.11 85.9);
   --color-gold-600: oklch(0.73 0.09 85.9);

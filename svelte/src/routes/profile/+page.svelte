@@ -7,7 +7,7 @@
 
   import { user } from "$lib/stores";
   import AppWrap from "$lib/components/AppWrap.svelte";
-  import BigText from "$lib/components/BigText.svelte";
+  import BigText from "$lib/components/typography/BigText.svelte";
 
   export let data: PageServerData;
 

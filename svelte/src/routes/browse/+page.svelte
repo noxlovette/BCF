@@ -1,12 +1,14 @@
 <script lang="ts">
-  import BrowseCard from "$lib/components/BrowseCard.svelte";
-  import MetaData from "$lib/components/MetaData.svelte";
-  import SearchBar from "$lib/components/SearchBar.svelte";
-  import PerPage from "$lib/components/UI/PerPage.svelte";
-  import Search from "$lib/components/UI/Search.svelte";
-  import CardHolder from "$lib/components/CardHolder.svelte";
+  import {
+    BrowseCard,
+    MetaData,
+    Search,
+    SearchBar,
+    CardHolder,
+    PerPage,
+    Pagination,
+  } from "$lib/components";
   import { searchTerm, pageSize, currentPage, notification } from "$lib/stores";
-  import Pagination from "$lib/components/UI/Pagination.svelte";
   import { goto } from "$app/navigation";
 
   let { data } = $props();

@@ -1,5 +1,5 @@
 <script>
-  import BigText from "$lib/components/BigText.svelte";
+  import BigText from "$lib/components/typography/BigText.svelte";
 </script>
 
 <div class="lowercase">

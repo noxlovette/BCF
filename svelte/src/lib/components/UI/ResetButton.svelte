@@ -1,26 +1,10 @@
 <script lang="ts">
-  import ResetIcon from "$lib/icons/ResetIcon.svelte";
-  import { notification } from "$lib/stores";
-  import { createEventDispatcher } from "svelte";
-  import { currentPage, searchTerm } from "$lib/stores";
-  import RoundButton from "./RoundButton.svelte";
-  import { RotateCcw } from "lucide-svelte";
-
-  const dispatch = createEventDispatcher();
-
-  function reset() {
-    notification.set({
-      message: "Resetting everything",
-      type: "info",
-    });
-
-    searchTerm.set("");
-    currentPage.set(1);
-
-    dispatch("reset");
-  }
+  import { ListRestart } from "lucide-svelte";
 </script>
 
-<RoundButton class="hidden md:block" on:click={reset}>
-  <RotateCcw size="26" />
-</RoundButton>
+<button
+  formaction="?/reset"
+  class="border-gold-400 bg-gold-700 text-gold-50 hover:text-gold-700 dark:border-gold-900 rounded-full border p-2 shadow transition-colors hover:bg-white hover:shadow-lg active:shadow-none dark:hover:bg-zinc-800"
+>
+  <ListRestart />
+</button>

@@ -1,5 +1,5 @@
 <script>
-  import BigText from "$lib/components/BigText.svelte";
+  import BigText from "$lib/components/typography/BigText.svelte";
   import Section from "../Section.svelte";
   const bigText = `terms of use<span class="text-gold-400">.</span>`;
 </script>

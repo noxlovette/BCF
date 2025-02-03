@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Label from "$lib/components/UI/Label.svelte";
+  import Label from "$lib/components/typography/Label.svelte";
   import type { PageServerData } from "./$types";
   import MetaData from "../../../lib/components/MetaData.svelte";
 

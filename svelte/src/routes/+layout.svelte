@@ -1,10 +1,12 @@
 <script lang="ts">
-  import Header from "$lib/components/Header.svelte";
-  import Footer from "$lib/components/Footer.svelte";
-  import Notification from "$lib/components/Notification.svelte";
+  import {
+    Header,
+    Footer,
+    Notification,
+    MetaData,
+    Loader,
+  } from "$lib/components";
   import "../app.css";
-  import MetaData from "$lib/components/MetaData.svelte";
-  import Loader from "$lib/components/Loader.svelte";
 
   let { children } = $props();
 </script>
