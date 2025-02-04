@@ -18,8 +18,6 @@
       `/browse?search=${$searchTerm}&page_size=${$pageSize}&page=${$currentPage}`,
       { noScroll: true, keepFocus: true },
     );
-
-    notification.set({ message: `Current Page ${$currentPage}`, type: "info" });
   });
 
   $inspect($currentPage);

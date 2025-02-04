@@ -24,7 +24,7 @@
             const { user } = result.data;
             setUser(user);
             localStorage.setItem("user", JSON.stringify(user));
-            notification.set({ message: "Welcome home", type: "success" });
+            notification.set({ message: "Welcome!", type: "success" });
             goto("/");
           } else if (result.type === "failure") {
             notification.set({

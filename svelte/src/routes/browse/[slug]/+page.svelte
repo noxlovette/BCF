@@ -1,9 +1,12 @@
 <script lang="ts">
   import { EditButton, Label, MetaData, SubmitButton } from "$lib/components";
   import { enhance } from "$app/forms";
+  import { notification } from "$lib/stores";
 
   let { data } = $props();
   let { ingredient, unsplashData } = data;
+
+  let isSubmitting = $state(false);
 
   let href = $state("");
   if (unsplashData) {
@@ -146,7 +149,22 @@
     id="controls"
     class="mt-4 flex flex-row space-x-2"
     method="POST"
-    use:enhance
+    use:enhance={() => {
+      isSubmitting = true;
+
+      return async ({ result, update }) => {
+        isSubmitting = false;
+        if (result.type === "success") {
+          notification.set({ message: "Added to Collection", type: "success" });
+          update();
+        } else if (result.type === "error") {
+          notification.set({
+            message: String(result.error?.message) || "Something's off",
+            type: "error",
+          });
+        }
+      };
+    }}
   >
     <input type="hidden" value={ingredient.commonName} name="commonName" />
     <input type="hidden" value={ingredient.cas} name="cas" />

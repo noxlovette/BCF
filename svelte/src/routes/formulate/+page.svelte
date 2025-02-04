@@ -21,8 +21,19 @@
   <form
     method="post"
     action="?/create"
-    use:enhance={() =>
-      notification.set({ message: "Formula Created", type: "success" })}
+    use:enhance={() => {
+      return async ({ result, update }) => {
+        if (result.type === "success") {
+          notification.set({ message: "Suggestion Sent", type: "success" });
+          update();
+        } else if (result.type === "error") {
+          notification.set({
+            message: String(result.error?.message) || "Something's off",
+            type: "error",
+          });
+        }
+      };
+    }}
   >
     <CreateButton />
   </form>

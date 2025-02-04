@@ -2,7 +2,6 @@
   import { goto } from "$app/navigation";
   import {
     CollectCard,
-    ResetButton,
     CreateButton,
     MetaData,
     Search,
@@ -23,8 +22,6 @@
       `/collect?search=${$searchTerm}&page_size=${$pageSize}&page=${$currentPage}`,
       { noScroll: true, keepFocus: true },
     );
-
-    notification.set({ message: `Current Page ${$currentPage}`, type: "info" });
   });
 </script>
 
@@ -42,17 +39,24 @@
   <form
     method="post"
     action="?/create"
-    use:enhance={() =>
-      notification.set({
-        message: "New Ingredient Created",
-        type: "success",
-      })}
+    use:enhance={() => {
+      return async ({ result, update }) => {
+        if (result.type === "redirect") {
+          notification.set({
+            message: "New Ingredient Created",
+            type: "success",
+          });
+          update();
+        } else if (result.type === "error") {
+          notification.set({
+            message: String(result.error?.message) || "Something's off",
+            type: "error",
+          });
+        }
+      };
+    }}
   >
     <CreateButton />
-  </form>
-
-  <form method="post" action="?/reset" use:enhance>
-    <ResetButton />
   </form>
 
   <Pagination />

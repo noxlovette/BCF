@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { IngredientCollection } from "$lib/types";
   import MetaData from "$lib/components/MetaData.svelte";
+  import { EditButton } from "$lib/components";
 
   let { data } = $props();
   let ingredient: IngredientCollection = data.ingredient;
@@ -81,15 +82,10 @@
       </div>
     </div>
   </div>
-  <a
-    href="{ingredient.id}/edit"
-    class="bg-peach-600 hover:bg-peach-700
-    focus:ring-peach-500 text-peach-50 inline-flex items-center
-    self-start rounded-md border border-transparent px-4 py-2 text-sm font-medium shadow-sm
-    transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none sm:self-center lg:text-2xl"
+
+  <EditButton colour="peach" styling="self-start " href="{ingredient.id}/edit"
+    >Edit</EditButton
   >
-    Edit
-  </a>
 </div>
 
 <style>

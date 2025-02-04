@@ -1,12 +1,33 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { SubmitButton, CancelButton } from "$lib/components";
+  import { notification } from "$lib/stores";
 
   let { data } = $props();
   let { ingredient } = data;
+
+  let isSubmitting = $state(false);
 </script>
 
-<form method="POST" class="my-4 flex size-full flex-col" use:enhance>
+<form
+  method="POST"
+  class="my-4 flex size-full flex-col"
+  use:enhance={() => {
+    isSubmitting = true;
+    return async ({ result, update }) => {
+      isSubmitting = false;
+      if (result.type === "redirect") {
+        notification.set({ message: "Suggestion Sent", type: "success" });
+        update();
+      } else if (result.type === "error") {
+        notification.set({
+          message: String(result.error?.message) || "Something's off",
+          type: "error",
+        });
+      }
+    };
+  }}
+>
   <input type="hidden" name="id" value={ingredient.id} />
 
   <div

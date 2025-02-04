@@ -1,15 +1,36 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import { CancelButton, DangerButton, SubmitButton } from "$lib/components";
+  import { notification } from "$lib/stores";
 
   let { data } = $props();
   let { ingredient } = data;
+  let isSubmitting = $state();
 </script>
 
 <form
   action="?/update"
   method="POST"
   class="my-4 flex size-full flex-col"
-  use:enhance
+  use:enhance={() => {
+    isSubmitting = true;
+
+    return async ({ result, update }) => {
+      isSubmitting = false;
+      if (result.type === "success") {
+        notification.set({ message: "Update Saved", type: "success" });
+        update();
+      } else if (result.type === "redirect") {
+        notification.set({ message: "Deleted", type: "success" });
+        update();
+      } else if (result.type === "error") {
+        notification.set({
+          message: String(result.error?.message) || "Something's off",
+          type: "error",
+        });
+      }
+    };
+  }}
 >
   <input type="hidden" name="id" value={ingredient.id} />
 
@@ -90,25 +111,8 @@
 
   <!-- Action Buttons -->
   <div class="mt-8 flex justify-end space-x-4">
-    <a
-      href="."
-      class="rounded-md border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 shadow-sm transition-colors duration-200 hover:bg-stone-100 focus:ring-2 focus:ring-stone-500"
-    >
-      Cancel
-    </a>
-    <button
-      formaction="?/delete"
-      class="
-    rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-red-50 shadow-sm transition-colors duration-200 hover:bg-red-700 focus:ring-2 focus:ring-red-500
-    "
-    >
-      Delete
-    </button>
-    <button
-      type="submit"
-      class="bg-peach-600 hover:bg-peach-700 text-peach-50 focus:ring-peach-500 rounded-md px-4 py-2 text-sm font-medium shadow-sm transition-colors duration-200 focus:ring-2"
-    >
-      Save Changes
-    </button>
+    <CancelButton></CancelButton>
+    <DangerButton>Delete</DangerButton>
+    <SubmitButton colour="peach">Save Changes</SubmitButton>
   </div>
 </form>

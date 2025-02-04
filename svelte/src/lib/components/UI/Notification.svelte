@@ -29,7 +29,7 @@
 {#snippet icon(type: Toast["type"])}
   {#if type === "success"}
     <Check
-      class="text-pakistan-700 size-5 rounded-full bg-stone-100 p-1 lg:size-6 dark:bg-inherit dark:ring-2 dark:ring-stone-800"
+      class="size-5 rounded-full bg-stone-100 p-1 text-green-700 lg:size-6 dark:bg-inherit dark:ring-2 dark:ring-stone-800"
     />
   {:else if type === "error"}
     <X
@@ -37,7 +37,7 @@
     />
   {:else}
     <AlertCircle
-      class="text-brick-700 size-5 rounded-full bg-stone-100 p-1 lg:size-6 dark:bg-inherit  dark:ring-2 dark:ring-stone-800"
+      class="text-gold-700 size-5 rounded-full bg-stone-100 p-1 lg:size-6 dark:bg-inherit  dark:ring-2 dark:ring-stone-800"
     />
   {/if}
 {/snippet}
@@ -53,7 +53,7 @@
     class="fixed bottom-5 left-1/2 z-50 flex max-w-md min-w-[200px] -translate-x-1/2 items-center gap-6
 			rounded-full bg-stone-50 px-4 py-2 ring-1 shadow-md dark:bg-stone-900 {$notification.type ===
     'success'
-      ? 'ring-pakistan-700'
+      ? 'ring-green-700'
       : $notification.type === 'error'
         ? 'ring-red-700'
         : 'ring-amber-700'}"

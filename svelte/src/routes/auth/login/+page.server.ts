@@ -44,7 +44,6 @@ export const actions = {
         user,
       };
     } catch (error) {
-      console.error(error);
       return error(500, { message: "An unknown error occurred" });
     }
   },

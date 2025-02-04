@@ -7,7 +7,7 @@
   const isActive = (route: string) => page.url.pathname.startsWith(route);
 </script>
 
-<header class="font-manrope w-full bg-white shadow-md dark:bg-stone-900">
+<header class="font-manrope w-full bg-white shadow-sm dark:bg-stone-900">
   <div class="mx-auto max-w-7xl px-4">
     <div class="flex grid h-16 w-full grid-cols-3 items-center">
       <div class="flex items-center">
