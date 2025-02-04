@@ -6,11 +6,10 @@ const token = env.TELEGRAM_BOT_TOKEN;
 const chatId = env.TELEGRAM_CHAT_ID;
 
 export const actions = {
-    suggest: async ({ request }) => {
+    default: async ({ request, fetch }) => {
         const formData = await request.formData();
-
         let body = {
-            ingredientId: formData.get("ingredientId"),
+            ingredientId: formData.get("id"),
             commonName: formData.get("commonName"),
             cas: formData.get("cas"),
             markdown: formData.get("markdown"),

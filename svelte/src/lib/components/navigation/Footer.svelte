@@ -8,7 +8,7 @@
   }
 </script>
 
-<div class="flex w-full max-w-[90vw]">
+<div class="mt-10 flex w-full max-w-[90vw]">
   <p
     class="font-quicksand text-gold-400/80 -mb-2 text-left text-4xl font-bold lg:text-7xl"
   >

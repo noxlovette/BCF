@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { IngredientBrowse } from "$lib/types";
-  import { Label, MetaData } from "$lib/components";
+  import { EditButton, Label, MetaData, SubmitButton } from "$lib/components";
   import { enhance } from "$app/forms";
 
   let { data } = $props();
@@ -143,12 +142,17 @@
       </div>
     </div>
   </div>
-  <form id="controls" class="mt-4 flex flex-row" method="POST" use:enhance>
+  <form
+    id="controls"
+    class="mt-4 flex flex-row space-x-2"
+    method="POST"
+    use:enhance
+  >
     <input type="hidden" value={ingredient.commonName} name="commonName" />
     <input type="hidden" value={ingredient.cas} name="cas" />
     <input type="hidden" value={ingredient.ingDescription} name="markdown" />
-    <button type="submit" class="px-3 py-1"> Add to Collection </button>
-    <a href="{ingredient.slug}/suggest" class="px-3 py-1">Suggest a Change </a>
+    <SubmitButton>Add to Collection</SubmitButton>
+    <EditButton href="{ingredient.slug}/suggest">Suggest a Change</EditButton>
   </form>
 </div>
 
