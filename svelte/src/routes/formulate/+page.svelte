@@ -23,8 +23,8 @@
     action="?/create"
     use:enhance={() => {
       return async ({ result, update }) => {
-        if (result.type === "success") {
-          notification.set({ message: "Suggestion Sent", type: "success" });
+        if (result.type === "redirect") {
+          notification.set({ message: "Formula Created", type: "success" });
           update();
         } else if (result.type === "error") {
           notification.set({

@@ -22,8 +22,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   const accessToken = event.cookies.get("accessToken");
 
-  console.log("TOKEN FROM HANDLE", accessToken);
-
   let user: JWTPayload;
   if (accessToken) {
     try {

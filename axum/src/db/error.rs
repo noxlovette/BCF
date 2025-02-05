@@ -17,6 +17,8 @@ pub enum DbError {
     TransactionFailed,
     #[error("Already exists")]
     AlreadyExists,
+    #[error("Parsing Error")]
+    ParseError
 }
 
 impl IntoResponse for DbError {
@@ -26,6 +28,7 @@ impl IntoResponse for DbError {
             DbError::NotFound => (StatusCode::INTERNAL_SERVER_ERROR, "Not Found"),
             DbError::TransactionFailed => (StatusCode::INTERNAL_SERVER_ERROR, "Transaction failed"),
             DbError::AlreadyExists => (StatusCode::INTERNAL_SERVER_ERROR, "Already exists"),
+            DbError::ParseError => (StatusCode::INTERNAL_SERVER_ERROR, "Parse Error"),
         };
 
         let body = Json(json!({

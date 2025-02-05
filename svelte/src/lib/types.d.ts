@@ -57,29 +57,20 @@ export interface IngredientCollection {
 export interface Formula {
   id: string;
   title: string;
-  createdAt?: string;
-  updatedAt?: string;
   description: string;
   solvent: string;
   ingredients: FormulaIngredient[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface FormulaIngredient {
-  commonName: string;
+  name: string;
   id: string;
   amount: number;
-  unit: string;
-}
-
-export interface FormulaIngredient {
-  id: string;
-  amount: number;
-  common_name: string;
-  formula_id: number;
   percentage: number;
   volatility: string;
   unit: string;
-  counterpart?: IngredientCollection;
 }
 
 export interface Toast {

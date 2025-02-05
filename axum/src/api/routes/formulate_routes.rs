@@ -11,7 +11,7 @@ pub fn formulate_routes() -> Router<AppState> {
         )
         .route(
             "/formula/{formula_id}",
-            get(formulate::fetch_formula)
+            get(formulate::fetch_formula_with_ingredients)
                 .patch(formulate::update_formula)
                 .delete(formulate::delete_formula),
         )

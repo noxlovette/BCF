@@ -48,15 +48,16 @@
     <!-- Left Column - Main Info -->
     <div class="space-y-8 lg:col-span-2">
       <!-- Descriptors & CAS -->
-      <div class="rounded-lg bg-white p-6 shadow-sm">
+      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900">
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
             <Label>Descriptors</Label>
             <div
-              class="flex flex-wrap items-center gap-2 text-lg text-stone-600 md:gap-4 md:text-xl xl:text-2xl"
+              class="my-2 flex flex-wrap items-center gap-2 text-lg text-stone-600 md:gap-4 md:text-xl xl:text-2xl"
             >
               {#each ingredient.descriptors as descriptor}
-                <span class="rounded-md bg-stone-100 px-3 py-1 shadow-sm"
+                <span
+                  class="rounded-md bg-stone-100 px-3 py-1 text-stone-700 shadow-sm dark:bg-stone-700 dark:text-stone-100"
                   >{descriptor}</span
                 >
               {/each}
@@ -65,9 +66,11 @@
           <div>
             <Label>CAS Number</Label>
             <div
-              class="flex flex-wrap items-center gap-2 text-lg text-stone-600 md:gap-4 md:text-xl xl:text-2xl"
+              class="my-2 flex flex-wrap items-center gap-2 text-lg text-stone-600 md:gap-4 md:text-xl xl:text-2xl"
             >
-              <span class="rounded-md bg-stone-100 px-3 py-1 shadow-sm">
+              <span
+                class="rounded-md bg-stone-100 px-3 py-1 text-stone-700 shadow-sm dark:bg-stone-700 dark:text-stone-100"
+              >
                 {ingredient.cas || "Not available"}
               </span>
             </div>
@@ -76,27 +79,27 @@
       </div>
 
       <!-- Usage Information -->
-      <div class="rounded-lg bg-white p-6 shadow-sm">
+      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900">
         <Label>How to Use</Label>
-        <p class="mt-2 min-h-24 text-lg text-stone-700 md:min-h-36">
+        <p class="mt-2 min-h-24 text-lg md:min-h-36">
           {useMessage}
         </p>
       </div>
 
       <!-- Properties -->
-      <div class="rounded-lg bg-white p-6 shadow-sm">
+      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900">
         <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div>
             <Label>Volatility</Label>
-            <p class="mt-2 text-lg text-stone-700">{volatility}</p>
+            <p class="mt-2 text-lg">{volatility}</p>
           </div>
           <div>
             <Label>IFRA Status</Label>
-            <p class="mt-2 text-lg text-stone-700">{ifraStatus}</p>
+            <p class="mt-2 text-lg">{ifraStatus}</p>
           </div>
           <div>
             <Label>Origin</Label>
-            <p class="mt-2 text-lg text-stone-700">{origin}</p>
+            <p class="mt-2 text-lg">{origin}</p>
           </div>
         </div>
       </div>
@@ -106,7 +109,7 @@
     <div class="space-y-6 lg:col-span-1">
       <!-- Related Ingredients / PHOTO -->
       <div
-        class="relative aspect-square overflow-hidden rounded-lg bg-white shadow-sm"
+        class="relative aspect-square overflow-hidden rounded-lg bg-white shadow-sm dark:bg-stone-900"
       >
         {#if unsplashData}
           <img
@@ -127,13 +130,13 @@
       </div>
 
       <!-- Alternative Names -->
-      <div class="rounded-lg bg-white p-6 shadow-sm">
+      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900">
         <Label>Also Known As</Label>
         <div class="mt-2">
           {#if otherNames !== "No alternative names"}
             {#each otherNames.split(";") as name}
               <span
-                class="mr-2 mb-2 inline-block rounded-lg bg-stone-100 px-4 py-2 text-sm text-stone-700"
+                class="mr-2 mb-2 inline-block rounded-lg bg-stone-100 px-4 py-2 text-sm text-stone-700 dark:bg-stone-700 dark:text-stone-100"
               >
                 {name.trim()}
               </span>

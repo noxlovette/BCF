@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { multiplier = 1, ingredient } = $props();
+  let { multiplier = $bindable(1), ingredient } = $props();
 </script>
 
 <div class="flex flex-row justify-between">

@@ -44,8 +44,6 @@ export async function handleTokenRefresh(event: RequestEvent) {
       },
     });
 
-    console.debug("THE FYCJUING REFRESH REQUEST", refreshRes);
-
     if (!refreshRes.ok) {
       throw new Error("Refresh failed");
     }

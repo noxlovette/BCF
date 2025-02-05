@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
 export const actions = {
   create: async ({ fetch }) => {
     const body = {
-      name: "New Formula",
+      title: "New Formula",
       description: "Write something inspiring here!",
       notes: "Add some notes here...",
     };
@@ -36,7 +36,7 @@ export const actions = {
 
     if (response.ok) {
       const formula = await response.json();
-      redirect(301, `/formulate/${formula.id}`);
+      redirect(301, `/formulate/${formula.id}/edit`);
     } else {
       return error(500);
     }

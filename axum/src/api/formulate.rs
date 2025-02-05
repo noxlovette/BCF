@@ -1,46 +1,40 @@
 use crate::auth::jwt::Claims;
 use crate::db::error::DbError;
 use crate::db::init::AppState;
-use crate::models::formulate::{Formula, FormulaCreatePayload, FormulaFull, FormulaPayload};
+use crate::models::formulate::{Formula, FormulaCreatePayload, FormulaPayload, FormulaWithIngredients, FormulaIngredient};
 use axum::extract::Path;
 use axum::{extract::State, Json};
 
-pub async fn fetch_formula(
-    State(pool): State<AppState>,
+pub async fn fetch_formula_with_ingredients(
+    State(state): State<AppState>,
     claims: Claims,
     Path(formula_id): Path<String>,
-) -> Result<Json<FormulaFull>, DbError> {
+) -> Result<Json<FormulaWithIngredients>, DbError> {
     let formula = sqlx::query_as!(
-        FormulaFull,
+        Formula,
         r#"
-        SELECT f.*, 
-            COALESCE(
-                jsonb_agg(
-                    jsonb_build_object(
-                        'id', fi.id,
-                        'name', fi.name,
-                        'amount', fi.amount,
-                        'unit', fi.unit,
-                        'volatility', fi.volatility,
-                        'percentage', fi.percentage
-                    )
-                ) FILTER (WHERE fi.id IS NOT NULL),
-                '[]'::jsonb
-            ) as "ingredients!"
-        FROM formulas f
-        LEFT JOIN formula_ingredients fi ON f.id = fi.formula_id
-        WHERE f.id = $1 AND f.user_id = $2
-        GROUP BY f.id
+        SELECT * FROM formulas 
+        WHERE id = $1 AND user_id=$2
         "#,
         formula_id,
         claims.sub
     )
-    .fetch_one(&pool.db)
-    .await?
-    .with_parsed_ingredients()
-    .unwrap();
+    .fetch_one(&state.db)
+    .await?;
 
-    Ok(Json(formula))
+    let ingredients = sqlx::query_as!(
+        FormulaIngredient,
+        r#"
+        SELECT * FROM formula_ingredients 
+        WHERE formula_id = $1
+        "#,
+        formula_id
+    )
+    .fetch_all(&state.db)
+    .await?;
+    
+    Ok(Json(FormulaWithIngredients { formula, ingredients }))
+    
 }
 
 pub async fn create_formula(
