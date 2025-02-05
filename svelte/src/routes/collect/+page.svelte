@@ -32,7 +32,7 @@
   ogUrl="https://bcfapp.app/collect"
 />
 
-<SearchBar>
+<SearchBar colour="peach">
   <Search />
 
   <PerPage />

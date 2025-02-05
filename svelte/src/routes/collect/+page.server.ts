@@ -17,7 +17,6 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
     const endpoint = `/axum/collect?page=${page}&search=${search}&page_size=${pageSize}`;
     const response = await fetch(endpoint, {
       method: "GET",
-
     });
 
     let collection: IngredientCollection[] = await response.json();
@@ -32,14 +31,14 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
 export const actions = {
   create: async ({ fetch }) => {
     const body = {
-      "commonName": "New Ingredient",
-      "cas": "0000-00-00",
-      "amount": 100,
-      "unit": "g"
-    }
+      commonName: "New Ingredient",
+      cas: "0000-00-00",
+      amount: 100,
+      unit: "g",
+    };
     const response = await fetch(`/axum/collect`, {
       method: "POST",
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     });
 
     if (response.ok) {

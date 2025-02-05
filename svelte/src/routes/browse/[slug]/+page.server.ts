@@ -6,12 +6,12 @@ export const actions = {
     const formData = await request.formData();
 
     const body = {
-      "commonName": formData.get("commonName"),
-      "cas": formData.get("cas"),
-      "markdown": formData.get("markdown"),
-      "amount": 100,
-      "unit": "g"
-    }
+      commonName: formData.get("commonName"),
+      cas: formData.get("cas"),
+      markdown: formData.get("markdown"),
+      amount: 100,
+      unit: "g",
+    };
 
     try {
       const response = await fetch(`/axum/collect`, {

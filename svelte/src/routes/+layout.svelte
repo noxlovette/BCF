@@ -14,7 +14,7 @@
 <MetaData />
 
 <main
-  class=" text-stone-80 flex min-h-screen min-w-screen flex-col items-center justify-center overflow-hidden bg-stone-100 slashed-zero tabular-nums antialiased dark:bg-stone-800 dark:text-stone-200"
+  class=" text-stone-80 flex min-h-screen min-w-screen flex-col items-center justify-center overflow-hidden bg-stone-100 slashed-zero tabular-nums antialiased dark:bg-stone-950 dark:text-stone-200"
 >
   <Header />
 

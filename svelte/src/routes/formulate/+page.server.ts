@@ -25,8 +25,7 @@ export const actions = {
   create: async ({ fetch }) => {
     const body = {
       title: "New Formula",
-      description: "Write something inspiring here!",
-      notes: "Add some notes here...",
+      description: "Express yourself",
     };
 
     const response = await fetch(`/axum/formulate`, {

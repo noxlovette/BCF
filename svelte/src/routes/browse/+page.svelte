@@ -29,7 +29,7 @@
 
 <MetaData title={ogTitle} {description} {ogTitle} {ogUrl} />
 
-<SearchBar>
+<SearchBar colour="navy">
   <Search />
   <PerPage />
   <Pagination />

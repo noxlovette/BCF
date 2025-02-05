@@ -59,18 +59,23 @@ export interface Formula {
   title: string;
   description: string;
   solvent: string;
-  ingredients: FormulaIngredient[];
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface FormulaIngredient {
   name: string;
-  id: string;
   amount: number;
   percentage: number;
   volatility: string;
   unit: string;
+  id?: string;
+  counterpart?: string;
+}
+
+export interface FormulaComposite {
+  formula: Formula;
+  ingredients: FormulaIngredient[];
 }
 
 export interface Toast {

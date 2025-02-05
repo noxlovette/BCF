@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { EditButton, Label, MetaData, SubmitButton } from "$lib/components";
+  import {
+    EditButton,
+    HeaderMerger,
+    Label,
+    MetaData,
+    SubmitButton,
+  } from "$lib/components";
   import { enhance } from "$app/forms";
   import { notification } from "$lib/stores";
 
@@ -33,15 +39,9 @@
 />
 
 <div class="flex size-full flex-col">
-  <div
-    class="border-navy-500 flex w-full flex-col items-center space-y-2 border-b-2 py-4 md:border-b-3 md:py-6 xl:border-b-4"
-  >
-    <h1
-      class="font-manrope text-center text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl xl:text-7xl"
-    >
-      {ingredient.commonName}
-    </h1>
-  </div>
+  <HeaderMerger colour="navy">
+    {ingredient.commonName}
+  </HeaderMerger>
 
   <!-- Main Content -->
   <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">

@@ -9,7 +9,7 @@
 
 <header class="font-manrope w-full bg-white shadow-sm dark:bg-stone-900">
   <div class="mx-auto max-w-7xl px-4">
-    <div class="flex grid h-16 w-full grid-cols-3 items-center">
+    <div class="grid h-16 w-full grid-cols-3 items-center">
       <div class="flex items-center">
         <a href="/" class="flex items-center space-x-3 hover:opacity-90">
           <img

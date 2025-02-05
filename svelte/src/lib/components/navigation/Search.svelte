@@ -26,12 +26,11 @@
 >
   <input
     type="text"
-    class="border-gold-400 w-full rounded-lg border-2 bg-stone-50 px-4 py-3
-           shadow transition-all duration-300
-           {focused
-      ? 'ring-gold-700/60 border-gold-200 ring-2'
-      : 'hover:border-gold-300'}
-           dark:border-gold-900 dark:bg-stone-900 dark:placeholder-stone-500"
+    class="border-gold-400 focus:ring-gold-400 focus:border-gold-500 dark:border-gold-900 dark:focus:ring-gold-700 dark:focus:border-gold-700 w-full
+       rounded-lg border-2 bg-stone-50 px-4 py-3
+       shadow-md transition
+       focus:ring-2 focus:ring-offset-0 focus:outline-none
+       dark:bg-stone-900 dark:placeholder-stone-500"
     bind:value
     oninput={handleSearch}
     onfocus={handleFocus}

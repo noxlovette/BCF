@@ -3,18 +3,26 @@
 </script>
 
 <div class="flex flex-row justify-between">
-  <div id="left-part" class="flex flex-col tracking-tight">
-    <p>ingredient.volatility</p>
-    <p>ingredient.commonName</p>
+  <div class="flex flex-col">
+    <span class="text-sm text-gray-600 capitalize">
+      {ingredient.volatility}
+    </span>
+    <p class="hover:text-aqua-700 text-lg transition-colors">
+      {ingredient.name}
+    </p>
   </div>
-
-  <div id="right-part" class="grid w-36 grid-cols-2 text-right">
-    <p>
-      {ingredient.amount * multiplier}
-    </p>
-
-    <p>
-      {ingredient.percentage}
-    </p>
+  <div class="flex space-x-6 text-right">
+    <div class="flex flex-col">
+      <span class="text-sm text-gray-600">Amount</span>
+      <span class="text-lg font-medium">
+        {(ingredient.amount * multiplier).toFixed(2)}g
+      </span>
+    </div>
+    <div class="flex flex-col">
+      <span class="text-sm text-gray-600">Percentage</span>
+      <span class="text-lg text-gray-600">
+        {ingredient.percentage.toFixed(2)}%
+      </span>
+    </div>
   </div>
 </div>

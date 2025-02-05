@@ -14,7 +14,7 @@
         clearTimeout(timeout);
       }
       timeout = setTimeout(() => {
-        clearNotification(); // Reset the notification store
+        clearNotification();
       }, 2800);
     }
   });
@@ -62,8 +62,8 @@
 
     <p
       class="flex text-sm font-bold
-
-		text-stone-800 dark:text-inherit
+text-stone-800
+		capitalize dark:text-inherit
 		"
     >
       {$notification.message}

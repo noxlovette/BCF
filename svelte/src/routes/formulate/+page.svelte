@@ -5,6 +5,8 @@
     CreateButton,
     Search,
     MetaData,
+    PerPage,
+    Pagination,
   } from "$lib/components";
   import { enhance } from "$app/forms";
   import { notification } from "$lib/stores";
@@ -16,8 +18,10 @@
 
 <MetaData title="BCF | Formulate" />
 
-<SearchBar>
-  <Search placeholder="Search for Formulas " />
+<SearchBar colour="aqua">
+  <Search placeholder="Search Formulas..." />
+  <PerPage />
+
   <form
     method="post"
     action="?/create"
@@ -37,6 +41,7 @@
   >
     <CreateButton />
   </form>
+  <Pagination />
 </SearchBar>
 
 <div id="table-wrapper" class="my-8 flex w-full items-center justify-center">

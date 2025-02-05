@@ -1,4 +1,4 @@
-import { error, redirect } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
 
 export const actions = {
@@ -8,14 +8,24 @@ export const actions = {
     const title = formData.get("title");
     const description = formData.get("description");
     const solvent = formData.get("solvent");
-    const ingredients = formData
-      .getAll("ingredient")
-      .map((ing) => JSON.parse(ing));
+    const ingredients = formData.getAll("ingredient").map((ing) => {
+      if (typeof ing === "string") {
+        return JSON.parse(ing);
+      } else {
+        return fail(400, {
+          message: "Invalid ingredient format",
+        });
+      }
+    });
 
-    const body = {
+    const formula = {
       title,
       description,
       solvent,
+    };
+
+    const body = {
+      formula,
       ingredients,
     };
 
