@@ -10,7 +10,7 @@ pub struct FormulaIngredient {
     pub formula_id: String,
     pub name: String,
     pub volatility: String,
-    pub amount: f64,
+    pub amount: i32,
     pub unit: String,
     pub counterpart_id: Option<String>,
     pub percentage: f64,
@@ -24,11 +24,11 @@ pub struct FormulaIngredientUpdate {
     pub id: Option<String>,
     pub formula_id: Option<String>,
     pub name: Option<String>,
-    pub amount: Option<f64>,
+    pub amount: Option<i32>,
     pub volatility: Option<String>,
     pub unit: Option<String>,
     pub counterpart_id: Option<String>,
-    pub percentage: Option<f32>,
+    pub percentage: Option<f64>,
 }
 
 
@@ -54,6 +54,11 @@ pub struct FormulaWithIngredients {
     pub ingredients: Vec<FormulaIngredient>,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct FormulaWithIngUpdate {
+    pub formula: FormulaUpdate,
+    pub ingredients: Vec<FormulaIngredientUpdate>,
+}
 
 #[serde_with::serde_as]
 #[derive(Serialize, Deserialize, Debug)]
@@ -63,20 +68,13 @@ pub struct FormulaUpdate {
     pub user_id: Option<String>,
     pub title: Option<String>,
     pub description: Option<String>,
-    pub solvent: Option<String>,
-    #[serde_as(as = "Option<Rfc3339>")]
-    pub created_at: Option<OffsetDateTime>,
-    #[serde_as(as = "Option<Rfc3339>")]
-    pub updated_at: Option<OffsetDateTime>,
+    pub solvent: Option<String>
 }
 
 
 #[derive(Debug, Deserialize)]
 pub struct FormulaPayload {
-    pub title: Option<String>,
-    pub description: Option<String>,
-    pub notes: Option<String>,
-    pub solvent: Option<String>,
+    pub formula: Option<FormulaUpdate>,
     pub ingredients: Vec<FormulaIngredientUpdate>,
 }
 
