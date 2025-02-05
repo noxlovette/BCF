@@ -1,3 +1,7 @@
-<p class="text-sm opacity-60">
-  <slot></slot>
-</p>
+<script lang="ts">
+  let { target = "", children } = $props();
+</script>
+
+<label class="text-sm font-semibold opacity-60" for={target}
+  >{@render children()}</label
+>

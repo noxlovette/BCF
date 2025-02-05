@@ -46,12 +46,11 @@ export interface IngredientCollection {
   id: number;
   commonName: string;
   cas: string;
-  origin: string;
   otherNames: string;
   markdown: string;
   amount: number;
   unit: string;
-  related_formulas: Formula[];
+  relatedFormulas: Formula[];
 }
 
 export interface Formula {

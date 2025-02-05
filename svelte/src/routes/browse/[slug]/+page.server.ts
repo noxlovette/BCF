@@ -9,6 +9,7 @@ export const actions = {
       commonName: formData.get("commonName"),
       cas: formData.get("cas"),
       markdown: formData.get("markdown"),
+      otherNames: formData.get("otherNames"),
       amount: 100,
       unit: "g",
     };

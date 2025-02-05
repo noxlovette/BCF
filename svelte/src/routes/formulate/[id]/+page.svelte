@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { MetaData, Label, EditButton, HeaderMerger } from "$lib/components";
+  import { MetaData, EditButton, HeaderMerger, Label } from "$lib/components";
   import { FormulaIngCell } from "$lib/components";
 
   let { data } = $props();
@@ -14,12 +14,12 @@
     {formula.title}
   </HeaderMerger>
   <!-- Main Container -->
-  <div class="flex gap-4">
+  <div class="grid w-full grid-cols-1 gap-8 lg:grid-cols-3">
     <!-- Ingredients List -->
     <div
-      class="flex-1 space-y-6 rounded-xl bg-white p-6 shadow-sm dark:bg-stone-800"
+      class="col-span-2 space-y-6 rounded-xl bg-white p-6 shadow-sm dark:bg-stone-800"
     >
-      <div class="flex items-center justify-between">
+      <div class="item s-center flex justify-between">
         <h2 class="text-xl font-semibold">Ingredients</h2>
         <div class="flex flex-row items-center space-x-4">
           <Label>Quantity</Label>
@@ -40,7 +40,7 @@
         {/each}
         <!-- Totals -->
         <div
-          class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4"
+          class="mt-6 flex items-center justify-between border-t border-stone-500 pt-4"
         >
           <span class="font-semibold">Total</span>
           <div class="flex space-x-6">
@@ -53,7 +53,7 @@
               </span>
             </div>
             <div class="w-20 text-right">
-              <span class="text-lg text-gray-600">
+              <span class="text-lg text-stone-600">
                 {ingredients
                   .reduce((sum, ing) => sum + ing.percentage, 0)
                   .toFixed(2)}%
@@ -65,7 +65,7 @@
       <!-- Description -->
     </div>
     <div
-      class="flex w-1/4 flex-col justify-between rounded-xl bg-white p-4 shadow-sm dark:bg-stone-800"
+      class="flex justify-between rounded-xl bg-white p-4 shadow-sm dark:bg-stone-800"
     >
       <div>
         <Label>Description</Label>

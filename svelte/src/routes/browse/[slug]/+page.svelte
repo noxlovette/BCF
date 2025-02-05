@@ -44,7 +44,7 @@
   </HeaderMerger>
 
   <!-- Main Content -->
-  <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
     <!-- Left Column - Main Info -->
     <div class="space-y-8 lg:col-span-2">
       <!-- Descriptors & CAS -->
@@ -172,6 +172,7 @@
     <input type="hidden" value={ingredient.commonName} name="commonName" />
     <input type="hidden" value={ingredient.cas} name="cas" />
     <input type="hidden" value={ingredient.ingDescription} name="markdown" />
+    <input type="hidden" value={ingredient.otherNames} name="otherNames" />
     <SubmitButton>Add to Collection</SubmitButton>
     <EditButton href="{ingredient.slug}/suggest">Suggest a Change</EditButton>
   </form>

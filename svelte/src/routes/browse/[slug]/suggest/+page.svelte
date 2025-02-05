@@ -1,6 +1,12 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
-  import { SubmitButton, CancelButton } from "$lib/components";
+  import {
+    SubmitButton,
+    CancelButton,
+    HeaderMerger,
+    Input,
+    Label,
+  } from "$lib/components";
   import { notification } from "$lib/stores";
 
   let { data } = $props();
@@ -11,7 +17,7 @@
 
 <form
   method="POST"
-  class="my-4 flex size-full flex-col"
+  class="flex size-full flex-col"
   use:enhance={() => {
     isSubmitting = true;
     return async ({ result, update }) => {
@@ -30,56 +36,46 @@
 >
   <input type="hidden" name="id" value={ingredient.id} />
 
-  <div
-    class="border-navy-500 flex w-full flex-col items-center space-y-2 border-b-2 py-4 md:border-b-3 md:py-6 xl:border-b-4"
-  >
-    <h1
-      class="font-manrope text-center text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl xl:text-7xl"
-    >
-      Editing: {ingredient.commonName || "Unnamed Ingredient"}
-    </h1>
-  </div>
+  <HeaderMerger colour="navy">
+    {ingredient.commonName || "Unnamed Ingredient"}
+  </HeaderMerger>
 
-  <div class="my-4 space-y-6">
+  <div class="space-y-6">
     <!-- Common Name & CAS Number -->
-    <div class="flex space-x-4 rounded-lg bg-white p-6 shadow-sm">
+    <div
+      class="flex space-x-4 rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900"
+    >
       <div class="w-1/2">
-        <label class="text-xl font-semibold text-stone-900" for="commonName"
-          >Common Name</label
-        >
-        <input
-          name="commonName"
-          type="text"
-          value={ingredient.commonName}
-          class="focus:border-navy-500 focus:ring-navy-500 mt-2 w-full rounded-md border-stone-300 p-3 text-lg text-stone-700 shadow-sm"
+        <Label>Common Name</Label>
+        <Input
+          colour="navy"
           placeholder="Enter ingredient name..."
+          name="commonName"
+          value={ingredient.commonName}
+          type="text"
         />
       </div>
       <div class="w-1/2">
-        <label class="text-xl font-semibold text-stone-900" for="cas"
-          >CAS Number</label
-        >
-        <input
+        <Label>CAS Number</Label>
+        <Input
+          colour="navy"
+          placeholder="Enter CAS number..."
           name="cas"
-          type="text"
           value={ingredient.cas}
-          class="focus:border-navy-500 focus:ring-navy-500 mt-2 w-full rounded-md border-stone-300 p-3 text-lg text-stone-700 shadow-sm"
-          placeholder="Enter CAS Number..."
+          type="text"
         />
       </div>
     </div>
 
-    <div class="rounded-lg bg-white p-6 shadow-sm">
-      <label class="text-xl font-semibold text-stone-900" for="ingDescription"
-        >Tell us what needs to change</label
-      >
-      <textarea
+    <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900">
+      <Label>Tell us what needs to change</Label>
+      <Input
+        colour="navy"
+        placeholder="What do you think should change?"
         name="markdown"
         value={ingredient.ingDescription}
-        rows="5"
-        class="focus:border-navy-500 focus:ring-navy-500 mt-2 w-full rounded-md border-stone-300 p-3 text-lg text-stone-700 shadow-sm"
-        placeholder="Enter your suggestions..."
-      ></textarea>
+        type="textarea"
+      />
     </div>
   </div>
 

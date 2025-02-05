@@ -4,7 +4,7 @@
 </script>
 
 <div
-  class="border-{colour}-500 mb-4 flex w-full flex-col items-center rounded-b-lg py-2 xl:border-t-2 dark:bg-stone-900"
+  class="border-{colour}-600 mb-8 flex w-full flex-col items-center rounded-b-lg py-2 xl:border-t-2 dark:bg-stone-900"
 >
   <H1>
     {@render children()}

@@ -1,6 +1,13 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
-  import { CancelButton, DangerButton, SubmitButton } from "$lib/components";
+  import {
+    CancelButton,
+    DangerButton,
+    HeaderMerger,
+    SubmitButton,
+    Input,
+    Label,
+  } from "$lib/components";
   import { notification } from "$lib/stores";
 
   let { data } = $props();
@@ -11,7 +18,7 @@
 <form
   action="?/update"
   method="POST"
-  class="my-4 flex size-full flex-col"
+  class="flex size-full flex-col"
   use:enhance={() => {
     isSubmitting = true;
 
@@ -34,77 +41,90 @@
 >
   <input type="hidden" name="id" value={ingredient.id} />
 
-  <div
-    class="border-peach-500 flex w-full flex-col items-center space-y-2 border-b-2 py-4 md:border-b-3 md:py-6 xl:border-b-4"
-  >
-    <h1
-      class="font-manrope text-center text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl xl:text-7xl"
-    >
-      Editing: {ingredient.commonName || "Unnamed Ingredient"}
-    </h1>
-  </div>
+  <HeaderMerger colour="peach">
+    {ingredient.commonName || "Unnamed Ingredient"}
+  </HeaderMerger>
 
   <!-- Form Grid -->
-  <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
     <!-- Left Column - Main Info -->
     <div class="space-y-6 lg:col-span-2">
       <!-- Common Name -->
-      <div class="flex space-x-4 rounded-lg bg-white p-6 shadow-sm">
+      <div
+        class="flex space-x-4 rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800"
+      >
         <div>
-          <label class="text-xl font-semibold text-stone-900" for="commonName"
-            >Common Name</label
-          >
-          <input
+          <Label>Common Name</Label>
+          <Input
+            colour="peach"
+            placeholder="Enter CAS number..."
             name="commonName"
-            type="text"
             value={ingredient.commonName}
-            class="focus:border-peach-500 focus:ring-peach-500 mt-2 w-full rounded-md border-stone-300 p-3 text-lg text-stone-700 shadow-sm"
-            placeholder="Enter ingredient name..."
+            type="text"
           />
         </div>
         <div>
-          <label class="text-xl font-semibold text-stone-900" for="cas"
-            >CAS Number</label
-          >
-          <input
+          <Label>CAS Number</Label>
+          <Input
+            colour="peach"
+            placeholder="Enter CAS number..."
             name="cas"
-            type="text"
             value={ingredient.cas}
-            class="focus:border-peach-500 focus:ring-peach-500 mt-2 w-full rounded-md border-stone-300 p-3 text-lg text-stone-700 shadow-sm"
-            placeholder="Enter CAS Number..."
+            type="text"
           />
         </div>
       </div>
 
       <!-- Description -->
-      <div class="rounded-lg bg-white p-6 shadow-sm">
-        <label class="text-xl font-semibold text-stone-900" for="description"
-          >Description</label
-        >
-        <textarea
+      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800">
+        <Label>Description</Label>
+        <Input
+          colour="peach"
+          placeholder="Enter description..."
           name="markdown"
           value={ingredient.markdown}
-          rows="5"
-          class="focus:border-peach-500 focus:ring-peach-500 mt-2 w-full rounded-md border-stone-300 p-3 text-lg text-stone-700 shadow-sm"
-          placeholder="Enter description..."
-        ></textarea>
+          type="textarea"
+        />
       </div>
     </div>
 
     <!-- Right Column - Additional Info -->
-    <div class="lg:col-span-1">
+    <div class="flex flex-col gap-6 lg:col-span-1">
       <!-- Also Known As -->
-      <div class="rounded-lg bg-white p-6 shadow-sm">
-        <label class="text-xl font-semibold text-stone-900" for="otherNames"
-          >Also Known As</label
-        >
-        <input
-          name="otherNames"
-          type="text"
-          value={ingredient.otherNames}
-          class="focus:border-peach-500 focus:ring-peach-500 mt-2 w-full rounded-md border-stone-300 p-3 text-lg text-stone-700 shadow-sm"
+      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800">
+        <Label>Also Known As</Label>
+        <Input
+          colour="peach"
           placeholder="Comma-separated alternative names..."
+          name="otherNames"
+          value={ingredient.otherNames}
+          type="text"
         />
+      </div>
+      <div
+        class="flex flex-1 flex-col rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800"
+      >
+        <h2 class="mb-3 text-xl font-semibold dark:text-stone-500">
+          Ingredient Details
+        </h2>
+
+        <div class="flex items-center justify-between">
+          <div>
+            <span class=" dark:text-stone-300">Available</span>
+            <div class="inline-flex items-end space-x-2">
+              <Input
+                colour="peach"
+                placeholder="How much in stock"
+                name="amount"
+                value={ingredient.amount}
+                type="number"
+              />
+              <span class="font-semibold dark:text-stone-100"
+                >{ingredient.unit}</span
+              >
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
