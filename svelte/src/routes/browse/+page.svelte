@@ -35,7 +35,7 @@
   <Pagination />
 </SearchBar>
 
-<div id="table-wrapper" class="my-8 flex w-full flex-col transition-all">
+<div id="table-wrapper" class="my-4 flex w-full flex-col transition-all">
   {#if data.ingredients.length === 0}
     <p class="font-quicksand m-12 text-5xl font-bold">Looks Lonely Here</p>
   {:else}

@@ -15,9 +15,6 @@
   import { currentPage, pageSize, searchTerm } from "$lib/stores";
 
   let { data } = $props();
-  let { collection } = data;
-
-  $inspect(collection);
 
   $effect(() => {
     goto(
@@ -64,12 +61,12 @@
   <Pagination />
 </SearchBar>
 
-<div id="table-wrapper" class="my-8 flex w-full items-center justify-center">
-  {#if collection.length === 0}
+<div id="table-wrapper" class="my-4 flex w-full items-center justify-center">
+  {#if data.collection.length === 0}
     <p class="m-12 text-5xl">Looks Lonely Here</p>
   {:else}
     <CardHolder>
-      {#each collection as ingredient}
+      {#each data.collection as ingredient}
         <CollectCard {ingredient} />
       {/each}
     </CardHolder>
