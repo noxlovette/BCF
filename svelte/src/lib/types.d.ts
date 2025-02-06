@@ -64,8 +64,10 @@ export interface Formula {
 
 export interface FormulaIngredient {
   name: string;
+  formulaId: string;
   amount: number;
   percentage: number;
+  counterpartId: string;
   volatility: string;
   unit: string;
   id?: string;

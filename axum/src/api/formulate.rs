@@ -91,36 +91,7 @@ pub async fn update_formula(
 
     let mut tx = state.db.begin().await?;
 
-    // Step 2: Upsert (Insert or Update) Ingredients
-    for ingredient in &payload.ingredients {
-        let ing_id = ingredient.id.clone().unwrap_or_else(|| nanoid::nanoid!());
-        sqlx::query!(
-            r#"
-            INSERT INTO formula_ingredients (id, formula_id, name, amount, unit, volatility, percentage, counterpart_id)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-            ON CONFLICT (id) DO UPDATE
-            SET 
-                name = EXCLUDED.name,
-                amount = EXCLUDED.amount,
-                unit = EXCLUDED.unit,
-                volatility = EXCLUDED.volatility,
-                percentage = EXCLUDED.percentage,
-                counterpart_id = EXCLUDED.counterpart_id
-            "#,
-            ing_id,
-            formula_id,
-            ingredient.name,
-            ingredient.amount,
-            ingredient.unit,
-            ingredient.volatility,
-            ingredient.percentage,
-            ingredient.counterpart_id
-        )
-        .execute(&mut *tx)
-        .await?;
-    }
-
-    // Step 3: Remove Ingredients That Are No Longer in Payload
+    // Step 2: Remove Ingredients That Are No Longer in Payload
     sqlx::query!(
         r#"
         DELETE FROM formula_ingredients
@@ -134,6 +105,36 @@ pub async fn update_formula(
     )
     .execute(&mut *tx)
     .await?;
+
+    // Step 3: Upsert (Insert or Update) Ingredients
+    for ingredient in &payload.ingredients {
+    let ing_id = ingredient.id.clone().unwrap_or_else(|| nanoid::nanoid!());
+    sqlx::query!(
+        r#"
+        INSERT INTO formula_ingredients (id, formula_id, name, amount, unit, volatility, percentage, counterpart_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        ON CONFLICT (id) DO UPDATE
+        SET 
+            name = EXCLUDED.name,
+            amount = EXCLUDED.amount,
+            unit = EXCLUDED.unit,
+            volatility = EXCLUDED.volatility,
+            percentage = EXCLUDED.percentage,
+            counterpart_id = EXCLUDED.counterpart_id
+        RETURNING id
+        "#,
+        ing_id,
+        formula_id,
+        ingredient.name,
+        ingredient.amount,
+        ingredient.unit,
+        ingredient.volatility,
+        ingredient.percentage,
+        ingredient.counterpart_id
+    )
+    .fetch_one(&mut *tx)
+    .await?;
+}
 
     tx.commit().await?;
 

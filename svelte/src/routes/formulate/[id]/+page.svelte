@@ -35,7 +35,9 @@
       </div>
 
       <div class="space-y-4">
-        {#each ingredients as ingredient}
+        {#each ingredients
+          .slice()
+          .sort((a, b) => b.amount - a.amount) as ingredient}
           <FormulaIngCell {multiplier} {ingredient} />
         {/each}
         <!-- Totals -->
@@ -52,22 +54,13 @@
                 ).toFixed(2)}g
               </span>
             </div>
-            <div class="w-20 text-right">
-              <span class="text-lg text-stone-600">
-                {ingredients
-                  .reduce((sum, ing) => sum + ing.percentage, 0)
-                  .toFixed(2)}%
-              </span>
-            </div>
           </div>
         </div>
       </div>
       <!-- Description -->
     </div>
-    <div
-      class="flex justify-between rounded-xl bg-white p-4 shadow-sm dark:bg-stone-800"
-    >
-      <div>
+    <div class="flex h-full flex-col space-y-4">
+      <div class="flex-1 rounded-xl bg-white p-4 shadow-sm dark:bg-stone-800">
         <Label>Description</Label>
         <p class="mt-2 text-lg">
           {formula.description || "No description available"}

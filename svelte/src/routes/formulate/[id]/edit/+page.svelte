@@ -5,6 +5,7 @@
     SubmitButton,
     Input,
     HeaderMerger,
+    CancelButton,
   } from "$lib/components";
   import { notification } from "$lib/stores";
   import { enhance } from "$app/forms";
@@ -22,6 +23,8 @@
       ...updatedIngredients,
       {
         name: "",
+        counterpartId: "",
+        formulaId: formula.id,
         volatility: "heart",
         amount: 0,
         percentage: 0,
@@ -32,17 +35,6 @@
 
   function removeIngredient(index: number) {
     updatedIngredients = updatedIngredients.filter((_, i) => i !== index);
-  }
-
-  function calculatePercentage(index: number) {
-    const total = updatedIngredients.reduce(
-      (sum, ing) => sum + (ing.amount || 0),
-      0,
-    );
-    if (total > 0) {
-      updatedIngredients[index].percentage =
-        (updatedIngredients[index].amount / total) * 100;
-    }
   }
 </script>
 
@@ -59,14 +51,15 @@
   use:enhance={() => {
     isSubmitting = true;
 
-    return async ({ result }) => {
+    return async ({ result, update }) => {
       isSubmitting = false;
 
-      if (result.type === "success") {
+      if (result.type === "redirect") {
         notification.set({
           message: "Formula updated successfully",
           type: "success",
         });
+        update();
       } else if (result.type === "failure") {
         notification.set({
           message: String(result.data?.message) || "Failed to update formula",
@@ -100,73 +93,93 @@
         </button>
       </div>
 
-      <div class="space-y-4">
-        {#each updatedIngredients as ingredient, index}
-          <input
-            type="hidden"
-            value={JSON.stringify(ingredient)}
-            name="ingredient"
-          />
-          <div
-            class="grid grid-cols-12 items-end gap-4 rounded-lg bg-stone-50 p-4 dark:bg-stone-900"
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse overflow-hidden shadow-md">
+          <thead
+            class="sticky top-0 bg-stone-200 text-stone-900 dark:bg-stone-800 dark:text-stone-100"
           >
-            <div class="col-span-3">
-              <Label>Name</Label>
-              <input
-                class="focus:border-aqua-500 w-full border-b border-stone-300 bg-transparent px-3 py-2 transition-colors focus:outline-none"
-                type="text"
-                name={`ingredients[${index}][commonName]`}
-                value={ingredient.name}
-                placeholder="Ingredient name"
-              />
-            </div>
-            <div class="col-span-2">
-              <Label>Volatility</Label>
-              <select
-                class="focus:border-aqua-500 w-full border-b border-stone-300 bg-transparent px-3 py-2 focus:outline-none"
-                name={`ingredients[${index}][volatility]`}
-                value={ingredient.volatility}
+            <tr>
+              <th class="p-3 text-left">Name</th>
+              <th class="p-3 text-left">Volatility</th>
+              <th class="p-3 text-left">Amount (g)</th>
+              <th class="p-3 text-left">Percentage</th>
+              <th class="p-3 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody
+            class="divide-y divide-stone-300 bg-white dark:divide-stone-700 dark:bg-stone-900"
+          >
+            {#each updatedIngredients as ingredient, index}
+              <tr
+                class=" transition-colors hover:bg-stone-100 dark:hover:bg-stone-800"
               >
-                <option value="heart">Heart</option>
-                <option value="head">Head</option>
-                <option value="base">Base</option>
-              </select>
-            </div>
-            <div class="col-span-2">
-              <Label>Amount (g)</Label>
-              <input
-                class="focus:border-aqua-500 w-full border-b border-stone-300 bg-transparent px-3 py-2 focus:outline-none"
-                type="number"
-                name={`ingredients[${index}][amount]`}
-                value={ingredient.amount}
-                step="0.01"
-                required
-                oninput={() => calculatePercentage(index)}
-              />
-            </div>
-            <div class="col-span-2">
-              <Label>Percentage</Label>
-              <input
-                class="focus:border-aqua-500 w-full border-b border-stone-300 bg-transparent px-3 py-2 focus:outline-none"
-                type="number"
-                name={`ingredients[${index}][percentage]`}
-                value={ingredient.percentage.toFixed(2)}
-                step="0.01"
-                readonly
-              />
-            </div>
-            <div class="col-span-1 flex justify-end">
-              <button
-                type="button"
-                onclick={() => removeIngredient(index)}
-                class="p-2 text-red-500 transition-colors hover:text-red-700"
-                title="Remove ingredient"
-              >
-                <Trash2 class="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-        {/each}
+                <!-- Name Input -->
+                <td class="p-3">
+                  <input
+                    class="focus:border-aqua-500 ring-aqua-600 w-full rounded-md border border-stone-300 bg-transparent px-2 py-1 transition focus:outline-none dark:border-stone-700"
+                    type="text"
+                    name={`ingredients[${index}][commonName]`}
+                    bind:value={ingredient.name}
+                    placeholder="Ingredient name"
+                  />
+                  <input
+                    type="hidden"
+                    value={JSON.stringify(ingredient)}
+                    name="ingredient"
+                  />
+                </td>
+
+                <!-- Volatility Selection -->
+                <td class="p-3">
+                  <select
+                    class="focus:border-aqua-500 ring-aqua-600 w-full rounded-md border border-stone-300 bg-transparent px-2 py-1 transition focus:outline-none dark:border-stone-700"
+                    name={`ingredients[${index}][volatility]`}
+                    bind:value={ingredient.volatility}
+                  >
+                    <option value="heart">Heart</option>
+                    <option value="head">Head</option>
+                    <option value="base">Base</option>
+                  </select>
+                </td>
+
+                <!-- Amount Input -->
+                <td class="p-3">
+                  <input
+                    class="focus:border-aqua-500 ring-aqua-600 w-full rounded-md border border-stone-300 bg-transparent px-2 py-1 transition focus:outline-none dark:border-stone-700"
+                    type="number"
+                    name={`ingredients[${index}][amount]`}
+                    bind:value={ingredient.amount}
+                    step="1"
+                    required
+                  />
+                </td>
+
+                <!-- Percentage Input (readonly) -->
+                <td class="p-3">
+                  <input
+                    class="ring-aqua-600 w-full rounded-md border border-stone-300 bg-transparent px-2 py-1 transition focus:outline-none dark:border-stone-700"
+                    type="number"
+                    name={`ingredients[${index}][percentage]`}
+                    bind:value={ingredient.percentage}
+                    step="0.01"
+                  />
+                </td>
+
+                <!-- Action Button -->
+                <td class="p-3 text-center">
+                  <button
+                    type="button"
+                    onclick={() => removeIngredient(index)}
+                    class="rounded-full bg-red-500 p-2 text-white transition hover:bg-red-600 focus:ring-2 focus:ring-red-400"
+                    title="Remove ingredient"
+                  >
+                    <Trash2 class="h-5 w-5" />
+                  </button>
+                </td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
       </div>
     </div>
     <div class="w-1/4 rounded-xl bg-white p-4 shadow-sm dark:bg-stone-800">
@@ -189,7 +202,8 @@
     </div>
   </div>
 
-  <div class="flex justify-end pt-4">
+  <div class="flex justify-end space-x-4">
+    <CancelButton></CancelButton>
     <SubmitButton colour="aqua">
       <Save class="mr-2 h-5 w-5" />
       {isSubmitting ? "Saving..." : "Save Changes"}
