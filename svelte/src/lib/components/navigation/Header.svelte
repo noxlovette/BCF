@@ -21,7 +21,7 @@
       </div>
 
       <nav
-        class="flex items-center justify-center gap-8 text-2xl tracking-tight uppercase"
+        class="flex items-center justify-center gap-8 space-x-2 text-2xl tracking-tight uppercase"
       >
         <a
           href="/browse"

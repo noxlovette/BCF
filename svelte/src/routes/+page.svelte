@@ -15,7 +15,7 @@
   />
   <Section
     href="collect"
-    color="hunter"
+    color="wine"
     heading="Collect hundreds of compounds."
     body="Keep track of your favourite ingredients and the ones you want to try. Note down ideas, associations, and inspirations. Everything from colour to availability in your lab. Your collection is your world only. Encrypted, it is only yours to enjoy."
   />

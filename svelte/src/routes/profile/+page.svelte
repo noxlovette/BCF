@@ -1,71 +1,37 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { writable } from "svelte/store";
-  import Settings from "./Settings.svelte";
-  import Contributions from "./Contributions.svelte";
-  import type { PageServerData } from "./$types";
+  import { enhance } from "$app/forms";
+  import { SubmitButton } from "$lib/components";
+  import { clearUser, notification } from "$lib/stores";
 
-  import { user } from "$lib/stores";
-
-  import BigText from "$lib/components/typography/BigText.svelte";
-
-  export let data: PageServerData;
-
-  const suggestedIngredients = data.suggestedIngredients;
-  let currentPage = writable("");
-  let greeting = writable("");
-
-  onMount(async () => {
-    updateGreeting();
-  });
-
-  function updateGreeting() {
-    const hours = new Date().getHours();
-    if (hours < 12) {
-      greeting.set("morning");
-    } else if (hours < 18) {
-      greeting.set("afternoon");
-    } else {
-      greeting.set("evening");
-    }
-  }
+  let isSubmitting = $state(false);
 </script>
 
-<svelte:head>
-  <title>BCF | Profile</title>
-</svelte:head>
-
 <div
-  id="header"
-  class="flex w-full flex-row items-end justify-between border-b-2 border-stone-500 pb-4 xl:border-b-4"
+  id="controls"
+  class="flex flex-row justify-end space-x-4 self-start xl:text-2xl"
 >
-  <button class="font-quicksand text-7xl" on:click={() => currentPage.set("")}>
-    Good <span class="text-saffron-400">{$greeting}</span>
-  </button>
+  <form
+    method="POST"
+    use:enhance={() => {
+      isSubmitting = true;
 
-  <div id="controls" class="flex flex-row justify-end space-x-4 xl:text-2xl">
-    <button
-      class="rounded border-2 border-stone-500 px-6 py-2"
-      on:mousedown={() => currentPage.set("settings")}
-    >
-      Settings
-    </button>
-    <button
-      class="rounded border-2 border-stone-500 px-6 py-2"
-      on:mousedown={() => currentPage.set("contributions")}
-    >
-      Contributions
-    </button>
-    <form method="post" action="?/logout">
-      <button type="submit" class="rounded border-2 border-stone-500 px-6 py-2">
-        Log Out
-      </button>
-    </form>
-  </div>
+      return async ({ result, update }) => {
+        isSubmitting = false;
+        if (result.type === "redirect") {
+          clearUser();
+          localStorage.removeItem("user");
+          localStorage.removeItem("profile");
+          notification.set({ message: "Bye!", type: "success" });
+          update();
+        } else if (result.type === "failure") {
+          notification.set({
+            message: String(result.data?.message) || "Something's off",
+            type: "error",
+          });
+        }
+      };
+    }}
+  >
+    <SubmitButton bind:isSubmitting>Log Out</SubmitButton>
+  </form>
 </div>
-
-{#if $currentPage === "settings"}
-  <Settings />
-{:else if $currentPage === "contributions"}
-  <Contributions {suggestedIngredients} />
-{/if}

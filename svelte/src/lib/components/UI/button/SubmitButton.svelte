@@ -2,7 +2,7 @@
   import { Loader } from "lucide-svelte";
   let {
     styling = "",
-    colour = "ultra",
+    colour = "saffron",
     children,
     isSubmitting = $bindable(false),
   } = $props();

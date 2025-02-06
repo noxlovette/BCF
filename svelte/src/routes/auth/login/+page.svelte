@@ -2,7 +2,6 @@
   import { enhance } from "$app/forms";
   import { fade } from "svelte/transition";
   import { notification, setUser } from "$lib/stores";
-  import { redirect } from "@sveltejs/kit";
   import { goto } from "$app/navigation";
 
   let username = $state("");
@@ -86,9 +85,4 @@
 
 <svelte:head>
   <title>BCF | Login</title>
-  <script
-    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-    async
-    defer
-  ></script>
 </svelte:head>

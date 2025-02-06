@@ -1,53 +1,66 @@
-import { error } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
-
 export const actions = {
-  default: async ({ request, cookies, fetch }) => {
+  default: async ({ request, fetch }) => {
     const data = await request.formData();
-    const csrfToken = cookies.get("csrftoken");
-    const username = data.get("username");
-    const password = data.get("password");
-    const email = data.get("email");
-    const body = JSON.stringify({ username, password, email });
+    const username = data.get("username") as string;
+    const pass = data.get("password") as string;
+    const confirmPassword = data.get("confirmPassword") as string;
+    const email = data.get("email") as string;
+    const name = data.get("name") as string;
 
-    if (!username || !password) {
-      return { success: false, error: "Username and password are required" };
-    }
-
-    const endpoint = `/axum/api/signup/`;
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-        },
-        body: body,
-        credentials: "include",
+    // Server-side validation
+    if (!username || username.length < 3) {
+      return fail(400, {
+        message: "Username must be at least 3 characters long.",
       });
-
-      if (!response.ok) {
-        throw error(400, "Signup failed");
-      }
-
-      const userData = await response.json();
-
-      cookies.set("sessionid", userData.sessionid, { path: "/" });
-
-      return {
-        success: true,
-        user: {
-          username: userData.username,
-          email: userData.email,
-          isAuthenticated: true,
-        },
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error:
-          error instanceof Error ? error.message : "An unknown error occurred",
-      };
     }
+
+    if (!pass || pass.length < 8) {
+      return fail(400, {
+        message: "Password must be at least 8 characters long.",
+      });
+    }
+
+    if (!/[a-z]/.test(pass) || !/[A-Z]/.test(pass)) {
+      return fail(400, {
+        message:
+          "Password must contain at least one uppercase and one lowercase letter.",
+      });
+    }
+
+    if (!/[\W_]/.test(pass)) {
+      return fail(400, {
+        message: "Password must contain at least one special character.",
+      });
+    }
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return fail(400, { message: "Invalid email format." });
+    }
+
+    if (pass !== confirmPassword) {
+      return fail(400, { message: "Passwords do not match." });
+    }
+
+    if (!name) {
+      return fail(422, { message: "So you're a mister nobody?" });
+    }
+
+    const body = JSON.stringify({ username, pass, email, name });
+
+    const response = await fetch("/axum/auth/signup", {
+      method: "POST",
+      body: body,
+    });
+
+    if (!response.ok) {
+      const { error } = await response.json();
+      return fail(400, { message: error });
+    }
+
+    const userData = await response.json();
+
+    redirect(301, "/auth/login");
   },
 } satisfies Actions;
