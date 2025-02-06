@@ -3,13 +3,13 @@
     placeholder = "Edit here",
     name = "name",
     value = "Edited",
-    colour = "gold",
+    colour = "saffron",
     type = "text",
   }: {
     placeholder: string;
     name: string;
     value: string | number;
-    colour: "peach" | "navy" | "aqua" | "gold";
+    colour: "wine" | "ultra" | "hunter" | "saffron";
     type: "text" | "number" | "textarea";
   } = $props();
 </script>
@@ -41,7 +41,7 @@
 {/if}
 
 <!-- These will ensure that all stylings are prerendered compile-time-->
-<input type="hidden" class=" focus:ring-navy-500 focus:border-navy-500" />
-<input type="hidden" class=" focus:ring-gold-500 focus:border-gold-500" />
-<input type="hidden" class=" focus:ring-peach-500 focus:border-peach-500" />
-<input type="hidden" class="focus:ring-aqua-500 focus:border-aqua-500" />
+<input type="hidden" class=" focus:ring-ultra-500 focus:border-ultra-500" />
+<input type="hidden" class=" focus:ring-saffron-500 focus:border-saffron-500" />
+<input type="hidden" class=" focus:ring-wine-500 focus:border-wine-500" />
+<input type="hidden" class="focus:ring-hunter-500 focus:border-hunter-500" />

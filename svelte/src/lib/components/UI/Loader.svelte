@@ -65,7 +65,7 @@
     <div class="relative flex max-w-[400px] flex-col space-y-2">
       <Loader2 class="animate-spin"></Loader2>
       <p
-        class="text-gold-50 px-4 font-bold text-pretty normal-case italic lg:text-2xl"
+        class="text-saffron-50 px-4 font-bold text-pretty normal-case italic lg:text-2xl"
       >
         {chosenQuote}
       </p>

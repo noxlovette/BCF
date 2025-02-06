@@ -3,7 +3,7 @@
 </script>
 
 <div class="lowercase">
-  <BigText text="Contact Me<span class='text-gold-400'>.</span>" />
+  <BigText text="Contact Me<span class='text-saffron-400'>.</span>" />
 </div>
 
 <div
@@ -16,7 +16,7 @@
     >
       <div class="lg:ml-8 xl:ml-12">
         <h2
-          class="group-hover:text-gold-400 text-3xl font-bold text-pretty transition-all"
+          class="group-hover:text-saffron-400 text-3xl font-bold text-pretty transition-all"
         >
           Telegram
         </h2>
@@ -36,7 +36,7 @@
     >
       <div class="lg:ml-8 xl:ml-12">
         <h2
-          class="group-hover:text-gold-400 text-3xl font-bold text-pretty transition-all"
+          class="group-hover:text-saffron-400 text-3xl font-bold text-pretty transition-all"
         >
           Email
         </h2>
@@ -53,7 +53,7 @@
     <a href="https://github.com/noxlovette" class="flex flex-row items-center">
       <div class="lg:ml-8 xl:ml-12">
         <h2
-          class="group-hover:text-gold-400 text-3xl font-bold text-pretty transition-all"
+          class="group-hover:text-saffron-400 text-3xl font-bold text-pretty transition-all"
         >
           GitHub
         </h2>

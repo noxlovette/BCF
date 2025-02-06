@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { children, colour = "gold" } = $props();
+  let { children, colour = "saffron" } = $props();
 </script>
 
 <div
@@ -11,7 +11,7 @@
 </div>
 
 <!-- These will ensure that all border stylings are prerendered compile-time-->
-<input type="hidden" class="border-navy-600">
-<input type="hidden" class="border-gold-600">
-<input type="hidden" class="border-peach-600">
-<input type="hidden" class="border-aqua-600">
+<input type="hidden" class="border-ultra-600" />
+<input type="hidden" class="border-saffron-600" />
+<input type="hidden" class="border-wine-600" />
+<input type="hidden" class="border-hunter-600" />

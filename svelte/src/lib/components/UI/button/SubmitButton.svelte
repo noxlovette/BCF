@@ -2,7 +2,7 @@
   import { Loader } from "lucide-svelte";
   let {
     styling = "",
-    colour = "navy",
+    colour = "ultra",
     children,
     isSubmitting = $bindable(false),
   } = $props();
@@ -20,9 +20,20 @@
   {/if}
 </button>
 
-
 <!-- These will ensure that all stylings are prerendered compile-time-->
-<input type="hidden" class="bg-navy-600 hover:bg-navy-700 text-navy-50 focus:ring-navy-500">
-<input type="hidden" class="bg-gold-600 hover:bg-gold-700 text-gold-50 focus:ring-gold-500">
-<input type="hidden" class="bg-peach-600 hover:bg-peach-700 text-peach-50 focus:ring-peach-500">
-<input type="hidden" class="bg-aqua-600 hover:bg-aqua-700 text-aqua-50 focus:ring-aqua-500">
+<input
+  type="hidden"
+  class="bg-ultra-600 hover:bg-ultra-700 text-ultra-50 focus:ring-ultra-500"
+/>
+<input
+  type="hidden"
+  class="bg-saffron-600 hover:bg-saffron-700 text-saffron-50 focus:ring-saffron-500"
+/>
+<input
+  type="hidden"
+  class="bg-wine-600 hover:bg-wine-700 text-wine-50 focus:ring-wine-500"
+/>
+<input
+  type="hidden"
+  class="bg-hunter-600 hover:bg-hunter-700 text-hunter-50 focus:ring-hunter-500"
+/>

@@ -41,7 +41,7 @@
 >
   <input type="hidden" name="id" value={ingredient.id} />
 
-  <HeaderMerger colour="peach">
+  <HeaderMerger colour="wine">
     {ingredient.commonName || "Unnamed Ingredient"}
   </HeaderMerger>
 
@@ -56,7 +56,7 @@
         <div>
           <Label>Common Name</Label>
           <Input
-            colour="peach"
+            colour="wine"
             placeholder="Enter CAS number..."
             name="commonName"
             value={ingredient.commonName}
@@ -66,7 +66,7 @@
         <div>
           <Label>CAS Number</Label>
           <Input
-            colour="peach"
+            colour="wine"
             placeholder="Enter CAS number..."
             name="cas"
             value={ingredient.cas}
@@ -79,7 +79,7 @@
       <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800">
         <Label>Description</Label>
         <Input
-          colour="peach"
+          colour="wine"
           placeholder="Enter description..."
           name="markdown"
           value={ingredient.markdown}
@@ -94,7 +94,7 @@
       <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800">
         <Label>Also Known As</Label>
         <Input
-          colour="peach"
+          colour="wine"
           placeholder="Comma-separated alternative names..."
           name="otherNames"
           value={ingredient.otherNames}
@@ -113,7 +113,7 @@
             <span class=" dark:text-stone-300">Available</span>
             <div class="inline-flex items-end space-x-2">
               <Input
-                colour="peach"
+                colour="wine"
                 placeholder="How much in stock"
                 name="amount"
                 value={ingredient.amount}
@@ -133,6 +133,6 @@
   <div class="mt-8 flex justify-end space-x-4">
     <CancelButton></CancelButton>
     <DangerButton>Delete</DangerButton>
-    <SubmitButton colour="peach">Save Changes</SubmitButton>
+    <SubmitButton colour="wine">Save Changes</SubmitButton>
   </div>
 </form>

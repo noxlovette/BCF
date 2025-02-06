@@ -7,7 +7,7 @@
 <div class="group relative inline-block">
   <select
     bind:value={$pageSize}
-    class="border-gold-400 focus:ring-gold-400/70 dark:border-gold-900 dark:focus:border-gold-400 w-36 appearance-none rounded-lg border-2
+    class="border-saffron-400 focus:ring-saffron-400/70 dark:border-saffron-900 dark:focus:border-saffron-400 w-36 appearance-none rounded-lg border-2
            bg-stone-50 px-3 py-2 shadow-sm transition-all
            duration-300 focus:ring-2 dark:bg-stone-800"
     aria-label="Items per page"

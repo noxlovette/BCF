@@ -113,12 +113,12 @@
   <div id="mini-header" class="flex flex-row">
     <h1 class="mb-4 text-4xl">settings</h1>
     <button
-      class="hover:text-gold-400/60 ml-4 disabled:text-stone-400/70"
+      class="hover:text-saffron-400/60 ml-4 disabled:text-stone-400/70"
       disabled={!allValid}
       on:mousedown={handleSaveChanges}>apply changes</button
     >
     <button
-      class="hover:text-gold-400/60 ml-4 disabled:text-stone-400/70"
+      class="hover:text-saffron-400/60 ml-4 disabled:text-stone-400/70"
       disabled={!allValid}
       on:mousedown={revertChanges}>revert changes</button
     >
@@ -134,14 +134,14 @@
       <input
         type="password"
         bind:value={oldPassword}
-        class="focus:ring-gold-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
+        class="focus:ring-saffron-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
         placeholder="old password"
       />
       {#if oldPassword}
         <input
           type="password"
           bind:value={newPassword}
-          class="focus:ring-gold-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
+          class="focus:ring-saffron-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
           placeholder="new password"
         />
 
@@ -149,19 +149,19 @@
           <div>
             <span
               class:valid={validCase}
-              class="text-grapefruit-400/80 rounded p-1 normal-case"
+              class="text-hunter-400/80 rounded p-1 normal-case"
             >
               a..Z
             </span>
             <span
               class:valid={validLength}
-              class="text-grapefruit-400/80 rounded p-1"
+              class="text-hunter-400/80 rounded p-1"
             >
               8+
             </span>
             <span
               class:valid={validSpecial}
-              class="text-grapefruit-400/80 rounded p-1">~&#</span
+              class="text-hunter-400/80 rounded p-1">~&#</span
             >
           </div>
         {/if}
@@ -169,7 +169,7 @@
         <input
           type="password"
           bind:value={confirmPassword}
-          class="focus:ring-gold-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
+          class="focus:ring-saffron-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
           placeholder="confirm password"
         />
         {#if confirmPassword}
@@ -182,7 +182,7 @@
         {#if email}
           <span
             class:valid={validEmail}
-            class="text-grapefruit-400/80 ml-auto self-end">valid</span
+            class="text-hunter-400/80 ml-auto self-end">valid</span
           >
         {/if}
       </div>
@@ -190,7 +190,7 @@
       <input
         type="email"
         bind:value={email}
-        class="focus:ring-gold-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
+        class="focus:ring-saffron-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
         placeholder="new email"
       />
 
@@ -199,14 +199,14 @@
         {#if username}
           <span
             class:valid={validUsername}
-            class="text-grapefruit-400/80 ml-auto self-end">valid</span
+            class="text-hunter-400/80 ml-auto self-end">valid</span
           >
         {/if}
       </div>
       <input
         type="text"
         bind:value={username}
-        class="focus:ring-gold-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
+        class="focus:ring-saffron-700/70 flex w-full rounded border-none bg-stone-50/20 p-2 shadow-inner focus:ring-2 dark:bg-stone-950/20"
         placeholder="new username"
       />
       <h3 class="mt-4 font-normal">2FA</h3>
@@ -216,15 +216,15 @@
 
         {#if deleteWarning}
           <div
-            class="bg-aqua-600/10 flex flex-col items-center rounded p-2 *:transition-all"
+            class="bg-hunter-600/10 flex flex-col items-center rounded p-2 *:transition-all"
           >
             <h3 class="m-4 font-normal">all i am offering is the truth</h3>
             <button
-              class="bg-navy-400 hover:bg-navy-700 w-full rounded-md p-2 active:scale-95"
+              class="bg-ultra-400 hover:bg-ultra-700 w-full rounded-md p-2 active:scale-95"
               on:mousedown={handleDelete}>the story ends</button
             >
             <button
-              class="bg-grapefruit-400 hover:bg-grapefruit-700 w-full rounded-md p-2 active:scale-95"
+              class="bg-hunter-400 hover:bg-hunter-700 w-full rounded-md p-2 active:scale-95"
               on:mousedown={toggleWarningDelete}>stay in wonderland</button
             >
           </div>
@@ -244,7 +244,7 @@
       <label for="imperial">imperial</label>
       <input
         type="radio"
-        class="active:svale-90 text-gold-400 ring-gold-50 checked:bg-gold-400 hover:checked:bg-gold-500 active:bg-gold-300 border-none bg-none transition-all hover:ring-0 focus:ring-0 active:ring-0"
+        class="active:svale-90 text-saffron-400 ring-saffron-50 checked:bg-saffron-400 hover:checked:bg-saffron-500 active:bg-saffron-300 border-none bg-none transition-all hover:ring-0 focus:ring-0 active:ring-0"
         name="unit"
         value="imperial"
         id="imperial"
@@ -252,7 +252,7 @@
       <label for="metric">metric</label>
       <input
         type="radio"
-        class="active:svale-90 text-gold-400 ring-gold-50 checked:bg-gold-400 hover:checked:bg-gold-500 active:bg-gold-300 border-none bg-none transition-all hover:ring-0 focus:ring-0 active:ring-0"
+        class="active:svale-90 text-saffron-400 ring-saffron-50 checked:bg-saffron-400 hover:checked:bg-saffron-500 active:bg-saffron-300 border-none bg-none transition-all hover:ring-0 focus:ring-0 active:ring-0"
         name="unit"
         value="metric"
         id="metric"
@@ -271,7 +271,7 @@
       <p class="italic">coming soon</p>
       <input
         type="radio"
-        class="active:svale-90 text-gold-400 ring-gold-50 checked:bg-gold-400 hover:checked:bg-gold-500 active:bg-gold-300 border-none bg-none transition-all hover:ring-0 focus:ring-0 active:ring-0"
+        class="active:svale-90 text-saffron-400 ring-saffron-50 checked:bg-saffron-400 hover:checked:bg-saffron-500 active:bg-saffron-300 border-none bg-none transition-all hover:ring-0 focus:ring-0 active:ring-0"
         name="email"
         value="on"
         id="email-on"
@@ -280,7 +280,7 @@
       <label for="email-on">on</label>
       <input
         type="radio"
-        class="active:svale-90 text-gold-400 ring-gold-50 checked:bg-gold-400 hover:checked:bg-gold-500 active:bg-gold-300 border-none bg-none transition-all hover:ring-0 focus:ring-0 active:ring-0"
+        class="active:svale-90 text-saffron-400 ring-saffron-50 checked:bg-saffron-400 hover:checked:bg-saffron-500 active:bg-saffron-300 border-none bg-none transition-all hover:ring-0 focus:ring-0 active:ring-0"
         name="email"
         value="off"
         id="email-off"

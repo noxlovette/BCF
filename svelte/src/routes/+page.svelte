@@ -1,7 +1,7 @@
 <script lang="ts">
   import BigText from "$lib/components/typography/BigText.svelte";
   import Section from "$lib/components/typography/Section.svelte";
-  const bigText = `We make perfume here<span class="text-gold-400">.</span>`;
+  const bigText = `We make perfume here<span class="text-saffron-400">.</span>`;
 </script>
 
 <BigText text={bigText} />
@@ -9,19 +9,19 @@
 <div class="grid grid-cols-3 gap-2">
   <Section
     href="browse"
-    color="navy"
+    color="ultra"
     heading="Browse over 3100 ingredients."
     body="Use the power of IFRA's FIG in an unprecedented way. Industry-level data, supported by the opinions of real perfumers. This is the place where the hidden becomes apparent, and your expertise grows. You contribute, and you benefit."
   />
   <Section
     href="collect"
-    color="grapefruit"
+    color="hunter"
     heading="Collect hundreds of compounds."
     body="Keep track of your favourite ingredients and the ones you want to try. Note down ideas, associations, and inspirations. Everything from colour to availability in your lab. Your collection is your world only. Encrypted, it is only yours to enjoy."
   />
   <Section
     href="formulate"
-    color="aqua"
+    color="hunter"
     heading="Formulate a revolution."
     body="Manage your formulas independent of where you are. At home, in the
             lab, or on holiday. Focus on how to make your ideas come true, and
@@ -33,7 +33,7 @@
 <div class="my-4 text-6xl font-bold xl:text-[6rem]">
   <a
     href="/auth/signup"
-    class="button hover:text-gold-700 text-gold-400 font-manrope tracking-tighter transition-all"
+    class="button hover:text-saffron-700 text-saffron-400 font-manrope tracking-tighter transition-all"
     >Sign up</a
   >
 </div>

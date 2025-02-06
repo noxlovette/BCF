@@ -89,13 +89,13 @@
       use:enhance={() => handleLoginResult}
     >
       <h1 class="border-b-2 text-6xl font-bold tracking-tighter">
-        sign up<span class="text-gold-400">.</span>
+        sign up<span class="text-saffron-400">.</span>
       </h1>
 
       <input
         type="text"
         name="username"
-        class="focus:ring-gold-300 mt-8 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
+        class="focus:ring-saffron-300 mt-8 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
         placeholder="username"
         required
         bind:value={username}
@@ -105,7 +105,7 @@
         <input
           type="email"
           name="email"
-          class="focus:ring-gold-300 rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
+          class="focus:ring-saffron-300 rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
           placeholder="email"
           bind:value={email}
         />
@@ -119,7 +119,7 @@
         <input
           type="password"
           name="password"
-          class="focus:ring-gold-300 mr-auto rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
+          class="focus:ring-saffron-300 mr-auto rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
           placeholder="password"
           bind:value={password}
         />
@@ -139,7 +139,7 @@
       <div class="flex items-center justify-center" id="handle 2nd pass">
         <input
           type="password"
-          class="focus:ring-gold-300 rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
+          class="focus:ring-saffron-300 rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
           placeholder="repeat"
           bind:value={confirmPassword}
         />
@@ -161,23 +161,23 @@
         <a
           href="/paperwork/terms-of-service"
           on:mousedown={() => sessionStorage.setItem("terms", "true")}
-          class="hover:text-gold-400 text-stone-900/80 dark:text-stone-50/80"
+          class="hover:text-saffron-400 text-stone-900/80 dark:text-stone-50/80"
           >agree to the terms</a
         >
         <input
           type="checkbox"
           bind:checked={agreeTerms}
-          class="shadow-inline text-aqua-500 checked:bg-aqua-500 checked:ring-gold-300 hover:checked:bg-gold-300 focus:ring-aqua-700 size-4 rounded border-none bg-stone-50 ring-2 ring-stone-300/50 transition-all hover:scale-110 active:scale-90 dark:bg-stone-800"
+          class="shadow-inline text-hunter-500 checked:bg-hunter-500 checked:ring-saffron-300 hover:checked:bg-saffron-300 focus:ring-hunter-700 size-4 rounded border-none bg-stone-50 ring-2 ring-stone-300/50 transition-all hover:scale-110 active:scale-90 dark:bg-stone-800"
         />
       </div>
       <button
         type="submit"
-        class="hover:text-gold-400 text-5xl font-bold tracking-tighter active:scale-90 disabled:text-stone-400/70"
+        class="hover:text-saffron-400 text-5xl font-bold tracking-tighter active:scale-90 disabled:text-stone-400/70"
         disabled={!allValid}>go</button
       >
       <a
         href="/auth/login"
-        class="hover:text-gold-400 mt-auto flex text-sm opacity-60 transition-all hover:opacity-100"
+        class="hover:text-saffron-400 mt-auto flex text-sm opacity-60 transition-all hover:opacity-100"
         >have an account? sign in</a
       >
     </form>

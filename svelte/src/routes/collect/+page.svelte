@@ -17,6 +17,8 @@
   let { data } = $props();
   let { collection } = data;
 
+  $inspect(collection);
+
   $effect(() => {
     goto(
       `/collect?search=${$searchTerm}&page_size=${$pageSize}&page=${$currentPage}`,
@@ -32,7 +34,7 @@
   ogUrl="https://bcfapp.app/collect"
 />
 
-<SearchBar colour="peach">
+<SearchBar colour="wine">
   <Search />
 
   <PerPage />

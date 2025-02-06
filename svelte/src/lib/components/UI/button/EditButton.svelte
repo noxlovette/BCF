@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { styling = "", colour = "navy", children, href = "." } = $props();
+  let { styling = "", colour = "ultra", children, href = "." } = $props();
 </script>
 
 <a

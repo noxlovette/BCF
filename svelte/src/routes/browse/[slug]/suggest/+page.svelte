@@ -36,7 +36,7 @@
 >
   <input type="hidden" name="id" value={ingredient.id} />
 
-  <HeaderMerger colour="navy">
+  <HeaderMerger colour="ultra">
     {ingredient.commonName || "Unnamed Ingredient"}
   </HeaderMerger>
 
@@ -48,7 +48,7 @@
       <div class="w-1/2">
         <Label>Common Name</Label>
         <Input
-          colour="navy"
+          colour="ultra"
           placeholder="Enter ingredient name..."
           name="commonName"
           value={ingredient.commonName}
@@ -58,7 +58,7 @@
       <div class="w-1/2">
         <Label>CAS Number</Label>
         <Input
-          colour="navy"
+          colour="ultra"
           placeholder="Enter CAS number..."
           name="cas"
           value={ingredient.cas}
@@ -70,7 +70,7 @@
     <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900">
       <Label>Tell us what needs to change</Label>
       <Input
-        colour="navy"
+        colour="ultra"
         placeholder="What do you think should change?"
         name="markdown"
         value={ingredient.ingDescription}

@@ -20,6 +20,8 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
     });
 
     let collection: IngredientCollection[] = await response.json();
+
+    console.debug("server-side collection", collection);
     return {
       collection,
     };

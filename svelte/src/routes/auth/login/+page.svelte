@@ -43,14 +43,14 @@
       in:fade
     >
       <h1 class="mb-8 border-b-2 text-6xl font-bold tracking-tighter">
-        sign in<span class="text-gold-400">.</span>
+        sign in<span class="text-saffron-400">.</span>
       </h1>
 
       <input
         id="username-field"
         type="text"
         name="username"
-        class="focus:ring-gold-300 my-4 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
+        class="focus:ring-saffron-300 my-4 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
         placeholder="username"
         bind:value={username}
         required
@@ -59,7 +59,7 @@
         id="password-field"
         type="password"
         name="password"
-        class="focus:ring-gold-300 my-2 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
+        class="focus:ring-saffron-300 my-2 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
         placeholder="password"
         bind:value={password}
         required
@@ -70,13 +70,13 @@
       ></div>
       <button
         type="submit"
-        class="hover:text-gold-400 text-4xl font-bold tracking-tighter transition-all active:scale-90"
+        class="hover:text-saffron-400 text-4xl font-bold tracking-tighter transition-all active:scale-90"
       >
         go
       </button>
       <a
         href="/auth/signup"
-        class="hover:text-gold-400 mt-auto flex text-sm opacity-60 transition-all hover:opacity-100"
+        class="hover:text-saffron-400 mt-auto flex text-sm opacity-60 transition-all hover:opacity-100"
       >
         don't have an account?</a
       >

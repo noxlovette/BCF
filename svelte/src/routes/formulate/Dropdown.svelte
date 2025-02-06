@@ -89,7 +89,7 @@
 <div class="relative">
   <input
     type="text"
-    class="text-aqua-700 flex w-5/6 rounded border-none p-1 focus:ring-0 dark:bg-stone-800 dark:text-stone-50"
+    class="text-hunter-700 flex w-5/6 rounded border-none p-1 focus:ring-0 dark:bg-stone-800 dark:text-stone-50"
     bind:value={searchTerm}
     bind:this={searchInput}
     placeholder="something new"
@@ -99,11 +99,11 @@
   />
   {#if isDropdownVisible && filteredCollection.length !== 0 && filteredCollection.length < 5}
     <ul
-      class="bg-aqua-600 text-aqua-50 absolute z-10 mt-1 w-5/6 space-y-2 rounded p-2 shadow-lg"
+      class="bg-hunter-600 text-hunter-50 absolute z-10 mt-1 w-5/6 space-y-2 rounded p-2 shadow-lg"
     >
       {#each filteredCollection as item (item.common_name)}
         <button
-          class="dropdown-item hover:bg-aqua-700 dark:bg-aqua-800 w-full rounded border-none p-2 text-left focus:ring-0"
+          class="dropdown-item hover:bg-hunter-700 dark:bg-hunter-800 w-full rounded border-none p-2 text-left focus:ring-0"
           on:mousedown={() => selectItem(item)}
         >
           {item.common_name}

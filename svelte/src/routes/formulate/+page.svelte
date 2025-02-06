@@ -18,7 +18,7 @@
 
 <MetaData title="BCF | Formulate" />
 
-<SearchBar colour="aqua">
+<SearchBar colour="hunter">
   <Search placeholder="Search Formulas..." />
   <PerPage />
 

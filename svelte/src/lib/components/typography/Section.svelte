@@ -1,15 +1,14 @@
 <script>
   export let href = "";
-  export let color = "navy"; // default color
+  export let color = "ultra"; // default color
   export let heading = "";
   export let body = "";
 
   const colorClasses = {
-    grapefruit:
-      "group-hover:text-grapefruit-700 group-hover:dark:text-grapefruit-400",
-    navy: "group-hover:text-navy-700 group-hover:dark:text-navy-400",
-    aqua: "group-hover:text-aqua-700 group-hover:dark:text-aqua-400",
-    gold: "group-hover:text-gold-700 group-hover:dark:text-gold-400",
+    hunter: "group-hover:text-hunter-700 group-hover:dark:text-hunter-400",
+    ultra: "group-hover:text-ultra-700 group-hover:dark:text-ultra-400",
+    hunter: "group-hover:text-hunter-700 group-hover:dark:text-hunter-400",
+    saffron: "group-hover:text-saffron-700 group-hover:dark:text-saffron-400",
   };
 </script>
 
@@ -22,13 +21,13 @@
   >
     <a href="/{href}" class="">
       <h2
-        class={`mb-4 text-3xl font-bold transition-colors md:text-3xl ${colorClasses[color] || colorClasses.navy}`}
+        class={`mb-4 text-3xl font-bold transition-colors md:text-3xl ${colorClasses[color] || colorClasses.ultra}`}
       >
         {heading}
       </h2>
     </a>
     <p
-      class={`max-w-2xl transition-colors md:text-lg lg:text-xl ${colorClasses[color] || colorClasses.navy}`}
+      class={`max-w-2xl transition-colors md:text-lg lg:text-xl ${colorClasses[color] || colorClasses.ultra}`}
     >
       {body}
     </p>

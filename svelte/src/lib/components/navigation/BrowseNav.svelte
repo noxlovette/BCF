@@ -9,7 +9,7 @@
   href="/browse"
   class="flex h-20 items-center justify-center rounded-lg text-xl font-bold text-white transition-all
            {isActive
-    ? 'bg-navy-600 scale-105 shadow-lg'
+    ? 'bg-ultra-600 scale-105 shadow-lg'
     : 'bg-stone-700 hover:bg-stone-800'}"
 >
   Browse

@@ -1,7 +1,7 @@
 <script>
   import BigText from "$lib/components/typography/BigText.svelte";
   import Section from "../Section.svelte";
-  const bigText = `About<span class="text-gold-400">.</span>`;
+  const bigText = `About<span class="text-saffron-400">.</span>`;
   const sectionBigTextWhat = `What is this?`;
   const sectionSmallTextWhat = `This app is your gateway to the world of perfume ingredients. It empowers you to explore, gather, classify, and create perfume formulas. The database draws from IFRA's FIG and contributions from passionate users like you.`;
   const sectionBigTextWhy = `Why?`;
@@ -40,6 +40,6 @@
     />
   </div>
   <BigText
-    text="Together, we'll shape <span class='text-gold-400'>the future </span> of perfume-making<span class='text-gold-400'>.</span>"
+    text="Together, we'll shape <span class='text-saffron-400'>the future </span> of perfume-making<span class='text-saffron-400'>.</span>"
   />
 </div>

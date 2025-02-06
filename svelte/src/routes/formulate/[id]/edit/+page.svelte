@@ -40,7 +40,7 @@
 
 <MetaData title={`Edit ${formula.title}`} />
 
-<HeaderMerger colour="aqua">
+<HeaderMerger colour="hunter">
   {formula.title}
 </HeaderMerger>
 
@@ -86,7 +86,7 @@
         <button
           type="button"
           onclick={addIngredient}
-          class="bg-aqua-500 hover:bg-aqua-600 inline-flex items-center rounded-lg px-4 py-2 text-white transition-colors"
+          class="bg-hunter-500 hover:bg-hunter-600 inline-flex items-center rounded-lg px-4 py-2 text-white transition-colors"
         >
           <Plus class="mr-2 h-4 w-4" />
           Add Ingredient
@@ -116,7 +116,7 @@
                 <!-- Name Input -->
                 <td class="p-3">
                   <input
-                    class="focus:border-aqua-500 ring-aqua-600 w-full rounded-md border border-stone-300 bg-transparent px-2 py-1 transition focus:outline-none dark:border-stone-700"
+                    class="focus:border-hunter-500 ring-hunter-600 w-full rounded-md border border-stone-300 bg-transparent px-2 py-1 transition focus:outline-none dark:border-stone-700"
                     type="text"
                     name={`ingredients[${index}][commonName]`}
                     bind:value={ingredient.name}
@@ -132,7 +132,7 @@
                 <!-- Volatility Selection -->
                 <td class="p-3">
                   <select
-                    class="focus:border-aqua-500 ring-aqua-600 w-full rounded-md border border-stone-300 bg-transparent px-2 py-1 transition focus:outline-none dark:border-stone-700"
+                    class="focus:border-hunter-500 ring-hunter-600 w-full rounded-md border border-stone-300 bg-transparent px-2 py-1 transition focus:outline-none dark:border-stone-700"
                     name={`ingredients[${index}][volatility]`}
                     bind:value={ingredient.volatility}
                   >
@@ -145,7 +145,7 @@
                 <!-- Amount Input -->
                 <td class="p-3">
                   <input
-                    class="focus:border-aqua-500 ring-aqua-600 w-full rounded-md border border-stone-300 bg-transparent px-2 py-1 transition focus:outline-none dark:border-stone-700"
+                    class="focus:border-hunter-500 ring-hunter-600 w-full rounded-md border border-stone-300 bg-transparent px-2 py-1 transition focus:outline-none dark:border-stone-700"
                     type="number"
                     name={`ingredients[${index}][amount]`}
                     bind:value={ingredient.amount}
@@ -157,7 +157,7 @@
                 <!-- Percentage Input (readonly) -->
                 <td class="p-3">
                   <input
-                    class="ring-aqua-600 w-full rounded-md border border-stone-300 bg-transparent px-2 py-1 transition focus:outline-none dark:border-stone-700"
+                    class="ring-hunter-600 w-full rounded-md border border-stone-300 bg-transparent px-2 py-1 transition focus:outline-none dark:border-stone-700"
                     type="number"
                     name={`ingredients[${index}][percentage]`}
                     bind:value={ingredient.percentage}
@@ -189,13 +189,13 @@
         type="text"
         placeholder="Make it matter"
         value={formula.title}
-        colour="aqua"
+        colour="hunter"
       />
       <Label>Description</Label>
       <Input
         name="description"
         placeholder="Enter formula description"
-        colour="aqua"
+        colour="hunter"
         type="textarea"
         value={formula.description}
       />
@@ -204,7 +204,7 @@
 
   <div class="flex justify-end space-x-4">
     <CancelButton></CancelButton>
-    <SubmitButton colour="aqua">
+    <SubmitButton colour="hunter">
       <Save class="mr-2 h-5 w-5" />
       {isSubmitting ? "Saving..." : "Save Changes"}
     </SubmitButton>

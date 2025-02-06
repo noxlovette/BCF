@@ -10,7 +10,7 @@
 <MetaData title={formula.title} />
 
 <div class="flex size-full flex-col">
-  <HeaderMerger colour="aqua">
+  <HeaderMerger colour="hunter">
     {formula.title}
   </HeaderMerger>
   <!-- Main Container -->
@@ -68,7 +68,7 @@
       </div>
       <EditButton
         href="{formula.id}/edit"
-        colour="aqua"
+        colour="hunter"
         styling="place-self-end">Edit Formula</EditButton
       >
     </div>

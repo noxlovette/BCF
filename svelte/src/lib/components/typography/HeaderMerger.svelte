@@ -1,6 +1,6 @@
 <script lang="ts">
   import { H1 } from "$lib/components";
-  let { children, colour = "gold" } = $props();
+  let { children, colour = "saffron" } = $props();
 </script>
 
 <div

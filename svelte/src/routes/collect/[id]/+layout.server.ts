@@ -11,8 +11,6 @@ export const load: LayoutServerLoad = async ({ fetch, params }) => {
     });
     const ingredient: IngredientCollection = await response.json();
 
-    console.log(ingredient);
-
     return {
       ingredient,
     };

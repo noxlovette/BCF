@@ -29,7 +29,7 @@
   robots="noindex, nofollow"
 />
 
-<HeaderMerger colour="peach">
+<HeaderMerger colour="wine">
   {formatValue(ingredient.commonName, "Unnamed Ingredient")}
 </HeaderMerger>
 <!-- Main Content Grid -->
@@ -101,6 +101,6 @@
   </div>
 </div>
 
-<EditButton colour="peach" styling="self-end" href="{ingredient.id}/edit"
+<EditButton colour="wine" styling="self-end" href="{ingredient.id}/edit"
   >Edit</EditButton
 >

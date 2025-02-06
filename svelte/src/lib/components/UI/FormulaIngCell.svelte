@@ -7,7 +7,7 @@
     <span class="text-sm text-stone-600 capitalize dark:text-stone-400">
       {ingredient.volatility}
     </span>
-    <p class="hover:text-aqua-700 text-lg transition-colors">
+    <p class="hover:text-hunter-700 text-lg transition-colors">
       {ingredient.name}
     </p>
   </div>

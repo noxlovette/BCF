@@ -26,7 +26,7 @@
 >
   <input
     type="text"
-    class="border-gold-400 focus:ring-gold-400 focus:border-gold-500 dark:border-gold-900 dark:focus:ring-gold-700 dark:focus:border-gold-700 w-full
+    class="border-saffron-400 focus:ring-saffron-400 focus:border-saffron-500 dark:border-saffron-900 dark:focus:ring-saffron-700 dark:focus:border-saffron-700 w-full
        rounded-lg border-2 bg-stone-50 px-4 py-3
        shadow-md transition
        focus:ring-2 focus:ring-offset-0 focus:outline-none

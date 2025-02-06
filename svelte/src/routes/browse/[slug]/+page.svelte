@@ -39,7 +39,7 @@
 />
 
 <div class="flex size-full flex-col">
-  <HeaderMerger colour="navy">
+  <HeaderMerger colour="ultra">
     {ingredient.commonName}
   </HeaderMerger>
 
@@ -150,7 +150,7 @@
   </div>
   <form
     id="controls"
-    class="mt-4 flex flex-row space-x-2"
+    class="mt-4 flex flex-row space-x-4 place-self-end"
     method="POST"
     use:enhance={() => {
       isSubmitting = true;

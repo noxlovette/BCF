@@ -40,7 +40,7 @@
   class="flex w-full flex-row items-end justify-between border-b-2 border-stone-500 pb-4 xl:border-b-4"
 >
   <button class="font-quicksand text-7xl" on:click={() => currentPage.set("")}>
-    Good <span class="text-gold-400">{$greeting}</span>
+    Good <span class="text-saffron-400">{$greeting}</span>
   </button>
 
   <div id="controls" class="flex flex-row justify-end space-x-4 xl:text-2xl">
