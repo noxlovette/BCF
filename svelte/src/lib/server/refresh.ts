@@ -49,7 +49,7 @@ export async function handleTokenRefresh(event: RequestEvent) {
     }
 
     const newAccessToken = event.cookies.get("accessToken");
-    console.log(newAccessToken);
+
     if (newAccessToken) {
       return await ValidateAccess(newAccessToken);
     }

@@ -86,12 +86,12 @@
       </h2>
       <div class="space-y-2">
         {#if otherNames !== "No alternative names available"}
-          {#each otherNames.split(",") as name}
-            <div
-              class="mr-2 mb-2 inline-block rounded-full bg-stone-100 px-4 py-2 text-sm text-stone-700"
+          {#each otherNames.split(";") as name}
+            <span
+              class="mr-2 mb-2 inline-block rounded-lg bg-stone-100 px-4 py-2 text-sm text-stone-700 dark:bg-stone-700 dark:text-stone-100"
             >
               {name.trim()}
-            </div>
+            </span>
           {/each}
         {:else}
           <p class="text-stone-500 italic">{otherNames}</p>

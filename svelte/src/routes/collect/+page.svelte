@@ -9,12 +9,15 @@
     CardHolder,
     PerPage,
     Pagination,
+    H1,
   } from "$lib/components";
   import { notification } from "$lib/stores";
-  import { enhance } from "$app/forms";
   import { currentPage, pageSize, searchTerm } from "$lib/stores";
+  import { enhance } from "$app/forms";
 
   let { data } = $props();
+
+  $inspect(data);
 
   $effect(() => {
     goto(
@@ -22,6 +25,23 @@
       { noScroll: true, keepFocus: true },
     );
   });
+
+  function handleSave() {
+    return async ({ result, update }) => {
+      if (result.type === "redirect") {
+        notification.set({
+          message: "New Ingredient Created",
+          type: "success",
+        });
+        update();
+      } else if (result.type === "error") {
+        notification.set({
+          message: String(result.error?.message) || "Something's off",
+          type: "error",
+        });
+      }
+    };
+  }
 </script>
 
 <MetaData
@@ -35,35 +55,42 @@
   <Search />
 
   <PerPage />
-  <form
-    method="post"
-    action="?/create"
-    use:enhance={() => {
-      return async ({ result, update }) => {
-        if (result.type === "redirect") {
-          notification.set({
-            message: "New Ingredient Created",
-            type: "success",
-          });
-          update();
-        } else if (result.type === "error") {
-          notification.set({
-            message: String(result.error?.message) || "Something's off",
-            type: "error",
-          });
-        }
-      };
-    }}
-  >
+  <form method="post" action="?/create" use:enhance={handleSave}>
     <CreateButton />
   </form>
 
   <Pagination />
 </SearchBar>
 
-<div id="table-wrapper" class="my-4 flex w-full items-center justify-center">
+<div
+  id="table-wrapper"
+  class="my-4 flex w-full flex-col items-center transition-all"
+>
   {#if data.collection.length === 0}
-    <p class="m-12 text-5xl">Looks Lonely Here</p>
+    <div class="flex max-w-4xl flex-col items-center justify-center space-y-8">
+      <H1>Looks Lonely Here</H1>
+      <p
+        class="font-quicksand text-center text-4xl tracking-tighter text-balance"
+      >
+        Nothing found in your collection. You can add new ingredients from the
+        browse page or create your own.
+      </p>
+      <div class="flex space-x-2">
+        <a
+          href="browse"
+          class="bg-ultra-600 hover:bg-ultra-700 text-ultra-50 rounded-lg px-4 py-2 font-bold transition-all"
+        >
+          Go Browse
+        </a>
+        <form method="post" action="?/create" use:enhance={handleSave}>
+          <button
+            class="bg-wine-600 hover:bg-wine-700 text-wine-50 rounded-lg px-4 py-2 font-bold transition-all"
+          >
+            Create
+          </button>
+        </form>
+      </div>
+    </div>
   {:else}
     <CardHolder>
       {#each data.collection as ingredient}

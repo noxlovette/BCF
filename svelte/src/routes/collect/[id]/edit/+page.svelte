@@ -24,11 +24,8 @@
 
     return async ({ result, update }) => {
       isSubmitting = false;
-      if (result.type === "success") {
-        notification.set({ message: "Update Saved", type: "success" });
-        update();
-      } else if (result.type === "redirect") {
-        notification.set({ message: "Deleted", type: "success" });
+      if (result.type === "redirect") {
+        notification.set({ message: "Done", type: "success" });
         update();
       } else if (result.type === "error") {
         notification.set({
@@ -39,8 +36,6 @@
     };
   }}
 >
-  <input type="hidden" name="id" value={ingredient.id} />
-
   <HeaderMerger colour="wine">
     {ingredient.commonName || "Unnamed Ingredient"}
   </HeaderMerger>
@@ -116,7 +111,7 @@
                 colour="wine"
                 placeholder="How much in stock"
                 name="amount"
-                value={ingredient.amount}
+                bind:value={ingredient.amount}
                 type="number"
               />
               <span class="font-semibold dark:text-stone-100"

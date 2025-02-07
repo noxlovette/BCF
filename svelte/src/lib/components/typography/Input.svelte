@@ -2,7 +2,7 @@
   let {
     placeholder = "Edit here",
     name = "name",
-    value = "Edited",
+    value = $bindable(),
     colour = "saffron",
     type = "text",
   }: {
@@ -35,7 +35,7 @@
     type="number"
     {placeholder}
     {name}
-    {value}
+    value={value as number}
     class="focus:border-{colour}-500 focus:ring-{colour}-500 mt-2 w-full rounded-md p-3 text-lg shadow-sm dark:border-stone-700 dark:bg-stone-900"
   />
 {/if}

@@ -29,7 +29,6 @@ export const actions = {
       ingredients,
     };
 
-    console.debug(body);
     const response = await fetch(`/axum/formulate/formula/${id}`, {
       method: "PATCH",
       body: JSON.stringify(body),

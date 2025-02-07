@@ -38,7 +38,6 @@ export const load: LayoutServerLoad = async ({ fetch, params }) => {
 
     return { ingredient, unsplashData };
   } catch (error) {
-    console.error("Error fetching data:", error);
     return {
       error: "Failed to fetch browse data",
     };
