@@ -21,8 +21,8 @@ export let searchTerm = writable("");
 export const isLoading = writable(false);
 
 export const user = writable({
-  is_authenticated: false,
   username: "",
+  name: "",
   email: "",
 });
 
@@ -35,20 +35,11 @@ export function setUser(data) {
 
 export function clearUser() {
   user.update(() => ({
-    is_authenticated: false,
     username: "",
+    name: "",
     email: "",
   }));
 }
-
-export const editedFormula = writable({
-  id: "",
-  name: "",
-  description: "",
-  solvent: "",
-  notes: "",
-  ingredients: [],
-});
 
 export const notification = writable<Toast>({
   message: null,

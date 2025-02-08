@@ -5,12 +5,14 @@
     colour = "saffron",
     children,
     isSubmitting = $bindable(false),
+    disabled = false,
   } = $props();
 </script>
 
 <button
   type="submit"
-  class="{styling} bg-{colour}-600 hover:bg-{colour}-700 text-{colour}-50 focus:ring-{colour}-500 inline-flex items-center space-x-2 rounded-md px-3 py-2 font-medium shadow-sm transition-colors duration-200 focus:ring-2"
+  {disabled}
+  class="{styling} bg-{colour}-600 hover:bg-{colour}-700 text-{colour}-50 focus:ring-{colour}-500 inline-flex items-center space-x-2 rounded-md px-3 py-2 font-medium shadow-sm transition-colors duration-200 focus:ring-2 disabled:bg-stone-300/50"
 >
   {#if isSubmitting}
     <Loader class="size-4 animate-spin" />

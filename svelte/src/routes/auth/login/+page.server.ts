@@ -1,8 +1,4 @@
-import {
-  parseCookieOptions,
-  turnstileVerify,
-  ValidateAccess,
-} from "$lib/server";
+import { parseCookieOptions, ValidateAccess } from "$lib/server";
 
 import { fail } from "@sveltejs/kit";
 import type { Actions } from "./$types";
@@ -13,19 +9,19 @@ export const actions = {
     const username = data.get("username");
     const pass = data.get("password");
 
-    const turnstileToken = data.get("cf-turnstile-response") as string;
-    if (!turnstileToken) {
-      return fail(400, {
-        message: "Please complete the CAPTCHA verification",
-      });
-    }
-
-    const turnstileResponse = await turnstileVerify(turnstileToken);
-    if (!turnstileResponse.ok) {
-      return fail(400, {
-        message: "Turnstile verification failed",
-      });
-    }
+    // const turnstileToken = data.get("cf-turnstile-response") as string;
+    // if (!turnstileToken) {
+    //   return fail(400, {
+    //     message: "Please complete the CAPTCHA verification",
+    //   });
+    // }
+    //
+    // const turnstileResponse = await turnstileVerify(turnstileToken);
+    //  if (!turnstileResponse.ok) {
+    //    return fail(400, {
+    //      message: "Turnstile verification failed",
+    //    });
+    //  }
 
     if (!username || !pass) {
       return fail(422, { message: "Username, anyone?" });

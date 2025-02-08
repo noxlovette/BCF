@@ -23,7 +23,6 @@
       ...updatedIngredients,
       {
         name: "",
-        counterpartId: "",
         formulaId: formula.id,
         volatility: "heart",
         amount: 0,

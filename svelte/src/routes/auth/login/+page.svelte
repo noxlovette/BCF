@@ -4,7 +4,8 @@
   import { quintOut } from "svelte/easing";
   import { notification, setUser } from "$lib/stores";
   import { goto } from "$app/navigation";
-  import { H1 } from "$lib/components";
+  import { H1, Input } from "$lib/components";
+  import SubmitButton from "$lib/components/UI/button/SubmitButton.svelte";
 
   let username = $state("");
   let password = $state("");
@@ -12,7 +13,7 @@
 </script>
 
 <form
-  class="max-w-md space-y-6 rounded-b-lg bg-white p-3 dark:bg-stone-900"
+  class="max-w-md space-y-4 rounded-b-lg bg-white p-6 dark:bg-stone-900"
   in:fade={{
     duration: 100,
     easing: quintOut,
@@ -44,33 +45,20 @@
     };
   }}
 >
-  <H1>Sign In</H1>
+  <h1 class="place-self-center uppercase lg:text-2xl">Sign In</h1>
 
-  <input
-    id="username-field"
-    type="text"
-    name="username"
-    class="focus:ring-saffron-300 my-4 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
-    placeholder="username"
-    bind:value={username}
-    required
-  />
-  <input
-    id="password-field"
-    type="password"
+  <Input name="username" placeholder="Username" bind:value={username} />
+
+  <Input
     name="password"
-    class="focus:ring-saffron-300 my-2 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
-    placeholder="password"
+    placeholder="Password"
+    type="password"
     bind:value={password}
-    required
   />
+
   <div class="cf-turnstile my-4" data-sitekey="0x4AAAAAAA6xKvX8IgCZg0J0"></div>
-  <button
-    type="submit"
-    class="hover:text-saffron-400 text-4xl font-bold tracking-tighter transition-all active:scale-90"
-  >
-    go
-  </button>
+
+  <SubmitButton>Go</SubmitButton>
   <a
     href="/auth/signup"
     class="hover:text-saffron-400 mt-auto flex text-sm opacity-60 transition-all hover:opacity-100"

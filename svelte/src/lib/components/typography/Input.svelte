@@ -21,15 +21,15 @@
   <input
     {name}
     type="text"
-    {value}
+    bind:value
     class="{styling} focus:border-{colour}-500 focus:ring-{colour}-500"
     {placeholder}
   />
 {:else if type === "textarea"}
   <textarea
     {name}
-    {value}
     rows="5"
+    bind:value
     class="{styling} focus:border-{colour}-500 focus:ring-{colour}-500"
     {placeholder}
   ></textarea>
@@ -38,7 +38,7 @@
     type="number"
     {placeholder}
     {name}
-    value={value as number}
+    bind:value
     class="{styling} focus:border-{colour}-500 focus:ring-{colour}-500"
   />
 {:else if type === "password"}
@@ -46,7 +46,7 @@
     type="password"
     {placeholder}
     {name}
-    value={value as number}
+    bind:value
     class="{styling} focus:border-{colour}-500 focus:ring-{colour}-500"
   />
 {:else if type === "email"}
@@ -54,7 +54,7 @@
     type="email"
     {placeholder}
     {name}
-    value={value as number}
+    bind:value
     class="{styling} focus:border-{colour}-500 focus:ring-{colour}-500"
   />
 {/if}

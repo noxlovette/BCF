@@ -90,7 +90,7 @@
         <Label>Also Known As</Label>
         <Input
           colour="wine"
-          placeholder="Comma-separated alternative names..."
+          placeholder="Colon-separated alternative names..."
           name="otherNames"
           value={ingredient.otherNames}
           type="text"

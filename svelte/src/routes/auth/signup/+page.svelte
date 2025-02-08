@@ -4,8 +4,8 @@
   import { onMount } from "svelte";
   import { notification } from "$lib/stores";
   import { enhance } from "$app/forms";
-  import H1 from "$lib/components/typography/H1.svelte";
-  import { Input } from "$lib/components";
+  import { Input, H1 } from "$lib/components";
+  import SubmitButton from "$lib/components/UI/button/SubmitButton.svelte";
 
   let username = $state("");
   let email = $state("");
@@ -34,7 +34,7 @@
     valid.terms = sessionStorage.getItem("terms") === "true";
   });
 
-  $inspect(username);
+  $inspect(valid);
 </script>
 
 <svelte:head>
@@ -42,7 +42,7 @@
 </svelte:head>
 
 <form
-  class="max-w-md space-y-4 rounded-b-lg bg-white p-3 dark:bg-stone-900"
+  class="max-w-md space-y-4 rounded-b-lg bg-white p-6 dark:bg-stone-900"
   in:fade={{
     duration: 100,
     easing: quintOut,
@@ -72,7 +72,7 @@
     };
   }}
 >
-  <H1>Sign up</H1>
+  <h1 class="place-self-center uppercase lg:text-2xl">Sign up</h1>
 
   <Input
     type="text"
@@ -85,45 +85,41 @@
 
   <Input name="email" placeholder="Email" bind:value={email}></Input>
 
-  <div id="handle pass" class="flex items-center justify-center">
+  <div id="handle pass" class="flex space-x-3">
     <Input
       type="password"
       name="password"
       placeholder="Password"
       bind:value={password}
     />
+    <div class="flex items-center justify-between space-x-2">
+      <span
+        class:valid={valid.case}
+        class="aspect-square rounded bg-stone-50 p-2 text-stone-900/60 normal-case shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+      >
+        aZ
+      </span>
+      <span
+        class:valid={valid.length}
+        class="text-baseline aspect-square rounded bg-stone-50 p-2 text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+      >
+        8+
+      </span>
+      <span
+        class:valid={valid.special}
+        class="aspect-square rounded bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+        >&~</span
+      >
+    </div>
+  </div>
 
-    <span
-      class:valid={valid.case}
-      class="mx-4 aspect-square rounded bg-stone-50 p-2 text-stone-900/60 normal-case shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
-    >
-      aZ
-    </span>
-    <span
-      class:valid={valid.length}
-      class="text-baseline aspect-square rounded bg-stone-50 p-2 text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
-    >
-      8+
-    </span>
-  </div>
-  <div class="flex items-center justify-center" id="handle 2nd pass">
-    <Input
-      type="password"
-      name="confirmPassword"
-      placeholder="Repeat"
-      bind:value={confirmPassword}
-    />
-    <span
-      class:valid={valid.match}
-      class="mx-4 aspect-square rotate-90 rounded bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
-      >||</span
-    >
-    <span
-      class:valid={valid.special}
-      class="aspect-square rounded bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
-      >&~</span
-    >
-  </div>
+  <Input
+    type="password"
+    name="confirmPassword"
+    placeholder="Repeat"
+    bind:value={confirmPassword}
+  />
+
   <div
     id="paperwork"
     class="flex flex-row items-center justify-between space-x-4"
@@ -141,10 +137,8 @@
     />
   </div>
   <div class="cf-turnstile my-4" data-sitekey="0x4AAAAAAA6xKvX8IgCZg0J0"></div>
-  <button
-    type="submit"
-    class="hover:text-saffron-400 text-5xl font-bold tracking-tighter active:scale-90 disabled:text-stone-400/70"
-    disabled={!Object.values(valid).every(Boolean)}>go</button
+
+  <SubmitButton disabled={!Object.values(valid).every(Boolean)}>Go</SubmitButton
   >
   <a
     href="/auth/login"
