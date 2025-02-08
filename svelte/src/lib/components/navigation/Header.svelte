@@ -11,7 +11,10 @@
   <div class="mx-auto max-w-7xl px-4">
     <div class="grid h-16 w-full grid-cols-3 items-center">
       <div class="flex items-center">
-        <a href="/" class="flex items-center space-x-3 hover:opacity-90">
+        <a
+          href="/"
+          class="hidden items-center space-x-3 hover:opacity-90 md:flex"
+        >
           <img
             src="/assets/img/bcf_logo_dark.png"
             alt="BCF Logo"
@@ -21,7 +24,7 @@
       </div>
 
       <nav
-        class="flex items-center justify-center gap-8 space-x-2 text-2xl tracking-tight uppercase"
+        class="flex items-center justify-center gap-8 space-x-2 tracking-tight uppercase lg:text-2xl"
       >
         <a
           href="/browse"
@@ -74,16 +77,13 @@
             >
               Log in
             </a>
-            <a href="/auth/signup">Sign up</a>
+            <a
+              href="/auth/signup"
+              class="text-sm text-stone-700 hover:text-stone-900 dark:text-stone-300 dark:hover:text-stone-100"
+              >Sign up</a
+            >
           </div>
         {/if}
-
-        <button
-          class="rounded p-1 hover:bg-stone-100 md:hidden dark:hover:bg-stone-800"
-          aria-label="Menu"
-        >
-          <Menu class="h-6 w-6" />
-        </button>
       </div>
     </div>
   </div>

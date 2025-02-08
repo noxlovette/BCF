@@ -39,10 +39,10 @@
     <!-- CAS and Amount Card -->
     <div class="mb-6 flex w-full space-x-6">
       <div
-        class="flex w-1/3 flex-col rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800"
+        class="flex flex-col bg-white p-6 shadow-sm md:w-1/3 md:rounded-lg dark:bg-stone-800"
       >
         <h2
-          class="mb-3 text-xl font-semibold text-stone-700 dark:text-stone-500"
+          class="font-semibold text-stone-700 md:mb-3 md:text-xl dark:text-stone-500"
         >
           CAS Number
         </h2>
@@ -51,10 +51,10 @@
         </p>
       </div>
       <div
-        class="flex flex-1 flex-col rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800"
+        class="flex flex-1 flex-col bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800"
       >
         <h2
-          class="mb-3 text-xl font-semibold text-stone-700 dark:text-stone-500"
+          class="font-semibold text-stone-700 md:mb-3 md:text-xl dark:text-stone-500"
         >
           Ingredient Details
         </h2>
@@ -68,8 +68,10 @@
       </div>
     </div>
     <!-- Description Card -->
-    <div class="mb-6 rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800">
-      <h2 class="mb-3 text-xl font-semibold text-stone-700 dark:text-stone-500">
+    <div class="bg-white p-6 shadow-sm md:mb-6 md:rounded-lg dark:bg-stone-800">
+      <h2
+        class="font-semibold text-stone-700 md:mb-3 md:text-xl dark:text-stone-500"
+      >
         Description
       </h2>
       <p class="">
@@ -80,8 +82,10 @@
   <!-- Right Column - Additional Info -->
   <div class="lg:col-span-1">
     <!-- Also Known As Card -->
-    <div class="mb-6 rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800">
-      <h2 class="mb-3 text-xl font-semibold text-stone-700 dark:text-stone-500">
+    <div class="mb-6 bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800">
+      <h2
+        class="font-semibold text-stone-700 md:mb-3 md:text-xl dark:text-stone-500"
+      >
         Also Known As
       </h2>
       <div class="space-y-2">
@@ -101,6 +105,8 @@
   </div>
 </div>
 
-<EditButton colour="wine" styling="self-end" href="{ingredient.id}/edit"
-  >Edit</EditButton
+<EditButton
+  colour="wine"
+  styling=" self-center md:self-end"
+  href="{ingredient.id}/edit">Edit</EditButton
 >

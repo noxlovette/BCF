@@ -48,7 +48,7 @@
     <!-- Left Column - Main Info -->
     <div class="space-y-8 lg:col-span-2">
       <!-- Descriptors & CAS -->
-      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900">
+      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-900">
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
             <Label>Descriptors</Label>
@@ -79,7 +79,7 @@
       </div>
 
       <!-- Usage Information -->
-      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900">
+      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-900">
         <Label>How to Use</Label>
         <p class="mt-2 min-h-24 text-lg md:min-h-36">
           {useMessage}
@@ -87,7 +87,7 @@
       </div>
 
       <!-- Properties -->
-      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900">
+      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-900">
         <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div>
             <Label>Volatility</Label>
@@ -109,7 +109,7 @@
     <div class="space-y-6 lg:col-span-1">
       <!-- Related Ingredients / PHOTO -->
       <div
-        class="relative aspect-square overflow-hidden rounded-lg bg-white shadow-sm dark:bg-stone-900"
+        class="relative aspect-square overflow-hidden bg-white shadow-sm md:rounded-lg dark:bg-stone-900"
       >
         {#if unsplashData}
           <img
@@ -130,7 +130,7 @@
       </div>
 
       <!-- Alternative Names -->
-      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900">
+      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-900">
         <Label>Also Known As</Label>
         <div class="mt-2">
           {#if otherNames !== "No alternative names"}
@@ -150,7 +150,7 @@
   </div>
   <form
     id="controls"
-    class="mt-4 flex flex-row space-x-4 place-self-end"
+    class="mt-4 flex flex-row space-x-4 place-self-center md:place-self-end"
     method="POST"
     use:enhance={() => {
       isSubmitting = true;

@@ -46,7 +46,7 @@
     <div class="space-y-6 lg:col-span-2">
       <!-- Common Name -->
       <div
-        class="flex space-x-4 rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800"
+        class="flex space-x-4 bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800"
       >
         <div>
           <Label>Common Name</Label>
@@ -71,7 +71,7 @@
       </div>
 
       <!-- Description -->
-      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800">
+      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800">
         <Label>Description</Label>
         <Input
           colour="wine"
@@ -86,7 +86,7 @@
     <!-- Right Column - Additional Info -->
     <div class="flex flex-col gap-6 lg:col-span-1">
       <!-- Also Known As -->
-      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800">
+      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800">
         <Label>Also Known As</Label>
         <Input
           colour="wine"
@@ -97,7 +97,7 @@
         />
       </div>
       <div
-        class="flex flex-1 flex-col rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800"
+        class="flex flex-1 flex-col bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800"
       >
         <h2 class="mb-3 text-xl font-semibold dark:text-stone-500">
           Ingredient Details

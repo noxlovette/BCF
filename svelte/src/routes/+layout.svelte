@@ -19,9 +19,8 @@
   <Header />
 
   <div
-    class="my-8 flex min-h-screen w-full max-w-[80vw] flex-col items-center justify-start
-    overscroll-contain
-    md:my-0"
+    class="flex min-h-screen w-full max-w-screen flex-col items-center justify-start overscroll-contain
+    md:max-w-[80vw]"
   >
     {@render children()}
   </div>

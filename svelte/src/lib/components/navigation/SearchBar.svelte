@@ -4,8 +4,8 @@
 
 <div
   id="search-bar"
-  class="group flex w-full flex-col justify-between rounded-b-lg border-t-2 bg-white px-3 py-4 border-{colour}-600
-   shadow-md transition-all duration-300 hover:shadow-lg sm:flex-row sm:items-center dark:bg-stone-900"
+  class="group flex w-full flex-col justify-between space-y-2 border-t-2 bg-white px-3 py-4 md:space-y-0 md:rounded-b-lg border-{colour}-600
+   items-center shadow-md transition-all duration-300 hover:shadow-lg md:flex-row dark:bg-stone-900"
 >
   {@render children()}
 </div>

@@ -17,7 +17,7 @@
   <div class="grid w-full grid-cols-1 gap-8 lg:grid-cols-3">
     <!-- Ingredients List -->
     <div
-      class="col-span-2 space-y-6 rounded-xl bg-white p-6 shadow-sm dark:bg-stone-800"
+      class="col-span-2 space-y-6 bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800"
     >
       <div class="item s-center flex justify-between">
         <h2 class="text-xl font-semibold">Ingredients</h2>
@@ -59,8 +59,8 @@
       </div>
       <!-- Description -->
     </div>
-    <div class="flex h-full flex-col space-y-4">
-      <div class="flex-1 rounded-xl bg-white p-4 shadow-sm dark:bg-stone-800">
+    <div class="col-span-2 flex h-full flex-col space-y-4 md:col-span-1">
+      <div class="bg-white p-4 shadow-sm md:rounded-lg dark:bg-stone-800">
         <Label>Description</Label>
         <p class="mt-2 text-lg">
           {formula.description || "No description available"}
@@ -69,7 +69,8 @@
       <EditButton
         href="{formula.id}/edit"
         colour="hunter"
-        styling="place-self-end">Edit Formula</EditButton
+        styling="place-self-center md:place-self-end hidden md:flex"
+        >Edit Formula</EditButton
       >
     </div>
   </div>

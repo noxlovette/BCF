@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { body, colour = "ultra", href, heading } = $props();
+  let { body, href, heading } = $props();
 </script>
 
 <section

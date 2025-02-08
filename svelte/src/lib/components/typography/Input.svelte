@@ -9,9 +9,12 @@
     placeholder: string;
     name: string;
     value: string | number;
-    colour: "wine" | "ultra" | "hunter" | "saffron";
-    type: "text" | "number" | "textarea";
+    colour?: "wine" | "ultra" | "hunter" | "saffron";
+    type?: "text" | "number" | "textarea" | "password" | "email";
   } = $props();
+
+  const styling =
+    "mt-2 w-full rounded-md p-3 text-lg shadow-sm dark:border-stone-700 dark:bg-stone-900";
 </script>
 
 {#if type === "text"}
@@ -19,7 +22,7 @@
     {name}
     type="text"
     {value}
-    class="focus:border-{colour}-500 focus:ring-{colour}-500 mt-2 w-full rounded-md p-3 text-lg shadow-sm dark:border-stone-700 dark:bg-stone-900"
+    class="{styling} focus:border-{colour}-500 focus:ring-{colour}-500"
     {placeholder}
   />
 {:else if type === "textarea"}
@@ -27,7 +30,7 @@
     {name}
     {value}
     rows="5"
-    class="focus:border-{colour}-500 focus:ring-{colour}-500 mt-2 w-full rounded-md p-3 text-lg shadow-sm dark:border-stone-700 dark:bg-stone-900"
+    class="{styling} focus:border-{colour}-500 focus:ring-{colour}-500"
     {placeholder}
   ></textarea>
 {:else if type === "number"}
@@ -36,7 +39,23 @@
     {placeholder}
     {name}
     value={value as number}
-    class="focus:border-{colour}-500 focus:ring-{colour}-500 mt-2 w-full rounded-md p-3 text-lg shadow-sm dark:border-stone-700 dark:bg-stone-900"
+    class="{styling} focus:border-{colour}-500 focus:ring-{colour}-500"
+  />
+{:else if type === "password"}
+  <input
+    type="password"
+    {placeholder}
+    {name}
+    value={value as number}
+    class="{styling} focus:border-{colour}-500 focus:ring-{colour}-500"
+  />
+{:else if type === "email"}
+  <input
+    type="email"
+    {placeholder}
+    {name}
+    value={value as number}
+    class="{styling} focus:border-{colour}-500 focus:ring-{colour}-500"
   />
 {/if}
 

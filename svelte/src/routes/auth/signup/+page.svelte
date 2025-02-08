@@ -4,11 +4,12 @@
   import { onMount } from "svelte";
   import { notification } from "$lib/stores";
   import { enhance } from "$app/forms";
+  import H1 from "$lib/components/typography/H1.svelte";
+  import { Input } from "$lib/components";
 
   let username = $state("");
   let email = $state("");
   let password = $state("");
-  let agreeTerms = $state(false);
   let confirmPassword = $state("");
   let isSubmitting = $state(false);
 
@@ -32,6 +33,8 @@
   onMount(() => {
     valid.terms = sessionStorage.getItem("terms") === "true";
   });
+
+  $inspect(username);
 </script>
 
 <svelte:head>
@@ -39,7 +42,7 @@
 </svelte:head>
 
 <form
-  class="mt-8 max-w-md space-y-6 rounded-lg bg-white p-3 dark:bg-stone-900"
+  class="max-w-md space-y-4 rounded-b-lg bg-white p-3 dark:bg-stone-900"
   in:fade={{
     duration: 100,
     easing: quintOut,
@@ -69,79 +72,55 @@
     };
   }}
 >
-  <h1 class="border-b-2 text-6xl font-bold tracking-tighter">
-    sign up<span class="text-saffron-400">.</span>
-  </h1>
+  <H1>Sign up</H1>
 
-  <div class="flex space-x-4">
-    <input
-      type="text"
-      name="username"
-      class="focus:ring-saffron-300 mt-8 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
-      placeholder="username"
-      required
-      bind:value={username}
-    />
-    <input
-      type="text"
-      name="name"
-      class="focus:ring-saffron-300 mt-8 w-full rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
-      placeholder="Name"
-      required
-    />
-  </div>
+  <Input
+    type="text"
+    name="username"
+    placeholder="Username"
+    bind:value={username}
+  ></Input>
+  <Input type="text" name="name" placeholder="Name" colour="saffron" value=""
+  ></Input>
 
-  <div id="handle email" class="flex items-center justify-center">
-    <input
-      type="email"
-      name="email"
-      class="focus:ring-saffron-300 rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
-      placeholder="email"
-      bind:value={email}
-    />
-    <span
-      class:valid={valid.email}
-      class="ml-4 h-[40px] w-[96px] rounded bg-stone-50 p-2 text-left text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
-      >valid</span
-    >
-  </div>
+  <Input name="email" placeholder="Email" bind:value={email}></Input>
+
   <div id="handle pass" class="flex items-center justify-center">
-    <input
+    <Input
       type="password"
       name="password"
-      class="focus:ring-saffron-300 mr-auto rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
-      placeholder="password"
+      placeholder="Password"
       bind:value={password}
     />
+
     <span
       class:valid={valid.case}
-      class="mx-4 size-[40px] rounded bg-stone-50 p-2 text-stone-900/60 normal-case shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+      class="mx-4 aspect-square rounded bg-stone-50 p-2 text-stone-900/60 normal-case shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
     >
       aZ
     </span>
     <span
       class:valid={valid.length}
-      class="text-baseline size-[40px] rounded bg-stone-50 p-2 text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+      class="text-baseline aspect-square rounded bg-stone-50 p-2 text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
     >
       8+
     </span>
   </div>
   <div class="flex items-center justify-center" id="handle 2nd pass">
-    <input
+    <Input
       type="password"
       name="confirmPassword"
-      class="focus:ring-saffron-300 rounded border-none bg-stone-50 p-2 shadow-inner focus:ring-2 dark:bg-stone-800"
-      placeholder="repeat"
+      placeholder="Repeat"
       bind:value={confirmPassword}
     />
     <span
       class:valid={valid.match}
-      class="mx-4 size-[40px] rotate-90 rounded bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+      class="mx-4 aspect-square rotate-90 rounded bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
       >||</span
     >
     <span
       class:valid={valid.special}
-      class="size-[40px] rounded bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
+      class="aspect-square rounded bg-stone-50 p-2 text-center text-stone-900/60 shadow-inner dark:bg-stone-800 dark:text-stone-50/60"
       >&~</span
     >
   </div>

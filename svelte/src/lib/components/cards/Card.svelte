@@ -14,9 +14,9 @@
   id="card-small"
   {href}
   class="group hover:ring-saffron-400 flex flex-col justify-between
-rounded-lg bg-stone-50 p-3
-         ring-2 shadow-sm ring-stone-200 transition-all
-         hover:shadow-md dark:bg-stone-900 dark:ring-stone-900"
+bg-stone-50 p-3 ring-2
+         shadow-sm ring-stone-200 transition-all hover:shadow-md
+         md:rounded-lg dark:bg-stone-900 dark:ring-stone-900"
   tabindex="0"
   {style}
   transition:fade

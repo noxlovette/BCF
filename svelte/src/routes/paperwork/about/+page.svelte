@@ -13,33 +13,28 @@
   const sectionSmallTextNext = `It's a question that concerns both you and me. As you continue to create amazing perfumes and contribute to our platform, I'm dedicated to listening to your feedback and implementing the features you want.`;
 </script>
 
-<div class="py-12 sm:py-8 md:py-12 lg:py-14 xl:py-12 2xl:py-28">
-  <div class="lowercase">
-    <BigText text={bigText} />
-  </div>
+<div class="lowercase">
+  <BigText text={bigText} />
+</div>
 
-  <div
-    class="mx-auto grid max-w-4xl grid-cols-1 items-start gap-8 px-4 py-8 pb-12 text-pretty sm:px-6 md:py-16 lg:grid lg:gap-x-8 lg:px-8 lg:py-24 xl:grid-cols-2 xl:gap-x-24 xl:gap-y-12"
-  >
-    <Section
-      sectionBigText={sectionBigTextWhat}
-      sectionSmallText={sectionSmallTextWhat}
-    />
-    <Section
-      sectionBigText={sectionBigTextWhy}
-      sectionSmallText={sectionSmallTextWhy}
-    />
+<div
+  class="grid max-w-5xl grid-cols-1 items-start gap-8 text-balance xl:grid-cols-2"
+>
+  <Section
+    sectionBigText={sectionBigTextWhat}
+    sectionSmallText={sectionSmallTextWhat}
+  />
+  <Section
+    sectionBigText={sectionBigTextWhy}
+    sectionSmallText={sectionSmallTextWhy}
+  />
 
-    <Section
-      sectionBigText={sectionBigTextFor}
-      sectionSmallText={sectionSmallTextFor}
-    />
-    <Section
-      sectionBigText={sectionBigTextNext}
-      sectionSmallText={sectionSmallTextNext}
-    />
-  </div>
-  <BigText
-    text="Together, we'll shape <span class='text-saffron-400'>the future </span> of perfume-making<span class='text-saffron-400'>.</span>"
+  <Section
+    sectionBigText={sectionBigTextFor}
+    sectionSmallText={sectionSmallTextFor}
+  />
+  <Section
+    sectionBigText={sectionBigTextNext}
+    sectionSmallText={sectionSmallTextNext}
   />
 </div>

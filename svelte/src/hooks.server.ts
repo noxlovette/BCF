@@ -32,7 +32,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   } else if (event.cookies.get("refreshToken")) {
     user = await handleTokenRefresh(event);
   } else {
-    throw redirect(302, "/auth/login");
+    throw redirect(302, "/auth/unauthorised");
   }
 
   const response = await resolve(event);

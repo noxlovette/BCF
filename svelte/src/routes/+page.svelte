@@ -6,22 +6,19 @@
 
 <BigText text={bigText} />
 
-<div class="grid grid-cols-3 gap-2">
+<div class="grid grid-cols-1 gap-4 text-balance lg:grid-cols-3">
   <Section
     href="browse"
-    color="ultra"
     heading="Browse over 3100 ingredients."
     body="Use the power of IFRA's FIG in an unprecedented way. Industry-level data, supported by the opinions of real perfumers. This is the place where the hidden becomes apparent, and your expertise grows. You contribute, and you benefit."
   />
   <Section
     href="collect"
-    color="wine"
     heading="Collect hundreds of compounds."
     body="Keep track of your favourite ingredients and the ones you want to try. Note down ideas, associations, and inspirations. Everything from colour to availability in your lab. Your collection is your world only. Encrypted, it is only yours to enjoy."
   />
   <Section
     href="formulate"
-    color="hunter"
     heading="Formulate a revolution."
     body="Manage your formulas independent of where you are. At home, in the
             lab, or on holiday. Focus on how to make your ideas come true, and

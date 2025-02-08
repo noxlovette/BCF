@@ -135,9 +135,6 @@ If you have any questions about this Notice or our privacy practices, <a class='
 "
     />
 
-    <BigText
-      text="We are committed to protecting your privacy<span class='text-saffron-400'>.</span>"
-    />
     <Section
       sectionBigText=""
       sectionSmallText="
