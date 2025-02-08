@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { IngredientCollection } from "$lib/types";
   import MetaData from "$lib/components/MetaData.svelte";
-  import { EditButton, HeaderMerger } from "$lib/components";
+  import { EditButton, HeaderMerger, Label } from "$lib/components";
 
   let { data } = $props();
-  let ingredient: IngredientCollection = data.ingredient;
+  let { ingredient, markdown } = data;
 
   function formatValue(
     value: string | null | undefined,
@@ -17,10 +17,7 @@
     ingredient.otherNames,
     "No alternative names available",
   );
-  const description = formatValue(
-    ingredient.markdown,
-    "No description available",
-  );
+
   const casNumber = formatValue(ingredient.cas, "CAS number not available");
 </script>
 
@@ -41,11 +38,7 @@
       <div
         class="flex flex-col bg-white p-6 shadow-sm md:w-1/3 md:rounded-lg dark:bg-stone-800"
       >
-        <h2
-          class="font-semibold text-stone-700 md:mb-3 md:text-xl dark:text-stone-500"
-        >
-          CAS Number
-        </h2>
+        <Label>CAS number</Label>
         <p class="font-mono text-lg">
           {casNumber}
         </p>
@@ -53,11 +46,7 @@
       <div
         class="flex flex-1 flex-col bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800"
       >
-        <h2
-          class="font-semibold text-stone-700 md:mb-3 md:text-xl dark:text-stone-500"
-        >
-          Ingredient Details
-        </h2>
+        <Label>Details</Label>
 
         <div class="flex items-center justify-between">
           <span class="text-stone-700 dark:text-stone-300">Available</span>
@@ -69,25 +58,18 @@
     </div>
     <!-- Description Card -->
     <div class="bg-white p-6 shadow-sm md:mb-6 md:rounded-lg dark:bg-stone-800">
-      <h2
-        class="font-semibold text-stone-700 md:mb-3 md:text-xl dark:text-stone-500"
-      >
-        Description
-      </h2>
-      <p class="">
-        {description}
-      </p>
+      <Label>Desciption</Label>
+
+      <div class="markdown">
+        {@html markdown}
+      </div>
     </div>
   </div>
   <!-- Right Column - Additional Info -->
   <div class="lg:col-span-1">
     <!-- Also Known As Card -->
     <div class="mb-6 bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800">
-      <h2
-        class="font-semibold text-stone-700 md:mb-3 md:text-xl dark:text-stone-500"
-      >
-        Also Known As
-      </h2>
+      <Label>Also known as</Label>
       <div class="space-y-2">
         {#if otherNames !== "No alternative names available"}
           {#each otherNames.split(";") as name}

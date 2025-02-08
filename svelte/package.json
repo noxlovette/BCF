@@ -44,10 +44,18 @@
     "jose": "^5.9.6",
     "lucide-svelte": "^0.474.0",
     "redis": "^4.7.0",
+    "rehype": "^13.0.2",
+    "rehype-format": "^5.0.1",
+    "rehype-sanitize": "^6.0.0",
+    "rehype-stringify": "^10.0.1",
+    "remark-gfm": "^4.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.1",
     "svelte-adapter-bun": "^0.5.2",
     "svelte-color": "^1.0.2",
     "svelte-loading-spinners": "^0.3.6",
     "tippy.js": "^6.3.7",
+    "unified": "^11.0.5",
     "unsplash-js": "^7.0.19"
   }
 }

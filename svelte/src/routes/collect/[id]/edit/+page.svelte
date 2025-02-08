@@ -132,8 +132,8 @@
 
   <!-- Action Buttons -->
   <div class="mt-8 flex justify-end space-x-4">
+    <SubmitButton colour="wine">Save Changes</SubmitButton>
     <CancelButton></CancelButton>
     <DangerButton>Delete</DangerButton>
-    <SubmitButton colour="wine">Save Changes</SubmitButton>
   </div>
 </form>

@@ -10,7 +10,7 @@
   import { notification } from "$lib/stores";
 
   let { data } = $props();
-  let { ingredient, unsplashData } = data;
+  let { ingredient, unsplashData, markdown } = data;
 
   let isSubmitting = $state(false);
 
@@ -20,8 +20,6 @@
   }
 
   const volatility = ingredient.volatility || "Unknown";
-  const useMessage =
-    ingredient.ingDescription || "No usage information available";
   const otherNames = ingredient.otherNames || "No alternative names";
   const origin = ingredient.origin || "Not Specified";
   const ifraStatus =
@@ -48,7 +46,7 @@
     <!-- Left Column - Main Info -->
     <div class="space-y-8 lg:col-span-2">
       <!-- Descriptors & CAS -->
-      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-900">
+      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800">
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
             <Label>Descriptors</Label>
@@ -79,15 +77,15 @@
       </div>
 
       <!-- Usage Information -->
-      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-900">
+      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800">
         <Label>How to Use</Label>
-        <p class="mt-2 min-h-24 text-lg md:min-h-36">
-          {useMessage}
+        <p class="markdown mt-2 min-h-24 text-lg md:min-h-36">
+          {@html markdown}
         </p>
       </div>
 
       <!-- Properties -->
-      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-900">
+      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800">
         <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div>
             <Label>Volatility</Label>
@@ -109,7 +107,7 @@
     <div class="space-y-6 lg:col-span-1">
       <!-- Related Ingredients / PHOTO -->
       <div
-        class="relative aspect-square overflow-hidden bg-white shadow-sm md:rounded-lg dark:bg-stone-900"
+        class="relative aspect-square overflow-hidden bg-white shadow-sm md:rounded-lg dark:bg-stone-800"
       >
         {#if unsplashData}
           <img
@@ -130,7 +128,7 @@
       </div>
 
       <!-- Alternative Names -->
-      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-900">
+      <div class="bg-white p-6 shadow-sm md:rounded-lg dark:bg-stone-800">
         <Label>Also Known As</Label>
         <div class="mt-2">
           {#if otherNames !== "No alternative names"}

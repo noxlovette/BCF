@@ -1,4 +1,5 @@
 import redis from "$lib/redisClient";
+import { parseMarkdown } from "$lib/server";
 import { getUnsplashURL } from "$lib/server/unsplash";
 import type { IngredientBrowse } from "$lib/types";
 import type { LayoutServerLoad } from "./$types";
@@ -36,7 +37,12 @@ export const load: LayoutServerLoad = async ({ fetch, params }) => {
       );
     }
 
-    return { ingredient, unsplashData };
+    let markdown = "Nobody has shared the description yet";
+    if (ingredient.ingDescription) {
+      markdown = await parseMarkdown(ingredient.ingDescription);
+    }
+
+    return { ingredient, unsplashData, markdown };
   } catch (error) {
     return {
       error: "Failed to fetch browse data",

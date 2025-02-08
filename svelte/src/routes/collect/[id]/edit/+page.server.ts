@@ -26,9 +26,9 @@ export const actions = {
       return error(500, { message: error });
     }
   },
-  delete: async ({ fetch, request }) => {
+  delete: async ({ fetch, request, params }) => {
     const formData = await request.formData();
-    const id = formData.get("id");
+    const id = params.id;
 
     const response = await fetch(`/axum/collect/ci/${id}`, {
       method: "DELETE",

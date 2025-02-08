@@ -20,6 +20,7 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
     );
 
     let ingredients: IngredientBrowse[] = await response.json();
+
     return {
       ingredients,
     };

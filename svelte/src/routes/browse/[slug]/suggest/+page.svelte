@@ -43,7 +43,7 @@
   <div class="space-y-6">
     <!-- Common Name & CAS Number -->
     <div
-      class="flex space-x-4 rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900"
+      class="flex space-x-4 rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800"
     >
       <div class="w-1/2">
         <Label>Common Name</Label>
@@ -67,7 +67,7 @@
       </div>
     </div>
 
-    <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900">
+    <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800">
       <Label>Tell us what needs to change</Label>
       <Input
         colour="ultra"

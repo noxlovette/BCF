@@ -1,0 +1,29 @@
+@layer base {
+  .font-inter {
+    font-family: "Inter", var(--font-sans);
+  }
+
+  .font-quicksand {
+    font-family: "Quicksand", var(--font-sans);
+  }
+
+  .font-manrope {
+    font-family: "Manrope", var(--font-sans);
+  }
+
+  .font-nunito {
+    font-family: "Nunito", var(--font-sans);
+  }
+
+  .font-outfit {
+    font-family: "Outfit", var(--font-sans);
+  }
+
+  .font-poppins {
+    font-family: "Poppins", var(--font-sans);
+  }
+
+  .font-urbanist {
+    font-family: "Urbanist", var(--font-sans);
+  }
+}
