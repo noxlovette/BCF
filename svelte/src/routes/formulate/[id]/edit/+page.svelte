@@ -37,7 +37,10 @@
   }
 </script>
 
-<MetaData title={`Edit ${formula.title}`} />
+<MetaData
+  title={`Edit ${formula.title} | Formulate`}
+  robots="noindex, nofollow"
+/>
 
 <HeaderMerger colour="hunter">
   {formula.title}

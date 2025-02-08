@@ -7,6 +7,7 @@
     SubmitButton,
     Input,
     Label,
+    MetaData,
   } from "$lib/components";
   import { notification } from "$lib/stores";
 
@@ -14,6 +15,11 @@
   let { ingredient } = data;
   let isSubmitting = $state();
 </script>
+
+<MetaData
+  title={`${ingredient.commonName} | Collect`}
+  robots="noindex, nofollow"
+/>
 
 <form
   action="?/update"

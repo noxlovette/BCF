@@ -7,7 +7,7 @@
   let { formula, ingredients } = data;
 </script>
 
-<MetaData title={formula.title} />
+<MetaData title="{formula.title} | Formulate" robots="noindex, nofollow" />
 
 <div class="flex size-full flex-col">
   <HeaderMerger colour="hunter">

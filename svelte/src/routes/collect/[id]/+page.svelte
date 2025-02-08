@@ -25,7 +25,7 @@
 </script>
 
 <MetaData
-  title={formatValue(ingredient.commonName)}
+  title={`${formatValue(ingredient.commonName)} | Collect`}
   robots="noindex, nofollow"
 />
 
