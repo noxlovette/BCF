@@ -1,60 +1,18 @@
+name: bcf-build
+
 services:
-  frontend:
-    build: 
-      context: ./frontend
+  svelte:
+    build:
+      context: ./svelte
       dockerfile: Dockerfile
-    container_name: frontend-production
-    ports:
-      - "5173:3000"
-    environment:
-      - NODE_ENV=production
-      - BACKEND_URL="http://backend:8000"
     env_file:
-      - ./frontend/.env
-    depends_on:
-      - backend
-      - redis
+      - ./svelte/.env.production
 
-  redis:
-    image: redis/redis-stack-server:latest
-    container_name: redis-production
-    ports:
-      - "6380:6379"
-
-  backend:
-    build: 
-      context: ./backend
+  axum:
+    build:
+      context: ./axum
       dockerfile: Dockerfile
-    container_name: backend-production
-    environment:
-      - POSTGRES_DB=${PGNAME}
-      - POSTGRES_USER=${PGUSER}
-      - POSTGRES_PASSWORD=${PGPASSWORD}
-      - POSTGRES_HOST=${PGHOST}
-      - POSTGRES_PORT=${PGPORT}
+      args:
+        RUSTFLAGS: "-C target-cpu=native"
     env_file:
-      - ./backend/.env
-    depends_on:
-      - db
-
-  db:
-    image: postgres
-    user: postgres
-    volumes:
-      - db-data-production:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=${PGNAME:-bcf}
-      - POSTGRES_USER=${PGUSER:-postgres}
-      - POSTGRES_PASSWORD=${PGPASSWORD:-your_secure_password}
-      - PGPORT=${PGPORT:-5432}
-      - PGHOST=${PGHOST:-db}
-    ports:
-      - "5433:5432"
-    healthcheck:
-      test: ["CMD", "pg_isready"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-volumes:
-  db-data-production:
+      - ./axum/.env.production

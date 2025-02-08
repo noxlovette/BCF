@@ -1,38 +1,14 @@
-# syntax=docker/dockerfile:1
-
-# Stage 1: Build environment
-FROM oven/bun:1 as build
-
+FROM node:23-alpine AS builder
 WORKDIR /app
-
-# Copy package files and install dependencies
-COPY package*.json ./
-RUN bun install --frozen-lockfile
-
-# Copy the rest of your project and build
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable && pnpm install
 COPY . .
-RUN bun run build
+RUN pnpm build
 
-# Stage 2: Runtime environment
-FROM oven/bun:1-alpine as runtime
-
+FROM node:23-alpine
 WORKDIR /app
-
-# Install production dependencies
-COPY package*.json ./
-RUN bun install --frozen-lockfile --production
-
-# Copy built assets from build stage
-COPY --from=build /app/build ./build
-
-# Use non-root user
-RUN addgroup -g 1001 -S bunjs && \
-    adduser -S bunjs -u 1001 && \
-    chown -R bunjs:bunjs /app
-USER bunjs
-
-# Expose the port the app runs on
-EXPOSE 3000
-
-# Command to start the application
-CMD ["bun", "run", "start"]
+COPY --from=builder /app/build ./build
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable && pnpm install --prod && \
+    rm -rf /root/.pnpm-store
+CMD ["node", "build/index.js"]
