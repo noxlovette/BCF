@@ -15,9 +15,7 @@ services:
         limits:
           memory: 512M
     depends_on:
-      - redis
-      - axum
-      - postgres:
+      postgres:
         condition: service_healthy
 
   redis:
@@ -28,7 +26,7 @@ services:
       - internal
 
   axum:
-    image: ghcr.io/noxlovette/fl-prod-axum:v1.0.0
+    image: ghcr.io/noxlovette/bcf-prod-axum:v1.0.0
     container_name: bcf-prod-axum
     logging:
       driver: "json-file"
@@ -50,7 +48,7 @@ services:
 
   postgres:
     image: postgres:17-alpine
-    container_name: pg-fl-prod
+    container_name: bcf-prod-pg
     restart: unless-stopped
     env_file: ./.env.postgres
     volumes:
@@ -69,11 +67,11 @@ services:
 
 volumes:
   db-data:
-    name: db-fl-prod
+    name: db-bcf-prod
 
 networks:
   web:
-    name: web-fl
+    name: web-bcf
   internal:
-    name: internal-fl
+    name: internal-bcf
     internal: true
