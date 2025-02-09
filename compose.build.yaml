@@ -6,7 +6,7 @@ services:
       context: ./svelte
       dockerfile: Dockerfile
     env_file:
-      - ./svelte/.env.production
+      - ./svelte/.env
 
   axum:
     build:
@@ -15,4 +15,4 @@ services:
       args:
         RUSTFLAGS: "-C target-cpu=native"
     env_file:
-      - ./axum/.env.production
+      - ./axum/.env
