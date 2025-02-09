@@ -4,7 +4,7 @@
   import { onMount } from "svelte";
   import { notification } from "$lib/stores";
   import { enhance } from "$app/forms";
-  import { Input, H1 } from "$lib/components";
+  import { Input } from "$lib/components";
   import SubmitButton from "$lib/components/UI/button/SubmitButton.svelte";
 
   let username = $state("");

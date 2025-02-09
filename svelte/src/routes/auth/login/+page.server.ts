@@ -16,7 +16,7 @@ export const actions = {
     const turnstileToken = data.get("cf-turnstile-response") as string;
     if (!turnstileToken) {
       return fail(400, {
-        message: "Please complete the CAPTCHA verification",
+        message: "CAPTCHA. You might want to refresh the page",
       });
     }
 

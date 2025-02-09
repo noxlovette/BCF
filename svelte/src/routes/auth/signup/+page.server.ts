@@ -1,5 +1,7 @@
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
+import { turnstileVerify } from "$lib/server";
+
 export const actions = {
   default: async ({ request, fetch }) => {
     const data = await request.formData();
@@ -45,6 +47,20 @@ export const actions = {
 
     if (!name) {
       return fail(422, { message: "So you're a mister nobody?" });
+    }
+
+    const turnstileToken = data.get("cf-turnstile-response") as string;
+    if (!turnstileToken) {
+      return fail(400, {
+        message: "Please complete the CAPTCHA verification",
+      });
+    }
+
+    const turnstileResponse = await turnstileVerify(turnstileToken);
+    if (!turnstileResponse.ok) {
+      return fail(400, {
+        message: "Turnstile verification failed",
+      });
     }
 
     const body = JSON.stringify({ username, pass, email, name });
