@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT * FROM formula_ingredients WHERE formula_id = $1\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "formula_id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "amount",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "unit",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "volatility",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "percentage",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 7,
+        "name": "counterpart_id",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "6a04ed5fcdd98c766f335382a17f0368282f877dceef5102f129df5b40b615f2"
+}

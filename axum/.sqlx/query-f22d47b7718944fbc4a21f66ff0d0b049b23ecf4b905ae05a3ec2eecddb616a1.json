@@ -1,0 +1,101 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            WITH descriptor_info AS (\n                SELECT \n                    i.*,\n                    array_agg(DISTINCT d.name) as descriptors,\n                    array_agg(DISTINCT d.colour) as colours\n                FROM ingredients i\n                LEFT JOIN ingredient_descriptors id ON i.id = id.ingredient_id\n                LEFT JOIN descriptors d ON id.descriptor_id = d.id\n                GROUP BY i.id\n                ORDER BY i.common_name\n                LIMIT $1 OFFSET $2\n            )\n            SELECT * FROM descriptor_info\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "common_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "other_names",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "cas",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "ing_type",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "ing_description",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "volatility",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "restricted",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 8,
+        "name": "origin",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 9,
+        "name": "slug",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 10,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 11,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 12,
+        "name": "descriptors",
+        "type_info": "VarcharArray"
+      },
+      {
+        "ordinal": 13,
+        "name": "colours",
+        "type_info": "BpcharArray"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "f22d47b7718944fbc4a21f66ff0d0b049b23ecf4b905ae05a3ec2eecddb616a1"
+}

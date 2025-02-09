@@ -1,0 +1,78 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM collection_ingredients WHERE user_id = $3 ORDER BY common_name LIMIT $1 OFFSET $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "user_id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "common_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "cas",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "other_names",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "markdown",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "amount",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 7,
+        "name": "unit",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 8,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 9,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int8",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "68c7af3a4d3bf27b1882f25d59a1d2bb9d493b450e5f54d50e5607327f1f0282"
+}

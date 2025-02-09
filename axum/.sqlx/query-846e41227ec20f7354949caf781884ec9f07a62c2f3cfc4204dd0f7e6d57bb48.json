@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        DELETE FROM formula_ingredients\n        WHERE formula_id = $1 AND id NOT IN (\n            SELECT UNNEST($2::text[])\n        )\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "TextArray"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "846e41227ec20f7354949caf781884ec9f07a62c2f3cfc4204dd0f7e6d57bb48"
+}

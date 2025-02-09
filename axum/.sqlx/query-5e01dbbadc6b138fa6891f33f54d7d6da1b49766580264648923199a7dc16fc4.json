@@ -1,0 +1,29 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        INSERT INTO formula_ingredients (id, formula_id, name, amount, unit, volatility, percentage, counterpart_id)\n        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)\n        ON CONFLICT (id) DO UPDATE\n        SET \n            name = EXCLUDED.name,\n            amount = EXCLUDED.amount,\n            unit = EXCLUDED.unit,\n            volatility = EXCLUDED.volatility,\n            percentage = EXCLUDED.percentage,\n            counterpart_id = EXCLUDED.counterpart_id\n        RETURNING id\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Int4",
+        "Varchar",
+        "Varchar",
+        "Float8",
+        "Varchar"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "5e01dbbadc6b138fa6891f33f54d7d6da1b49766580264648923199a7dc16fc4"
+}

@@ -1,0 +1,83 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n    UPDATE collection_ingredients\n    SET \n        common_name = COALESCE($3, common_name),\n        markdown = COALESCE($4, markdown),\n        amount = COALESCE($5, amount),\n        unit = COALESCE($6, unit),\n        cas = COALESCE($7, cas),\n        other_names = COALESCE($8, other_names)\n    WHERE id = $1 AND user_id = $2\n    RETURNING *\n    ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "user_id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "common_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "cas",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "other_names",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "markdown",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "amount",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 7,
+        "name": "unit",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 8,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 9,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Varchar",
+        "Text",
+        "Float8",
+        "Text",
+        "Varchar",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "0d665d169436da9bc2fe41427789d7d368ca20237d6b286579ff4d0e3aeddea5"
+}

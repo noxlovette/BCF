@@ -1,0 +1,97 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            UPDATE suggestions \n            SET \n                common_name = COALESCE($1, common_name),\n                cas = COALESCE($2, cas),\n                markdown = COALESCE($3, markdown),\n                status = COALESCE($4, status),\n                updated_at = CURRENT_TIMESTAMP\n            WHERE id = $5 AND user_id = $6\n            RETURNING \n                id, ingredient_id, common_name, cas, markdown, \n                user_id, status as \"status: SuggestionStatus\", \n                created_at, updated_at\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "ingredient_id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "common_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "cas",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "markdown",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "user_id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "status: SuggestionStatus",
+        "type_info": {
+          "Custom": {
+            "name": "suggestion_status",
+            "kind": {
+              "Enum": [
+                "pending",
+                "approved",
+                "rejected"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 8,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Text",
+        {
+          "Custom": {
+            "name": "suggestion_status",
+            "kind": {
+              "Enum": [
+                "pending",
+                "approved",
+                "rejected"
+              ]
+            }
+          }
+        },
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "8951a03a86bbd22d29489538d6fe9cb182e771d13975738f24ddf02f6a3ce0b5"
+}
