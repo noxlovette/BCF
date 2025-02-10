@@ -15,9 +15,10 @@
   let isSubmitting = $state(false);
 
   let href = $state("");
-  if (unsplashData && unsplashData.user.username) {
+  if (unsplashData?.user?.username) {
     href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
-  }
+}
+
 
   const volatility = ingredient.volatility || "Unknown";
   const otherNames = ingredient.otherNames || "No alternative names";
@@ -118,7 +119,7 @@
           <p
             class="bg-opacity-75 absolute right-2 bottom-2 rounded bg-stone-50 px-2 py-1 text-sm text-stone-900 italic"
           >
-            Photo by <a {href} class="underline">{unsplashData.user.name}</a> on
+            Photo by <a {href} class="underline">{unsplashData.user ? unsplashData.user.name : "Unknown"}</a> on
             <a
               href="https://unsplash.com/?utm_source=bcf&utm_medium=referral"
               class="underline">Unsplash</a
