@@ -1,6 +1,6 @@
+import { turnstileVerify } from "$lib/server";
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
-import { turnstileVerify } from "$lib/server";
 
 export const actions = {
   default: async ({ request, fetch }) => {
@@ -15,6 +15,12 @@ export const actions = {
     if (!username || username.length < 3) {
       return fail(400, {
         message: "Username must be at least 3 characters long.",
+      });
+    }
+
+    if (name.length < 3 || name.length > 16) {
+      return fail(400, {
+        message: "Name should be between 3 and 16 characters",
       });
     }
 

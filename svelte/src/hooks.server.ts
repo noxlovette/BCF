@@ -1,8 +1,15 @@
+import {sequence} from "@sveltejs/kit/hooks";
+import * as Sentry from "@sentry/sveltekit";
 import { env } from "$env/dynamic/private";
 import { handleTokenRefresh, ValidateAccess } from "$lib/server/refresh";
 import type { Handle, HandleFetch } from "@sveltejs/kit";
 import { redirect } from "@sveltejs/kit";
 import type { JWTPayload } from "jose";
+
+Sentry.init({
+    dsn: "https://cb2fec3778ef3f394a970f72701a67f2@o4507272574468096.ingest.de.sentry.io/4507272578203728",
+    tracesSampleRate: 1
+})
 
 const PROTECTED_PATHS = new Set(["/collect", "/formulate"]);
 
@@ -13,7 +20,7 @@ function isProtectedPath(path: string): boolean {
   );
 }
 
-export const handle: Handle = async ({ event, resolve }) => {
+export const handle: Handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
   const path = event.url.pathname;
 
   if (!isProtectedPath(path)) {
@@ -37,7 +44,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   const response = await resolve(event);
   return response;
-};
+});
 
 export const handleFetch: HandleFetch = async ({ request, event, fetch }) => {
   const url = new URL(request.url);
@@ -59,3 +66,4 @@ export const handleFetch: HandleFetch = async ({ request, event, fetch }) => {
 
   return fetch(request);
 };
+export const handleError = Sentry.handleErrorWithSentry();
