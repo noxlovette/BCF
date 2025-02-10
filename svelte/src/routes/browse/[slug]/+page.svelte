@@ -15,7 +15,7 @@
   let isSubmitting = $state(false);
 
   let href = $state("");
-  if (unsplashData) {
+  if (unsplashData && unsplashData.user.username) {
     href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
   }
 
