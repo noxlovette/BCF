@@ -2,7 +2,7 @@ import type { Formula } from "$lib/types";
 import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ fetch, cookies }) => {
+export const load: PageServerLoad = async ({ fetch }) => {
   try {
     const endpoint = `/axum/formulate`;
 
