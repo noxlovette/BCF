@@ -2,7 +2,7 @@ import { env } from "$env/dynamic/private";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
-export const GET: RequestHandler = async ({ cookies, fetch, locals }) => {
+export const GET: RequestHandler = async ({ cookies, fetch }) => {
   const refreshToken = cookies.get("refreshToken");
   const response = await fetch("/axum/auth/refresh", {
     headers: {

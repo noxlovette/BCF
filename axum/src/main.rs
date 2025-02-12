@@ -24,8 +24,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         db: init_db().await?,
     };
 
+  let app_env = std::env::var("APP_ENV").unwrap_or_else(|_| "development".to_string());
+let is_prod = app_env == "production";
+
+let allowed_origin = if is_prod {
+    std::env::var("ORIGIN").unwrap_or_else(|_| "localhost".to_string())
+} else {
+    "*".to_string() 
+};
+
     // TODO implement rate limiting
     // TODO implement request signing
+    // TODO IDEMPODENCY
 
     let protected_routes = Router::new()
         .nest("/browse", rust::api::routes::browse_routes::browse_routes())
@@ -75,7 +85,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .layer(TimeoutLayer::new(std::time::Duration::from_secs(10)))
                 .layer(
                     CorsLayer::new()
-                        .allow_origin("*".parse::<HeaderValue>().unwrap())
+                        .allow_origin(allowed_origin.parse::<HeaderValue>().unwrap())
                         .allow_methods([
                             Method::GET,
                             Method::POST,
@@ -96,3 +106,5 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 async fn handler_404() -> impl IntoResponse {
     (StatusCode::NOT_FOUND, "Nothing to see here")
 }
+
+
