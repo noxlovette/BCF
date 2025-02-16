@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 use time::format_description::well_known::Rfc3339;
 use time::OffsetDateTime;
 
+use super::suggestion::Suggestion;
+
 #[serde_with::serde_as]
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -24,6 +26,13 @@ pub struct BrowseIngredient {
     pub updated_at: OffsetDateTime,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct BrowseIngredientWithSuggestions {
+    pub ingredient: BrowseIngredient,
+    pub suggestions: Vec<Suggestion>
+}
+
 #[derive(Deserialize)]
 pub struct BrowseQuery {
     pub search: Option<String>,
@@ -39,4 +48,17 @@ pub struct PaginatedResponse {
     pub total: i64,
     pub page: u32,
     pub page_size: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct BrowseIngredientUpdate {
+    pub common_name: Option<String>,
+    pub other_names: Option<String>,
+    pub cas: Option<String>,
+    pub ing_type: Option<String>,
+    pub ing_description: Option<String>,
+    pub volatility: Option<String>,
+    pub restricted: Option<bool>,
+    pub origin: Option<String>,
 }

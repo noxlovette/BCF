@@ -109,6 +109,23 @@ impl Suggestion {
         .await
     }
 
+    pub async fn fetch_edit(pool: &PgPool, ingredient_id: &str) -> Result<Vec<Self>, sqlx::Error>{
+        sqlx::query_as!(
+            Self,
+            r#"
+            SELECT
+                id, ingredient_id, common_name, cas, markdown, 
+                user_id, status as "status: SuggestionStatus", 
+                created_at, updated_at
+            FROM suggestions 
+            WHERE ingredient_id = $1
+            "#,
+            ingredient_id
+        )
+            .fetch_all(pool)
+            .await
+            
+        }
     pub async fn list(pool: &PgPool, user_id: &str) -> Result<Vec<Self>, sqlx::Error> {
         sqlx::query_as!(
             Self,
