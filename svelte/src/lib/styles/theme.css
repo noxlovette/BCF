@@ -50,3 +50,10 @@
   --color-wine-900: oklch(0.31 0.06 20);
   --color-wine-950: oklch(0.18 0.03 20);
 }
+
+
+@layer base {
+  button {
+    cursor: pointer;
+  }
+}

@@ -33,11 +33,10 @@ pub async fn list_suggestion(
 
 pub async fn update_suggestion(
     State(state): State<AppState>,
-    claims: Claims,
     Path(id): Path<String>,
     Json(payload): Json<UpdateSuggestion>,
 ) -> Result<Json<Suggestion>, DbError> {
-    let updated = payload.update(&state.db, &id, &claims.sub).await?;
+    let updated = payload.update(&state.db, &id).await?;
 
     Ok(Json(updated))
 }

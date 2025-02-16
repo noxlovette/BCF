@@ -1,5 +1,5 @@
 <footer
-  class="z-10 flex w-full flex-col items-center justify-between bg-stone-300 py-4 text-stone-600 shadow-inner dark:bg-stone-900 dark:text-stone-400"
+  class="z-10 mt-12 flex w-full flex-col items-center justify-between bg-stone-300 py-4 text-stone-600 shadow-inner dark:bg-stone-900 dark:text-stone-400"
 >
   <div class="flex w-[90vw] flex-col">
     <p

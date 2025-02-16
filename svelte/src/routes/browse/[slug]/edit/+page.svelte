@@ -6,6 +6,7 @@
     HeaderMerger,
     Input,
     Label,
+    SuggestionCard,
   } from "$lib/components";
   import { notification } from "$lib/stores";
 
@@ -18,6 +19,7 @@
 
 <form
   method="POST"
+  action="?/update"
   class="flex size-full flex-col space-y-6"
   use:enhance={() => {
     isSubmitting = true;
@@ -41,94 +43,104 @@
     {ingredient.commonName || "Unnamed Ingredient"}
   </HeaderMerger>
 
-  <!-- Common Name & CAS Number -->
-  <div class="space-y-4 rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800">
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <Label>Common Name</Label>
+  <div class="flex size-full space-x-8">
+    <div class="flex w-3/4 flex-col">
+      <!-- Common Name & CAS Number -->
+      <div
+        class="space-y-4 rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800"
+      >
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <Label>Common Name</Label>
+            <Input
+              colour="ultra"
+              placeholder="Enter ingredient name..."
+              name="commonName"
+              value={ingredient.commonName}
+              type="text"
+            />
+          </div>
+          <div>
+            <Label>CAS Number</Label>
+            <Input
+              colour="ultra"
+              placeholder="Enter CAS number..."
+              name="cas"
+              value={ingredient.cas}
+              type="text"
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label>Also Known As</Label>
+          <Input
+            colour="wine"
+            placeholder="Colon-separated alternative names..."
+            name="otherNames"
+            value={ingredient.otherNames}
+            type="text"
+          />
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800">
+        <Label>Description</Label>
         <Input
           colour="ultra"
-          placeholder="Enter ingredient name..."
-          name="commonName"
-          value={ingredient.commonName}
-          type="text"
+          placeholder="What do you think should change?"
+          name="ingDescription"
+          value={ingredient.ingDescription}
+          type="textarea"
         />
       </div>
-      <div>
-        <Label>CAS Number</Label>
-        <Input
-          colour="ultra"
-          placeholder="Enter CAS number..."
-          name="cas"
-          value={ingredient.cas}
-          type="text"
-        />
+
+      <!-- Additional Information -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <Label>Volatility</Label>
+          <Input
+            colour="ultra"
+            placeholder="Volatility"
+            name="volatility"
+            value={ingredient.volatility}
+            type="text"
+          />
+        </div>
+        <div>
+          <Label>IFRA Status</Label>
+          <Input
+            colour="ultra"
+            placeholder="IFRA"
+            name="isRestricted"
+            value={ingredient.isRestricted}
+            type="checkbox"
+          />
+        </div>
+        <div class="col-span-2">
+          <Label>Origin</Label>
+          <Input
+            colour="ultra"
+            placeholder="Origin"
+            name="origin"
+            value={ingredient.origin}
+            type="text"
+          />
+        </div>
+      </div>
+      <!-- Action Buttons -->
+      <div class="mt-8 flex justify-end space-x-4">
+        <CancelButton />
+        <SubmitButton>Done</SubmitButton>
       </div>
     </div>
-
-    <div>
-      <Label>Also Known As</Label>
-      <Input
-        colour="wine"
-        placeholder="Colon-separated alternative names..."
-        name="otherNames"
-        value={ingredient.otherNames}
-        type="text"
-      />
+    <div class="flex-1 space-y-4 overflow-auto p-4">
+      {#each data.ingredientComposite.suggestions as suggestion}
+        <div>
+          <SuggestionCard {suggestion} />
+        </div>
+      {/each}
     </div>
-  </div>
-
-  <!-- Description -->
-  <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-800">
-    <Label>Description</Label>
-    <Input
-      colour="ultra"
-      placeholder="What do you think should change?"
-      name="ingDescription"
-      value={ingredient.ingDescription}
-      type="textarea"
-    />
-  </div>
-
-  <!-- Additional Information -->
-  <div class="grid grid-cols-2 gap-4">
-    <div>
-      <Label>Volatility</Label>
-      <Input
-        colour="ultra"
-        placeholder="Volatility"
-        name="volatility"
-        value={ingredient.volatility}
-        type="text"
-      />
-    </div>
-    <div>
-      <Label>IFRA Status</Label>
-      <Input
-        colour="ultra"
-        placeholder="IFRA"
-        name="isRestricted"
-        value={ingredient.isRestricted}
-        type="checkbox"
-      />
-    </div>
-    <div class="col-span-2">
-      <Label>Origin</Label>
-      <Input
-        colour="ultra"
-        placeholder="Origin"
-        name="origin"
-        value={ingredient.origin}
-        type="text"
-      />
-    </div>
-  </div>
-
-  <div></div>
-
-  <!-- Action Buttons -->
-  <div class="mt-8 flex justify-end space-x-4">
-    <CancelButton />
-    <SubmitButton>Done</SubmitButton>
   </div>
 </form>

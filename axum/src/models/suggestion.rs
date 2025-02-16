@@ -168,7 +168,6 @@ impl UpdateSuggestion {
         &self,
         pool: &PgPool,
         id: &str,
-        user_id: &str,
     ) -> Result<Suggestion, sqlx::Error> {
         sqlx::query_as!(
             Suggestion,
@@ -180,7 +179,7 @@ impl UpdateSuggestion {
                 markdown = COALESCE($3, markdown),
                 status = COALESCE($4, status),
                 updated_at = CURRENT_TIMESTAMP
-            WHERE id = $5 AND user_id = $6
+            WHERE id = $5
             RETURNING 
                 id, ingredient_id, common_name, cas, markdown, 
                 user_id, status as "status: SuggestionStatus", 
@@ -191,7 +190,6 @@ impl UpdateSuggestion {
             self.markdown,
             self.status as Option<SuggestionStatus>,
             id,
-            user_id
         )
         .fetch_one(pool)
         .await

@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ fetch, params, locals }) => {
 };
 
 export const actions = {
-  default: async ({ request, fetch, params }) => {
+  update: async ({ request, fetch, params }) => {
     const { slug } = params;
     const formData = await request.formData();
     let body = {
@@ -45,4 +45,36 @@ export const actions = {
 
     return redirect(301, ".");
   },
+  approve: async ({ fetch, request }) => {
+    const formData = await request.formData();
+    const id = formData.get("id");
+
+    let body = {
+      status: "Approved",
+    };
+
+    fetch(`/axum/suggestion/s/${id}`,
+
+      {
+        method: "PATCH",
+        body: JSON.stringify(body)
+      }
+    )
+  },
+  reject: async ({ fetch, request }) => {
+    const formData = await request.formData();
+
+    const id = formData.get("id");
+    let body = {
+      status: "Rejected",
+    };
+
+    fetch(`/axum/suggestion/s/${id}`,
+
+      {
+        method: "PATCH",
+        body: JSON.stringify(body)
+      }
+    )
+  }
 } satisfies Actions;

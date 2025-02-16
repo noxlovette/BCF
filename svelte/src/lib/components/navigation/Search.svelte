@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
   import { searchTerm, currentPage } from "$lib/stores";
   import { X } from "lucide-svelte";
 
@@ -24,7 +23,6 @@
   id="search-bar"
   action="?search={$searchTerm}"
   class="relative flex w-full md:w-1/2"
-  use:enhance
 >
   <input
     type="text"
