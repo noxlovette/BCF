@@ -1,10 +1,10 @@
 // app.d.ts
-import type { User } from "$lib/types";
+import type { JWTPayload } from "jose";
 
 declare global {
   namespace App {
     interface Locals {
-      user: User;
+      user: JWTPayload;
     }
   }
 }

@@ -74,6 +74,21 @@ export interface FormulaIngredient {
   counterpart?: string;
 }
 
+export interface BrowseComposite {
+  ingredient: IngredientBrowse;
+  suggestions: Suggestion[];
+}
+
+export interface Suggestion {
+  id: string;
+  ingredientId: string;
+  commonName: string;
+  cas?: string;
+  markdown: string;
+  user_id: string;
+  status: "pending" | "approved" | "rejected";
+}
+
 export interface FormulaComposite {
   formula: Formula;
   ingredients: FormulaIngredient[];

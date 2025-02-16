@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        WITH descriptor_info AS (\n            SELECT \n                i.*,\n                array_remove(array_agg (DISTINCT d.name), NULL) as descriptors,\n                array_remove(array_agg (DISTINCT d.colour), NULL) as colours\n            FROM ingredients i\n            LEFT JOIN ingredient_descriptors id ON i.id = id.ingredient_id\n            LEFT JOIN descriptors d ON id.descriptor_id = d.id\n            WHERE i.common_name ILIKE $1 \n                OR i.other_names ILIKE $1 \n                OR i.cas ILIKE $1\n                OR d.name ILIKE $1  -- Add descriptor search\n            GROUP BY i.id\n            ORDER BY i.common_name\n            LIMIT $2 OFFSET $3\n        )\n        SELECT * FROM descriptor_info\n        ",
+  "query": "\n            WITH descriptor_info AS (\n                SELECT \n                    i.*,\n                    array_remove(array_agg(DISTINCT d.name), NULL) AS descriptors,\n                    array_remove(array_agg(DISTINCT d.colour), NULL) AS colours\n                FROM ingredients i\n                LEFT JOIN ingredient_descriptors id ON i.id = id.ingredient_id\n                LEFT JOIN descriptors d ON id.descriptor_id = d.id\n                GROUP BY i.id\n            )\n            SELECT * FROM descriptor_info\n            ORDER BY updated_at DESC\n            LIMIT $1 OFFSET $2\n            ",
   "describe": {
     "columns": [
       {
@@ -76,7 +76,6 @@
     ],
     "parameters": {
       "Left": [
-        "Text",
         "Int8",
         "Int8"
       ]
@@ -98,5 +97,5 @@
       null
     ]
   },
-  "hash": "47795d59d3fa77e10fca40afcec01091c2504b0e5173893fcb2c0903e81d2b17"
+  "hash": "a80d42cd44934b5cb5101590a695e89be8a7cf783ac6144b6c77e7543204ca01"
 }

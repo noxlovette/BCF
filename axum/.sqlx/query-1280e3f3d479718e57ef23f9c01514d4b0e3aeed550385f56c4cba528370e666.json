@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n    UPDATE ingredients\n    SET \n        common_name = COALESCE($2, common_name),\n        ing_description = COALESCE($3, ing_description),\n        ing_type = COALESCE($4, ing_type),\n        volatility = COALESCE($5, volatility),\n        restricted = COALESCE($6, restricted),\n        other_names = COALESCE($7, other_names),\n        origin =COALESCE($8, origin),\n        cas = COALESCE($9, cas)\n    WHERE slug = $1\n    ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Varchar",
+        "Text",
+        "Varchar",
+        "Varchar",
+        "Bool",
+        "Text",
+        "Text",
+        "Varchar"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "1280e3f3d479718e57ef23f9c01514d4b0e3aeed550385f56c4cba528370e666"
+}

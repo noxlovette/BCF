@@ -8,7 +8,7 @@
     PerPage,
     Pagination,
   } from "$lib/components";
-  import { searchTerm, pageSize, currentPage, notification } from "$lib/stores";
+  import { searchTerm, pageSize, currentPage } from "$lib/stores";
   import { goto } from "$app/navigation";
 
   let { data } = $props();
@@ -36,7 +36,7 @@
 </SearchBar>
 
 <div id="table-wrapper" class="my-4 flex w-full flex-col transition-all">
-  {#if data.ingredients.length === 0}
+  {#if data?.ingredients?.length === 0}
     <p class="font-quicksand m-12 text-5xl font-bold">Looks Lonely Here</p>
   {:else}
     <CardHolder>

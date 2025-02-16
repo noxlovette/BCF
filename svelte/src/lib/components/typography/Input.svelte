@@ -8,9 +8,9 @@
   }: {
     placeholder: string;
     name: string;
-    value: string | number;
+    value: string | number | boolean;
     colour?: "wine" | "ultra" | "hunter" | "saffron";
-    type?: "text" | "number" | "textarea" | "password" | "email";
+    type?: "text" | "number" | "textarea" | "password" | "email" | "checkbox";
   } = $props();
 
   const styling =
@@ -57,6 +57,16 @@
     bind:value
     class="{styling} focus:border-{colour}-500 focus:ring-{colour}-500"
   />
+{:else if type === "checkbox"}
+  <label class="flex items-center space-x-2">
+    <input
+      type="checkbox"
+      {name}
+      bind:checked={value}
+      class="h-5 w-5 text-{colour}-500 focus:ring-{colour}-500 rounded border-gray-300"
+    />
+    <span>{placeholder}</span>
+  </label>
 {/if}
 
 <!-- These will ensure that all stylings are prerendered compile-time-->
