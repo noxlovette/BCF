@@ -20,7 +20,6 @@
     );
   });
 
-  $inspect(data.ingredients);
   const description = "Browse perfume compounds. IFRA FIG. 3100 ingredients.";
   const ogTitle = "BCF | Browse";
   const ogUrl = "https://bcfapp.app/browse";

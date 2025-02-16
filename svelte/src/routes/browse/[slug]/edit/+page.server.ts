@@ -1,11 +1,17 @@
+import { env } from "$env/dynamic/private";
+import { ValidateAccess } from "$lib/server";
 import type { BrowseComposite } from "$lib/types";
-import { fail, redirect } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ fetch, params, locals }) => {
-  // if (env.ALLOWED_USER !== locals.user.sub) {
-  //   throw redirect(301, "/unauthorised");
-  // }
+export const load: PageServerLoad = async ({ fetch, params, cookies }) => {
+  const accessToken = cookies.get("accessToken");
+
+  const user = await ValidateAccess(accessToken);
+
+  if (env.ALLOWED_SUB !== user.sub) {
+    throw redirect(301, "/browse");
+  }
 
   const { slug } = params;
 
@@ -47,34 +53,43 @@ export const actions = {
   },
   approve: async ({ fetch, request }) => {
     const formData = await request.formData();
-    const id = formData.get("id");
-
+    const id = formData.get("suggestion_id");
     let body = {
       status: "Approved",
     };
 
-    fetch(`/axum/suggestion/s/${id}`,
+    const response = await fetch(
+      `/axum/suggestion/s/${id}`,
 
       {
         method: "PATCH",
-        body: JSON.stringify(body)
-      }
-    )
+        body: JSON.stringify(body),
+      },
+    );
+
+    if (!response.ok) {
+      return error(500);
+    }
   },
   reject: async ({ fetch, request }) => {
     const formData = await request.formData();
 
-    const id = formData.get("id");
+    const id = formData.get("suggestion_id");
     let body = {
       status: "Rejected",
     };
 
-    fetch(`/axum/suggestion/s/${id}`,
+    const response = await fetch(
+      `/axum/suggestion/s/${id}`,
 
       {
         method: "PATCH",
-        body: JSON.stringify(body)
-      }
-    )
-  }
+        body: JSON.stringify(body),
+      },
+    );
+
+    if (!response.ok) {
+      return error(500);
+    }
+  },
 } satisfies Actions;

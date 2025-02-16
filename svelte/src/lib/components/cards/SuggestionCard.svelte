@@ -35,19 +35,19 @@ space-y-2 bg-stone-50 p-3
     </p>
   </div>
 
-  <input type="hidden" value={suggestion.id} name="id" />
+  <input type="hidden" value={suggestion.id} name="suggestion_id" />
   <div class="">
-  <button
-    formaction="?/approve"
-    class="bg-ultra-800 hover:bg-ultra-700 rounded p-1 px-2 transition-colors"
-  >
-    Approve
-  </button>
-  <button
-    class="rounded bg-red-800 p-1 px-2 transition-colors hover:bg-red-700"
-    formaction="?/reject"
-  >
-    Reject
-  </button>
-</div>
+    <button
+      formaction="?/approve"
+      class="bg-ultra-800 hover:bg-ultra-700 rounded p-1 px-2 transition-colors"
+    >
+      Approve
+    </button>
+    <button
+      class="rounded bg-red-800 p-1 px-2 transition-colors hover:bg-red-700"
+      formaction="?/reject"
+    >
+      Reject
+    </button>
+  </div>
 </div>
