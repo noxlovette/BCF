@@ -33,8 +33,6 @@
   onMount(() => {
     valid.terms = sessionStorage.getItem("terms") === "true";
   });
-
-  $inspect(valid);
 </script>
 
 <svelte:head>

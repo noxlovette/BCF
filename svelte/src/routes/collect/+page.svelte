@@ -17,8 +17,6 @@
 
   let { data } = $props();
 
-  $inspect(data);
-
   $effect(() => {
     goto(
       `/collect?search=${$searchTerm}&page_size=${$pageSize}&page=${$currentPage}`,

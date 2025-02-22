@@ -98,3 +98,15 @@ export interface Toast {
   message: string | null;
   type: "success" | "error" | "info" | null;
 }
+
+export interface Photo {
+  id: number;
+  width: number;
+  height: number;
+  urls: { large: string; regular: string; raw: string; small: string };
+  color: string | null;
+  user: {
+    username: string;
+    name: string;
+  };
+}

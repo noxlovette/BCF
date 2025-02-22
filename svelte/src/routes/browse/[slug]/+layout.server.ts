@@ -1,7 +1,8 @@
 import redis from "$lib/redisClient";
 import { parseMarkdown } from "$lib/server";
 import { getUnsplashURL } from "$lib/server/unsplash";
-import type { IngredientBrowse } from "$lib/types";
+import type { IngredientBrowse, Photo } from "$lib/types";
+import { error } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
 
 export const load: LayoutServerLoad = async ({ fetch, params }) => {
@@ -16,40 +17,32 @@ export const load: LayoutServerLoad = async ({ fetch, params }) => {
     await redis.set(slug, JSON.stringify(ingredient), "EX", 3600);
 
     const query = ingredient.descriptors[0];
-    let unsplashData;
 
-    let cachedPhoto = await redis.get(`${query}-photo`);
-
-    if (cachedPhoto !== null) {
-      unsplashData = JSON.parse(cachedPhoto);
-    } else {
-      const unsplashURL = getUnsplashURL(query);
-      const unsplashResponse = await fetch(unsplashURL);
-
-      if (!unsplashResponse.ok) {
-        unsplashData = null;
-      } else {
-        unsplashData = await unsplashResponse.json();
-
-        if (unsplashData.errors) {
-          unsplashData = null;
+    const photo: Promise<Photo> = redis
+      .get(`${query}-photo`)
+      .then(async (unsplashData) => {
+        if (unsplashData && unsplashData !== null) {
+          return JSON.parse(unsplashData);
         } else {
-          await redis.set(
-            `${query}-photo`,
-            JSON.stringify(unsplashData),
-            "EX",
-            3600,
-          );
+          const unsplashURL = getUnsplashURL(query);
+          const unsplashResponse = await fetch(unsplashURL);
+
+          const data = await unsplashResponse.json();
+          if (data.errors || !unsplashResponse.ok || data === null) {
+            throw error(400);
+          } else {
+            await redis.set(`${query}-photo`, JSON.stringify(data), "EX", 3600);
+            return data;
+          }
         }
-      }
-    }
+      });
 
     let markdown = "Nobody has shared the description yet";
     if (ingredient.ingDescription) {
       markdown = await parseMarkdown(ingredient.ingDescription);
     }
 
-    return { ingredient, unsplashData, markdown };
+    return { ingredient, markdown, photo };
   } catch (error) {
     return {
       error: "Failed to fetch browse data",

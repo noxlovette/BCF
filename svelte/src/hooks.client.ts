@@ -1,15 +1,14 @@
+import { env } from "$env/dynamic/public";
 import { setUser } from "$lib/stores";
 import * as Sentry from "@sentry/sveltekit";
 import type { ClientInit } from "@sveltejs/kit";
 
-// If you don't want to use Session Replay, remove the `Replay` integration,
-// `replaysSessionSampleRate` and `replaysOnErrorSampleRate` options.
 Sentry.init({
   dsn: "https://cb2fec3778ef3f394a970f72701a67f2@o4507272574468096.ingest.de.sentry.io/4507272578203728",
   tracesSampleRate: 1,
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1,
-  environment: "development",
+  environment: env.PUBLIC_APP_ENV || "development",
   integrations: [Sentry.replayIntegration()],
 });
 

@@ -2,8 +2,6 @@
   import type { IngredientBrowse } from "$lib/types";
   let { ingredient }: { ingredient: IngredientBrowse } = $props();
   import Card from "./Card.svelte";
-
-  $inspect(ingredient.descriptors);
 </script>
 
 <Card

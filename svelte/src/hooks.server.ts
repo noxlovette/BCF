@@ -9,7 +9,7 @@ import type { JWTPayload } from "jose";
 Sentry.init({
   dsn: "https://cb2fec3778ef3f394a970f72701a67f2@o4507272574468096.ingest.de.sentry.io/4507272578203728",
   tracesSampleRate: 1,
-  environment: "development",
+  environment: env.PUBLIC_APP_ENV || "development",
 });
 
 const PROTECTED_PATHS = new Set(["/collect", "/formulate"]);

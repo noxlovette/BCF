@@ -8,26 +8,20 @@
   } from "$lib/components";
   import { enhance } from "$app/forms";
   import { notification } from "$lib/stores";
+  import { Loader2 } from "lucide-svelte";
 
   let { data } = $props();
-  let { ingredient, unsplashData, markdown } = data;
-
   let isSubmitting = $state(false);
+  let { ingredient, markdown } = data;
 
-  let href = $state("");
-  if (unsplashData?.user?.username) {
-    href = `https://unsplash.com/@${unsplashData.user.username}?utm_source=bcf&utm_medium=referral`;
-}
-
-
-  const volatility = ingredient.volatility || "Unknown";
-  const otherNames = ingredient.otherNames || "No alternative names";
-  const origin = ingredient.origin || "Not Specified";
+  const volatility = ingredient?.volatility ?? "Unknown";
+  const otherNames = ingredient?.otherNames ?? "No alternative names";
+  const origin = ingredient?.origin ?? "Not Specified";
   const ifraStatus =
-    ingredient.isRestricted === true ? "Restricted" : "Not restricted";
+    ingredient?.isRestricted === true ? "Restricted" : "Not Restricted";
 
   const description = `Discover ${ingredient.commonName}. ${ingredient.descriptors}. Explore similar ingredients and fragrances.`;
-  const keywords = `${ingredient.commonName}, ${ingredient.descriptors}, ${ingredient.otherNames}, ${ingredient.cas}, ${ingredient.origin}, ${volatility}`;
+  const keywords = `${ingredient.commonName}, ${ingredient.descriptors}, ${otherNames}, ${ingredient.cas}, ${origin}, ${volatility}`;
 </script>
 
 <MetaData
@@ -108,24 +102,35 @@
     <div class="space-y-6 lg:col-span-1">
       <!-- Related Ingredients / PHOTO -->
       <div
-        class="relative aspect-square overflow-hidden bg-white shadow-sm md:rounded-lg dark:bg-stone-800"
+        class="relative flex aspect-square items-center justify-center overflow-hidden bg-white shadow-sm md:rounded-lg dark:bg-stone-800"
       >
-        {#if unsplashData}
+        {#await data.photo}
+          <div class="flex space-x-2">
+            <Loader2 class="animate-spin"></Loader2>
+            <p>The photo is loading</p>
+          </div>
+        {:then photo}
           <img
             alt={ingredient.commonName}
-            src={unsplashData.urls.regular}
+            src={photo.urls.regular}
             class="h-full w-full object-cover"
           />
           <p
             class="bg-opacity-75 absolute right-2 bottom-2 rounded bg-stone-50 px-2 py-1 text-sm text-stone-900 italic"
           >
-            Photo by <a {href} class="underline">{unsplashData.user ? unsplashData.user.name : "Unknown"}</a> on
+            Photo by <a
+              href={`https://unsplash.com/@${photo.user?.username}?utm_source=bcf&utm_medium=referral}`}
+              class="underline">{photo.user ? photo.user.name : "Unknown"}</a
+            >
+            on
             <a
               href="https://unsplash.com/?utm_source=bcf&utm_medium=referral"
               class="underline">Unsplash</a
             >
           </p>
-        {/if}
+        {:catch error}
+          <p>No photo</p>
+        {/await}
       </div>
 
       <!-- Alternative Names -->
@@ -176,9 +181,3 @@
     <EditButton href="{ingredient.slug}/suggest">Suggest a Change</EditButton>
   </form>
 </div>
-
-<style>
-  :global(.prose) {
-    max-width: none;
-  }
-</style>

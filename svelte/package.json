@@ -1,6 +1,6 @@
 {
   "name": "bcf-svelte",
-  "version": "0.1.0",
+  "version": "1.0.8",
   "private": true,
   "scripts": {
     "dev": "vite dev",
@@ -15,22 +15,22 @@
     "@sveltejs/adapter-auto": "^4.0.0",
     "@sveltejs/kit": "^2.17.2",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
-    "@tailwindcss/postcss": "^4.0.6",
+    "@tailwindcss/postcss": "^4.0.8",
     "@tsconfig/svelte": "^5.0.4",
-    "@types/node": "^22.13.4",
+    "@types/node": "^22.13.5",
     "depcheck": "^1.4.7",
-    "postcss": "^8.5.2",
-    "prettier": "^3.5.1",
+    "postcss": "^8.5.3",
+    "prettier": "^3.5.2",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-svelte": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "svelte": "^5.20.1",
+    "svelte": "^5.20.2",
     "svelte-check": "^4.1.4",
     "svelte-preprocess": "^6.0.3",
-    "tailwindcss": "^4.0.6",
+    "tailwindcss": "^4.0.8",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
-    "vite": "^6.1.0"
+    "vite": "^6.1.1"
   },
   "type": "module",
   "dependencies": {
@@ -41,7 +41,7 @@
     "@tailwindcss/forms": "^0.5.10",
     "dotenv": "^16.4.7",
     "ioredis": "^5.5.0",
-    "jose": "^5.9.6",
+    "jose": "^5.10.0",
     "lucide-svelte": "^0.475.0",
     "redis": "^4.7.0",
     "rehype": "^13.0.2",
@@ -58,5 +58,5 @@
     "unified": "^11.0.5",
     "unsplash-js": "^7.0.19"
   },
-  "packageManager": "pnpm@10.4.0+sha512.6b849d0787d97f8f4e1f03a9b8ff8f038e79e153d6f11ae539ae7c435ff9e796df6a862c991502695c7f9e8fac8aeafc1ac5a8dab47e36148d183832d886dd52"
+  "packageManager": "pnpm@10.4.0"
 }
