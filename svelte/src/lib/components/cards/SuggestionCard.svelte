@@ -10,7 +10,7 @@
 <div
   class="group hover:ring-ultra-400 flex flex-col justify-between
 space-y-2 bg-stone-50 p-3
-         ring-2 shadow-sm ring-stone-200 transition-all
+         shadow-sm ring-2 ring-stone-200 transition-all
          hover:shadow-md md:rounded-lg dark:bg-stone-900 dark:ring-stone-900"
   transition:fade
 >

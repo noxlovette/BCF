@@ -6,6 +6,13 @@ declare global {
     interface Locals {
       user: JWTPayload;
     }
+    interface Window {
+      turnstile: {
+        render: (element: HTMLElement, options: any) => string;
+        remove: (widgetId: string) => void;
+        reset: (widgetId: string) => void;
+      };
+    }
   }
 }
 

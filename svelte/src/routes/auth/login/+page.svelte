@@ -4,7 +4,7 @@
   import { quintOut } from "svelte/easing";
   import { notification, setUser } from "$lib/stores";
   import { goto } from "$app/navigation";
-  import { H1, Input } from "$lib/components";
+  import { H1, Input, Turnstile } from "$lib/components";
   import SubmitButton from "$lib/components/UI/button/SubmitButton.svelte";
 
   let username = $state("");
@@ -56,7 +56,7 @@
     bind:value={password}
   />
 
-  <div class="cf-turnstile my-4" data-sitekey="0x4AAAAAAA6xKvX8IgCZg0J0"></div>
+  <Turnstile />
 
   <SubmitButton>Go</SubmitButton>
   <a

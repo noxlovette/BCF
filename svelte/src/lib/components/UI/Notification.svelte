@@ -29,15 +29,15 @@
 {#snippet icon(type: Toast["type"])}
   {#if type === "success"}
     <Check
-      class="size-5 rounded-full bg-stone-100 p-1 text-green-700 lg:size-6 dark:bg-inherit dark:ring-2 dark:ring-stone-800"
+      class="bg-milk-100 dark:ring-milk-900 size-5 rounded-full p-1 text-green-700 lg:size-6 dark:bg-inherit dark:ring-1"
     />
   {:else if type === "error"}
     <X
-      class="size-5 rounded-full bg-stone-100 p-1 text-red-700 lg:size-6 dark:bg-inherit  dark:ring-2 dark:ring-stone-800"
+      class="bg-milk-100 dark:ring-milk-900 size-5 rounded-full p-1 text-red-700 lg:size-6  dark:bg-inherit dark:ring-1"
     />
   {:else}
     <AlertCircle
-      class="text-saffron-700 size-5 rounded-full bg-stone-100 p-1 lg:size-6 dark:bg-inherit  dark:ring-2 dark:ring-stone-800"
+      class="bg-milk-100 dark:ring-milk-900 text-cacao-700 size-5 rounded-full p-1 lg:size-6  dark:bg-inherit dark:ring-1"
     />
   {/if}
 {/snippet}
@@ -50,8 +50,8 @@
       x: 0,
       y: 100,
     }}
-    class="fixed bottom-5 left-1/2 z-50 flex max-w-md min-w-[200px] -translate-x-1/2 items-center gap-6
-			rounded-full bg-stone-50 px-4 py-2 ring-1 shadow-md dark:bg-stone-900 {$notification.type ===
+    class="dark:bg-milk-950 bg-milk-50 fixed bottom-5 left-1/2 z-50 flex max-w-md -translate-x-1/2
+			items-center gap-3 rounded-full px-4 py-2 shadow-md ring-1 {$notification.type ===
     'success'
       ? 'ring-green-700'
       : $notification.type === 'error'
@@ -61,8 +61,8 @@
     {@render icon($notification.type)}
 
     <p
-      class="flex text-sm font-bold
-text-stone-800
+      class="text-milk-800 flex text-sm
+font-bold
 		capitalize dark:text-inherit
 		"
     >

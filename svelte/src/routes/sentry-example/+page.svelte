@@ -4,20 +4,20 @@ Feel free to delete this file and the entire sentry route.
 -->
 
 <script>
-  import * as Sentry from '@sentry/sveltekit';
+  import * as Sentry from "@sentry/sveltekit";
 
   function getSentryData() {
     Sentry.startSpan(
       {
-        name: 'Example Frontend Span',
-        op: 'test'
+        name: "Example Frontend Span",
+        op: "test",
       },
       async () => {
-        const res = await fetch('/sentry-example');
+        const res = await fetch("/sentry-example");
         if (!res.ok) {
-          throw new Error('Sentry Example Frontend Error');
+          throw new Error("Sentry Example Frontend Error");
         }
-      }
+      },
     );
   }
 </script>
@@ -41,7 +41,9 @@ Feel free to delete this file and the entire sentry route.
 
     <p>
       2. Look for the error on the
-      <a href="https://danila-volkov.sentry.io/issues/?project=4507272578203728">Issues Page</a>.
+      <a href="https://danila-volkov.sentry.io/issues/?project=4507272578203728"
+        >Issues Page</a
+      >.
     </p>
     <p style="margin-top: 24px;">
       For more information, take a look at the

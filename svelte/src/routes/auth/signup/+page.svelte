@@ -4,7 +4,7 @@
   import { onMount } from "svelte";
   import { notification } from "$lib/stores";
   import { enhance } from "$app/forms";
-  import { Input } from "$lib/components";
+  import { Input, Turnstile } from "$lib/components";
   import SubmitButton from "$lib/components/UI/button/SubmitButton.svelte";
 
   let username = $state("");
@@ -134,7 +134,7 @@
       class="shadow-inline text-hunter-500 checked:bg-hunter-500 checked:ring-saffron-300 hover:checked:bg-saffron-300 focus:ring-hunter-700 size-4 rounded border-none bg-stone-50 ring-2 ring-stone-300/50 transition-all hover:scale-110 active:scale-90 dark:bg-stone-800"
     />
   </div>
-  <div class="cf-turnstile my-4" data-sitekey="0x4AAAAAAA6xKvX8IgCZg0J0"></div>
+  <Turnstile />
 
   <SubmitButton disabled={!Object.values(valid).every(Boolean)}>Go</SubmitButton
   >
